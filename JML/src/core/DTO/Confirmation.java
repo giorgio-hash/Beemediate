@@ -1,4 +1,4 @@
-package DTO;
+package core.DTO;
 
 public class Confirmation {
 	
@@ -8,12 +8,13 @@ public class Confirmation {
 	
 	//@ requires d != null;
 	//@ ensures data == d;
+	//@ pure
 	public Confirmation(Object d) {
 		data = d;
 	}
 
 	//@ ensures \result == data;
-	public Object getData() {
+	public /*@ pure @*/ Object getData() {
 		return data;
 	}
 

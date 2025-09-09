@@ -1,6 +1,6 @@
-package DTO;
+package core.DTO;
 
-import DTO.QuantityFieldValue;
+import core.DTO.QuantityFieldValue;
 
 public class Order {
 	
@@ -25,30 +25,30 @@ public class Order {
 	  @						&& !deliveryLocationNumber && !deliveryDate && !deliveryDateContent;						
 	  @ pure
 	  @*/
-	public Order(Object d) {
+	public Order(/*@ non_null*/Object d) {
 		data = d;
 		quantity = QuantityFieldValue.NAN;
 		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;
 	}
 
 	//@ ensures \result == data;
-	public Object getData() {
+	public /*@ pure @*/ Object getData() {
 		return data;
 	}
 
 	//@ ensures \result == (!articleNumber | !quantityMeasure | (deliveryDate & !deliveryDateContent) );
-	public boolean hasContentError() {
+	public /*@ pure @*/ boolean hasContentError() {
 		return !(articleNumber && quantityMeasure && (!deliveryDate || deliveryDateContent));
 	}
 
 	//@ requires quantity != null;
 	//@ ensures \result == (!customerNumber | !deliveryLocationNumber | !deliveryDate | quantity != QuantityFieldValue.FLOAT_WITH_DOT);
-	public boolean hasOpenTransError() {
+	public /*@ pure @*/ boolean hasOpenTransError() {
 		return !(customerNumber && deliveryLocationNumber && deliveryDate && quantity == QuantityFieldValue.FLOAT_WITH_DOT);
 	}
 
 	//@ ensures \result == customerNumber;
-	public boolean isCustomerNumber() {
+	public /*@ pure @*/ boolean isCustomerNumber() {
 		return customerNumber;
 	}
 
@@ -59,7 +59,7 @@ public class Order {
 	}
 
 	//@ ensures \result == articleNumber;
-	public boolean isArticleNumber() {
+	public /*@ pure @*/ boolean isArticleNumber() {
 		return articleNumber;
 	}
 
@@ -70,7 +70,7 @@ public class Order {
 	}
 
 	//@ ensures \result == quantityMeasure;
-	public boolean isQuantityMeasure() {
+	public /*@ pure @*/ boolean isQuantityMeasure() {
 		return quantityMeasure;
 	}
 
@@ -81,7 +81,7 @@ public class Order {
 	}
 
 	//@ ensures \result == quantity;
-	public QuantityFieldValue getQuantity() {
+	public /*@ pure @*/ QuantityFieldValue getQuantity() {
 		return quantity;
 	}
 
@@ -93,7 +93,7 @@ public class Order {
 	}
 
 	//@ ensures \result == deliveryLocationNumber;
-	public boolean isDeliveryLocationNumber() {
+	public /*@ pure @*/ boolean isDeliveryLocationNumber() {
 		return deliveryLocationNumber;
 	}
 
@@ -104,7 +104,7 @@ public class Order {
 	}
 
 	//@ ensures \result == deliveryDate;
-	public boolean isDeliveryDate() {
+	public /*@ pure @*/ boolean isDeliveryDate() {
 		return deliveryDate;
 	}
 
@@ -115,7 +115,7 @@ public class Order {
 	}
 
 	//@ ensures \result == deliveryDateContent;
-	public boolean isDeliveryDateContent() {
+	public /*@ pure @*/ boolean isDeliveryDateContent() {
 		return deliveryDateContent;
 	}
 
