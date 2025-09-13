@@ -10,6 +10,7 @@ public interface NewOrdersEventIF {
 	  @ ensures \result!=null;
 	  @ ensures \result.data!=null;
 	  @ ensures \result.quantity!=null;
+	  @ ensures \result.orderID!=null;
 	  @ ensures \typeof(\result) == \type(Order);
 	  @*/
 	public /*@ pure @*/ Order popNewOrder();

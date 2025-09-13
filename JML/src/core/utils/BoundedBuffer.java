@@ -14,7 +14,9 @@ public class BoundedBuffer {
 	/*@ public invariant size>0 ==> (\forall int i; 0<=i<size; ordini[i]!=null); @*/
 	/*@ public invariant size>0 ==> (\forall int i; 0<=i<size; ordini[i].data!=null); @*/
 	/*@ public invariant size>0 ==> (\forall int i; 0<=i<size; ordini[i].quantity!=null); @*/
+	/*@ public invariant size>0 ==> (\forall int i; 0<=i<size; ordini[i].orderID!=null); @*/
 	/*@ public invariant size<ordini.length ==> (\forall int i; size<=i<ordini.length; ordini[i]==null); @*/
+	/*@ public invariant size>0 ==> (\forall int i; 0<=i<size; \typeof(ordini[i])==\type(Order)); @*/
 	/*@ public invariant \elemtype(\typeof(ordini)) == \type(Order); @*/
 	
 	//@ public normal_behaviour
@@ -22,20 +24,24 @@ public class BoundedBuffer {
 	//@ ensures ordini != null;
 	//@ ensures ordini.length == n;
 	//@ ensures size == 0;
+	//@ ensures (\forall int i; size<=i<ordini.length; ordini[i]==null);
 	//@ pure
+	@CodeBigintMath
 	public BoundedBuffer (int n) {
 		ordini = new Order[n];
 		size = 0;
 	}
 	
 	/*@ public normal_behaviour
+	  @ assigns \nothing;
 	  @ requires i>=0 & i<size;
-	  @ ensures \result != null <==> ordini[i]!=null;
+	  @ ensures \result != null <==> (ordini[i]!=null & \result==ordini[i] & \typeof(\result) == \type(Order));
 	  @ ensures \result == null <==> (i<0 | i>=size);
+	  @ ensures size<ordini.length ==> (\forall int j; size<=j<ordini.length; ordini[j]==null);
 	  @*/
 	@CodeBigintMath
 	public /*@ pure nullable */ Order get(int i) {
-		if(0<=i && i<size && size>0 && size<=ordini.length)
+		if(0<=i && i<size)
 			return ordini[i];
 		return null;
 	}
@@ -46,8 +52,10 @@ public class BoundedBuffer {
 	  @ requires x != null;
 	  @ requires x.quantity!=null;
 	  @ requires x.data!=null;
+	  @ requires x.orderID!=null;
 	  @ requires \typeof(x) == \type(Order);
 	  @ ensures size == \old(size)+1 | size == \old(size);
+	  @ ensures \old(size)<ordini.length <==> (size == \old(size)+1);
 	  @ ensures size == \old(size)+1 ==> ordini[\old(size)] == x;
 	  @ ensures size == \old(size)+1 ==> \typeof(ordini[\old(size)]) == \type(Order);
 	  @*/
@@ -60,11 +68,18 @@ public class BoundedBuffer {
 	
 	/*@ public normal_behaviour
 	  @ assigns size, ordini[*];
-	  @ requires size > 0 ==> \typeof(ordini[size-1]) == \type(Order);
-	  @ ensures (size == \old(size)-1) | (size == \old(size));
-	  @ ensures \result==null <==> (size == \old(size));
-	  @ ensures \result!=null <==> (size == \old(size)-1) ;
+	  @ requires ordini!=null & ordini.length>0 & size > 0;
+	  @ requires \typeof(ordini[size-1]) == \type(Order);
+	  @ ensures size == \old(size)-1;
+	  @ ensures \result!=null & \typeof(\result) == \type(Order);
+	  @ ensures size > 0 ==> \typeof(ordini[size-1]) == \type(Order);
+	  @ also public normal_behaviour
+	  @ assigns \nothing;
+	  @ requires size==0;
+	  @ ensures (size == \old(size));
+	  @ ensures \result==null;
 	  @*/
+	@CodeBigintMath
 	public /*@ nullable */ Order pop() {
 		/*@ nullable */ Order res=null;
 		
@@ -95,6 +110,7 @@ public class BoundedBuffer {
 	
 	/*@ public normal_behaviour
 	  @ ensures \result == size;
+	  @ ensures \not_modified(size);
 	  @*/
 	public /*@ pure @*/ int size() {
 		return size;
@@ -112,6 +128,13 @@ public class BoundedBuffer {
 	  @*/
 	public /*@ pure @*/ boolean isFull() {
 		return ordini.length == size;
+	}
+	
+	/*@ public normal_behaviour
+	  @ ensures \result | size>0;
+	  @*/
+	public /*@ pure @*/ boolean isEmpty() {
+		return size==0;
 	}
 
 }

@@ -7,6 +7,9 @@ public class Order {
 	//struttura dati
 	private /*@ spec_public @*/ Object data;
 	
+	//identificativo
+	private /*@ spec_public @*/ final String orderID;
+	
 	//campi più importanti per controllo errori
 	private /*@ spec_public @*/ boolean customerNumber;
 	private /*@ spec_public @*/ boolean articleNumber;
@@ -18,15 +21,19 @@ public class Order {
 	
 	/*@ public invariant data != null; @*/
 	/*@ public invariant quantity != null; @*/
+	/*@ public invariant orderID != null; @*/
 	
-	/*@ requires d != null;
-	  @ ensures data == d && quantity == QuantityFieldValue.NAN
+	/*@ public normal_behaviour
+	  @ requires d != null & oID!=null;
+	  @ ensures data == d && orderID == oID 
+	  @						&& quantity == QuantityFieldValue.NAN
 	  @						&& !customerNumber && !articleNumber && !quantityMeasure 
 	  @						&& !deliveryLocationNumber && !deliveryDate && !deliveryDateContent;						
 	  @ pure
 	  @*/
-	public Order(/*@ non_null*/Object d) {
+	public Order(/*@ non_null*/Object d, String oID) {
 		data = d;
+		orderID = oID;
 		quantity = QuantityFieldValue.NAN;
 		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;
 	}
@@ -36,11 +43,13 @@ public class Order {
 		return data;
 	}
 
+	//@ public normal_behaviour
 	//@ ensures \result == (!articleNumber | !quantityMeasure | (deliveryDate & !deliveryDateContent) );
 	public /*@ pure @*/ boolean hasContentError() {
 		return !(articleNumber && quantityMeasure && (!deliveryDate || deliveryDateContent));
 	}
 
+	//@ public normal_behaviour
 	//@ requires quantity != null;
 	//@ ensures \result == (!customerNumber | !deliveryLocationNumber | !deliveryDate | quantity != QuantityFieldValue.FLOAT_WITH_DOT);
 	public /*@ pure @*/ boolean hasOpenTransError() {
@@ -125,5 +134,9 @@ public class Order {
 		deliveryDateContent = ddc;
 	}
 	
+	//@ ensures \result == orderID; 
+	public /*@ pure @*/ String getOrderID() {
+		return orderID;
+	}
 
 }
