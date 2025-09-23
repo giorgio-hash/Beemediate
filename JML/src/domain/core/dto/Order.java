@@ -1,6 +1,6 @@
-package core.DTO;
+package domain.core.dto;
 
-import core.DTO.QuantityFieldValue;
+import domain.core.dto.QuantityFieldValue;
 
 public class Order {
 	

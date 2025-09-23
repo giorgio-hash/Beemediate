@@ -1,7 +1,8 @@
-package core.utils;
+package domain.core.utils;
 
 import org.jmlspecs.annotation.CodeBigintMath;
-import core.DTO.Order;
+
+import domain.core.dto.Order;
 
 public class BoundedBuffer {
 	

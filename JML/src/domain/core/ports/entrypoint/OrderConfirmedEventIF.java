@@ -1,6 +1,6 @@
-package core.ports.entrypoint;
+package domain.core.ports.entrypoint;
 
-import core.DTO.Confirmation;
+import domain.core.dto.Confirmation;
 
 public interface OrderConfirmedEventIF {
 

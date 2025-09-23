@@ -1,7 +1,7 @@
-package core;
+package domain.core;
 
-import core.DTO.Order;
-import core.DTO.QuantityFieldValue;
+import domain.core.dto.Order;
+import domain.core.dto.QuantityFieldValue;
 
 public interface OaFValidatorIF {
 

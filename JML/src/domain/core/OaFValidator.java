@@ -1,7 +1,5 @@
-package core;
+package domain.core;
 
-import core.DTO.QuantityFieldValue;
-import core.DTO.Order;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import org.jmlspecs.annotation.CodeBigintMath;
+
+import domain.core.dto.Order;
+import domain.core.dto.QuantityFieldValue;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

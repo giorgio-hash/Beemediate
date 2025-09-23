@@ -1,10 +1,10 @@
-package core;
+package domain.core;
 
 import org.jmlspecs.annotation.CodeBigintMath;
 
-import core.DTO.Order;
-import core.ports.entrypoint.NewOrdersEventIF;
-import core.utils.BoundedBuffer;
+import domain.core.dto.Order;
+import domain.core.ports.entrypoint.NewOrdersEventIF;
+import domain.core.utils.BoundedBuffer;
 
 public class OaFBuffer {
 	

@@ -1,4 +1,4 @@
-package core;
+package domain.core;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -7,12 +7,12 @@ import java.io.IOException;
 
 import org.jmlspecs.annotation.CodeBigintMath;
 
-import core.ports.entrypoint.NewOrdersEventIF;
-import core.ports.entrypoint.OrderConfirmedEventIF;
-import core.ports.repository.FTPHandlerIF;
-import core.ports.repository.UpdateOaFStateIF;
-import core.DTO.Confirmation;
-import core.DTO.Order;
+import domain.core.dto.Confirmation;
+import domain.core.dto.Order;
+import domain.core.ports.entrypoint.NewOrdersEventIF;
+import domain.core.ports.entrypoint.OrderConfirmedEventIF;
+import domain.core.ports.repository.FTPHandlerIF;
+import domain.core.ports.repository.UpdateOaFStateIF;
 
 
 public class OaFBatchManager {

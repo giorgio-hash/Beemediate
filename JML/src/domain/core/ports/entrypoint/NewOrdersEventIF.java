@@ -1,6 +1,6 @@
-package core.ports.entrypoint;
+package domain.core.ports.entrypoint;
 
-import core.DTO.Order;
+import domain.core.dto.Order;
 
 public interface NewOrdersEventIF {
 	

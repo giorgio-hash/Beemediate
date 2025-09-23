@@ -1,7 +1,7 @@
-package core.ports.repository;
+package domain.core.ports.repository;
 
-import core.DTO.Confirmation;
-import core.DTO.Order;
+import domain.core.dto.Confirmation;
+import domain.core.dto.Order;
 
 
 public interface UpdateOaFStateIF {

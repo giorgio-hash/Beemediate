@@ -1,6 +1,6 @@
-package core.ports.repository;
+package domain.core.ports.repository;
 
-import core.DTO.Order;
+import domain.core.dto.Order;
 
 public interface SendOrderIF {
 

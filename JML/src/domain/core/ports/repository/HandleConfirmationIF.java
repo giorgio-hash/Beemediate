@@ -1,6 +1,6 @@
-package core.ports.repository;
+package domain.core.ports.repository;
 
-import core.DTO.Confirmation;
+import domain.core.dto.Confirmation;
 
 public interface HandleConfirmationIF {
 

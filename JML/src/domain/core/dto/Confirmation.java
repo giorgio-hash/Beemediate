@@ -1,4 +1,4 @@
-package core.DTO;
+package domain.core.dto;
 
 public class Confirmation {
 	
