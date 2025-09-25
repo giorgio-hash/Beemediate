@@ -138,5 +138,37 @@ public class OaFValidator implements OaFValidatorIF{
 		}
 		return inCatalog;
 	}
+	
+	/*@ public normal_behaviour
+	  @ requires articleNumbers!=null;
+	  @ requires ost!=null;
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.itemList!=null & ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i].orderUnit!=null);
+	  @ ensures !\result <==> (\exists int i; 0<=i<ost.itemList.length; ost.itemList[i].orderUnit.length()!=1 | ost.itemList[i].orderUnit.charAt(0)!=quantityMeasure  );
+	  @*/
+	private /*@ spec_public pure @*/ boolean validateQuantityMeasure(/*@ non_null @*/ OrderStructure ost) {
+		
+		boolean rightMeasureUnit = true;
+		
+		/*@ loop_writes rightMeasureUnit;
+		  @ loop_invariant \count < ost.itemList.length ==> il!=null;
+		  @ loop_invariant 0<=\count<=ost.itemList.length;
+		  @ loop_invariant rightMeasureUnit <==> (\forall int j; 0<=j<\count; ost.itemList[j].orderUnit.length()==1 & ost.itemList[j].orderUnit.charAt(0) == quantityMeasure );
+		  @ decreases ost.itemList.length - \count;
+		  @*/
+		for(OrderItem il : ost.getItemList()) {
+			if( il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != quantityMeasure ) {
+				rightMeasureUnit = false;
+				break;
+			}
+		}
+		
+		return rightMeasureUnit;
+	}
 
 }
