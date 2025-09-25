@@ -1,6 +1,4 @@
-package domain.core.dto;
-
-import domain.core.dto.QuantityFieldValue;
+package com.beemediate.beemediate.domain.pojo.order;
 
 public class Order {
 	
@@ -10,7 +8,7 @@ public class Order {
 	//identificativo
 	private /*@ spec_public @*/ final String orderID;
 	
-	//campi più importanti per controllo errori
+	//campi piï¿½ importanti per controllo errori
 	private /*@ spec_public @*/ boolean customerNumber;
 	private /*@ spec_public @*/ boolean articleNumber;
 	private /*@ spec_public @*/ boolean quantityMeasure;

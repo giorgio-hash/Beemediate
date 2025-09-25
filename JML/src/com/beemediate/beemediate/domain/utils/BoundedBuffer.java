@@ -1,8 +1,9 @@
-package domain.core.utils;
+package com.beemediate.beemediate.domain.utils;
 
 import org.jmlspecs.annotation.CodeBigintMath;
 
-import domain.core.dto.Order;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+
 
 public class BoundedBuffer {
 	

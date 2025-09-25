@@ -1,26 +1,22 @@
-package domain.core;
+package com.beemediate.beemediate.domain.service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 
 import org.jmlspecs.annotation.CodeBigintMath;
 
-import domain.core.dto.Confirmation;
-import domain.core.dto.Order;
-import domain.core.ports.entrypoint.NewOrdersEventIF;
-import domain.core.ports.entrypoint.OrderConfirmedEventIF;
-import domain.core.ports.repository.FTPHandlerIF;
-import domain.core.ports.repository.UpdateOaFStateIF;
+import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
+import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
+import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 
 
 public class OaFBatchManager {
 	
 	private /*@ spec_public @*/ final OaFBuffer oaf;
-	private /*@ spec_public @*/ final OrderConfirmedEventIF confirmations;
-	private /*@ spec_public @*/ final FTPHandlerIF ftp;
-	private /*@ spec_public @*/ final UpdateOaFStateIF crm;
+	private /*@ spec_public @*/ final ConfirmationProviderPort confirmations;
+	private /*@ spec_public @*/ final FTPHandlerPort ftp;
+	private /*@ spec_public @*/ final DataSenderPort crm;
 	private /*@ spec_public @*/ final int oafBatchThreshold;
 
 	/*@ public invariant oaf!=null; @*/
@@ -30,16 +26,23 @@ public class OaFBatchManager {
 	/*@ public invariant 0 < oafBatchThreshold <= oaf.getBuffer().capacity() <= Integer.MAX_VALUE; @*/
 	
 	/*@ public normal_behaviour
-	  @ requires threshold>0 & bufferCapacity>=threshold;
-	  @ requires v!=null & noe!=null & c!=null & f!=null & u!=null;
+	  @ requires oafb!=null & c!=null & f!=null & u!=null;
+	  @ requires threshold>0 & oafb.getBuffer().capacity()>=threshold;
 	  @ ensures oaf!=null & confirmations!=null & ftp!=null & crm!=null;
 	  @ ensures oafBatchThreshold <= oaf.getBuffer().capacity();
+	  @ also public exceptional_behaviour
+	  @ requires oafb.getBuffer().capacity()>0 & oafb.getBuffer().capacity()<threshold;
+	  @ signals_only UnreachableThresholdException; 
 	  @ pure
 	  @*/
 	@CodeBigintMath
-	public OaFBatchManager(int threshold, int bufferCapacity, OaFValidatorIF v, NewOrdersEventIF noe, OrderConfirmedEventIF c, FTPHandlerIF f, UpdateOaFStateIF u) {
+	public OaFBatchManager(int threshold, OaFBuffer oafb, ConfirmationProviderPort c, FTPHandlerPort f, DataSenderPort u) throws UnreachableThresholdException{
+		
+		if(oafb.getBuffer().capacity()<threshold)
+			throw new UnreachableThresholdException("Capacità del buffer di caricamento ordini inferiore alla soglia minima di invio.");
+		
 		oafBatchThreshold = threshold;
-		oaf = new OaFBuffer(bufferCapacity,v,noe);
+		oaf = oafb;
 		confirmations = c;
 		ftp = f;
 		crm = u;
@@ -92,7 +95,7 @@ public class OaFBatchManager {
 		Confirmation c;
 		int confCount=0;
 		
-		if(confirmations.fetchConfirmations()) { //almeno una conferma c'è
+		if(confirmations.fetchConfirmations()) { //almeno una conferma c'?
 		
 		    //@ loop_writes c,confCount,confirmations.newConfirmation;
 			//@ maintaining confCount>=0;
@@ -126,7 +129,7 @@ public class OaFBatchManager {
 	public int handleOrders() {
 		
 		/*@ nullable @*/Order o;		
-		int toSend=0; //valuto se la threshold è superata
+		int toSend=0; //valuto se la threshold ? superata
 		
 		if((oaf.loadNewBuffer())>0) {
 			
@@ -158,7 +161,7 @@ public class OaFBatchManager {
 				if(o.hasOpenTransError()) {
 					crm.signalOpenTransError(o);
 				}
-				else if(toSend>oafBatchThreshold) { //manda e, se l'operazione non dà errori, segnala al crm
+				else if(toSend>oafBatchThreshold) { //manda e, se l'operazione non d? errori, segnala al crm
 					if(ftp.loadOrder(o)) {
 						crm.signalShipped(o);
 					}

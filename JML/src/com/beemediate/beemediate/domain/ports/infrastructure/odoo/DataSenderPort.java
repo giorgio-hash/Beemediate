@@ -1,10 +1,10 @@
-package domain.core.ports.repository;
+package com.beemediate.beemediate.domain.ports.infrastructure.odoo;
 
-import domain.core.dto.Confirmation;
-import domain.core.dto.Order;
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
+import com.beemediate.beemediate.domain.pojo.order.Order;
 
 
-public interface UpdateOaFStateIF {
+public interface DataSenderPort {
 	
 	//@ public model instance boolean positiveResponse;
 	

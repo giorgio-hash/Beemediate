@@ -1,7 +1,6 @@
-package domain.core;
+package com.beemediate.beemediate.domain.service.validator;
 
-import domain.core.dto.Order;
-import domain.core.dto.QuantityFieldValue;
+import com.beemediate.beemediate.domain.pojo.order.Order;
 
 public interface OaFValidatorIF {
 

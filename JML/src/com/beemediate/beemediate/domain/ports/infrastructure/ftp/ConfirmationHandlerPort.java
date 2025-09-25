@@ -1,17 +1,17 @@
-package domain.core.ports.repository;
+package com.beemediate.beemediate.domain.ports.infrastructure.ftp;
 
-import domain.core.dto.Confirmation;
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 
-public interface HandleConfirmationIF {
+public interface ConfirmationHandlerPort {
 
-	/*** Ritorna true se l'operazione è andata bene
+	/*** Ritorna true se l'operazione ? andata bene
 	 * */
 	/*@ public normal_behaviour 
 	  @ requires c!=null & c.data!=null; 
 	  @*/
 	public /*@ pure */ boolean archive(Confirmation c);
 	
-	/*** Ritorna true se l'operazione è andata bene
+	/*** Ritorna true se l'operazione ? andata bene
 	 * */
 	/*@ public normal_behaviour 
 	  @ requires c!=null & c.data!=null; 

@@ -1,8 +1,8 @@
-package domain.core.ports.entrypoint;
+package com.beemediate.beemediate.domain.ports.infrastructure.ftp;
 
-import domain.core.dto.Confirmation;
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 
-public interface OrderConfirmedEventIF {
+public interface ConfirmationProviderPort {
 
 	//@ public model instance boolean newConfirmation;
 	

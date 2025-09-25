@@ -1,4 +1,4 @@
-package domain.core.dto;
+package com.beemediate.beemediate.domain.pojo.confirmation;
 
 public class Confirmation {
 	

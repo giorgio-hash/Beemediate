@@ -1,8 +1,8 @@
-package domain.core.ports.entrypoint;
+package com.beemediate.beemediate.domain.ports.infrastructure.odoo;
 
-import domain.core.dto.Order;
+import com.beemediate.beemediate.domain.pojo.order.Order;
 
-public interface NewOrdersEventIF {
+public interface OrderProviderPort {
 	
 	//@ public model instance boolean newOrder;
 	
