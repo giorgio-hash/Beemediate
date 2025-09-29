@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.domain.service.validator.impl;
 
 import org.jmlspecs.annotation.CodeBigintMath;
+import org.jmlspecs.annotation.SkipEsc;
 
 import com.beemediate.beemediate.domain.exceptions.EmptyArrayException;
 import com.beemediate.beemediate.domain.pojo.order.Order;
@@ -249,4 +250,28 @@ public class OaFValidator implements OaFValidatorIF{
 		
 		return qfv;
 	}
+	
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ ensures !\result <==> (!StringHandler.isDateTime(ost.header.startDate) | !StringHandler.isDateTime(ost.header.orderDate) | !StringHandler.isDateTime(ost.header.endDate));
+	  @*/
+	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/OrderStructure ost) {
+		return ost.getHeader().getStartDate()!=null && StringHandler.isDateTime(ost.getHeader().getStartDate())
+				&& ost.getHeader().getOrderDate()!=null && StringHandler.isDateTime(ost.getHeader().getOrderDate())
+				&& ost.getHeader().getEndDate()!=null && StringHandler.isDateTime(ost.getHeader().getEndDate());
+	}
+	
+	@SkipEsc
+	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/OrderStructure ost) {
+		return validateDeliveryDateContent(ost) 
+				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getStartDate(), ost.getHeader().getEndDate())
+				&& StringHandler.equals(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate());
+	}
+
 }
