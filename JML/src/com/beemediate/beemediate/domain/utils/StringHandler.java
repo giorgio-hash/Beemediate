@@ -352,5 +352,86 @@ public class StringHandler {
 		return true;
 		
 		}
+	
+	/*@ public normal_behaviour
+	  @ requires date1!=null & date1.length()==19;
+	  @ requires date2!=null & date2.length()==19;
+	  @ requires !isDateTime(date1) | !isDateTime(date2);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires date1!=null & date1.length()==19;
+	  @ requires date2!=null & date2.length()==19;
+	  @ requires isDateTime(date1) & isDateTime(date2);
+	  @ ensures !\result<==> ((\exists int i; 0<=i<4; date1.charAt(i)>date2.charAt(i))
+	  @							| (\exists int i; 5<=i<7; date1.charAt(i)>date2.charAt(i))
+	  @							| (\exists int i; 8<=i<10; date1.charAt(i)>date2.charAt(i))
+	  @							| (\exists int i; 11<=i<13; date1.charAt(i)>date2.charAt(i))
+	  @							| (\exists int i; 14<=i<16; date1.charAt(i)>date2.charAt(i))
+	  @							| (\exists int i; 17<=i<19; date1.charAt(i)>date2.charAt(i)));
+	  @*/
+	@CodeBigintMath
+	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
+		
+		if(!StringHandler.isDateTime(date1) || !StringHandler.isDateTime(date2))
+			return false;
+		
+		int pos=0;//yyyy
+		
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=4;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 4-i;
+		for(int i=0; i<4;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+		
+		pos=5;//MM
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=2;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 2-i;
+		for(int i=0; i<2;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+		
+		pos=8;//dd
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=2;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 2-i;
+		for(int i=0; i<2;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+		
+		pos=11;//HH
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=2;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 2-i;
+		for(int i=0; i<2;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+		
+		pos=14;//mm
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=2;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 2-i;
+		for(int i=0; i<2;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+
+		pos=17;//ss
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=2;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
+		//@ decreases 2-i;
+		for(int i=0; i<2;i++)
+			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+				return false;
+		
+		return true;
+	}
 
 }
