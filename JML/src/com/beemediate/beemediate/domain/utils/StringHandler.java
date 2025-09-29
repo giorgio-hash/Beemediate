@@ -72,17 +72,16 @@ public class StringHandler {
 	  @
 	  @ also public normal_behaviour
 	  @ requires str.length()>1;
-	  @ requires (\exists int i; 0<=i<str.length(); str.charAt(i)<48 | str.charAt(i)>57 );
+	  @ requires (\exists int i; 0<=i<str.length(); !isDigit(str.charAt(i),false) );
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
 	  @ requires str.length()>1;
-	  @ requires str.charAt(0)>=49 & str.charAt(0)<=57;
-	  @ requires (\forall int i; 1<=i<str.length(); str.charAt(i)>=48 & str.charAt(i)<=57 );
-	  @ ensures \result;
+	  @ requires (\forall int i; 0<=i<str.length(); isDigit(str.charAt(i),false) );
+	  @ ensures \result <==> isDigit(str.charAt(0),true);
 	  @*/
 	@CodeBigintMath
-	public static /*@ pure @*/ boolean isInteger(/*@ non_null @*/ String str) {
+	public static /*@ helper pure @*/ boolean isInteger(/*@ non_null @*/ String str) {
 		
 		if(str == null || str.length()==0)
 			return false;
@@ -112,33 +111,41 @@ public class StringHandler {
 	
 	//@ public static ghost int numOfCommas = 0;
 	
+	/*Più scenari:
+	 * - scenario 1: stringa troppo corta --> false
+	 * - scenario 2: stringa minima ma '.' agli estremi --> false
+	 * - scenario 3: stringa minima, '.' nel mezzo ma c'è carattere sbagliato --> false
+	 * - scenario 4: stringa minima, '.' non agli estremi, caratteri corretti e '.' al secondo posto --> true sse c'è solo un dot
+	 * - scenario 5: stringa minima, '.' non agli estremi, caratteri corretti e '.' dopo il secondo posto --> true sse c'è solo un dot e primo carattere è non-nullo
+	 * */
 	/*@ public normal_behaviour
 	  @ requires str.length()<3;
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires str.length()>3;
+	  @ requires str.length()>=3;
 	  @ requires str.charAt(str.length()-1) == '.' | str.charAt(0) == '.';
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires str.length()>3;
-	  @ requires str.charAt(1) == '.';
-	  @ requires str.charAt(0)<48 | str.charAt(0)>57;
-	  @ ensures !\result;
-	  @
-	  @ also public normal_behaviour
-	  @ requires str.length()>3;
-	  @ requires str.charAt(1) != '.';
-	  @ requires str.charAt(0)<49 | str.charAt(0)>57;
-	  @ ensures !\result;
-	  @
-	  @ also public normal_behaviour
-	  @ requires str.length()>3;
+	  @ requires str.length()>=3;
 	  @ requires str.charAt(str.length()-1) != '.' & str.charAt(0) != '.';
-	  @ requires str.charAt(1) == '.';
-	  @ requires (\forall int i; 0<=i<str.length(); 48<=str.charAt(i)<=57 | str.charAt(i)=='.');
-	  @ ensures \result <==> (numOfCommas == 1);
+	  @ requires (\exists int i; 0<=i<str.length(); (str.charAt(i)<48 | str.charAt(i)>57) & str.charAt(i)!='.');
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires str.length()>=3;
+	  @ requires str.charAt(str.length()-1) != '.' & str.charAt(0) != '.';
+	  @ requires (\forall int i; 0<=i<str.length(); 48<=str.charAt(i)<=57 | str.charAt(i)=='.' );
+	  @ requires str.charAt(1)=='.';
+	  @ ensures \result <==> numOfCommas==1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires str.length()>=3;
+	  @ requires str.charAt(str.length()-1) != '.' & str.charAt(0) != '.';
+	  @ requires (\forall int i; 0<=i<str.length(); 48<=str.charAt(i)<=57 | str.charAt(i)=='.' );
+	  @ requires str.charAt(1)!='.';
+	  @ ensures \result <==> (numOfCommas==1 & str.charAt(0)!='0');
 	  @*/
 	@CodeBigintMath
 	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/  String str) {
@@ -153,29 +160,28 @@ public class StringHandler {
 			return false;
 		
 		// se il secondo carattere è COMMA, il primo carattere può essere zero.
-		if ( str.charAt(1) == '.' & !isDigit(str.charAt(0),false) )
-			return false;
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
 		if ( str.charAt(1) != '.' & !isDigit(str.charAt(0),true) )
 			return false;
 		
-		int i=1;
-		//@ loop_writes \nothing;
-		//@ maintaining 1<=i<=str.length();
-		//@ maintaining i>1 ==> (\forall int j; 1<=j<i; isDigit(str.charAt(j),false) | str.charAt(j)==COMMA );
+		int i=0;
+		//@ loop_writes numOfCommas;
+		//@ maintaining 0<=numOfCommas<=str.length();
+		//@ maintaining 0<=i<=str.length();
+		//@ maintaining i>0 ==> (\forall int j; 0<=j<i; 48<=str.charAt(j)<=57 | str.charAt(j)=='.');
 		//@ decreases str.length()-i;
 		for(; i<str.length(); i++) {
 				
 			if( !isDigit(str.charAt(i),false) )
-				if (str.charAt(i) == COMMA)
+				if (str.charAt(i) == COMMA) {
 					numOfCommas++;
-				else
+					//@ set numOfCommas=numOfCommas+1;
+				}else
 					return false;
 			
-				//@ set numOfCommas=numOfCommas+(str.charAt(i) == COMMA? 1 : 0);
 			}		
 		
-		return numOfCommas==1; // voglio solo una virgola.
+		return numOfCommas==1; // voglio solo un dot.
 	}
 	
 	
@@ -204,6 +210,36 @@ public class StringHandler {
 			if(c == digit)
 				return c=='0'? (nonNull? false : true) : true ;
 		}
+		return false;
+	}
+	
+	/*@ public normal_behaviour
+	  @ requires str.length()==0;
+	  @ ensures \result == false;
+	  @
+	  @ also public normal_behaviour
+	  @ requires str.length()==1;
+	  @ ensures \result <==> str.charAt(0)==elem;
+	  @
+	  @ also public normal_behaviour
+	  @ requires str.length()>1;
+	  @ ensures \result <==> (\exists int i; 0<=i<str.length(); str.charAt(i)==elem);
+	  @*/
+	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ String str, char elem) {
+	
+		if(str==null || str.length()==0)
+			return false;
+		
+		/*@ loop_writes \nothing;
+		  @ loop_invariant 0<=i<=str.length();
+		  @ loop_invariant i>0 ==> (\forall int j; 0<=j<i; str.charAt(j)!=elem);
+		  @ decreases str.length()-i;
+		  @*/
+		for(int i=0; i<str.length(); i++) {
+			if(str.charAt(i)==elem)
+				return true;
+		}
+		
 		return false;
 	}
 

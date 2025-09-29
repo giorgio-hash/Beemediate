@@ -170,5 +170,49 @@ public class OaFValidator implements OaFValidatorIF{
 		
 		return rightMeasureUnit;
 	}
-
+	
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i].quantity!=null & ost.itemList[i].quantity.length()>=0);
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
+	  @*/
+	@CodeBigintMath
+	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/ OrderStructure ost) {
+		
+		
+		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;
+		
+		/*@ loop_writes \nothing;
+		  @ loop_invariant 0<=\count<=ost.itemList.length;
+		  @ loop_invariant \count < ost.itemList.length ==> (il!=null & il.quantity.length()>=0);
+		  @ loop_invariant (qfv==QuantityFieldValue.FLOAT_WITH_DOT & \count>0) ==> (\forall int i; 0<=i<\count; StringHandler.isDouble(ost.itemList[i].quantity) );
+		  @ loop_invariant (qfv==QuantityFieldValue.INTEGER & \count>0) ==> (\exists int i; 0<=i<\count; StringHandler.isInteger(ost.itemList[i].quantity));
+		  @ loop_invariant qfv==QuantityFieldValue.FLOAT_WITH_COMMA ==> (!StringHandler.isDouble(il.quantity) & StringHandler.containsChar(il.quantity,',') );
+		  @ loop_invariant qfv==QuantityFieldValue.NAN ==> (!StringHandler.isDouble(il.quantity) & !StringHandler.containsChar(il.quantity,',') );
+		  @ decreases ost.itemList.length - \count;
+		  @*/
+		for(OrderItem il : ost.getItemList()) {
+			
+			if(StringHandler.isDouble(il.getQuantity()))
+				continue;
+			else if(StringHandler.isInteger(il.getQuantity())) {
+				qfv = QuantityFieldValue.INTEGER;
+				continue;
+			} else {
+				if(StringHandler.containsChar(il.getQuantity(),','))
+					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;
+				else
+					qfv = QuantityFieldValue.NAN;
+				
+				return qfv;
+			} 
+		}
+		
+		return qfv;
+	}
 }
