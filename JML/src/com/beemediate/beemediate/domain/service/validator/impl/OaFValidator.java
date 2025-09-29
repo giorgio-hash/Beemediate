@@ -83,6 +83,40 @@ public class OaFValidator implements OaFValidatorIF{
 	}
 	
 	/*@ public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null & deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0<=i<2; deliveryLocationNumber[i]!=null & deliveryLocationNumber[i].length()>0);
+	  @ requires (\forall int i; 0<=i<2; ost.header.deliveryID.length()!=deliveryLocationNumber[i].length())
+	  @				| (\forall int i; 0<=i<2; ost.header.deliveryIDRef.length()!=deliveryLocationNumber[i].length());
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null & deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0<=i<2; deliveryLocationNumber[i]!=null & deliveryLocationNumber[i].length()>0);
+	  @	requires ost.header.deliveryID.length() != ost.header.deliveryIDRef.length();
+	  @ ensures  !\result;
+	  @
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null & deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0<=i<2; deliveryLocationNumber[i]!=null & deliveryLocationNumber[i].length()>0);
+	  @ requires (\exists int i; 0<=i<2; ost.header.deliveryID.length()==deliveryLocationNumber[i].length()
+	  @										& (\forall int j; 0<=j<ost.header.deliveryID.length(); ost.header.deliveryID.charAt(j)==deliveryLocationNumber[i].charAt(j) ));
+	  @	requires ost.header.deliveryID.length() == ost.header.deliveryIDRef.length();
+	  @ requires (\forall int j; 0<=j<ost.header.deliveryID.length(); ost.header.deliveryID.charAt(j)==ost.header.deliveryIDRef.charAt(j) );
+	  @ ensures  \result;
+	  @*/
+	@CodeBigintMath
+	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/ OrderStructure ost) {
+		
+		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())
+				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[0])
+						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[1]));
+	}
+	
+	/*@ public normal_behaviour
 	  @ requires articleNumbers!=null;
 	  @ requires ost!=null;
 	  @ requires ost.itemList!=null;
