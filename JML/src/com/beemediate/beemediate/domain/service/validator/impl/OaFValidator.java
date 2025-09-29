@@ -267,7 +267,18 @@ public class OaFValidator implements OaFValidatorIF{
 				&& ost.getHeader().getEndDate()!=null && StringHandler.isDateTime(ost.getHeader().getEndDate());
 	}
 	
-	@SkipEsc
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ ensures \result ==> (StringHandler.isDateTime(ost.header.startDate) & StringHandler.isDateTime(ost.header.orderDate) & StringHandler.isDateTime(ost.header.endDate));
+	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.startDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.startDate.charAt(i)<=ost.header.endDate.charAt(i) );
+	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.startDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.orderDate.charAt(i)==ost.header.endDate.charAt(i) );
+	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/OrderStructure ost) {
 		return validateDeliveryDateContent(ost) 
 				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getStartDate(), ost.getHeader().getEndDate())
