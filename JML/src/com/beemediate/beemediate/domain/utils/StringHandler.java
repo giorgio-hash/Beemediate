@@ -200,17 +200,11 @@ public class StringHandler {
 	  @ ensures !\result;
 	  @*/
 	public static /*@ pure @*/ boolean isDigit(char c, boolean nonNull) {
-		char[] digits = new char[]{'0','1','2','3','4','5','6','7','8','9'};
 		
-		//@ loop_writes \nothing;
-		//@ maintaining 0<=\count<=11;
-		//@ loop_invariant (\forall int j; 0<=j<\count; c!=digits[j]);
-		//@ decreases 10-\count;
-		for(char digit : digits) {
-			if(c == digit)
-				return c=='0'? (nonNull? false : true) : true ;
-		}
-		return false;
+		if(nonNull)
+			return 49<=c && c<=57;
+		
+		return 48<=c && c<=57;
 	}
 	
 	/*@ public normal_behaviour
@@ -242,5 +236,121 @@ public class StringHandler {
 		
 		return false;
 	}
+	
+	
+	/*@ public normal_behaviour
+	  @ requires str.length()!=19;
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires str.length()==19;
+	  @ requires (\exists int i; i==4 | i==7; str.charAt(i) != '-')
+      @	  			| str.charAt(10) != ' '
+      @				| (\exists int i; i==13 | i==16; str.charAt(i) != ':');
+      @ ensures !\result;
+      @
+      @ also public normal_behaviour
+	  @ requires str.length()==19;
+	  @ requires (\forall int i; i==4 | i==7; str.charAt(i) == '-')
+      @	  			& str.charAt(10) == ' '
+      @				& (\forall int i; i==13 | i==16; str.charAt(i) == ':');
+      @ ensures \result ==> isDigit(str.charAt(0),true);
+      @ ensures \result ==> (\forall int i; 1<=i<str.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; isDigit(str.charAt(i),false) );
+	  @*/
+	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
+	
+		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
+			
+		final char MAIN_SEPARATOR = ' ';
+		final char DATE_SEPARATOR = '-';
+		final char TIME_SEPARATOR = ':';
+		final int YSize = 4; 
+		final int MSize = 2; 
+		final int GSize = 2;
+		final int hSize = 2; 
+		final int mSize = 2; 
+		final int sSize = 2;
+		
+		//mi aspetto una certa forma
+		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )
+			return false;
+		
+		//mi aspetto i separatori in determinate posizioni
+		if(str.charAt(4)!=DATE_SEPARATOR
+				|| str.charAt(7)!=DATE_SEPARATOR
+				|| str.charAt(10)!=MAIN_SEPARATOR
+				|| str.charAt(13)!=TIME_SEPARATOR
+				|| str.charAt(16)!=TIME_SEPARATOR)
+			return false;
+		
+		//controllo yyyy
+		if( !isDigit(str.charAt(0), true) 
+				|| !isDigit(str.charAt(1), false)  
+				|| !isDigit(str.charAt(2), false)  
+				|| !isDigit(str.charAt(3), false) )
+			return false;
+		
+		//controllo MM, da "01" a "12"
+		if( str.charAt(5)=='0' ) {
+			if( !isDigit( str.charAt(6) ,true) )
+				return false;
+		}else if(str.charAt(5) == '1') {
+			if( str.charAt(6)<'0' || str.charAt(6)>'2' )
+				return false;
+		}else
+			return false;
+		
+		//controllo gg, da "01" a "31"
+		if( str.charAt(8)=='0' ) {
+			if( !isDigit( str.charAt(9) ,true) )
+				return false;
+		}else if( '0'<str.charAt(8) && str.charAt(8)<'3' ) {
+			if( !isDigit(str.charAt(9), false ) )
+				return false;
+		} else if( str.charAt(8) == '3' ) {
+			if( str.charAt(8)<'0' || str.charAt(8)>'1' )
+				return false;
+		}else
+			return false;
+		
+		//controllo HH, da "00" a "23"
+		if( str.charAt(11)=='0' ) {
+			if( !isDigit( str.charAt(12) ,false) )
+				return false;
+		}else if( '0'<str.charAt(11) && str.charAt(11)<'2' ) {
+			if( !isDigit(str.charAt(12) , false) )
+				return false;
+		}else if( str.charAt(11)=='2') {
+			if( str.charAt(12)<'0' || str.charAt(12)>'3')
+				return false;
+		} else
+			return false;
+
+
+		//controllo mm, da "00" a "59"
+		if( str.charAt(14)=='0' ) {
+			if( !isDigit( str.charAt(15) ,false) )
+				return false;
+		}else if( '0'<str.charAt(14) && str.charAt(14)<'6' ) {
+			if( !isDigit(str.charAt(15) , false) )
+				return false;
+		} else
+			return false;
+		
+		
+		//controllo ss, da "00" a "59"
+		if( str.charAt(17)=='0' ) {
+			if( !isDigit( str.charAt(18) ,false) )
+				return false;
+		}else if( '0'<str.charAt(17) && str.charAt(17)<'6' ) {
+			if( !isDigit(str.charAt(18) , false) )
+				return false;
+		} else
+			return false;
+		
+		
+		return true;
+		
+		}
 
 }
