@@ -41,6 +41,7 @@ public class BoundedBuffer {
 	  @ ensures \result == null <==> (i<0 | i>=size);
 	  @ ensures size<ordini.length ==> (\forall int j; size<=j<ordini.length; ordini[j]==null);
 	  @*/
+
 //	@CodeBigintMath
 	public /*@ pure nullable */ Order get(int i) {
 		if(0<=i && i<size)
@@ -81,6 +82,7 @@ public class BoundedBuffer {
 	  @ ensures (size == \old(size));
 	  @ ensures \result==null;
 	  @*/
+
 //	@CodeBigintMath
 	public /*@ nullable */ Order pop() {
 		/*@ nullable */ Order res=null;
@@ -98,6 +100,7 @@ public class BoundedBuffer {
 	  @ ensures size == 0;
 	  @ ensures (\forall int i; 0<=i<ordini.length; ordini[i]==null);
 	  @*/
+
 //	@CodeBigintMath
 	public void empty() {
 
