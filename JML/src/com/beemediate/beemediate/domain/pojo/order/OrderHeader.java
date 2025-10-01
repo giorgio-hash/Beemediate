@@ -1,6 +1,6 @@
 package com.beemediate.beemediate.domain.pojo.order;
 
-//import org.jmlspecs.annotation.SkipEsc;
+import org.jmlspecs.annotation.SkipEsc;
 
 public class OrderHeader {
 	
@@ -167,7 +167,7 @@ public class OrderHeader {
 		this.deliveryIDRef = deliveryIDRef;
 	}
 
-//	@SkipEsc
+	@SkipEsc
 	@Override
 	public String toString() {
 		return "OrderHeader [orderID=" + orderID + ", orderDate=" + orderDate + ", currency=" + currency + ", buyerID="

@@ -2,8 +2,8 @@ package com.beemediate.beemediate.domain.pojo.order;
 
 import java.util.Arrays;
 
-//import org.jmlspecs.annotation.CodeBigintMath;
-//import org.jmlspecs.annotation.SkipEsc;
+import org.jmlspecs.annotation.CodeBigintMath;
+import org.jmlspecs.annotation.SkipEsc;
 
 public class OrderStructure {
 	
@@ -23,7 +23,7 @@ public class OrderStructure {
 	//@ public normal_behaviour
 	//@ ensures header == null & itemList == null & orderSummary == null;
 	//@ pure
-	public OrderStructure() {};
+	private OrderStructure() {};
 	
 	//@ public normal_behaviour
 	//@ requires header!=null;
@@ -89,12 +89,12 @@ public class OrderStructure {
 	//@ requires itemList==null;
 	//@ ensures this.orderSummary!=null;
 	//@ ensures this.orderSummary == orderSummary;
-//	@CodeBigintMath
+	@CodeBigintMath
 	public void setOrderSummary(/*@ non_null @*/ OrderSummary orderSummary) {
 		this.orderSummary = orderSummary;
 	}
 	
-//	@SkipEsc
+	@SkipEsc
 	@Override
 	public String toString() {
 		return "OrderStructure [header=" + header + ", itemList=" + Arrays.toString(itemList) + ", orderSummary="

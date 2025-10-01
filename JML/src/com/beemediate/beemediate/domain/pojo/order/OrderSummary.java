@@ -1,7 +1,7 @@
 package com.beemediate.beemediate.domain.pojo.order;
 
-//import org.jmlspecs.annotation.CodeBigintMath;
-//import org.jmlspecs.annotation.SkipEsc;
+import org.jmlspecs.annotation.CodeBigintMath;
+import org.jmlspecs.annotation.SkipEsc;
 
 public class OrderSummary {
 	
@@ -9,8 +9,8 @@ public class OrderSummary {
 
 	/*@ public invariant 0<totalItemNum<=Integer.MAX_VALUE; @*/
 	
-//	@SkipEsc
-	public OrderSummary() {}
+	@SkipEsc
+	private OrderSummary() {}
 	
 	//@ ensures \result==totalItemNum;
 	public /*@ pure @*/ int getTotalItemNum() {
@@ -19,12 +19,12 @@ public class OrderSummary {
 
 	//@ requires totalItemNum>0;
 	//@ ensures this.totalItemNum>0;
-//	@CodeBigintMath
+	@CodeBigintMath
 	public void setTotalItemNum(int totalItemNum) {
 		this.totalItemNum = totalItemNum;
 	}
 
-//	@SkipEsc
+	@SkipEsc
 	@Override
 	public String toString() {
 		return "OrderSummary [totalItemNum=" + totalItemNum + "]";

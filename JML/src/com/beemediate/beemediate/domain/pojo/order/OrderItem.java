@@ -1,6 +1,6 @@
 package com.beemediate.beemediate.domain.pojo.order;
 
-//import org.jmlspecs.annotation.SkipEsc;
+import org.jmlspecs.annotation.SkipEsc;
 
 public class OrderItem {
 	
@@ -93,7 +93,7 @@ public class OrderItem {
 		this.descriptionShort = descriptionShort;
 	}
 	
-//	@SkipEsc
+	@SkipEsc
 	@Override
 	public String toString() {
 		return "OrderItem [lineItemID=" + lineItemID + ", quantity=" + quantity + ", orderUnit=" + orderUnit
