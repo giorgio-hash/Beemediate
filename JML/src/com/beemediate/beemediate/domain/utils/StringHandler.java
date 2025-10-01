@@ -111,12 +111,12 @@ public class StringHandler {
 	
 	//@ public static ghost int numOfCommas = 0;
 	
-	/*PiÃ¹ scenari:
+	/*Più scenari:
 	 * - scenario 1: stringa troppo corta --> false
 	 * - scenario 2: stringa minima ma '.' agli estremi --> false
-	 * - scenario 3: stringa minima, '.' nel mezzo ma c'Ã¨ carattere sbagliato --> false
-	 * - scenario 4: stringa minima, '.' non agli estremi, caratteri corretti e '.' al secondo posto --> true sse c'Ã¨ solo un dot
-	 * - scenario 5: stringa minima, '.' non agli estremi, caratteri corretti e '.' dopo il secondo posto --> true sse c'Ã¨ solo un dot e primo carattere Ã¨ non-nullo
+	 * - scenario 3: stringa minima, '.' nel mezzo ma c'è carattere sbagliato --> false
+	 * - scenario 4: stringa minima, '.' non agli estremi, caratteri corretti e '.' al secondo posto --> true sse c'è solo un dot
+	 * - scenario 5: stringa minima, '.' non agli estremi, caratteri corretti e '.' dopo il secondo posto --> true sse c'è solo un dot e primo carattere è non-nullo
 	 * */
 	/*@ public normal_behaviour
 	  @ requires str.length()<3;
@@ -159,7 +159,7 @@ public class StringHandler {
 		if(str == null || str.length()<3 || str.charAt(str.length()-1) == COMMA || str.charAt(0) == COMMA)
 			return false;
 		
-		// se il secondo carattere Ã¨ COMMA, il primo carattere puÃ² essere zero.
+		// se il secondo carattere è COMMA, il primo carattere può essere zero.
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
 		if ( str.charAt(1) != '.' & !isDigit(str.charAt(0),true) )
 			return false;

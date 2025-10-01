@@ -50,10 +50,19 @@ public class OaFValidator implements OaFValidatorIF{
 		articleNumbers = rows;
 	}
 	
-
+	@SkipEsc
 	@Override
-	public void validate(Order o) {
-
+	public void validate(/*@ non_null @*/Order o) {
+		
+		OrderStructure ost = o.getData();
+			
+		o.setCustomerNumber( this.validateCustomerNumber( ost ) );
+		o.setArticleNumber( this.validateArticleNumber( ost ) );
+		o.setQuantityMeasure( this.validateQuantityMeasure( ost ) );
+		o.setQuantity( this.validateQuantity( ost ) );
+		o.setDeliveryLocationNumber( this.validateDeliveryLocationNumber( ost ) );
+		o.setDeliveryDate( this.validateDeliveryDate( ost) );
+		o.setDeliveryDateContent( this.validateDeliveryDateContent( ost ) );
 	}
 	
 	/*@ public normal_behaviour

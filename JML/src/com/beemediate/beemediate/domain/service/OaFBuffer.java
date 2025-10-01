@@ -96,6 +96,7 @@ public class OaFBuffer {
 	  @ ensures \result>=0 & \result<=buffer.size;
 	  @ ensures buffer.size>0 ==> (\forall int i; 0<=i<buffer.size; \old(buffer).ordini[i]==buffer.ordini[i]);
 	  @ ensures \not_modified(buffer.size);
+	  @
 	  @ also public normal_behaviour
 	  @ assigns \nothing;
 	  @ requires buffer!=null & buffer.size==0;

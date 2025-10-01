@@ -20,6 +20,7 @@ public class OrderStructure {
 	/*@ public invariant itemList!=null ==> \elemtype(\typeof(itemList)) == \type(OrderItem); @*/
 	/*@ public invariant (itemList!=null & orderSummary!=null) ==> orderSummary.totalItemNum == itemList.length; @*/
 	
+	//@ public normal_behaviour
 	//@ ensures header == null & itemList == null & orderSummary == null;
 	//@ pure
 	private OrderStructure() {};
@@ -32,6 +33,7 @@ public class OrderStructure {
 		return header;
 	}
 	
+	//@ public normal_behaviour
 	//@ ensures this.header!=null;
 	public void setHeader(/*@ non_null @*/ OrderHeader header) {
 		this.header = header;
