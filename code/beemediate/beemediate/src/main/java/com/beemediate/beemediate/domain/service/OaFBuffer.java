@@ -1,9 +1,12 @@
-package com.beemediate.beemediate.domain;
+package com.beemediate.beemediate.domain.service;
+
+//import org.jmlspecs.annotation.CodeBigintMath;
+
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
+import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
-import com.beemediate.beemediate.domain.validator.OaFValidatorIF;
 
 public class OaFBuffer {
 	
@@ -25,7 +28,7 @@ public class OaFBuffer {
 	//@ ensures buffer.ordini.length==bufferCapacity & buffer.size==0;
 	//@ ensures (\forall int i; buffer.size<=i<buffer.ordini.length; buffer.ordini[i]==null);
 	//@ pure
-	//@CodeBigintMath
+//	@CodeBigintMath
 	public OaFBuffer(int bufferCapacity, OaFValidatorIF v, OrderProviderPort orderRetriever) {
 		buffer = new BoundedBuffer(bufferCapacity);
 		validator = v;
@@ -40,7 +43,7 @@ public class OaFBuffer {
 	  @ ensures \result == buffer.size;
 	  @ diverges true;
 	  @*/
-	//@CodeBigintMath
+//	@CodeBigintMath
 	public int loadNewBuffer() {
 		
 		buffer.empty();
@@ -48,7 +51,7 @@ public class OaFBuffer {
 		
 		//@ ghost int ordersLoaded = 0;
 		
-		if(or.fetchOrders()) { //c'� almeno un ordine
+		if(or.fetchOrders()) { //c'? almeno un ordine
 			Order t = or.popNewOrder();
 			//@ loop_writes buffer.ordini[*], t, ordersLoaded;
 			//@ loop_invariant 0<=buffer.size<=buffer.ordini.length;
@@ -94,12 +97,13 @@ public class OaFBuffer {
 	  @ ensures \result>=0 & \result<=buffer.size;
 	  @ ensures buffer.size>0 ==> (\forall int i; 0<=i<buffer.size; \old(buffer).ordini[i]==buffer.ordini[i]);
 	  @ ensures \not_modified(buffer.size);
+	  @
 	  @ also public normal_behaviour
 	  @ assigns \nothing;
 	  @ requires buffer!=null & buffer.size==0;
 	  @ ensures \result == 0;
 	  @*/
-	//@CodeBigintMath
+//	@CodeBigintMath
 	public int validateBuffer() {
 		int passed=0;
 		

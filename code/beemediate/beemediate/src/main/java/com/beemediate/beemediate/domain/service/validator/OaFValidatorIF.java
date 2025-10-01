@@ -1,7 +1,6 @@
-package com.beemediate.beemediate.domain.validator;
+package com.beemediate.beemediate.domain.service.validator;
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
-import com.beemediate.beemediate.domain.pojo.order.QuantityFieldValue;
 
 public interface OaFValidatorIF {
 
@@ -13,7 +12,8 @@ public interface OaFValidatorIF {
 	  @ requires o.quantity != null;
 	  @ requires o.orderID != null;
 	  @ requires \typeof(o) == \type(Order);
-	  @ ensures \not_modified(o,o.data,o.quantity,o.orderID); 
+	  @ ensures \not_modified(o,o.data,o.orderID);
+	  @ ensures o.quantity!=null; 
 	  @*/
 	public void validate(Order o);
 

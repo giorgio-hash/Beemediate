@@ -1,10 +1,10 @@
-package com.beemediate.beemediate.domain.ports.infrastructure.odoo.ftp;
+package com.beemediate.beemediate.domain.ports.infrastructure.ftp;
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
 
 public interface OrderSenderPort {
 
-	/*** Ritorna true se l'operazione � andata bene
+	/*** Ritorna true se l'operazione ? andata bene
 	 * */
 	/*@ public normal_behaviour 
 	  @ requires o!=null & o.data!=null & o.quantity!=null;

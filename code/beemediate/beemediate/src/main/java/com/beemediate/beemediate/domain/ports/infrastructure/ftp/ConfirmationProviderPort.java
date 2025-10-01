@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.domain.ports.infrastructure.odoo.ftp;
+package com.beemediate.beemediate.domain.ports.infrastructure.ftp;
 
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 

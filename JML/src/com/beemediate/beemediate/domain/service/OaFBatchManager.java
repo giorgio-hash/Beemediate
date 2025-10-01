@@ -6,12 +6,13 @@ import org.jmlspecs.annotation.CodeBigintMath;
 import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.ports.entrypoint.OaFManagerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 
 
-public class OaFBatchManager {
+public class OaFBatchManager implements OaFManagerPort{
 	
 	private /*@ spec_public @*/ final OaFBuffer oaf;
 	private /*@ spec_public @*/ final ConfirmationProviderPort confirmations;
@@ -39,7 +40,7 @@ public class OaFBatchManager {
 	public OaFBatchManager(int threshold, OaFBuffer oafb, ConfirmationProviderPort c, FTPHandlerPort f, DataSenderPort u) throws UnreachableThresholdException{
 		
 		if(oafb.getBuffer().capacity()<threshold)
-			throw new UnreachableThresholdException("Capacità del buffer di caricamento ordini inferiore alla soglia minima di invio.");
+			throw new UnreachableThresholdException("CapacitÃ  del buffer di caricamento ordini inferiore alla soglia minima di invio.");
 		
 		oafBatchThreshold = threshold;
 		oaf = oafb;
@@ -48,40 +49,7 @@ public class OaFBatchManager {
 		crm = u;
 	}
 	
-//	public static void main(String args) {
-//		
-//		/*@ nullable*/ String[] articleNumbers = null;
-//		FileReader fr;
-//		try {
-//			fr = new FileReader("./resources/Numero articolo GEALAN.txt");
-//			BufferedReader br = new BufferedReader(fr);
-//			String row;
-//			String concatRows = "";
-//			if((row=br.readLine()) != null) {
-//				concatRows = row;
-//				while ((row=br.readLine()) != null) {
-//					concatRows += ";" + row;
-//				}
-//			}
-//			articleNumbers = concatRows.split(";");
-//		} catch (FileNotFoundException e0) {
-//			e0.printStackTrace();
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		} catch (Exception e2) {
-//			e2.printStackTrace();
-//		}
-//		
-//		try {
-//			OaFValidatorIF v = new OaFValidator(articleNumbers);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}	
-//	}
-//	
-//	
-	/*@ public normal_behaviour
+	/*@ also public normal_behaviour
 	  @ assigns confirmations.newConfirmation, crm.positiveResponse;
 	  @ requires confirmations!=null;
 	  @ requires crm!=null;
@@ -90,6 +58,7 @@ public class OaFBatchManager {
 	  @ diverges true;
 	  @*/
 	@CodeBigintMath
+	@Override
 	public int handleConfirmations() {
 		
 		Confirmation c;
@@ -113,7 +82,7 @@ public class OaFBatchManager {
 		return confCount;
 	}
 	
-	//@ public normal_behaviour
+	//@ also public normal_behaviour
 	//@ requires oaf!=null & crm!=null & ftp!=null;
 	/*@ requires 0<oaf.buffer.size ==> (\forall int j; 0<=j<oaf.buffer.size; oaf.buffer.ordini[j] != null
 	  @																		& oaf.buffer.ordini[j].data!=null 
@@ -126,6 +95,7 @@ public class OaFBatchManager {
 	//@ ensures \result>=0;
 	//@ ensures \not_modified(oaf,oaf.buffer,oaf.buffer.ordini,oaf.buffer.ordini.length);
 	@CodeBigintMath
+	@Override
 	public int handleOrders() {
 		
 		/*@ nullable @*/Order o;		

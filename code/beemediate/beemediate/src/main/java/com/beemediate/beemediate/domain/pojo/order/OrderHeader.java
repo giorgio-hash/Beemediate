@@ -1,120 +1,173 @@
 package com.beemediate.beemediate.domain.pojo.order;
 
+//import org.jmlspecs.annotation.SkipEsc;
+
 public class OrderHeader {
 	
 	//order_info
-	private String orderID;
-	private String orderDate;
-	private String currency;
+	private /*@ spec_public @*/ String orderID = "";
+	private /*@ spec_public @*/ String orderDate = "";
+	private /*@ spec_public @*/ String currency = "";
 	
 	//order_info.parties.party[party_role="buyer"]
-	private String buyerID;
+	private /*@ spec_public @*/ String buyerID = "";
 	//order_info.parties.party[party_role="supplier"]
-	private String supplierID;
+	private /*@ spec_public @*/ String supplierID = "";
 	//order_info.parties.party[party_role="delivery"]
-	private String deliveryID;
+	private /*@ spec_public @*/ String deliveryID = "";
 	
 	//order_info.delivery_date
-	private String startDate;
-	private String endDate;
+	private /*@ spec_public @*/ String startDate = "";
+	private /*@ spec_public @*/ String endDate = "";
 	
 	//order_info.order_parties_reference
-	private String buyerIDRef;
-	private String supplierIDRef;
+	private /*@ spec_public @*/ String buyerIDRef = "";
+	private /*@ spec_public @*/ String supplierIDRef = "";
 	
 	//order_info.parties_reference.shipment_parties_reference
-	private String deliveryIDRef;
-
+	private /*@ spec_public @*/ String deliveryIDRef = "";
 	
+	/*@ ensures buyerID!=null & supplierID!=null & deliveryID!=null
+	  @			& startDate!=null & endDate!=null
+	  @			& buyerIDRef!=null & supplierIDRef!=null
+	  @			& deliveryIDRef!=null;
+	  @*/
+	//@ pure
+	public OrderHeader() {};
 	
-	public String getOrderID() {
+	//@ public normal_behaviour
+	//@ ensures \result == orderID;
+	public /*@ pure @*/ String getOrderID() {
 		return orderID;
 	}
 
-	public void setOrderID(String orderID) {
+	//@ public normal_behaviour
+	//@ ensures this.orderID!=null;
+	public void setOrderID( /*@ non_null @*/ String orderID) {
 		this.orderID = orderID;
 	}
 
-	public String getOrderDate() {
+	//@ public normal_behaviour
+	//@ ensures \result==orderDate;
+	public /*@ pure @*/  String getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrderDate(String orderDate) {
+	//@ public normal_behaviour
+	//@ ensures this.orderDate!=null;
+	public void setOrderDate( /*@ non_null @*/ String orderDate) {
 		this.orderDate = orderDate;
 	}
 
-	public String getCurrency() {
+	//@ public normal_behaviour
+	//@ ensures \result==currency;
+	public /*@ pure @*/  String getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String currency) {
+	//@ public normal_behaviour
+	//@ ensures this.currency!=null;
+	public void setCurrency( /*@ non_null @*/ String currency) {
 		this.currency = currency;
 	}
 
-	public String getBuyerID() {
+	//@ public normal_behaviour
+	//@ ensures \result==buyerID;
+	public /*@ pure @*/  String getBuyerID() {
 		return buyerID;
 	}
 
-	public void setBuyerID(String buyerID) {
+	//@ public normal_behaviour
+	//@ ensures this.buyerID!=null;
+	public void setBuyerID( /*@ non_null @*/ String buyerID) {
 		this.buyerID = buyerID;
 	}
 
-	public String getSupplierID() {
+	//@ public normal_behaviour
+	//@ ensures \result==supplierID;
+	public /*@ pure @*/ String getSupplierID() {
 		return supplierID;
 	}
 
-	public void setSupplierID(String supplierID) {
+	//@ public normal_behaviour
+	//@ ensures this.supplierID!=null;
+	public void setSupplierID( /*@ non_null @*/ String supplierID) {
 		this.supplierID = supplierID;
 	}
 
-	public String getDeliveryID() {
+	//@ public normal_behaviour
+	//@ ensures \result==deliveryID;
+	public /*@ pure @*/ String getDeliveryID() {
 		return deliveryID;
 	}
 
-	public void setDeliveryID(String deliveryID) {
+	//@ public normal_behaviour
+	//@ ensures this.deliveryID==deliveryID;
+	public void setDeliveryID( /*@ non_null @*/ String deliveryID) {
 		this.deliveryID = deliveryID;
 	}
 
-	public String getStartDate() {
+	//@ public normal_behaviour
+	//@ ensures \result==startDate;
+	public /*@ pure @*/ String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	//@ public normal_behaviour
+	//@ ensures this.startDate!=null;
+	public void setStartDate( /*@ non_null @*/ String startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	//@ public normal_behaviour
+	//@ ensures \result == endDate;
+	public /*@ pure @*/ String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	//@ public normal_behaviour
+	//@ ensures this.endDate!=null;
+	public void setEndDate(/*@ non_null @*/ String endDate) {
 		this.endDate = endDate;
 	}
 
-	public String getBuyerIDRef() {
+	//@ public normal_behaviour
+	//@ ensures \result==buyerIDRef;
+	public /*@ pure @*/ String getBuyerIDRef() {
 		return buyerIDRef;
 	}
 
-	public void setBuyerIDRef(String buyerIDRef) {
+	//@ public normal_behaviour
+	//@ ensures this.buyerIDRef!=null; 
+	public void setBuyerIDRef(/*@ non_null @*/ String buyerIDRef) {
 		this.buyerIDRef = buyerIDRef;
 	}
 
-	public String getSupplierIDRef() {
+	//@ public normal_behaviour
+	//@ ensures \result==supplierIDRef;
+	public /*@ pure @*/ String getSupplierIDRef() {
 		return supplierIDRef;
 	}
 
-	public void setSupplierIDRef(String supplierIDRef) {
+	//@ public normal_behaviour
+	//@ ensures this.supplierIDRef!=null;
+	public void setSupplierIDRef(/*@ non_null @*/ String supplierIDRef) {
 		this.supplierIDRef = supplierIDRef;
 	}
 
-	public String getDeliveryIDRef() {
+	//@ public normal_behaviour
+	//@ ensures \result==deliveryIDRef;
+	public /*@ pure @*/ String getDeliveryIDRef() {
 		return deliveryIDRef;
 	}
 
-	public void setDeliveryIDRef(String deliveryIDRef) {
+	//@ public normal_behaviour
+	//@ ensures this.deliveryIDRef!=null;
+	public void setDeliveryIDRef(/*@ non_null @*/ String deliveryIDRef) {
 		this.deliveryIDRef = deliveryIDRef;
 	}
 
+//	@SkipEsc
 	@Override
 	public String toString() {
 		return "OrderHeader [orderID=" + orderID + ", orderDate=" + orderDate + ", currency=" + currency + ", buyerID="
