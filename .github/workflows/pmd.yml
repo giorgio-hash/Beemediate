@@ -1,5 +1,10 @@
 name: PMD
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
   pmd-code-scan:
     permissions:
