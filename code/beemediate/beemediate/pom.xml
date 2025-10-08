@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.beemediate</groupId>
 	<artifactId>beemediate</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>beemediate</name>
 	<description>Integration platform from ODOO-XMLRPC to XMLOpentrans</description>
-	<url/>
+	<url />
 	<licenses>
-		<license/>
+		<license />
 	</licenses>
 	<developers>
-		<developer/>
+		<developer />
 	</developers>
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<connection />
+		<developerConnection />
+		<tag />
+		<url />
 	</scm>
 	<properties>
 		<java.version>17</java.version>
-  <sonar.organization>giorgio-hash</sonar.organization>
+		<sonar.organization>giorgio-hash</sonar.organization>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlrpc/xmlrpc-client -->
 		<!-- XMLRPC -->
 		<dependency>
-		    <groupId>org.apache.xmlrpc</groupId>
-		    <artifactId>xmlrpc-client</artifactId>
-		    <version>3.1.3</version>
+			<groupId>org.apache.xmlrpc</groupId>
+			<artifactId>xmlrpc-client</artifactId>
+			<version>3.1.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -50,14 +51,123 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!--PMD-->
+		      <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-pmd-plugin</artifactId>
+		        <version>3.27.0</version>
+		        <configuration>
+		            <includeTests>false</includeTests>
+		            <rulesets>
+		                <ruleset>config/pmd/ruleset.xml</ruleset>
+		            </rulesets>
+		            <failOnViolation>false</failOnViolation>  <!-- non fallisce la build -->
+    				<printFailingErrors>true</printFailingErrors> <!-- mostra comunque i warning -->
+		            <linkXRef>false</linkXRef>
+		            <targetJdk>17</targetJdk>
+		        </configuration>
+		        <executions>
+		            <execution>
+		                <id>pmd-main</id>
+		                <phase>verify</phase>
+		                <goals>
+		                    <goal>check</goal>
+		                </goals>
+		            </execution>
+		            <!--Ho escluso l'analisi dei casi di test-->
+		            <execution>
+		                <id>cpd</id>
+		                <phase>verify</phase>
+		                <goals>
+		                    <goal>cpd-check</goal>
+		                </goals>
+		            </execution>
+		        </executions>
+		        </plugin>
+		        
+		        <!--SpotBugs-->
+		        <plugin>
+				  <groupId>com.github.spotbugs</groupId>
+				  <artifactId>spotbugs-maven-plugin</artifactId>
+				  <version>4.9.5.0</version>
+				    <configuration>
+				      <effort>Max</effort>
+			          <threshold>Low</threshold>          
+				          <xmlOutput>true</xmlOutput>
+				          <!-- Optional directory to put spotbugs xdoc xml report -->
+				          <xmlOutput>true</xmlOutput>
+						  <sarifOutput>true</sarifOutput>
+						  <sarifOutputDirectory>${project.basedir}</sarifOutputDirectory>
+						  <sarifOutputFilename>spotbugs-report.sarif</sarifOutputFilename>
+						  <htmlOutput>true</htmlOutput>
+		                <!--<includeFilterFile>config/spotbugs/spotbugs-security-include.xml</includeFilterFile>
+		                <excludeFilterFile>config/spotbugs/spotbugs-security-exclude.xml</excludeFilterFile>-->
+		                <plugins>
+		                    <plugin>
+		                        <groupId>com.h3xstream.findsecbugs</groupId>
+		                        <artifactId>findsecbugs-plugin</artifactId>
+		                        <version>1.12.0</version>
+		                    </plugin>
+		                </plugins>
+		            </configuration>
+		            <executions>
+		            	<execution>
+		            		<id>main-report</id>
+		            		<phase>verify</phase>
+		            		<goals>
+		            			<goal>spotbugs</goal>
+		            		</goals>
+		            	</execution>
+		            </executions>
+				</plugin>
 		</plugins>
 	</build>
+	
+	<reporting>
+    <plugins>
+    
+      <!--PMD report-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.27.0</version>
+ 		        <configuration>
+		            <includeTests>false</includeTests>
+		            <rulesets>
+		                <ruleset>config/pmd/ruleset.xml</ruleset>
+		            </rulesets>
+		            <linkXRef>false</linkXRef>
+		            <targetJdk>17</targetJdk>
+		            <minimumTokens>1</minimumTokens>
+		            <skipEmptyReport>false</skipEmptyReport>
+		        </configuration>
+      </plugin>
+    
+      <!--spotbugs report-->
+      <plugin>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-maven-plugin</artifactId>
+      <version>4.9.5.0</version>
+      <configuration>
+        <effort>Max</effort>
+        <threshold>Low</threshold>
+        <plugins>
+          <plugin>
+            <groupId>com.h3xstream.findsecbugs</groupId>
+            <artifactId>findsecbugs-plugin</artifactId>
+            <version>1.12.0</version>
+          </plugin>
+        </plugins>
+      </configuration>
+    </plugin>
+    </plugins>
+  </reporting>
 
 </project>
