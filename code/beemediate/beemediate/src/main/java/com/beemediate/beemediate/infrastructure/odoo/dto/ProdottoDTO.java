@@ -13,11 +13,11 @@ public class ProdottoDTO{
 	/**
 	 * Mapping di id
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di seller_ids
 	 */
-	private Optional<Object[]> sellerIds;
+	private final Optional<Object[]> sellerIds;
 	
 	/**
 	 * Costruttore

@@ -11,11 +11,11 @@ public class IdentifierDTO{
 	/**
 	 * Map del numero identificativo.
 	 */
-	private Optional<Integer> num;
+	private final Optional<Integer> num;
 	/**
 	 * Map del nome identificativo.
 	 */
-	private Optional<String> name;
+	private final Optional<String> name;
 	
 	/**
 	 * Costruttore.

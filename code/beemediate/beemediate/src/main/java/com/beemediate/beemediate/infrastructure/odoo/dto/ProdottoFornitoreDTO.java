@@ -13,31 +13,31 @@ public class ProdottoFornitoreDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di product_id
 	 */
-	private IdentifierDTO productId;
+	private final IdentifierDTO productId;
 	/**
 	 * Mapping di sequence
 	 */
-	private Optional<Integer> sequence;
+	private final Optional<Integer> sequence;
 	/**
 	 * Mapping di product_name
 	 */
-	private Optional<String> productName;
+	private final Optional<String> productName;
 	/**
 	 * Mapping di product_code
 	 */
-	private Optional<String> productCode;
+	private final Optional<String> productCode;
 	/**
 	 * Mapping di partner_id
 	 */
-	private IdentifierDTO partnerId;
+	private final IdentifierDTO partnerId;
 	/**
 	 * Mapping di product_uom_id
 	 */
-	private IdentifierDTO productUomId;
+	private final IdentifierDTO productUomId;
 	
 	/**
 	 * 

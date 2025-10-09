@@ -13,11 +13,11 @@ public class DestinazioneDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di ref.
 	 */
-	private Optional<String> codiceDestinazione;
+	private final Optional<String> codiceDestinazione;
 	
 	/**
 	 * 

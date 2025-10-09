@@ -13,15 +13,15 @@ public class FornitoreDTO{
 	/**
 	 * Mapping di name
 	 */
-	private Optional<String> name;
+	private final Optional<String> name;
 	/**
 	 * Mapping di ref
 	 */
-	private Optional<String> codiceAzienda;
+	private final Optional<String> codiceAzienda;
 	/**
 	 * Mapping di id
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	
 	/**
 	 * Costruttore

@@ -13,11 +13,11 @@ public class ContattoConsegnaDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di partner_id.
 	 */
-	private IdentifierDTO partnerId;
+	private final IdentifierDTO partnerId;
 	
 	/**
 	 * 

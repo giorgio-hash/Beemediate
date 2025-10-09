@@ -13,11 +13,11 @@ public class ConsegnaDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di warehouse_id.
 	 */
-	private IdentifierDTO warehouseId;
+	private final IdentifierDTO warehouseId;
 	
 	/**
 	 * Costruttore

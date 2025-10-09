@@ -18,19 +18,19 @@ public class ArticoloPreventivoDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di order_id.
 	 */
-	private IdentifierDTO orderId;
+	private final IdentifierDTO orderId;
 	/**
 	 * Mapping di product_id.
 	 */
-	private IdentifierDTO productId;
+	private final IdentifierDTO productId;
 	/**
 	 * Mapping di product_qty.
 	 */
-	private Optional<Double> productQty;
+	private final Optional<Double> productQty;
 	
 	/**
 	 * Costruttore

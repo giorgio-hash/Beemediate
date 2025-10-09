@@ -13,11 +13,11 @@ public class CompagniaDTO{
 	/**
 	 * Mapping di id.
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di company_registry.
 	 */
-	private Optional<String> companyRegistry;
+	private final Optional<String> companyRegistry;
 	
 	/**
 	 * Costruttore

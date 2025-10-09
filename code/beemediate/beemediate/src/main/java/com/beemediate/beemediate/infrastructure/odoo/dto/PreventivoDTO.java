@@ -14,51 +14,51 @@ public class PreventivoDTO{
 	/**
 	 * Mapping di id
 	 */
-	private Optional<Integer> id;
+	private final Optional<Integer> id;
 	/**
 	 * Mapping di name
 	 */
-	private Optional<String> name;
+	private final Optional<String> name;
 	/**
 	 * Mapping di partner_id
 	 */
-	private IdentifierDTO partnerId;
+	private final IdentifierDTO partnerId;
 	/**
 	 * Mapping di product_id
 	 */
-	private IdentifierDTO productId;
+	private final IdentifierDTO productId;
 	/**
 	 * Mapping di currency_id
 	 */
-	private IdentifierDTO currencyId;
+	private final IdentifierDTO currencyId;
 	/**
 	 * Mapping di picking_type_id
 	 */
-	private IdentifierDTO pickingTypeId;
+	private final IdentifierDTO pickingTypeId;
 	/**
 	 * Mapping di company_id
 	 */
-	private IdentifierDTO companyId;
+	private final IdentifierDTO companyId;
 	/**
 	 * Mapping di origin
 	 */
-	private Optional<String> origin;
+	private final Optional<String> origin;
 	/**
 	 * Mapping di order_line
 	 */
-	private Optional<Object[]> orderLine;
+	private final Optional<Object[]> orderLine;
 	/**
 	 * Mapping di date_order
 	 */
-	private Optional<LocalDateTime> dateOrder;
+	private final Optional<LocalDateTime> dateOrder;
 	/**
 	 * Mapping di date_approve
 	 */
-	private Optional<LocalDateTime> dateApprove;
+	private final Optional<LocalDateTime> dateApprove;
 	/**
 	 * Mapping di date_planned
 	 */
-	private Optional<LocalDateTime> datePlanned;
+	private final Optional<LocalDateTime> datePlanned;
 //	[{'id': 4,
 //		  'name': 'P00004',
 //		  'partner_id': [8, 'GEALAN'],
