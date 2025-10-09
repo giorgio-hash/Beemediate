@@ -6,7 +6,7 @@ import com.beemediate.beemediate.domain.pojo.order.*;
 /**
  * Classe utility per mappare i dati ricevuti da Odoo in un OrderStructure. A tale scopo, la classe si serve delle classi "DTO" presenti in <i>com.beemediate.beemediate.infrastructure.odoo.dto</i>.
  */
-public class OrderMapper {
+public final class OrderMapper {
 	
 	private OrderMapper() {}
 

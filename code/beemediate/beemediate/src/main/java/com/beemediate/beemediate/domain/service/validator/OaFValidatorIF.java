@@ -22,6 +22,6 @@ public interface OaFValidatorIF {
 	  @ ensures \not_modified(o,o.data,o.orderID);
 	  @ ensures o.quantity!=null; 
 	  @*/
-	/*@ soec_public @*/ void validate(final Order o);
+	/*@ soec_public @*/ void validate(Order o);
 
 }

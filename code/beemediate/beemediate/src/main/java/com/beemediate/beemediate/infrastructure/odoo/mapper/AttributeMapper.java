@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Classe utility per fare inferenza sui model fields del XML ricevuto da Odoo.
  */
-public class AttributeMapper {
+public final class AttributeMapper {
 	
 	/**
 	 * Logger
 	 */
-	private final static Logger log = LoggerFactory.getLogger(AttributeMapper.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AttributeMapper.class);
 
 	private AttributeMapper() {}
 	
@@ -82,7 +82,7 @@ public class AttributeMapper {
         try {
         	dateTime = LocalDateTime.parse(s, formatter);
         }catch(DateTimeParseException e) {
-        	log.info(e.getMessage());
+        	LOG.info(e.getMessage());
         }
 		return dateTime==null? Optional.empty() : Optional.of(dateTime);
 	}

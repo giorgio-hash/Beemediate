@@ -169,13 +169,13 @@ public class StringHandler {
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/final String str) {
 		
-		final char COMMA = '.';
+		final char comma = '.';
 		int numOfCommas = 0;
 		
 		//@ set numOfCommas = 0;
 		
 		// voglio str: non null, forma minima '0.0', non forma troncata '0.', non forma troncata '.0' 
-		if(str == null || str.length()<3 || str.charAt(str.length()-1) == COMMA || str.charAt(0) == COMMA)
+		if(str == null || str.length()<3 || str.charAt(str.length()-1) == comma || str.charAt(0) == comma)
 			return false;
 		
 		// se il secondo carattere � COMMA, il primo carattere pu� essere zero.
@@ -192,7 +192,7 @@ public class StringHandler {
 		for(; i<str.length(); i++) {
 				
 			if( !isDigit(str.charAt(i),false) )
-				if (str.charAt(i) == COMMA) {
+				if (str.charAt(i) == comma) {
 					numOfCommas++;
 					//@ set numOfCommas=numOfCommas+1;
 				}else
