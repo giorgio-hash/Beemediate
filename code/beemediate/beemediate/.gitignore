@@ -3,6 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/beemediate/src/main/resources/apiconfig.properties
 
 ### STS ###
 .apt_generated
