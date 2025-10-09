@@ -17,6 +17,8 @@
     <rule ref="category/java/codestyle.xml" >
     	<exclude name="ShortVariable" />
     	<exclude name="ControlStatementBraces" />
+    	<exclude name="OnlyOneReturn" />
+    	<exclude name="PrematureDeclaration" />
     </rule>
     <rule ref="category/java/documentation.xml">
     	<exclude name="CommentSize" />
@@ -31,6 +33,8 @@
         	<property name="trustRadius" value="2" />
     	</properties>
 	</rule>
-    <rule ref="category/java/errorprone.xml" />
+    <rule ref="category/java/errorprone.xml">
+    	<exclude name="AvoidLiteralsInIfCondition" />
+    </rule>
     
 </ruleset>

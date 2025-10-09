@@ -104,7 +104,7 @@ public class OaFBuffer {
 		//@ assert ordersLoaded == buffer.size;
 		//@ assert buffer.size() == buffer.size;
 		
-		return buffer.size();
+		return buffer.getSize();
 	}	
 	
 	/**
@@ -135,7 +135,7 @@ public class OaFBuffer {
 		
 		//@ ghost int initialSize = buffer.size;
 		
-		if (buffer.size()>0) {
+		if (buffer.getSize()>0) {
 			
 			//@ assert initialSize == buffer.size;
 			
@@ -159,7 +159,7 @@ public class OaFBuffer {
 			  @*/
 			//@ maintaining 0<=passed<=i & 0<=passed<=initialSize;
 			//@ decreases buffer.size-i;
-			for(int i=0;i<buffer.size();i++) {
+			for(int i=0;i<buffer.getSize();i++) {
 				o = buffer.get(i);
 				//@ assert \typeof(buffer.get(i)) == \typeof(o);
 				//@ assert \typeof(buffer.get(i)) == \type(Order);

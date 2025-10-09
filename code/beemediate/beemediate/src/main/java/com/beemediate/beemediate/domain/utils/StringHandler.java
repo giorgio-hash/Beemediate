@@ -42,7 +42,7 @@ public class StringHandler {
 		if (s1==null || s2==null)
 			return false;
 		
-		boolean sameSize = (s1.length() == s2.length());
+		boolean sameSize = s1.length() == s2.length();
 		
 		if(!sameSize) return false;
 		
@@ -113,7 +113,7 @@ public class StringHandler {
 			//@ decreases str.length()-i;
 			for(; i<str.length(); i++) {
 				
-				if ( !isDigit( str.charAt(i), (i==0) ) )
+				if ( !isDigit( str.charAt(i), i==0 ) )
 					return false;
 				
 			}
@@ -292,30 +292,30 @@ public class StringHandler {
       @ ensures \result ==> isDigit(str.charAt(0),true);
       @ ensures \result ==> (\forall int i; 1<=i<str.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; isDigit(str.charAt(i),false) );
 	  @*/
-	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
+	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/final String str) {
 	
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
-		final char MAIN_SEPARATOR = ' ';
-		final char DATE_SEPARATOR = '-';
-		final char TIME_SEPARATOR = ':';
-		final int YSize = 4; 
-		final int MSize = 2; 
-		final int GSize = 2;
+		final char mainSeparator = ' ';
+		final char dateSeparator = '-';
+		final char timeSeparator = ':';
+		final int yYSize = 4; 
+		final int mMSize = 2; 
+		final int gGSize = 2;
 		final int hSize = 2; 
 		final int mSize = 2; 
 		final int sSize = 2;
 		
 		//mi aspetto una certa forma
-		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )
+		if( str.length() != yYSize+mMSize+gGSize+hSize+mSize+sSize+5  )
 			return false;
 		
 		//mi aspetto i separatori in determinate posizioni
-		if(str.charAt(4)!=DATE_SEPARATOR
-				|| str.charAt(7)!=DATE_SEPARATOR
-				|| str.charAt(10)!=MAIN_SEPARATOR
-				|| str.charAt(13)!=TIME_SEPARATOR
-				|| str.charAt(16)!=TIME_SEPARATOR)
+		if(str.charAt(4)!=dateSeparator
+				|| str.charAt(7)!=dateSeparator
+				|| str.charAt(10)!=mainSeparator
+				|| str.charAt(13)!=timeSeparator
+				|| str.charAt(16)!=timeSeparator)
 			return false;
 		
 		//controllo yyyy
@@ -414,7 +414,7 @@ public class StringHandler {
 //	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/final String date1, /*@ non_null @*/final String date2) {
 		
-		if(!StringHandler.isDateTime(date1) || !StringHandler.isDateTime(date2))
+		if(!isDateTime(date1) || !isDateTime(date2))
 			return false;
 		
 		int pos=0;//yyyy

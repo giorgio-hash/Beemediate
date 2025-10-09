@@ -22,11 +22,11 @@ public class OaFValidator implements OaFValidatorIF{
 	
 
 	/***Numero cliente corretto*/
-	/*@ spec_public */ final String customerNumber = "3024005150";
+	private /*@ spec_public */ final String customerNumber = "3024005150";
 	/***Formato corretto del valore di quantità di ogni articolo.*/
-	/*@ spec_public */ final QuantityFieldValue quantity = QuantityFieldValue.FLOAT_WITH_DOT;
+	private /*@ spec_public */ final QuantityFieldValue quantity = QuantityFieldValue.FLOAT_WITH_DOT;
 	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
-	/*@ spec_public */ final char quantityMeasure = 'M';
+	private /*@ spec_public */ final char quantityMeasure = 'M';
 	/***Numeri corretti di località di consegna*/
 	private /*@ spec_public */ final String[] deliveryLocationNumber = {"3024005150","30901505150"};
 	/***Elenco numeri articolo da catalogo fornitore.*/

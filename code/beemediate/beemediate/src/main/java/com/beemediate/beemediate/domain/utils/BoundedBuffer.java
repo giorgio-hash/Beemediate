@@ -45,7 +45,7 @@ public class BoundedBuffer {
 	/**
 	 * Restituisce elemento alla posizione <tt>i</tt>.
 	 * @param i - int
-	 * @return Order se <tt>i</tt> è un indice compreso tra 0 ed ordini.length-1 e ordini[i] esiste, altrimenti<i>null</i>;
+	 * @return Order se <tt>i</tt> è un indice compreso tra 0 ed ordini.length-1 e ordini[i] esiste, altrimenti <i>null</i>;
 	 */
 	/*@ public normal_behaviour
 	  @ assigns \nothing;
@@ -142,7 +142,7 @@ public class BoundedBuffer {
 	  @ ensures \result == size;
 	  @ ensures \not_modified(size);
 	  @*/
-	public /*@ pure @*/ int size() {
+	public /*@ pure @*/ int getSize() {
 		return size;
 	}
 	
