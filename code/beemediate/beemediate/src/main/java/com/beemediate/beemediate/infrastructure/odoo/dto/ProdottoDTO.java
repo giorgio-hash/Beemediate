@@ -1,31 +1,54 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class ProdottoDTO extends XmlDTO{
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa i dettagli di un prodotto. I campi rimappano alcuni attributi richiesti al model <i>product.product</i> di Odoo.
+ */
+public class ProdottoDTO{
 	
+	/**
+	 * Mapping di id
+	 */
 	private Optional<Integer> id;
-	private Optional<Object[]> seller_ids;
+	/**
+	 * Mapping di seller_ids
+	 */
+	private Optional<Object[]> sellerIds;
 	
-	public ProdottoDTO(HashMap<String, Object> map) {
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model <i>product.product</i> di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+	public ProdottoDTO( final Map<String, Object> map) {
 		
-		id = intify(map.get("id"));
+		id = AttributeMapper.intify(map.get("id"));
 		
-		seller_ids = toArray(map.get("seller_ids"));
+		sellerIds = AttributeMapper.toArray(map.get("seller_ids"));
 	}
 
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
 	public Optional<Integer> getId() {
 		return id;
 	}
 
-	public Optional<Object[]> getSeller_ids() {
-		return seller_ids;
+	/**
+	 * 
+	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
+	 */
+	public Optional<Object[]> getSellerIds() {
+		return sellerIds;
 	}
 
 	@Override
 	public String toString() {
-		return "ProdottoDTO [id=" + id + ", seller_ids=" + seller_ids + "]";
+		return "ProdottoDTO [id=" + id + ", seller_ids=" + sellerIds + "]";
 	}
 	
 	

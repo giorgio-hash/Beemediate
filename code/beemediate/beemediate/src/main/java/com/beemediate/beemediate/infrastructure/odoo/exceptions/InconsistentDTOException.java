@@ -1,8 +1,15 @@
 package com.beemediate.beemediate.infrastructure.odoo.exceptions;
 
+/**
+ * Segnala che il DTO non possiede i valori necessari a completare la procedura.
+ */
 public class InconsistentDTOException extends Exception {
 	
-	public InconsistentDTOException(String message) {
+	/**
+	 * 
+	 * @param message - String
+	 */
+	public InconsistentDTOException(final String message) {
 		super(message);
 	}
 

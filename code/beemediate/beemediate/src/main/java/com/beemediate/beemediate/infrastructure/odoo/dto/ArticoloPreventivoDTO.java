@@ -3,49 +3,86 @@ package com.beemediate.beemediate.infrastructure.odoo.dto;
 import java.util.Map;
 import java.util.Optional;
 
-public class ArticoloPreventivoDTO extends XmlDTO{
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa gli articoli contenuti nel preventivo dell'ordine di acquisto. I campi rimappano alcuni attributi richiesti al model <i>purchase.order.line</i> di Odoo.
+ */
+public class ArticoloPreventivoDTO{
 	
 //	 {'id': 13,
 //		  'order_id': [4, 'P00004'],
 //		  'product_id': [6, 'schienale sedia'],
 //		  'product_qty': 1.0}
 	
+	/**
+	 * Mapping di id.
+	 */
 	private Optional<Integer> id;
-	private FieldIdentifierDTO order_id;
-	private FieldIdentifierDTO product_id;
-	private Optional<Double> product_qty;
+	/**
+	 * Mapping di order_id.
+	 */
+	private IdentifierDTO orderId;
+	/**
+	 * Mapping di product_id.
+	 */
+	private IdentifierDTO productId;
+	/**
+	 * Mapping di product_qty.
+	 */
+	private Optional<Double> productQty;
 	
-	public ArticoloPreventivoDTO( Map<String, Object> map ) {
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model <i>purchase.order.line</i> di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+	public ArticoloPreventivoDTO( final Map<String, Object> map ) {
 		
-		id = intify( map.get("id") );
+		id = AttributeMapper.intify( map.get("id") );
 		
-		order_id = new FieldIdentifierDTO( (Object[]) map.get("order_id") );
+		orderId = new IdentifierDTO( (Object[]) map.get("order_id") );
 		
-		product_id = new FieldIdentifierDTO( (Object[]) map.get("product_id") );
+		productId = new IdentifierDTO( (Object[]) map.get("product_id") );
 		
-		product_qty = doublify( map.get("product_qty") );
+		productQty = AttributeMapper.doublify( map.get("product_qty") );
 	}
 
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
 	public Optional<Integer> getId() {
 		return id;
 	}
 
-	public FieldIdentifierDTO getOrder_id() {
-		return order_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo dell'ordine
+	 */
+	public IdentifierDTO getOrderId() {
+		return orderId;
 	}
 
-	public FieldIdentifierDTO getProduct_id() {
-		return product_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del prodotto associato a questo articolo.
+	 */
+	public IdentifierDTO getProductId() {
+		return productId;
 	}
 
-	public Optional<Double> getProduct_qty() {
-		return product_qty;
+	/**
+	 * 
+	 * @return oggetto Optional contenente Double, altrimenti Optional.empty()
+	 */
+	public Optional<Double> getProductQty() {
+		return productQty;
 	}
 
 	@Override
 	public String toString() {
-		return "ArticoloPreventivoDTO [id=" + id + ", order_id=" + order_id + ", product_id=" + product_id
-				+ ", product_qty=" + product_qty + "]";
+		return "ArticoloPreventivoDTO [id=" + id + ", order_id=" + orderId + ", product_id=" + productId
+				+ ", product_qty=" + productQty + "]";
 	}
 
 	

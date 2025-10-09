@@ -3,10 +3,23 @@ package com.beemediate.beemediate.infrastructure.odoo.mapper;
 import com.beemediate.beemediate.infrastructure.odoo.dto.*;
 import com.beemediate.beemediate.domain.pojo.order.*;
 
+/**
+ * Classe utility per mappare i dati ricevuti da Odoo in un OrderStructure. A tale scopo, la classe si serve delle classi "DTO" presenti in <i>com.beemediate.beemediate.infrastructure.odoo.dto</i>.
+ */
 public class OrderMapper {
 	
-	private OrderMapper() {};
+	private OrderMapper() {}
 
+	/**
+	 * Crea un OrderStructure utilizzando i dati dei "DTO" forniti in input.
+	 * @param f - FornitoreDTO
+	 * @param prev - PreventivoDTO
+	 * @param artpr - Array di ArticoloPreventivoDTO
+	 * @param prodf - Array di ProdottoFornitoreDTO
+	 * @param dest - DestinazioneDTO
+	 * @param comp - CompagniaDTO
+	 * @return OrderStructure
+	 */
 	public static OrderStructure map(FornitoreDTO f, PreventivoDTO prev, ArticoloPreventivoDTO[] artpr, ProdottoFornitoreDTO[] prodf, DestinazioneDTO dest, CompagniaDTO comp) {
 		
 		OrderSummary os = new OrderSummary();
@@ -25,7 +38,12 @@ public class OrderMapper {
 	
 	
 	
-	
+	/**
+	 * Crea un array di OrderItem utilizzando i dati dei "DTO" forniti in input.
+	 * @param artpr - ArticoloPreventivoDTO
+	 * @param prodf - ProdottoFornitoreDTO
+	 * @return Array di OrderItem
+	 */
 	private static OrderItem[] mapOrderItemList(ArticoloPreventivoDTO[] artpr, ProdottoFornitoreDTO[] prodf) {
 		
 		OrderItem[] oi = new OrderItem[artpr.length];
@@ -36,20 +54,20 @@ public class OrderMapper {
 			oi[i] = new OrderItem();
 			
 			//buyerID
-			if(prodf[i].getProduct_id().getName().isPresent())
-				oi[i].setBuyerID(prodf[i].getProduct_id().getName().get());
+			if(prodf[i].getProductId().getName().isPresent())
+				oi[i].setBuyerID(prodf[i].getProductId().getName().get());
 			else
 				oi[i].setBuyerID("");
 			
 			//supplierID
-			if(prodf[i].getProduct_code().isPresent())
-				oi[i].setSupplierID(prodf[i].getProduct_code().get());
+			if(prodf[i].getProductCode().isPresent())
+				oi[i].setSupplierID(prodf[i].getProductCode().get());
 			else
 				oi[i].setSupplierID("");
 			
 			//descriptionShort
-			if(prodf[i].getProduct_name().isPresent())
-				oi[i].setDescriptionShort(prodf[i].getProduct_name().get());
+			if(prodf[i].getProductName().isPresent())
+				oi[i].setDescriptionShort(prodf[i].getProductName().get());
 			else
 				oi[i].setDescriptionShort("");
 			
@@ -60,14 +78,14 @@ public class OrderMapper {
 				oi[i].setLineItemID("");
 			
 			//quantity
-			if(artpr[i].getProduct_qty().isPresent())
-				oi[i].setQuantity(artpr[i].getProduct_qty().get().toString());
+			if(artpr[i].getProductQty().isPresent())
+				oi[i].setQuantity(artpr[i].getProductQty().get().toString());
 			else
 				oi[i].setLineItemID("");
 			
 			//orderUnit
-			if(prodf[i].getProduct_uom_id().getName().isPresent())
-				oi[i].setOrderUnit(prodf[i].getProduct_uom_id().getName().get());
+			if(prodf[i].getProductUomId().getName().isPresent())
+				oi[i].setOrderUnit(prodf[i].getProductUomId().getName().get());
 			else
 				oi[i].setOrderUnit("");
 		}
@@ -77,7 +95,14 @@ public class OrderMapper {
 	
 	
 	
-	
+	/**
+	 * Crea un OrderHeader utilizzando i dati dei "DTO" forniti in input.
+	 * @param f - FornitoreDTO
+	 * @param prev - PreventivoDTO
+	 * @param dest - DestinazioneDTO
+	 * @param comp - CompagniaDTO
+	 * @return OrderHeader
+	 */
 	private static OrderHeader mapOrderHeader(FornitoreDTO f, PreventivoDTO prev, DestinazioneDTO dest, CompagniaDTO comp) {
 		
 		OrderHeader oh = new OrderHeader();
@@ -89,21 +114,21 @@ public class OrderMapper {
 			oh.setOrderID("");
 		
 		//orderDate
-		if(prev.getDate_order().isPresent())
-			oh.setOrderDate(prev.getDate_order().get().toString());
+		if(prev.getDateOrder().isPresent())
+			oh.setOrderDate(prev.getDateOrder().get().toString());
 		else
 			oh.setOrderDate("");
 		
 		//currency
-		if(prev.getCurrency_id().getName().isPresent())
-			oh.setCurrency(prev.getCurrency_id().getName().get());
+		if(prev.getCurrencyId().getName().isPresent())
+			oh.setCurrency(prev.getCurrencyId().getName().get());
 		else
 			oh.setCurrency("");
 		
 		//buyerID
-		if(comp.getCompany_registry().isPresent()) {
-			oh.setBuyerID(comp.getCompany_registry().get());
-			oh.setBuyerIDRef(comp.getCompany_registry().get());
+		if(comp.getCompanyRegistry().isPresent()) {
+			oh.setBuyerID(comp.getCompanyRegistry().get());
+			oh.setBuyerIDRef(comp.getCompanyRegistry().get());
 		}else {
 			oh.setBuyerID("");
 			oh.setBuyerIDRef("");
@@ -129,14 +154,14 @@ public class OrderMapper {
 		}
 		
 		//startDate
-		if(prev.getDate_approve().isPresent())
-			oh.setStartDate(prev.getDate_approve().get().toString());
+		if(prev.getDateApprove().isPresent())
+			oh.setStartDate(prev.getDateApprove().get().toString());
 		else
 			oh.setStartDate("");
 		
 		//endDate
-		if(prev.getDate_planned().isPresent())
-			oh.setEndDate(prev.getDate_planned().get().toString());
+		if(prev.getDatePlanned().isPresent())
+			oh.setEndDate(prev.getDatePlanned().get().toString());
 		else
 			oh.setEndDate("");
 		

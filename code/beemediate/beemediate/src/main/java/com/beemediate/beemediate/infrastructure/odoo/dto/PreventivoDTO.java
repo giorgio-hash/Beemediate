@@ -4,20 +4,61 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-public class PreventivoDTO extends XmlDTO{
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa informazioni sul preventivo per la fornitura. I campi rimappano alcuni attributi richiesti al model <i>purchase.order</i> di Odoo.
+ */
+public class PreventivoDTO{
 	
+	/**
+	 * Mapping di id
+	 */
 	private Optional<Integer> id;
+	/**
+	 * Mapping di name
+	 */
 	private Optional<String> name;
-	private FieldIdentifierDTO partner_id;
-	private FieldIdentifierDTO product_id;
-	private FieldIdentifierDTO currency_id;
-	private FieldIdentifierDTO picking_type_id;
-	private FieldIdentifierDTO company_id;
+	/**
+	 * Mapping di partner_id
+	 */
+	private IdentifierDTO partnerId;
+	/**
+	 * Mapping di product_id
+	 */
+	private IdentifierDTO productId;
+	/**
+	 * Mapping di currency_id
+	 */
+	private IdentifierDTO currencyId;
+	/**
+	 * Mapping di picking_type_id
+	 */
+	private IdentifierDTO pickingTypeId;
+	/**
+	 * Mapping di company_id
+	 */
+	private IdentifierDTO companyId;
+	/**
+	 * Mapping di origin
+	 */
 	private Optional<String> origin;
-	private Optional<Object[]> order_line;
-	private Optional<LocalDateTime> date_order;
-	private Optional<LocalDateTime> date_approve;
-	private Optional<LocalDateTime> date_planned;
+	/**
+	 * Mapping di order_line
+	 */
+	private Optional<Object[]> orderLine;
+	/**
+	 * Mapping di date_order
+	 */
+	private Optional<LocalDateTime> dateOrder;
+	/**
+	 * Mapping di date_approve
+	 */
+	private Optional<LocalDateTime> dateApprove;
+	/**
+	 * Mapping di date_planned
+	 */
+	private Optional<LocalDateTime> datePlanned;
 //	[{'id': 4,
 //		  'name': 'P00004',
 //		  'partner_id': [8, 'GEALAN'],
@@ -31,87 +72,139 @@ public class PreventivoDTO extends XmlDTO{
 //		  'date_planned': '2025-09-19 12:00:00',
 //		  'picking_type_id': [1, 'edu-trySerramenti2: Receipts']]
 	
-	public PreventivoDTO(Map<String, Object> map) {
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model <i>purchase.order</i> di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+	public PreventivoDTO( final Map<String, Object> map) {
 		
-		id = intify(map.get("id"));
+		id = AttributeMapper.intify(map.get("id"));
 		
-		name = stringify(map.get("name"));
+		name = AttributeMapper.stringify(map.get("name"));
 		
-		partner_id = new FieldIdentifierDTO( (Object[]) map.get("partner_id") );
+		partnerId = new IdentifierDTO( (Object[]) map.get("partner_id") );
 		
-		product_id = new FieldIdentifierDTO( (Object[]) map.get("product_id") );
+		productId = new IdentifierDTO( (Object[]) map.get("product_id") );
 		
-		currency_id = new FieldIdentifierDTO( (Object[]) map.get("currency_id") );
+		currencyId = new IdentifierDTO( (Object[]) map.get("currency_id") );
 		
-		picking_type_id = new FieldIdentifierDTO( (Object[]) map.get("picking_type_id") );
+		pickingTypeId = new IdentifierDTO( (Object[]) map.get("picking_type_id") );
 		
-		company_id = new FieldIdentifierDTO( (Object[]) map.get("company_id") );
+		companyId = new IdentifierDTO( (Object[]) map.get("company_id") );
 		
-		origin = stringify( map.get("origin") );
+		origin = AttributeMapper.stringify( map.get("origin") );
 		
-		order_line = toArray( map.get("order_line") );
+		orderLine = AttributeMapper.toArray( map.get("order_line") );
 		
-		date_order = toLocalDateTime( map.get("date_order") );
+		dateOrder = AttributeMapper.toLocalDateTime( map.get("date_order") );
 		
-		date_approve = toLocalDateTime( map.get("date_approve") );
+		dateApprove = AttributeMapper.toLocalDateTime( map.get("date_approve") );
 		
-		date_planned = toLocalDateTime( map.get("date_planned") );
+		datePlanned = AttributeMapper.toLocalDateTime( map.get("date_planned") );
 	}
 
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
 	public Optional<Integer> getId() {
 		return id;
 	}
 
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
 	public Optional<String> getName() {
 		return name;
 	}
 
-	public FieldIdentifierDTO getPartner_id() {
-		return partner_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del fornitore.
+	 */
+	public IdentifierDTO getPartnerId() {
+		return partnerId;
 	}
 
-	public FieldIdentifierDTO getProduct_id() {
-		return product_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del prodotto che ha attivato il preventivo.
+	 */
+	public IdentifierDTO getProductId() {
+		return productId;
 	}
 
-	public FieldIdentifierDTO getCurrency_id() {
-		return currency_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della valuta specificata nel preventivo.
+	 */
+	public IdentifierDTO getCurrencyId() {
+		return currencyId;
 	}
 
-	public FieldIdentifierDTO getPicking_type_id() {
-		return picking_type_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della "procedura di consegna" specificato nel preventivo.
+	 */
+	public IdentifierDTO getPickingTypeId() {
+		return pickingTypeId;
 	}
 
-	public FieldIdentifierDTO getCompany_id() {
-		return company_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della compagnia cliente del preventivo.
+	 */
+	public IdentifierDTO getCompanyId() {
+		return companyId;
 	}
 
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
 	public Optional<String> getOrigin() {
 		return origin;
 	}
 
-	public Optional<Object[]> getOrder_line() {
-		return order_line;
+	/**
+	 * 
+	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
+	 */
+	public Optional<Object[]> getOrderLine() {
+		return orderLine;
 	}
 
-	public Optional<LocalDateTime> getDate_order() {
-		return date_order;
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional<LocalDateTime> getDateOrder() {
+		return dateOrder;
 	}
 
-	public Optional<LocalDateTime> getDate_approve() {
-		return date_approve;
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional<LocalDateTime> getDateApprove() {
+		return dateApprove;
 	}
 
-	public Optional<LocalDateTime> getDate_planned() {
-		return date_planned;
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional<LocalDateTime> getDatePlanned() {
+		return datePlanned;
 	}
 
 	@Override
 	public String toString() {
-		return "PreventivoDTO [id=" + id + ", name=" + name + ", partner_id=" + partner_id + ", product_id="
-				+ product_id + ", currency_id=" + currency_id + ", picking_type_id=" + picking_type_id + ", company_id="
-				+ company_id + ", origin=" + origin + ", order_line=" + order_line + ", date_order=" + date_order
-				+ ", date_approve=" + date_approve + ", date_planned=" + date_planned 
+		return "PreventivoDTO [id=" + id + ", name=" + name + ", partner_id=" + partnerId + ", product_id="
+				+ productId + ", currency_id=" + currencyId + ", picking_type_id=" + pickingTypeId + ", company_id="
+				+ companyId + ", origin=" + origin + ", order_line=" + orderLine + ", date_order=" + dateOrder
+				+ ", date_approve=" + dateApprove + ", date_planned=" + datePlanned 
 				+  "]";
 	}
 	

@@ -3,82 +3,125 @@ package com.beemediate.beemediate.infrastructure.odoo.dto;
 import java.util.Map;
 import java.util.Optional;
 
-public class ProdottoFornitoreDTO extends XmlDTO{
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa i dettagli prodotto specifici di un certo fornitore. I campi rimappano alcuni attributi richiesti al model <i>product.supplierinfo</i> di Odoo.
+ */
+public class ProdottoFornitoreDTO{
 	
-//	 {'id': 4,
-//		  'product_id': [4, 'tavola per sedia'],
-//		  'sequence': 1,
-//		  'product_name': False,
-//		  'product_code': False,
-//		  'partner_id': [8, 'GEALAN']}
-	
+	/**
+	 * Mapping di id.
+	 */
 	private Optional<Integer> id;
-	private FieldIdentifierDTO product_id;
+	/**
+	 * Mapping di product_id
+	 */
+	private IdentifierDTO productId;
+	/**
+	 * Mapping di sequence
+	 */
 	private Optional<Integer> sequence;
-	private Optional<String> product_name;
-	private Optional<String> product_code;
-	private FieldIdentifierDTO partner_id;
-	private FieldIdentifierDTO product_uom_id;
+	/**
+	 * Mapping di product_name
+	 */
+	private Optional<String> productName;
+	/**
+	 * Mapping di product_code
+	 */
+	private Optional<String> productCode;
+	/**
+	 * Mapping di partner_id
+	 */
+	private IdentifierDTO partnerId;
+	/**
+	 * Mapping di product_uom_id
+	 */
+	private IdentifierDTO productUomId;
 	
-	
-	public ProdottoFornitoreDTO( Map<String, Object> map ) {
+	/**
+	 * 
+	 * @param map - Map contente una tupla del model <i>product.supplierinfo</i> di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+	public ProdottoFornitoreDTO( final Map<String, Object> map ) {
 		
-		id = intify( map.get("id") );
+		id = AttributeMapper.intify( map.get("id") );
 		
-		product_id = new FieldIdentifierDTO( (Object[]) map.get("product_id") );
+		productId = new IdentifierDTO( (Object[]) map.get("product_id") );
 		
-		sequence = intify( map.get("sequence") );
+		sequence = AttributeMapper.intify( map.get("sequence") );
 		
-		product_name = stringify( map.get("product_name") );
+		productName = AttributeMapper.stringify( map.get("product_name") );
 		
-		product_code = stringify( map.get("product_code") );
+		productCode = AttributeMapper.stringify( map.get("product_code") );
 		
-		partner_id = new FieldIdentifierDTO( (Object[]) map.get("partner_id"));
+		partnerId = new IdentifierDTO( (Object[]) map.get("partner_id"));
 		
-		product_uom_id = new FieldIdentifierDTO( (Object[]) map.get("product_uom_id") );
+		productUomId = new IdentifierDTO( (Object[]) map.get("product_uom_id") );
 	}
 
-
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
 	public Optional<Integer> getId() {
 		return id;
 	}
 
-
-	public FieldIdentifierDTO getProduct_id() {
-		return product_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del prodotto.
+	 */
+	public IdentifierDTO getProductId() {
+		return productId;
 	}
 
-
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
 	public Optional<Integer> getSequence() {
 		return sequence;
 	}
 
-
-	public Optional<String> getProduct_name() {
-		return product_name;
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional<String> getProductName() {
+		return productName;
 	}
 
-
-	public Optional<String> getProduct_code() {
-		return product_code;
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional<String> getProductCode() {
+		return productCode;
 	}
 
-
-	public FieldIdentifierDTO getPartner_id() {
-		return partner_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del fornitore.
+	 */
+	public IdentifierDTO getPartnerId() {
+		return partnerId;
 	}
 
-
-	public FieldIdentifierDTO getProduct_uom_id() {
-		return product_uom_id;
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo dell'unità di misura per la quantità di prodotto.
+	 */
+	public IdentifierDTO getProductUomId() {
+		return productUomId;
 	}
 
 
 	@Override
 	public String toString() {
-		return "ProdottoFornitoreDTO [id=" + id + ", product_id=" + product_id + ", sequence=" + sequence
-				+ ", product_name=" + product_name + ", product_code=" + product_code + ", partner_id=" + partner_id
-				+ ", product_uom_id=" + product_uom_id 
+		return "ProdottoFornitoreDTO [id=" + id + ", product_id=" + productId + ", sequence=" + sequence
+				+ ", product_name=" + productName + ", product_code=" + productCode + ", partner_id=" + partnerId
+				+ ", product_uom_id=" + productUomId 
 				+ "]";
 	}
 	
