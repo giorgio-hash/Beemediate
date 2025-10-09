@@ -107,8 +107,6 @@
 						  <sarifOutputDirectory>${project.basedir}</sarifOutputDirectory>
 						  <sarifOutputFilename>spotbugs-report.sarif</sarifOutputFilename>
 						  <htmlOutput>true</htmlOutput>
-		                <!--<includeFilterFile>config/spotbugs/spotbugs-security-include.xml</includeFilterFile>
-		                <excludeFilterFile>config/spotbugs/spotbugs-security-exclude.xml</excludeFilterFile>-->
 		                <plugins>
 		                    <plugin>
 		                        <groupId>com.h3xstream.findsecbugs</groupId>

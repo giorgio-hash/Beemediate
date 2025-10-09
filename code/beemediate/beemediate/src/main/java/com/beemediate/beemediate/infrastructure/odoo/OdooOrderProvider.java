@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		try {
 			return fetchData();
-		}catch(MalformedURLException | FailedLoginException | XmlRpcException e){
+		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){
 			log.info(e.getMessage());
 		}
 		
@@ -88,8 +89,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 * @throws MalformedURLException
 	 * @throws FailedLoginException
 	 * @throws XmlRpcException
+	 * @throws URISyntaxException 
 	 */
-	private boolean fetchData() throws MalformedURLException, FailedLoginException, XmlRpcException {
+	private boolean fetchData() throws FailedLoginException, XmlRpcException, URISyntaxException, MalformedURLException {
 		
 		// se non si è connessi, prova una connessione.
 		if(odoo.isOnline() == false)
@@ -205,14 +207,17 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 * @param f - FornitoreDTO
 	 * @return PreventivoDTO
 	 * @throws EmptyFetchException
+	 * @throws InconsistentDTOException
 	 * @throws ClassCastException
 	 * @throws XmlRpcException
 	 */
-	private PreventivoDTO estraiPreventivo(final FornitoreDTO f) throws EmptyFetchException, XmlRpcException {
+	private PreventivoDTO estraiPreventivo(final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
 		
 		Object[] ids = null;
 		Object[] res = null;
 		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		
+		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException("Oggetto FornitoreDTO non ha le informazioni necessarie");
 		
 		//cerca un preventivo di GEALAN
 		requestInfo.clear();
@@ -261,7 +266,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private ConsegnaDTO estraiConsegna(final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-		if (prv == null) throw new InconsistentDTOException("Oggetto PreventivoDTO null");
+		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
 		Object id = prv.getPickingTypeId().getNum().get();
 		Object[] res = null;
@@ -296,7 +301,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private ContattoConsegnaDTO estraiContattoConsegna(final ConsegnaDTO cns) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-		if (cns == null) throw new InconsistentDTOException("Oggetto ConsegnaDTO null");
+		if (cns == null || cns.getWarehouseId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto ConsegnaDTO non ha le informazioni necessarie");
 		
 		Object id = cns.getWarehouseId().getNum().get();
 		Object[] res = null;
@@ -331,7 +336,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private DestinazioneDTO estraiDestinazione(final ContattoConsegnaDTO concons) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 
-		if (concons == null) throw new InconsistentDTOException("Oggetto ContattoConsegnaDTO null");
+		if (concons == null || concons.getPartnerId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto ContattoConsegnaDTO non ha le informazioni necessarie");
 		
 		Object id = concons.getPartnerId().getNum().get();
 		Object[] res = null;
@@ -366,7 +371,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private CompagniaDTO estraiCompagnia(final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-		if (prv == null) throw new InconsistentDTOException("Oggetto PreventivoDTO null");
+		if (prv == null || prv.getPickingTypeId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
 		Object id = prv.getPickingTypeId().getNum().get();
 		Object[] res = null;
@@ -401,7 +406,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private ArticoloPreventivoDTO[] estraiArticoliPreventivo(final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-		if (prv == null) throw new InconsistentDTOException("Oggetto PreventivoDTO null");
+		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
 		Object[] ids = null;
 		Object[] res = null;
@@ -409,15 +414,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
 		
 		
-		if(prv == null)
-			throw new InconsistentDTOException("POJO null");
 		
 		//verifica che il preventivo contenga le sue parti
-		if(prv.getOrderLine().isPresent())
-			ids = (prv).getOrderLine().get();
-		else {
-			throw new InconsistentDTOException("Non hai ordini nel preventivo.");
-		}
+		ids = prv.getOrderLine().get();
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Non sono stati trovati articoli nel preventivo " + prv);
 		
@@ -469,9 +468,10 @@ public class OdooOrderProvider implements OrderProviderPort{
 		//prima bisogna cercare gli id del prodotto
 		for(int i=0; i<ap.length; i++) {
 			
-			if(ap[i].getProductId().getNum().isEmpty()) throw new InconsistentDTOException("id prodotto non presente. articolo: " + ap[i]);
-			
-			ids[i] = ap[i].getProductId().getNum().get();
+			if(ap[i].getProductId().getNum().isEmpty()) 
+				throw new InconsistentDTOException("id prodotto non presente. articolo: " + ap[i]);
+			else
+				ids[i] = ap[i].getProductId().getNum().get();
 		}
 		
 		//estrazione
@@ -531,10 +531,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 		//ora estraggo gli id che fanno riferimento ad un articolo a fornitore
 		elems = new ArrayList<>();
 		for(ProdottoDTO p : pr) {
-			if(  p.getSellerIds().isPresent()  )
+			if(  p.getSellerIds().isPresent()  ) {
+				if(p.getSellerIds().isEmpty())
+					throw new InconsistentDTOException("ProdottoDTO ha sellerIds vuoto");
 				for(Object o : p.getSellerIds().get() )
 					elems.add(o);
-			else
+			}else
 				throw new InconsistentDTOException("Il prodotto non ha nessun id a fornitore: " + p);
 		}
 

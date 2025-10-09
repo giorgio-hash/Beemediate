@@ -28,7 +28,7 @@ public class OrderItem {
 	  @			& supplierID!=null & buyerID!=null & descriptionShort!=null;
 	  @ pure
 	  @*/
-	public OrderItem() {}
+	public OrderItem() {/*empty constructor*/}
 	
 	/**
 	 * 

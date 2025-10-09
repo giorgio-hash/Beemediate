@@ -180,7 +180,7 @@ public class StringHandler {
 		
 		// se il secondo carattere � COMMA, il primo carattere pu� essere zero.
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
-		if ( str.charAt(1) != '.' & !isDigit(str.charAt(0),true) )
+		if ( str.charAt(1) != '.' && !isDigit(str.charAt(0),true) )
 			return false;
 		
 		int i=0;

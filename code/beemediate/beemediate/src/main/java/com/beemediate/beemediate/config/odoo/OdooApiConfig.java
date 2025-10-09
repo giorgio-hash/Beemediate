@@ -1,8 +1,8 @@
 package com.beemediate.beemediate.config.odoo;
 
 import java.net.MalformedURLException;
-
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -79,22 +79,23 @@ public class OdooApiConfig {
 	 * @throws MalformedURLException
 	 * @throws FailedLoginException
 	 * @throws XmlRpcException
+	 * @throws URISyntaxException 
 	 */
-	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException {
+	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
 		
 		//informazioni sul server
-		commmonConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/common", url)));
+		commmonConfig.setServerURL( (new URI(String.format("%s/xmlrpc/2/common", url))).toURL() );
 		Object ver = client.execute(commmonConfig, "version", Collections.emptyList());
 		
 		//login
 		try {
 			uid = (int) client.execute(commmonConfig, "authenticate", Arrays.asList(db, username, password, Collections.emptyMap()));
 
-			log.info("Versione server: "+ver);
-			log.info("Session uid: "+uid);
+			log.info("Versione server: {}", ver);
+			log.info("Session uid: {}", uid);
 			
 			//oggetto per interagire coi models di ODOO
-			objectConfig.setServerURL(new URL(String.format("%s/xmlrpc/2/object", url)));
+			objectConfig.setServerURL( new URI(String.format("%s/xmlrpc/2/object", url)).toURL() );
 			models.setConfig(objectConfig);
 			
 			online = true;
