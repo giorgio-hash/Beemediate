@@ -24,7 +24,13 @@
     <rule ref="category/java/design.xml">
     	<exclude name="DataClass" />
     	<exclude name="UseUtilityClass" />
+    	<exclude name="LawOfDemeter" />
     </rule>
+    <rule ref="category/java/design.xml/LawOfDemeter">
+    	<properties>
+        	<property name="trustRadius" value="2" />
+    	</properties>
+	</rule>
     <rule ref="category/java/errorprone.xml" />
     
 </ruleset>

@@ -2,9 +2,16 @@ package com.beemediate.beemediate.domain.service.validator;
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
 
+/**
+ * Interfaccia del OaFValidator.
+ */
+@SuppressWarnings("PMD.ImplicitFunctionalInterface")
 public interface OaFValidatorIF {
 
-	
+	/**
+	 * Dato un Order, modifica i flag a seguito della verifica della OrderStructure.
+	 * @param o - Order
+	 */
 	/*@ public normal_behaviour
 	  @ assigns o.*;
 	  @ requires o != null;
@@ -15,6 +22,6 @@ public interface OaFValidatorIF {
 	  @ ensures \not_modified(o,o.data,o.orderID);
 	  @ ensures o.quantity!=null; 
 	  @*/
-	public void validate(Order o);
+	/*@ soec_public @*/ void validate(final Order o);
 
 }

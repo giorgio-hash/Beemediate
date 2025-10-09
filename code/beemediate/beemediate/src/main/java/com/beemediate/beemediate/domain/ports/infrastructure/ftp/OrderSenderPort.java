@@ -2,14 +2,21 @@ package com.beemediate.beemediate.domain.ports.infrastructure.ftp;
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
 
+/**
+ * Port per gestire l'adattatore incaricato della spedizione di Order verso il fornitore.
+ */
 public interface OrderSenderPort {
 
-	/*** Ritorna true se l'operazione ? andata bene
-	 * */
+	/**
+	 * Carica Order sul FTP.
+	 * @param o - Order
+	 * @return <i>true</i> se l'operazione è stata completata con successo.
+	 * 
+	 */
 	/*@ public normal_behaviour 
 	  @ requires o!=null & o.data!=null & o.quantity!=null;
 	  @ requires !o.hasOpenTransError(); 
 	  @*/
-	public /*@ pure */ boolean loadOrder(Order o);
+	/*@ spec_public pure */ boolean loadOrder(final Order o);
 	
 }

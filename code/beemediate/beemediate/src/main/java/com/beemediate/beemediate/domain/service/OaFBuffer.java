@@ -1,5 +1,7 @@
 package com.beemediate.beemediate.domain.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 //import org.jmlspecs.annotation.CodeBigintMath;
 
 
@@ -8,16 +10,33 @@ import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderP
 import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
+/**
+ * Gestore buffer degli elementi Order in arrivo dal CRM. Utilizza:
+ * <ul>
+ * <li>Un BoundedBuffer che contiene e gestisce gli ordini con politica LIFO;</li>
+ * <li>Un riferimento alll'interfaccia del validatore, OaFValidatorIF;</li>
+ * <li>Un riferimento all'adattatore di OrderProviderPort.</li>
+ * </ul>
+ */
 public class OaFBuffer {
 	
+	/***Riferimento alla struttura dati che gestisce gli Order con politica LIFO*/
 	private /*@ spec_public @*/ final BoundedBuffer buffer;
+	/***Riferimento all'interfaccia del validatore*/
 	private /*@ spec_public @*/ final OaFValidatorIF validator;
+	/***Riferimento all'adattatore di OrderProviderPort*/
 	private /*@ spec_public @*/ final OrderProviderPort or;
 	
 	/*@ public invariant buffer!=null; @*/
 	/*@ public invariant validator!=null; @*/
 	/*@ public invariant or!=null; @*/
 
+	/**
+	 * Costruttore
+	 * @param bufferCapacity - capacità con la quale si istanzia BoundedBuffer
+	 * @param v - implementazione dell'interfaccia OaFValidatorIF
+	 * @param orderRetriever - 
+	 */
 	//@ public normal_behaviour
 	//@ requires bufferCapacity>0;
 	//@ requires v != null;
@@ -29,12 +48,17 @@ public class OaFBuffer {
 	//@ ensures (\forall int i; buffer.size<=i<buffer.ordini.length; buffer.ordini[i]==null);
 	//@ pure
 //	@CodeBigintMath
-	public OaFBuffer(int bufferCapacity, OaFValidatorIF v, OrderProviderPort orderRetriever) {
+	@Autowired
+	public OaFBuffer(final int bufferCapacity, final OaFValidatorIF v, final OrderProviderPort orderRetriever) {
 		buffer = new BoundedBuffer(bufferCapacity);
 		validator = v;
 		or = orderRetriever;
 	}
 
+	/**
+	 * Svuota il buffer, richiede nuovi Order e ricarica il buffer.
+	 * @return int - numero di Order caricati
+	 */
 	/*@ public normal_behaviour
 	  @ assigns or.newOrder, buffer.ordini[*], buffer.size;
 	  @ requires buffer != null;
@@ -83,8 +107,10 @@ public class OaFBuffer {
 		return buffer.size();
 	}	
 	
-	/** Valida gli ordini presenti nel buffer (se presenti) e restituisce il numero di ordini idonei per l'invio.
-	 * */
+	/**
+	 * Valida gli ordini presenti nel buffer (se presenti) e restituisce il numero di ordini idonei per l'invio.
+	 * @return int - numero di ordini che hanno superato la validazione
+	 */
 	/*@ public normal_behaviour
 	  @ requires validator!=null;
 	  @ requires buffer!=null & buffer.size>0 & buffer.size<=buffer.ordini.length;
@@ -151,6 +177,10 @@ public class OaFBuffer {
 		return passed;
 	}
 	
+	/**
+	 * 
+	 * @return riferimento al BoundedBuffer contenente gli Order
+	 */
 	//@ public normal_behaviour
 	//@ ensures \result == buffer;
 	public /*@ pure @*/ BoundedBuffer getBuffer() {

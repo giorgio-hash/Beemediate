@@ -1,5 +1,7 @@
 package com.beemediate.beemediate.domain.service.validator.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 //import org.jmlspecs.annotation.CodeBigintMath;
 
 //import org.jmlspecs.annotation.SkipEsc;
@@ -9,17 +11,25 @@ import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.pojo.order.OrderItem;
 import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
 import com.beemediate.beemediate.domain.pojo.order.QuantityFieldValue;
-import com.beemediate.beemediate.domain.ports.infrastructure.filesystem.SupplierCatalogReader;
+import com.beemediate.beemediate.domain.ports.infrastructure.filesystem.SupplierCatalogReaderPort;
 import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
 import com.beemediate.beemediate.domain.utils.StringHandler;
 
+/**
+ * Classe incaricata di verificare la OrderStructure per confermare che le informazioni contenute rispettino i vincoli richiesti dal sistema fornitore.
+ */
 public class OaFValidator implements OaFValidatorIF{
 	
 
+	/***Numero cliente corretto*/
 	/*@ spec_public */ final String customerNumber = "3024005150";
+	/***Formato corretto del valore di quantità di ogni articolo.*/
 	/*@ spec_public */ final QuantityFieldValue quantity = QuantityFieldValue.FLOAT_WITH_DOT;
+	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
 	/*@ spec_public */ final char quantityMeasure = 'M';
+	/***Numeri corretti di località di consegna*/
 	private /*@ spec_public */ final String[] deliveryLocationNumber = {"3024005150","30901505150"};
+	/***Elenco numeri articolo da catalogo fornitore.*/
 	private /*@ spec_public */ final String[] articleNumbers;
 	
 
@@ -27,6 +37,11 @@ public class OaFValidator implements OaFValidatorIF{
 	/*@ public invariant (\forall int i; 0<=i<articleNumbers.length; articleNumbers[i]!=null); @*/
 	/*@ public invariant (\forall int i; 0<=i<articleNumbers.length; 0<articleNumbers[i].length()<=Integer.MAX_VALUE); @*/
 	
+	/**
+	 * Costruttore
+	 * @param catalog - adattatore SupplierCatalogReaderPort
+	 * @throws EmptyArrayException se l'elenco dei numeri articolo risulta vuoto
+	 */
 	/*@ public normal_behaviour
 	  @ requires catalog!=null;
 	  @ requires catalog.articleNumbers.length>0;
@@ -44,7 +59,8 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ signals_only EmptyArrayException;
 	  @*/
 //	@CodeBigintMath
-	public /*@ pure*/ OaFValidator (SupplierCatalogReader catalog) throws EmptyArrayException {
+	@Autowired
+	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {
 		String[] rows = catalog.readArticleNumbers(); 
 		if(rows.length == 0)
 			throw new EmptyArrayException("ID articoli non trovati.");
@@ -53,7 +69,7 @@ public class OaFValidator implements OaFValidatorIF{
 	
 //	@SkipEsc
 	@Override
-	public void validate(/*@ non_null @*/Order o) {
+	public void validate(/*@ non_null @*/final Order o) {
 		
 		OrderStructure ost = o.getData();
 			
@@ -66,6 +82,11 @@ public class OaFValidator implements OaFValidatorIF{
 		o.setDeliveryDateContent( this.validateDeliveryDateContent( ost ) );
 	}
 	
+	/**
+	 * Verifica che buyerID, buyerIDRef e customerNumber abbiano lo stesso valore.
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires ost.header!=null;
 	  @ requires ost.header.buyerID.length()!=customerNumber.length() | ost.header.buyerIDRef.length()!=customerNumber.length();
@@ -87,12 +108,17 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ ensures  \result;
 	  @*/
 //	@CodeBigintMath
-	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/ OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())
 				&& StringHandler.equals(ost.getHeader().getBuyerID(), this.customerNumber);
 	}
 	
+	/**
+	 * Verifica che i campi deliveryID, deliveryIDRef ed almeno una delle deliveryLocationNumver abbiano lo stesso valore.
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires ost.header!=null;
 	  @ requires deliveryLocationNumber!=null & deliveryLocationNumber.length==2;
@@ -120,13 +146,18 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ ensures  \result;
 	  @*/
 //	@CodeBigintMath
-	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/ OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())
 				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[0])
 						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[1]));
 	}
 	
+	/**
+	 * Verifica che ogni OrderItem in ost.getItemList() abbia supplierID con valore presente in articleNumbers.
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires articleNumbers!=null;
 	  @ requires ost!=null;
@@ -140,7 +171,7 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ ensures \result <==> (\forall int i; 0<=i<ost.itemList.length; isInCatalog(ost.itemList[i].supplierID) );
 	  @*/
 //	@CodeBigintMath
-	private /*@ spec_public pure @*/ boolean validateArticleNumber(/*@ non_null @*/ OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateArticleNumber(/*@ non_null @*/final OrderStructure ost) {
 		
 		boolean found = true;
 		
@@ -160,12 +191,17 @@ public class OaFValidator implements OaFValidatorIF{
 		return found;
 	}
 	
+	/**
+	 * 
+	 * @param artNum - String
+	 * @return <i>true</i> se artNum è presente in articleNumbers
+	 */
 	/*@ public normal_behaviour
 	  @ requires artNum!=null & artNum.length()>0;
 	  @ requires articleNumbers!=null;
 	  @ ensures \result <==> (\exists int i; 0<=i<articleNumbers.length; StringHandler.equals(articleNumbers[i],artNum)  );
 	  @*/
-	private /*@ spec_public pure @*/ boolean isInCatalog(/*@ non_null @*/ String artNum) {
+	private /*@ spec_public pure @*/ boolean isInCatalog(/*@ non_null @*/final String artNum) {
 		
 		boolean inCatalog = false;
 		
@@ -184,6 +220,11 @@ public class OaFValidator implements OaFValidatorIF{
 		return inCatalog;
 	}
 	
+	/**
+	 * Per ogni OrderItem presente in OrderStructure, quantityMeasure dev'essere uguale a 'M'.
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires articleNumbers!=null;
 	  @ requires ost!=null;
@@ -196,7 +237,7 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i].orderUnit!=null);
 	  @ ensures !\result <==> (\exists int i; 0<=i<ost.itemList.length; ost.itemList[i].orderUnit.length()!=1 | ost.itemList[i].orderUnit.charAt(0)!=quantityMeasure  );
 	  @*/
-	private /*@ spec_public pure @*/ boolean validateQuantityMeasure(/*@ non_null @*/ OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateQuantityMeasure(/*@ non_null @*/final OrderStructure ost) {
 		
 		boolean rightMeasureUnit = true;
 		
@@ -216,6 +257,20 @@ public class OaFValidator implements OaFValidatorIF{
 		return rightMeasureUnit;
 	}
 	
+	/**
+	 * Verifica la forma del campo quantity di ogni OrderItem.
+	 * <ul>
+	 * <li>Alla prima occorrenza di un campo quantity non numerico, restituisce <i>QuantityFieldValue.NAN</i>;</li>
+	 * <li>Alla prima occorrenza di un campo quantity contenente un numero a virgola mobile ma con "," al posto di ".", restituisce <i>QuantityFieldValue.FLOAT_WITH_COMMA</i>.</li>
+	 * </ul>
+	 * Se i precedenti due eventi non si verificano:
+	 * <ul>
+	 * <li>Se esiste almeno un campo quantity numerico senza virgola mobile, restituisce <i>QuantityFieldValue.INTEGER</i>;</li>
+	 * <li>Altrimenti, restituisce <i>QuantityFieldValue.FLOAT_WITH_DOT</i>.</li>
+	 * </ul>
+	 * @param ost - OrderStructure
+	 * @return valore enum QuantityFieldValue
+	 */
 	/*@ public normal_behaviour
 	  @ requires ost.itemList!=null;
 	  @ requires ost.itemList.length>0;
@@ -227,7 +282,7 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
 	  @*/
 //	@CodeBigintMath
-	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/ OrderStructure ost) {
+	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
 		
 		
 		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;
@@ -261,6 +316,11 @@ public class OaFValidator implements OaFValidatorIF{
 		return qfv;
 	}
 	
+	/**
+	 * Verifica che startDate, orderDate ed endDate siano delle stringhe rappresentanti un timestamp nel formato "yyyy-MM-dd HH:mm:ss".
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires ost.itemList!=null;
 	  @ requires ost.itemList.length>0;
@@ -271,12 +331,22 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ requires ost.header!=null;
 	  @ ensures !\result <==> (!StringHandler.isDateTime(ost.header.startDate) | !StringHandler.isDateTime(ost.header.orderDate) | !StringHandler.isDateTime(ost.header.endDate));
 	  @*/
-	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/final OrderStructure ost) {
 		return ost.getHeader().getStartDate()!=null && StringHandler.isDateTime(ost.getHeader().getStartDate())
 				&& ost.getHeader().getOrderDate()!=null && StringHandler.isDateTime(ost.getHeader().getOrderDate())
 				&& ost.getHeader().getEndDate()!=null && StringHandler.isDateTime(ost.getHeader().getEndDate());
 	}
 	
+	/**
+	 * Verifica che siano rispettate tutte le seguenti condizioni:
+	 * <ul>
+	 * <li>startDate, orderDate ed endDate sono delle stringhe rappresentanti un timestamp nel formato "yyyy-MM-dd HH:mm:ss";</li>
+	 * <li>startDate precede temporalmente endDate;</li>
+	 * <li>orderDate e endDate coincidono;</li>
+	 * </ul>
+	 * @param ost - OrderStructure
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires ost.itemList!=null;
 	  @ requires ost.itemList.length>0;
@@ -289,7 +359,7 @@ public class OaFValidator implements OaFValidatorIF{
 	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.startDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.startDate.charAt(i)<=ost.header.endDate.charAt(i) );
 	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.startDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.orderDate.charAt(i)==ost.header.endDate.charAt(i) );
 	  @*/
-	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/OrderStructure ost) {
+	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
 		return validateDeliveryDateContent(ost) 
 				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getStartDate(), ost.getHeader().getEndDate())
 				&& StringHandler.equals(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate());

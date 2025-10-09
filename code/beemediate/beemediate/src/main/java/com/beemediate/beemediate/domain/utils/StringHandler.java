@@ -3,8 +3,17 @@ package com.beemediate.beemediate.domain.utils;
 //import org.jmlspecs.annotation.CodeBigintMath;
 //import org.jmlspecs.annotation.SkipEsc;
 
+/**
+ * Classe utility per le operazioni su oggetti String.
+ */
 public class StringHandler {
 	
+	/**
+	 * Determina se due oggetti String sono uguali.
+	 * @param s1 - String
+	 * @param s2 - String
+	 * @return <i>true</i> se sono uguali
+	 */
 	/*@ public normal_behaviour
 	  @ requires s1==null || s2==null;
 	  @ ensures !\result;
@@ -28,7 +37,7 @@ public class StringHandler {
 	  @ ensures \result <==> (\forall int i; 0<=i<s1.length(); s1.charAt(i) == s2.charAt(i));
 	  @*/
 //	@CodeBigintMath
-	public /*@ pure @*/ static boolean equals(String s1, String s2) {
+	public /*@ pure @*/ static boolean equals(final String s1, final String s2) {
 		
 		if (s1==null || s2==null)
 			return false;
@@ -62,6 +71,11 @@ public class StringHandler {
 		
 	}
 	
+	/**
+	 * Determina se String rappresenta un <i>int</i>.
+	 * @param str - String
+	 * @return <i>true</i> se rappresenta un <i>int</i>
+	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()==0;
 	  @ ensures !\result;
@@ -81,7 +95,7 @@ public class StringHandler {
 	  @ ensures \result <==> isDigit(str.charAt(0),true);
 	  @*/
 //	@CodeBigintMath
-	public static /*@ helper pure @*/ boolean isInteger(/*@ non_null @*/ String str) {
+	public static /*@ helper pure @*/ boolean isInteger(/*@ non_null @*/final String str) {
 		
 		if(str == null || str.length()==0)
 			return false;
@@ -111,6 +125,11 @@ public class StringHandler {
 	
 	//@ public static ghost int numOfCommas = 0;
 	
+	/**
+	 * Determina se String rappresenta un <i>double</i>.
+	 * @param str - String
+	 * @return <i>true</i> se rappresenta un <i>double</i>
+	 */
 	/*Pi� scenari:
 	 * - scenario 1: stringa troppo corta --> false
 	 * - scenario 2: stringa minima ma '.' agli estremi --> false
@@ -148,7 +167,7 @@ public class StringHandler {
 	  @ ensures \result <==> (numOfCommas==1 & str.charAt(0)!='0');
 	  @*/
 //	@CodeBigintMath
-	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/  String str) {
+	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/final String str) {
 		
 		final char COMMA = '.';
 		int numOfCommas = 0;
@@ -185,6 +204,12 @@ public class StringHandler {
 	}
 	
 	
+	/**
+	 * Determina se il carattere sia una cifra. Se nonNull è true, la funzione determina se il carattere sia una cifra diversa da '0'.
+	 * @param c - char
+	 * @param nonNull - boolean per determinare se c è una cifra non-nulla
+	 * @return <i>true</i> se condizione verificata
+	 */
 	/*@ public normal_behaviour
 	  @ requires c>=48 & c<=57;
 	  @ requires nonNull == false;
@@ -199,7 +224,7 @@ public class StringHandler {
 	  @ requires c<48 | c>57;
 	  @ ensures !\result;
 	  @*/
-	public static /*@ pure @*/ boolean isDigit(char c, boolean nonNull) {
+	public static /*@ pure @*/ boolean isDigit(final char c, final boolean nonNull) {
 		
 		if(nonNull)
 			return 49<=c && c<=57;
@@ -207,6 +232,12 @@ public class StringHandler {
 		return 48<=c && c<=57;
 	}
 	
+	/**
+	 * Determina se la String str 
+	 * @param str
+	 * @param elem
+	 * @return
+	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()==0;
 	  @ ensures \result == false;
@@ -219,7 +250,7 @@ public class StringHandler {
 	  @ requires str.length()>1;
 	  @ ensures \result <==> (\exists int i; 0<=i<str.length(); str.charAt(i)==elem);
 	  @*/
-	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ String str, char elem) {
+	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ final String str, final char elem) {
 	
 		if(str==null || str.length()==0)
 			return false;
@@ -237,7 +268,11 @@ public class StringHandler {
 		return false;
 	}
 	
-	
+	/**
+	 * Determina se str sia un oggetto String rappresentante una data in formato "yyyy-MM-dd HH:mm:ss".
+	 * @param str - String
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()!=19;
 	  @ ensures !\result;
@@ -353,6 +388,12 @@ public class StringHandler {
 		
 		}
 	
+	/**
+	 * Determina se date1 e date2 rappresentano una data in formato "yyyy-MM-dd HH:mm:ss" e date1 precede temporalmente date2
+	 * @param date1 - String
+	 * @param date2 - String
+	 * @return <i>true</i> se condizione rispettata.
+	 */
 	/*@ public normal_behaviour
 	  @ requires date1!=null & date1.length()==19;
 	  @ requires date2!=null & date2.length()==19;
@@ -371,7 +412,7 @@ public class StringHandler {
 	  @							| (\exists int i; 17<=i<19; date1.charAt(i)>date2.charAt(i)));
 	  @*/
 //	@CodeBigintMath
-	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
+	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/final String date1, /*@ non_null @*/final String date2) {
 		
 		if(!StringHandler.isDateTime(date1) || !StringHandler.isDateTime(date2))
 			return false;

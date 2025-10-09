@@ -1,6 +1,8 @@
 package com.beemediate.beemediate.domain.service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 //import org.jmlspecs.annotation.CodeBigintMath;
 
 
@@ -12,13 +14,20 @@ import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationPro
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 
-
+/**
+ * Classe principale per la gestione della piattagorma. Implementa OaFManagerPort.
+ */
 public class OaFBatchManager implements OaFManagerPort{
 	
+	/***riferimento al gestore buffer ordini*/
 	private /*@ spec_public @*/ final OaFBuffer oaf;
+	/***riferimento al ricevitore di conferme*/
 	private /*@ spec_public @*/ final ConfirmationProviderPort confirmations;
+	/***riferimento al getore FTP*/
 	private /*@ spec_public @*/ final FTPHandlerPort ftp;
+	/***riferimento al notificatore verso CRM*/
 	private /*@ spec_public @*/ final DataSenderPort crm;
+	/***numero minimo di Order validi richiesti per l'invio al fornitore*/
 	private /*@ spec_public @*/ final int oafBatchThreshold;
 
 	/*@ public invariant oaf!=null; @*/
@@ -27,6 +36,15 @@ public class OaFBatchManager implements OaFManagerPort{
 	/*@ public invariant crm!=null; @*/
 	/*@ public invariant 0 < oafBatchThreshold <= oaf.getBuffer().capacity() <= Integer.MAX_VALUE; @*/
 	
+	/**
+	 * Costruttore
+	 * @param threshold - int
+	 * @param oafb - oggetto OaFBuffer
+	 * @param c - adattatore ConfirmationProviderPort
+	 * @param f - adattatore FTPHandlerPort
+	 * @param u - adattatore DataSenderPort
+	 * @throws UnreachableThresholdException se la differenza <tt>oafb.capacity()</tt>-threshold>0
+	 */
 	/*@ public normal_behaviour
 	  @ requires oafb!=null & c!=null & f!=null & u!=null;
 	  @ requires threshold>0 & oafb.getBuffer().capacity()>=threshold;
@@ -38,7 +56,8 @@ public class OaFBatchManager implements OaFManagerPort{
 	  @ pure
 	  @*/
 //	@CodeBigintMath
-	public OaFBatchManager(int threshold, OaFBuffer oafb, ConfirmationProviderPort c, FTPHandlerPort f, DataSenderPort u) throws UnreachableThresholdException{
+	@Autowired
+	public OaFBatchManager(final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, DataSenderPort u) throws UnreachableThresholdException{
 		
 		if(oafb.getBuffer().capacity()<threshold)
 			throw new UnreachableThresholdException("Capacit� del buffer di caricamento ordini inferiore alla soglia minima di invio.");
