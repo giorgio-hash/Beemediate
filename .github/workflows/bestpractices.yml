@@ -7,6 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   pmd-code-scan:
+    if: github.actor == 'giorgio-hash'
     permissions:
       contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
@@ -31,6 +32,7 @@ jobs:
         with:
           sarif_file: pmd-report.sarif
   spotbugs-upload-report:
+    if: github.actor == 'giorgio-hash'
     permissions:
       contents: write # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results

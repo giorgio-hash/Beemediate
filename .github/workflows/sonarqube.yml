@@ -7,6 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   sonar:
+    if: github.actor == 'giorgio-hash'
     name: SonarQube Build and analyze
     runs-on: ubuntu-latest
     defaults:
