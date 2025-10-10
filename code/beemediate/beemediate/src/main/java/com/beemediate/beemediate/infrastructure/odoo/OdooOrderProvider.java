@@ -11,7 +11,7 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -26,7 +26,7 @@ import javax.security.auth.login.FailedLoginException;
 /**
  * Adattatore che implementa OrderProviderPort. Recupera gli ordini di acquisto dal CRM Odoo, ricostruisce i corrispondenti Order e li conserva in un buffer.
  */
-@Service
+@Component
 public class OdooOrderProvider implements OrderProviderPort{
 	
 	/**
