@@ -233,10 +233,10 @@ public class StringHandler {
 	}
 	
 	/**
-	 * Determina se la String str 
-	 * @param str
-	 * @param elem
-	 * @return
+	 * Determina se la String str contiene il char elem.
+	 * @param str - String
+	 * @param elem - char
+	 * @return <i>true</i> se condizione rispettata
 	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()==0;

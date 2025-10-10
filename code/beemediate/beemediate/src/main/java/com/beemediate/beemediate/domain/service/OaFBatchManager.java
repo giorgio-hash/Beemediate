@@ -2,6 +2,7 @@ package com.beemediate.beemediate.domain.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 //import org.jmlspecs.annotation.CodeBigintMath;
 
@@ -17,6 +18,7 @@ import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort
 /**
  * Classe principale per la gestione della piattagorma. Implementa OaFManagerPort.
  */
+@Service
 public class OaFBatchManager implements OaFManagerPort{
 	
 	/***riferimento al gestore buffer ordini*/

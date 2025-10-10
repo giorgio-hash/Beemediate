@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 //import org.jmlspecs.annotation.CodeBigintMath;
 
@@ -18,6 +19,7 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
  * <li>Un riferimento all'adattatore di OrderProviderPort.</li>
  * </ul>
  */
+@Service
 public class OaFBuffer {
 	
 	/***Riferimento alla struttura dati che gestisce gli Order con politica LIFO*/
