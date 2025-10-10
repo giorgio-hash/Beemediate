@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.domain.service.validator.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 //import org.jmlspecs.annotation.CodeBigintMath;
 
@@ -18,6 +19,7 @@ import com.beemediate.beemediate.domain.utils.StringHandler;
 /**
  * Classe incaricata di verificare la OrderStructure per confermare che le informazioni contenute rispettino i vincoli richiesti dal sistema fornitore.
  */
+@Service
 public class OaFValidator implements OaFValidatorIF{
 	
 
