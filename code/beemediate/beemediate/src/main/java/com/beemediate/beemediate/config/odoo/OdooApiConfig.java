@@ -47,7 +47,6 @@ public class OdooApiConfig {
 	 */
 	@Value("${api.key:noconf}")
 	public String password;// scade 23.09
-	
 	/**
 	 * Serve a gestire il protocollo XML-RPC.
 	 */
@@ -72,6 +71,27 @@ public class OdooApiConfig {
 	 * flag per segnalare stato della connessione.
 	 */
 	private boolean online = false;
+	/**
+	 * Stato degli Ordini a Fornitore, ovvero gli Ordini di Acquisto di Odoo.
+	 */
+	public enum OafStatus{
+		NEW("NEW"),
+		SHIPPED("SHIPPED"),
+		CONFIRMED("CONFIRMED"),
+		OPENTRANSERROR("OPENTRANSERROR"),
+		CONTENTERROR("CONTENTERROR");
+		
+		public final String label;
+		
+		private OafStatus(String label) {
+			this.label = label;
+		}
+		
+		@Override
+		public String toString() {
+			return label;
+		}
+	}
 	
 	
 	/**
