@@ -113,12 +113,6 @@ public final class OrderMapper {
 		else
 			oh.setOrderID("");
 		
-		//orderDate
-		if(prev.getDateOrder().isPresent())
-			oh.setOrderDate(prev.getDateOrder().get().toString());
-		else
-			oh.setOrderDate("");
-		
 		//currency
 		if(prev.getCurrencyId().getName().isPresent())
 			oh.setCurrency(prev.getCurrencyId().getName().get());
@@ -155,9 +149,15 @@ public final class OrderMapper {
 		
 		//startDate
 		if(prev.getDateApprove().isPresent())
-			oh.setStartDate(prev.getDateApprove().get().toString());
+			oh.setStartDate(prev.getDateOrder().get().toString());
 		else
 			oh.setStartDate("");
+		
+		//orderDate
+		if(prev.getDateOrder().isPresent())
+			oh.setOrderDate(prev.getDateOrder().get().toString());
+		else
+			oh.setOrderDate("");
 		
 		//endDate
 		if(prev.getDatePlanned().isPresent())
