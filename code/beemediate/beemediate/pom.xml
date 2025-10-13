@@ -32,6 +32,14 @@
 		<sonar.organization>giorgio-hash</sonar.organization>
 	</properties>
 	<dependencies>
+	
+        <!--Apache POI-->
+        <dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>5.2.3</version>
+		</dependency>
+	
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlrpc/xmlrpc-client -->
 		<!-- XMLRPC -->
 		<dependency>
