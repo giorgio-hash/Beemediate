@@ -81,8 +81,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 	}
 	
 	
+	//*******************************************//	
+	//******** metodi helper di servizio ********//
+	//*******************************************//
 	
-	//******** metodi helper di servizio
+	
 	/**
 	 * Richiede via XML-RPC le informazioni dei model di Odoo e ricostruisce l'oggetto Order.
 	 * @return <i>true</i> se viene creato un nuovo Order.
@@ -228,7 +231,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 						"purchase.order","search",
 						Arrays.asList(Arrays.asList(
 								Arrays.asList("partner_id","=",f.getName().get()),
-								Arrays.asList("x_studio_oaf","=","new")
+								Arrays.asList("x_studio_oaf","=",OdooApiConfig
+																	.OafStatus
+																	.NEW.toString() )
 								)),
 						requestInfo
 						)
