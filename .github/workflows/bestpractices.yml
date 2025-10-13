@@ -32,7 +32,7 @@ jobs:
         with:
           sarif_file: pmd-report.sarif
   spotbugs-upload-report:
-    if: github.actor == 'giorgio-hash'
+    if: github.actor == 'giorgio-hash' && github.event_name != 'pull_request'
     permissions:
       contents: write # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
