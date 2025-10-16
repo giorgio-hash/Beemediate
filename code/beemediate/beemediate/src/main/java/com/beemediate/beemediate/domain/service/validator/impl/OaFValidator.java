@@ -363,8 +363,8 @@ public class OaFValidator implements OaFValidatorIF{
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
 		return validateDeliveryDateContent(ost) 
-				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getStartDate(), ost.getHeader().getEndDate())
-				&& StringHandler.equals(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate());
+				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())
+				&& StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());
 	}
 
 }
