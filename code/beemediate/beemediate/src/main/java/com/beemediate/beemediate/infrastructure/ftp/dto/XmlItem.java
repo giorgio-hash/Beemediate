@@ -4,24 +4,42 @@ import com.beemediate.beemediate.domain.pojo.order.OrderItem;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+/**
+ * Mappatura XML-OpenTrans per articolo ordine. Può prendere in input il POJO {@code OrderItem}
+ */
 @JacksonXmlRootElement(localName = "ORDER_ITEM")
 public class XmlItem {
 	
+	/**
+	 * tag per ordinare l'articolo
+	 */
 	@JacksonXmlProperty(localName="LINE_ITEM_ID")
 	private int lineItemId;
 	
+	/**
+	 * riferimento a DTO XmlProductId per PRODUCT_ID
+	 */
 	@JacksonXmlProperty(localName="PRODUCT_ID")
 	private XmlProductId prodId;
 	
+	/**
+	 * tag per specificare quantità (con o senza cifre decimali; il separatore deve essere “.”)
+	 */
 	@JacksonXmlProperty(localName="QUANTITY")
 	private float quantity;
 	
+	/**
+	 * tag per Unità di misura (unità ISO, ma è possibile una mappatura personalizzata)
+	 */
 	@JacksonXmlProperty(localName="bmecat:ORDER_UNIT")
 	private String orderUnit;
 
 	
 	
-	
+	/**
+	 * Costruttore per creare struttura XML-OpenTrans articolo ordine partendo dal POJO {@code OrderItem}
+	 * @param item - OrderItem
+	 */
 	public XmlItem(OrderItem item) {
 		super();
 		this.lineItemId = Integer.parseInt(item.getLineItemID());
@@ -36,28 +54,40 @@ public class XmlItem {
 
 
 
-
+	/**
+	 * 
+	 * @return int 
+	 */
 	public int getLineItemId() {
 		return lineItemId;
 	}
 
 
 
-
+	/**
+	 * 
+	 * @return XmlProductId - DTO con numero articolo del sistema cliente e del sistema fornitore.
+	 */
 	public XmlProductId getProdId() {
 		return prodId;
 	}
 
 
 
-
+	/**
+	 * 
+	 * @return float - quantità
+	 */
 	public float getQuantity() {
 		return quantity;
 	}
 
 
 
-
+	/**
+	 * 
+	 * @return String - unità di misura (ISO) della quantità
+	 */
 	public String getOrderUnit() {
 		return orderUnit;
 	}
