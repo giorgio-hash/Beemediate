@@ -127,9 +127,9 @@ public class FTPHandler implements FTPHandlerPort{
                         StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);
 
-            log.info("File scritto con successo: {}", filePath.toAbsolutePath());
+            log.info("File scritto con successo: {}", filePath.toAbsolutePath().toString().replaceAll("[\r\n]","") );
         } catch (IOException e) {
-        	log.info("Problema di scrittura sul filesystem:".concat(filePath.toAbsolutePath().toString()),e);
+        	log.error("Problema di scrittura sul filesystem:".concat(filePath.toAbsolutePath().toString().replaceAll("[\r\n]","") ),e);
         }
         return Files.exists(filePath);
 	}

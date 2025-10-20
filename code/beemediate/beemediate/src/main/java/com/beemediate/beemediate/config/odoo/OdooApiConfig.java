@@ -123,7 +123,7 @@ public class OdooApiConfig {
 		try {
 			uid = (int) client.execute(commmonConfig, "authenticate", Arrays.asList(db, username, password, Collections.emptyMap()));
 
-			log.info("Versione server: {}", ver);
+			log.info("Versione server: {}", ver.toString().replaceAll("[\r\n]","") );
 			log.info("Session uid: {}", uid);
 			
 			//oggetto per interagire coi models di ODOO

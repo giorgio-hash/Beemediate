@@ -100,7 +100,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 		try {
 			return fetchData();
 		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){
-			log.info(e.getMessage());
+			log.error("Problema nel recupero degli ordini.",e);
 		}
 		
 		return false;
@@ -142,43 +142,43 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//trova ed estrai GEALAN (e stampa su log)
 			f = estraiFornitore();
-			log.info(f.toString());
+			log.info(f.toString().toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova ed estrai preventivo (e stampa su log)
 			prev = estraiPreventivo(f);
-			log.info(prev.toString());
+			log.info(prev.toString().toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
 			dest = estraiDestinazione(estraiContattoConsegna(estraiConsegna(prev)));
-			log.info(dest.toString());
+			log.info(dest.toString().toString().replaceAll("[\r\n]",""));
 			
 			//trova informazioni sulla compagnia cliente (e stampa su log)
 			comp = estraiCompagnia(prev);
-			log.info(comp.toString());
+			log.info(comp.toString().toString().replaceAll("[\r\n]",""));
 			
 			//trova ed estrai parti del preventivo (e stampa su log)
 			artpr = estraiArticoliPreventivo(prev);
 			for(ArticoloPreventivoDTO p : artpr) {
-				log.info(p.toString());
+				log.info(p.toString().toString().replaceAll("[\r\n]",""));
 			}
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
 			prodf = estraiProdottoFornitore(estraiProdottoPerArticoloPreventivo(artpr),f);
 			for(ProdottoFornitoreDTO p : prodf) {
-				log.info(p.toString());
+				log.info(p.toString().toString().replaceAll("[\r\n]",""));
 			}
 			
 			//costruzione struct ordine
 			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);
-			log.info(ordine.toString());
+			log.info(ordine.toString().toString().replaceAll("[\r\n]",""));
 			//costruzione ordine
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			
 			
 		} catch (EmptyFetchException | InconsistentDTOException | ClassCastException e1) {
-			log.info(e1.getMessage());
+			log.error("Problema nel recupero degli ordini.",e1);
 		} 
 		
 		return hasNewOrder();
