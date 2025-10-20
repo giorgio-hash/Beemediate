@@ -19,7 +19,7 @@ import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort
  * Classe principale per la gestione della piattagorma. Implementa OaFManagerPort.
  */
 //@Service
-public class OaFBatchManager implements OaFManagerPort{
+public final class OaFBatchManager implements OaFManagerPort{
 	
 	/***riferimento al gestore buffer ordini*/
 	private /*@ spec_public @*/ final OaFBuffer oaf;

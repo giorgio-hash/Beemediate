@@ -20,7 +20,7 @@ import com.beemediate.beemediate.domain.utils.StringHandler;
  * Classe incaricata di verificare la OrderStructure per confermare che le informazioni contenute rispettino i vincoli richiesti dal sistema fornitore.
  */
 @Service
-public class OaFValidator implements OaFValidatorIF{
+public final class OaFValidator implements OaFValidatorIF{
 	
 
 	/***Numero cliente corretto*/

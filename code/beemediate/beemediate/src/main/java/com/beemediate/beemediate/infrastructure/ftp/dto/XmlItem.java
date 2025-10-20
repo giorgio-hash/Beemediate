@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Mappatura XML-OpenTrans per articolo ordine. Può prendere in input il POJO {@code OrderItem}
  */
 @JacksonXmlRootElement(localName = "ORDER_ITEM")
-public class XmlItem {
+public final class XmlItem {
 	
 	/**
 	 * tag per ordinare l'articolo
