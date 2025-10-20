@@ -53,6 +53,23 @@ public class OrderHeader {
 	public OrderHeader() {/*empty constructor*/}
 	
 	/**
+	 * Copy Constructor
+	 */
+	public OrderHeader(OrderHeader oh) {
+		this.buyerID = oh.getBuyerID();
+		this.buyerIDRef = oh.getBuyerIDRef();
+		this.currency = oh.getCurrency();
+		this.deliveryID = oh.getDeliveryID();
+		this.deliveryIDRef = oh.getDeliveryIDRef();
+		this.endDate = oh.getEndDate();
+		this.orderDate = oh.getOrderDate();
+		this.orderID = oh.getOrderID();
+		this.startDate = oh.getStartDate();
+		this.supplierID = oh.getSupplierID();
+		this.supplierIDRef = oh.getSupplierIDRef();
+	}
+	
+	/**
 	 * 
 	 * @return String - identificativo ordine
 	 */

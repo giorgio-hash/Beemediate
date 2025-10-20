@@ -16,6 +16,13 @@ public class OrderSummary {
 	public OrderSummary() {/*empty constructor*/}
 	
 	/**
+	 * Copy Constructor
+	 */
+	public OrderSummary(OrderSummary os) {
+		this.totalItemNum = os.getTotalItemNum();
+	}
+	
+	/**
 	 * 
 	 * @return int - numero di OrderItem nel OrderStructure
 	 */

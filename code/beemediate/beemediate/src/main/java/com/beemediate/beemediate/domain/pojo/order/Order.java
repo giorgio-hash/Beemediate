@@ -50,13 +50,13 @@ public class Order {
 	}
 
 	/**
-	 * Restituisce la struttura dati dell'ordine
-	 * @return oggeto OrderStructure
+	 * Restituisce una copia della struttura dati dell'ordine
+	 * @return oggetto OrderStructure
 	 */
 	//@ public normal_behaviour
-	//@ ensures \result == data;
+	//@ ensures \result != data;
 	public /*@ pure @*/ OrderStructure getData() {
-		return data;
+		return new OrderStructure(data);
 	}
 
 	/**
