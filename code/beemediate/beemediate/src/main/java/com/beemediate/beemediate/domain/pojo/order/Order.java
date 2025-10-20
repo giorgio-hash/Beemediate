@@ -4,7 +4,7 @@ package com.beemediate.beemediate.domain.pojo.order;
 public class Order {
 	
 	/***struttura dati dell'ordine*/
-	private /*@ spec_public @*/ OrderStructure data;
+	private /*@ spec_public @*/ final OrderStructure data;
 	
 	/***identificativo dell' ordine*/
 	private /*@ spec_public @*/ final String orderID;
@@ -50,13 +50,13 @@ public class Order {
 	}
 
 	/**
-	 * Restituisce la struttura dati dell'ordine
-	 * @return oggeto OrderStructure
+	 * Restituisce una copia difensiva (CWE-374) della struttura dati dell'ordine.
+	 * @return oggetto OrderStructure
 	 */
 	//@ public normal_behaviour
-	//@ ensures \result == data;
+	//@ ensures \result != data;
 	public /*@ pure @*/ OrderStructure getData() {
-		return data;
+		return new OrderStructure(data);
 	}
 
 	/**
@@ -161,7 +161,7 @@ public class Order {
 	//@ assignable quantity;
 	//@ requires q != null;
 	//@ ensures quantity == q;
-	public void setQuantity(QuantityFieldValue q) {
+	public void setQuantity(final QuantityFieldValue q) {
 		quantity = q;
 	}
 

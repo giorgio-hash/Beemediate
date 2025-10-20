@@ -31,6 +31,18 @@ public class OrderItem {
 	public OrderItem() {/*empty constructor*/}
 	
 	/**
+	 * Copy constructor
+	 */
+	public OrderItem(OrderItem oi) {
+		this.buyerID = oi.getBuyerID();
+		this.descriptionShort = oi.getDescriptionShort();
+		this.lineItemID = oi.getLineItemID();
+		this.orderUnit = oi.getOrderUnit();
+		this.quantity = oi.getQuantity();
+		this.supplierID = oi.getSupplierID();
+	}
+	
+	/**
 	 * 
 	 * @return String - numero di linea dell'articolo
 	 */
@@ -86,7 +98,7 @@ public class OrderItem {
 	 */
 	//@ public normal_behaviour
 	//@ ensures this.orderUnit!=null;
-	public void setOrderUnit(/*@ non_null @*/ String orderUnit) {
+	public void setOrderUnit(/*@ non_null @*/final String orderUnit) {
 		this.orderUnit = orderUnit;
 	}
 	

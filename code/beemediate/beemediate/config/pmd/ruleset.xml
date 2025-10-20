@@ -3,7 +3,8 @@
 <ruleset name="Custom Rules"
     xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+    minimumPriority="3">
 
     <description>
         Java best practices and guidelines for codestyle, documentation, design, errorprone.
@@ -19,6 +20,7 @@
     	<exclude name="ControlStatementBraces" />
     	<exclude name="OnlyOneReturn" />
     	<exclude name="PrematureDeclaration" />
+    	<exclude name="LongVariable" />
     </rule>
     <rule ref="category/java/documentation.xml">
     	<exclude name="CommentSize" />

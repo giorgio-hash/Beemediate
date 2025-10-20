@@ -8,7 +8,7 @@ import com.beemediate.beemediate.domain.pojo.order.*;
  */
 public final class OrderMapper {
 	
-	private OrderMapper() {}
+	private OrderMapper() {/*empty constructor*/}
 
 	/**
 	 * Crea un OrderStructure utilizzando i dati dei "DTO" forniti in input.
@@ -20,16 +20,16 @@ public final class OrderMapper {
 	 * @param comp - CompagniaDTO
 	 * @return OrderStructure
 	 */
-	public static OrderStructure map(FornitoreDTO f, PreventivoDTO prev, ArticoloPreventivoDTO[] artpr, ProdottoFornitoreDTO[] prodf, DestinazioneDTO dest, CompagniaDTO comp) {
+	public static OrderStructure map(final FornitoreDTO f, final PreventivoDTO prev, final ArticoloPreventivoDTO[] artpr, final ProdottoFornitoreDTO[] prodf, final DestinazioneDTO dest, final CompagniaDTO comp) {
 		
-		OrderSummary os = new OrderSummary();
+		final OrderSummary os = new OrderSummary();
 		os.setTotalItemNum(artpr.length);
 		
-		OrderItem[] oi = mapOrderItemList(artpr,prodf);
+		final OrderItem[] oi = mapOrderItemList(artpr,prodf);
 		
-		OrderHeader oh = mapOrderHeader(f,prev,dest,comp);
+		final OrderHeader oh = mapOrderHeader(f,prev,dest,comp);
 		
-		OrderStructure ostr = new OrderStructure();
+		final OrderStructure ostr = new OrderStructure();
 		ostr.setHeader(oh);
 		ostr.setItemList(oi);
 		
@@ -44,9 +44,9 @@ public final class OrderMapper {
 	 * @param prodf - ProdottoFornitoreDTO
 	 * @return Array di OrderItem
 	 */
-	private static OrderItem[] mapOrderItemList(ArticoloPreventivoDTO[] artpr, ProdottoFornitoreDTO[] prodf) {
+	private static OrderItem[] mapOrderItemList(final ArticoloPreventivoDTO[] artpr, final ProdottoFornitoreDTO[] prodf) {
 		
-		OrderItem[] oi = new OrderItem[artpr.length];
+		final OrderItem[] oi = new OrderItem[artpr.length];
 		
 		
 		for(int i=0; i<artpr.length; i++) {
@@ -103,21 +103,15 @@ public final class OrderMapper {
 	 * @param comp - CompagniaDTO
 	 * @return OrderHeader
 	 */
-	private static OrderHeader mapOrderHeader(FornitoreDTO f, PreventivoDTO prev, DestinazioneDTO dest, CompagniaDTO comp) {
+	private static OrderHeader mapOrderHeader(final FornitoreDTO f, final PreventivoDTO prev, final DestinazioneDTO dest, final CompagniaDTO comp) {
 		
-		OrderHeader oh = new OrderHeader();
+		final OrderHeader oh = new OrderHeader();
 		
 		//orderID
 		if(prev.getOrigin().isPresent())
 			oh.setOrderID(prev.getOrigin().get());
 		else
 			oh.setOrderID("");
-		
-		//orderDate
-		if(prev.getDateOrder().isPresent())
-			oh.setOrderDate(prev.getDateOrder().get().toString());
-		else
-			oh.setOrderDate("");
 		
 		//currency
 		if(prev.getCurrencyId().getName().isPresent())
@@ -155,9 +149,15 @@ public final class OrderMapper {
 		
 		//startDate
 		if(prev.getDateApprove().isPresent())
-			oh.setStartDate(prev.getDateApprove().get().toString());
+			oh.setStartDate(prev.getDateOrder().get().toString());
 		else
 			oh.setStartDate("");
+		
+		//orderDate
+		if(prev.getDateOrder().isPresent())
+			oh.setOrderDate(prev.getDateOrder().get().toString());
+		else
+			oh.setOrderDate("");
 		
 		//endDate
 		if(prev.getDatePlanned().isPresent())

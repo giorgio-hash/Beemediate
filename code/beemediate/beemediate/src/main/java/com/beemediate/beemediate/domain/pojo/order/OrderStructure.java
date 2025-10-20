@@ -40,7 +40,17 @@ public class OrderStructure {
 	//@ public normal_behaviour
 	//@ ensures header == null & itemList == null & orderSummary == null;
 	//@ pure
-	public OrderStructure() {}
+	public OrderStructure() {/*empty constructor*/}
+	
+	/**
+	 * Copy Constructor
+	 */
+	//@SkipEsc
+	public OrderStructure(OrderStructure os) {
+		this.header = new OrderHeader(os.getHeader());
+		this.itemList = os.getItemList().clone();
+		this.orderSummary = new OrderSummary(os.getOrderSummary());
+	}
 	
 	/**
 	 * 

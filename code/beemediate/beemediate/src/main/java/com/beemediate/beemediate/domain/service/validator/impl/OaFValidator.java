@@ -20,17 +20,15 @@ import com.beemediate.beemediate.domain.utils.StringHandler;
  * Classe incaricata di verificare la OrderStructure per confermare che le informazioni contenute rispettino i vincoli richiesti dal sistema fornitore.
  */
 @Service
-public class OaFValidator implements OaFValidatorIF{
+public final class OaFValidator implements OaFValidatorIF{
 	
 
 	/***Numero cliente corretto*/
-	private /*@ spec_public */ final String customerNumber = "3024005150";
-	/***Formato corretto del valore di quantità di ogni articolo.*/
-	private /*@ spec_public */ final QuantityFieldValue quantity = QuantityFieldValue.FLOAT_WITH_DOT;
+	private /*@ spec_public */ static final String CUSTOMER_NUMBER = "3024005150";
 	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
-	private /*@ spec_public */ final char quantityMeasure = 'M';
+	private /*@ spec_public */ static final char QUANTITY_MEASURE = 'M';
 	/***Numeri corretti di località di consegna*/
-	private /*@ spec_public */ final String[] deliveryLocationNumber = {"3024005150","30901505150"};
+	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {"3024005150","30901505150"};
 	/***Elenco numeri articolo da catalogo fornitore.*/
 	private /*@ spec_public */ final String[] articleNumbers;
 	
@@ -63,7 +61,7 @@ public class OaFValidator implements OaFValidatorIF{
 //	@CodeBigintMath
 	@Autowired
 	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {
-		String[] rows = catalog.readArticleNumbers(); 
+		final String[] rows = catalog.readArticleNumbers(); 
 		if(rows.length == 0)
 			throw new EmptyArrayException("ID articoli non trovati.");
 		articleNumbers = rows;
@@ -113,7 +111,7 @@ public class OaFValidator implements OaFValidatorIF{
 	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())
-				&& StringHandler.equals(ost.getHeader().getBuyerID(), this.customerNumber);
+				&& StringHandler.equals(ost.getHeader().getBuyerID(), this.CUSTOMER_NUMBER);
 	}
 	
 	/**
@@ -151,8 +149,8 @@ public class OaFValidator implements OaFValidatorIF{
 	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())
-				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[0])
-						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.deliveryLocationNumber[1]));
+				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[0])
+						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[1]));
 	}
 	
 	/**
@@ -194,9 +192,9 @@ public class OaFValidator implements OaFValidatorIF{
 	}
 	
 	/**
-	 * 
+	 * Verifica se <i>artNum</i> è presente in <i>articleNumbers</i>
 	 * @param artNum - String
-	 * @return <i>true</i> se artNum è presente in articleNumbers
+	 * @return <i>true</i> se artNum è presente in <i>articleNumbers</i>
 	 */
 	/*@ public normal_behaviour
 	  @ requires artNum!=null & artNum.length()>0;
@@ -250,7 +248,7 @@ public class OaFValidator implements OaFValidatorIF{
 		  @ decreases ost.itemList.length - \count;
 		  @*/
 		for(OrderItem il : ost.getItemList()) {
-			if( il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != quantityMeasure ) {
+			if( il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {
 				rightMeasureUnit = false;
 				break;
 			}
@@ -363,8 +361,8 @@ public class OaFValidator implements OaFValidatorIF{
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
 		return validateDeliveryDateContent(ost) 
-				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getStartDate(), ost.getHeader().getEndDate())
-				&& StringHandler.equals(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate());
+				&& StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())
+				&& StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());
 	}
 
 }

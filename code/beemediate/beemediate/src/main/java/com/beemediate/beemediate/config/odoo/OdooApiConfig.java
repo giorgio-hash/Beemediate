@@ -81,9 +81,16 @@ public class OdooApiConfig {
 		OPENTRANSERROR("OPENTRANSERROR"),
 		CONTENTERROR("CONTENTERROR");
 		
+		/**
+		 * String corrispondente allo stato
+		 */
 		public final String label;
 		
-		private OafStatus(String label) {
+		/**
+		 * Costruttore privato
+		 * @param label - String
+		 */
+		OafStatus(final String label) {
 			this.label = label;
 		}
 		
@@ -105,13 +112,13 @@ public class OdooApiConfig {
 		
 		//informazioni sul server
 		commmonConfig.setServerURL( (new URI(String.format("%s/xmlrpc/2/common", url))).toURL() );
-		Object ver = client.execute(commmonConfig, "version", Collections.emptyList());
+		final Object ver = client.execute(commmonConfig, "version", Collections.emptyList());
 		
 		//login
 		try {
 			uid = (int) client.execute(commmonConfig, "authenticate", Arrays.asList(db, username, password, Collections.emptyMap()));
 
-			log.info("Versione server: {}", ver);
+			log.info("Versione server: {}", ver.toString().replaceAll("[\r\n]","") );
 			log.info("Session uid: {}", uid);
 			
 			//oggetto per interagire coi models di ODOO
@@ -124,7 +131,7 @@ public class OdooApiConfig {
 			
 			online = false;
 			
-			FailedLoginException ex = new FailedLoginException("Eccezione durante il recupero uid di sessione, verificare il login.");
+			final FailedLoginException ex = new FailedLoginException("Eccezione durante il recupero uid di sessione, verificare il login.");
 			ex.initCause(e);
 			throw ex;
 		}

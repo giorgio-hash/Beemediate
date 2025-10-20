@@ -40,6 +40,32 @@ public class OdooOrderProvider implements OrderProviderPort{
 	private final OdooApiConfig odoo;
 	
 	/**
+	 * String che identifica il comando RPC per l'esecuzione di procedura remota
+	 */
+	private static final String EXECUTE_KW = "execute_kw";
+	
+	/**
+	 * String che identifica il model dei contatti su model
+	 */
+	private static final String CONTACTS_MODEL = "res.partner";
+	
+	/**
+	 * String per l'header utile a specificare i campi di un model
+	 */
+	private static final String FIELDS = "fields";
+	
+	/**
+	 * String che identifica l'operazione di lettura su model
+	 */
+	private static final String READ_OP = "read";
+	
+	/**
+	 * String con campo identificativo di un partner dal model
+	 */
+	private static final String PARTNER_ID_FIELD = "partner_id";
+	
+	
+	/**
 	 * Costruttore
 	 * @param odoo - configurazione per autenticazione e comunicazione con Odoo via XML-RPC
 	 */
@@ -52,7 +78,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	
 	@Override
 	public Order popNewOrder() {
-		Order o = ordine;
+		final Order o = ordine;
 		ordine = null;
 		return o;
 	}
@@ -74,7 +100,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 		try {
 			return fetchData();
 		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){
-			log.info(e.getMessage());
+			log.error("Problema nel recupero degli ordini.",e);
 		}
 		
 		return false;
@@ -97,7 +123,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	private boolean fetchData() throws FailedLoginException, XmlRpcException, URISyntaxException, MalformedURLException {
 		
 		// se non si è connessi, prova una connessione.
-		if(odoo.isOnline() == false)
+		if(!odoo.isOnline())
 			odoo.connect();
 		
 		
@@ -105,54 +131,54 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		try {
 			
-			FornitoreDTO f = null;
-			PreventivoDTO prev = null;
-			ArticoloPreventivoDTO[] artpr = null;
-			ProdottoFornitoreDTO[] prodf = null;
-			DestinazioneDTO dest = null;
-			CompagniaDTO comp = null;
-			OrderStructure ordstr = null;
+			final FornitoreDTO f;
+			final PreventivoDTO prev;
+			final ArticoloPreventivoDTO[] artpr;
+			final ProdottoFornitoreDTO[] prodf;
+			final DestinazioneDTO dest;
+			final CompagniaDTO comp;
+			final OrderStructure ordstr;
 			
 			
 			//trova ed estrai GEALAN (e stampa su log)
 			f = estraiFornitore();
-			log.info(f.toString());
+			log.info(f.toString().toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova ed estrai preventivo (e stampa su log)
 			prev = estraiPreventivo(f);
-			log.info(prev.toString());
+			log.info(prev.toString().toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
 			dest = estraiDestinazione(estraiContattoConsegna(estraiConsegna(prev)));
-			log.info(dest.toString());
+			log.info(dest.toString().toString().replaceAll("[\r\n]",""));
 			
 			//trova informazioni sulla compagnia cliente (e stampa su log)
 			comp = estraiCompagnia(prev);
-			log.info(comp.toString());
+			log.info(comp.toString().toString().replaceAll("[\r\n]",""));
 			
 			//trova ed estrai parti del preventivo (e stampa su log)
 			artpr = estraiArticoliPreventivo(prev);
 			for(ArticoloPreventivoDTO p : artpr) {
-				log.info(p.toString());
+				log.info(p.toString().toString().replaceAll("[\r\n]",""));
 			}
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
 			prodf = estraiProdottoFornitore(estraiProdottoPerArticoloPreventivo(artpr),f);
 			for(ProdottoFornitoreDTO p : prodf) {
-				log.info(p.toString());
+				log.info(p.toString().toString().replaceAll("[\r\n]",""));
 			}
 			
 			//costruzione struct ordine
 			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);
-			log.info(ordine.toString());
+			log.info(ordine.toString().toString().replaceAll("[\r\n]",""));
 			//costruzione ordine
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			
 			
 		} catch (EmptyFetchException | InconsistentDTOException | ClassCastException e1) {
-			log.info(e1.getMessage());
+			log.error("Problema nel recupero degli ordini.",e1);
 		} 
 		
 		return hasNewOrder();
@@ -168,16 +194,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 * @throws XmlRpcException
 	 */
 	private FornitoreDTO estraiFornitore() throws EmptyFetchException, XmlRpcException {
-		Object[] ids = null;
-		Object[] res = null;
-		Map<String, Object> requestInfo = new HashMap<>();
+		Object[] ids;
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		//cerca GEALAN
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
+		ids = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"res.partner","search",
+						CONTACTS_MODEL,"search",
 						Arrays.asList(Arrays.asList(Arrays.asList("name","=","GEALAN"))),
 						requestInfo
 						)
@@ -187,11 +213,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		//estrai GEALAN
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("name","ref"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("name","ref"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"res.partner","read",
+						CONTACTS_MODEL,READ_OP,
 						Arrays.asList(ids),
 						requestInfo
 						)
@@ -216,21 +242,21 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private PreventivoDTO estraiPreventivo(final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
 		
-		Object[] ids = null;
-		Object[] res = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		Object[] ids;
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException("Oggetto FornitoreDTO non ha le informazioni necessarie");
 		
 		//cerca un preventivo di GEALAN
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
+		ids = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
 						"purchase.order","search",
 						Arrays.asList(Arrays.asList(
-								Arrays.asList("partner_id","=",f.getName().get()),
+								Arrays.asList(PARTNER_ID_FIELD,"=",f.getName().get()),
 								Arrays.asList("x_studio_oaf","=",OdooApiConfig
 																	.OafStatus
 																	.NEW.toString() )
@@ -243,11 +269,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		//estrai preventivo
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("name","partner_id","product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("name",PARTNER_ID_FIELD,"product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","read",
+						"purchase.order",READ_OP,
 						Arrays.asList(ids),
 						requestInfo
 						)
@@ -273,16 +299,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
-		Object id = prv.getPickingTypeId().getNum().get();
-		Object[] res = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object id = prv.getPickingTypeId().getNum().get();
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("warehouse_id"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("warehouse_id"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"stock.picking.type","read",
+						"stock.picking.type",READ_OP,
 						Arrays.asList(Arrays.asList(id)),
 						requestInfo
 						)
@@ -308,16 +334,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if (cns == null || cns.getWarehouseId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto ConsegnaDTO non ha le informazioni necessarie");
 		
-		Object id = cns.getWarehouseId().getNum().get();
-		Object[] res = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object id = cns.getWarehouseId().getNum().get();
+		final Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("partner_id"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList(PARTNER_ID_FIELD));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"stock.warehouse","read",
+						"stock.warehouse",READ_OP,
 						Arrays.asList(Arrays.asList(id)),
 						requestInfo
 						)
@@ -343,16 +369,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 
 		if (concons == null || concons.getPartnerId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto ContattoConsegnaDTO non ha le informazioni necessarie");
 		
-		Object id = concons.getPartnerId().getNum().get();
-		Object[] res = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object id = concons.getPartnerId().getNum().get();
+		final Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("ref"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("ref"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"res.partner","read",
+						CONTACTS_MODEL,READ_OP,
 						Arrays.asList(Arrays.asList(id)),
 						requestInfo
 						)
@@ -378,16 +404,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if (prv == null || prv.getPickingTypeId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
-		Object id = prv.getPickingTypeId().getNum().get();
-		Object[] res = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object id = prv.getPickingTypeId().getNum().get();
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("ref"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("ref"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"res.partner","read",
+						CONTACTS_MODEL,READ_OP,
 						Arrays.asList(Arrays.asList(id)),
 						requestInfo
 						)
@@ -413,10 +439,10 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
-		Object[] ids = null;
-		Object[] res = null;
-		ArticoloPreventivoDTO[] artPrv = null;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		Object[] ids;
+		Object[] res;
+		ArticoloPreventivoDTO[] artPrv;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		
 		
@@ -427,11 +453,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		//estrai parti del preventivo
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("order_id","product_id","product_qty"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("order_id","product_id","product_qty"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order.line","read",
+						"purchase.order.line",READ_OP,
 						Arrays.asList(Arrays.asList(ids)),
 						requestInfo
 						)
@@ -463,10 +489,10 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if ( ap == null ) throw new InconsistentDTOException("Lista ArticoloPreventivoDTO null");
 		
-		Object[] ids = new Object[ap.length];
-		Object[] res = null;
-		ProdottoDTO[] prd = new ProdottoDTO[ap.length];
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object[] ids = new Object[ap.length];
+		Object[] res;
+		final ProdottoDTO[] prd = new ProdottoDTO[ap.length];
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		//estrai prodotti (per arricchire le info sulle parti del preventivo)
 		
@@ -481,23 +507,23 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		//estrazione
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("seller_ids"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("seller_ids"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"product.product","read",
+						"product.product",READ_OP,
 						Arrays.asList(Arrays.asList(ids)),
 						requestInfo
 						)
 				);
 		
 		if(res.length==0) {
-			String s = "";
+			StringBuilder sb = new StringBuilder();
 			
 			for( ArticoloPreventivoDTO p : ap)
-				s += p.toString() + "\n"; 
+				sb.append(p.toString()).append('\n');
 			
-			throw new EmptyFetchException("Non è stato possibile trovare alcun prodotto associato agli articoli: " + s);
+			throw new EmptyFetchException("Non è stato possibile trovare alcun prodotto associato agli articoli: " + sb.toString());
 		}
 		
 		//collezione di POJO
@@ -526,11 +552,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 		if (f == null) throw new InconsistentDTOException("FornitoreDTO null");
 		if (pr == null) throw new InconsistentDTOException("Lista ProdottoDTO null");
 		
-		Object[] ids;
-		Object[] res;
-		ProdottoFornitoreDTO[] prd;
-		List<Object> elems;
-		HashMap<String, Object> requestInfo = new HashMap<String, Object>();
+		final Object[] ids;
+		final Object[] res;
+		final ProdottoFornitoreDTO[] prd;
+		final List<Object> elems;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		 
 		
 		//ora estraggo gli id che fanno riferimento ad un articolo a fornitore
@@ -548,12 +574,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 		
 		if ( f.getName().isEmpty() ) throw new InconsistentDTOException("Fornitore non ha un nome.");
 		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
-		ids = (Object[]) odoo.models.execute("execute_kw",
+		ids = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
 						"product.supplierinfo","search",
 						Arrays.asList(Arrays.asList(
-								Arrays.asList("partner_id","=", f.getName().get() ),
+								Arrays.asList(PARTNER_ID_FIELD,"=", f.getName().get() ),
 								Arrays.asList("id","in",elems)
 								))
 						)
@@ -561,11 +587,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 
 		// ora estraggo
 		requestInfo.clear();
-		requestInfo.put("fields", Arrays.asList("id","product_id","sequence","product_name","product_code","partner_id","product_uom_id"));
-		res = (Object[]) odoo.models.execute("execute_kw",
+		requestInfo.put(FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",PARTNER_ID_FIELD,"product_uom_id"));
+		res = (Object[]) odoo.models.execute(EXECUTE_KW,
 				Arrays.asList(
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"product.supplierinfo","read",
+						"product.supplierinfo",READ_OP,
 						Arrays.asList(Arrays.asList(ids)),
 						requestInfo
 						)

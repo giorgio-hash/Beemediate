@@ -14,6 +14,7 @@ import com.beemediate.beemediate.config.odoo.OdooApiConfig;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
+import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
  * Riferirsi alla documentazione ufficiale di Odoo per ulteriori informazioni.*/
@@ -25,6 +26,11 @@ public class OdooDataSender implements DataSenderPort{
 	/***Configurazione per comunicare con API del CRM Odoo.*/
 	private final OdooApiConfig odoo;
 
+	/**
+	 * Messaggio di errore
+	 */
+	private static final String ERROR_MSG_ODOODB = "Problema nella scrittura del db Odoo.";
+	
 	/***
 	 * Costruttore
 	 * @param oggetto {@code OdooApiConfig}*/
@@ -35,29 +41,29 @@ public class OdooDataSender implements DataSenderPort{
 	
 	
 	@Override
-	public boolean signalConfirmation(Confirmation c) {
+	public boolean signalConfirmation(final Confirmation c) {
 		
 		boolean res = false;
 		try {
 			res = updateTo(c.getOrderID(), OdooApiConfig
 											.OafStatus
 											.CONFIRMED.toString() );
-		}catch(XmlRpcException | NullPointerException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
+		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			log.error(ERROR_MSG_ODOODB,e);
 		}
 		return res;
 	}
 	
 	@Override
-	public boolean signalShipped(Order o) {
+	public boolean signalShipped(final Order o) {
 
 		boolean res = false;
 		try {
 			res = updateTo(o.getOrderID(), OdooApiConfig
 											.OafStatus
 											.SHIPPED.toString() );
-		}catch(XmlRpcException | NullPointerException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
+		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			log.error(ERROR_MSG_ODOODB,e);
 		}
 		return res;
 	}
@@ -70,22 +76,22 @@ public class OdooDataSender implements DataSenderPort{
 			res = updateTo(o.getOrderID(), OdooApiConfig
 											.OafStatus
 											.OPENTRANSERROR.toString() );
-		}catch(XmlRpcException | NullPointerException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
+		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			log.error(ERROR_MSG_ODOODB,e);
 		}
 		return res;
 	}
 
 	@Override
-	public boolean signalContentError(Order o) {
+	public boolean signalContentError(final  Order o) {
 
 		boolean res = false;
 		try {
 			res = updateTo(o.getOrderID(), OdooApiConfig
 											.OafStatus
 											.CONTENTERROR.toString() );
-		}catch(XmlRpcException | NullPointerException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
+		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			log.error(ERROR_MSG_ODOODB,e);
 		}
 		return res;
 	}
@@ -104,13 +110,13 @@ public class OdooDataSender implements DataSenderPort{
 	 * @return <i>true</i> se l'operazione è andata a buon fine
 	 * @throws XmlRpcException per problemi legati alla applicazione del protocollo XML-RPC
 	 */
-	private boolean updateTo(String orderId, String oafState) throws XmlRpcException {
+	private boolean updateTo(final String orderId, final String oafState) throws XmlRpcException, NullSuppliedArgumentException {
 		
 		if(orderId==null || oafState==null)
-			throw new NullPointerException ("Non sono ammessi argomenti null");
+			throw new NullSuppliedArgumentException ("Non sono ammessi argomenti null");
 		
-		Object[] ids = null;
-		Map<String, Object> requestInfo = new HashMap<>();
+		Object[] ids;
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
