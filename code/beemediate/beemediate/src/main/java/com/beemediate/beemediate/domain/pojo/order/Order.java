@@ -50,7 +50,7 @@ public class Order {
 	}
 
 	/**
-	 * Restituisce una copia della struttura dati dell'ordine
+	 * Restituisce una copia difensiva (CWE-374) della struttura dati dell'ordine.
 	 * @return oggetto OrderStructure
 	 */
 	//@ public normal_behaviour
