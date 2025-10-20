@@ -82,7 +82,7 @@ public final class AttributeMapper {
         try {
         	dateTime = LocalDateTime.parse(s, formatter);
         }catch(DateTimeParseException e) {
-        	LOG.info(e.getMessage());
+        	LOG.error("Errore nel parsing della data.",e);
         }
 		return dateTime==null? Optional.empty() : Optional.of(dateTime);
 	}
