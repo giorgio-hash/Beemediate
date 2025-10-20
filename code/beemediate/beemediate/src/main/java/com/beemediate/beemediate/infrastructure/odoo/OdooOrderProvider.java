@@ -518,12 +518,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 				);
 		
 		if(res.length==0) {
-			String s = "";
+			StringBuilder sb = new StringBuilder();
 			
 			for( ArticoloPreventivoDTO p : ap)
-				s += p.toString() + "\n"; 
+				sb.append(p.toString()).append('\n');
 			
-			throw new EmptyFetchException("Non è stato possibile trovare alcun prodotto associato agli articoli: " + s);
+			throw new EmptyFetchException("Non è stato possibile trovare alcun prodotto associato agli articoli: " + sb.toString());
 		}
 		
 		//collezione di POJO
