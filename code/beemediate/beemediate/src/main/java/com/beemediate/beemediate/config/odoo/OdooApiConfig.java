@@ -28,11 +28,6 @@ public class OdooApiConfig {
 	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);
 	
 	/**
-	 * Costruttore
-	 */
-	public OdooApiConfig() {/*empty constructor*/}
-	
-	/**
 	 * Riferimento alla risorsa online CRM.
 	 */
 	@Value("${api.host:noconf}")
