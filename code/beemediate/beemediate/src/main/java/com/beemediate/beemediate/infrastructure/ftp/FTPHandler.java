@@ -21,23 +21,51 @@ import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
 
+/**
+ * Adattatore di FTPHandlerPort che tratta la gestione dei file XML nel sistema FTP. 
+ * Nello specifico, tratta 
+ * <ul>
+ * <li>la serializzazione e deserializzazione tra POJO e XML-OpenTrans</li>
+ * <li> il posizionamento delle strutture dati nel filesystem destinato alla comunicazione tra i partner commerciali</li> 
+ * </ul>
+ * Questo adattatore <b><u>non tratta il protocollo di comunicazione FTP</u></b>, bensì tratta le strutture dati trasmesse e ricevute sul sistema dedicato.
+ */
 @Component
 @PropertySource("classpath:ftpconfig.properties")
 public class FTPHandler implements FTPHandlerPort{
 
-	
+	/**
+	 * Riferimento al Logger della classe
+	 */
 	private final Logger log = LoggerFactory.getLogger(FTPHandler.class);
 	
+	/**
+	 * Folder contenente gli ordini da mandare al fornitore
+	 */
 	private final String inbound;
+	/**
+	 * Folder contenente le conferme ricevute dal fornitore
+	 */
 	private final String outbound;
+	/**
+	 * Folder contenente le conferme archiviate. Una conferma diventa <i>archiviata</i> dopo esser stata individuata ed analizzata.
+	 */
 	private final String archived;
 	
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+	/**
+	 * Formattazione DateTime
+	 */
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
 	
-	
-	public FTPHandler(@Value("${file.inbound:ftp/INBOUND}") String inbound,
-						@Value("${file.outbound:ftp/OUTBOUND}") String outbound,
-						@Value("${file.archived:ftp/OUTBOUND/ARCHIV}") String archived
+	/**
+	 * Crea una istanza di {@code FTPHandler} utilizzando i dati presenti in {@code resources/ftpconfig.properties}, obbligatoriamente presente nel progetto. In assenza di valori personalizzati, vengono applicati dei valori di default.
+	 * @param inbound - valore della chiave {@code file.inbound}, se presente (default: <i>"ftp/INBOUND"</i>)
+	 * @param outbound - valore della chiave {@code file.outbound}, se presente (default <i>"ftp/OUTBOUND"</i>)
+	 * @param archived - valore della chiave {@code file.archived}, se presente (default: <i>"ftp/OUTBOUND/ARCHIV"</i>)
+	 */
+	public FTPHandler(@Value("${file.inbound:ftp/INBOUND}") final String inbound,
+						@Value("${file.outbound:ftp/OUTBOUND}") final String outbound,
+						@Value("${file.archived:ftp/OUTBOUND/ARCHIV}") final String archived
 						) {
 
 		this.inbound = inbound;
@@ -47,39 +75,48 @@ public class FTPHandler implements FTPHandlerPort{
 	
 	
 	@Override
-	public boolean archive(Confirmation c) {
+	public boolean archive(final Confirmation c) {
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 	@Override
-	public boolean delete(Confirmation c) {
+	public boolean delete(final Confirmation c) {
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 	@Override
-	public boolean loadOrder(Order o) {
+	public boolean loadOrder(final Order o) {
 		return loadOrder(o.getData());
 	}
 
-	
-	private boolean loadOrder(OrderStructure os) {
+	/**
+	 * Converte il POJO {@code OrderStructure} in una struttura <i>Serializable</i>, per poi salvare la struttura dati su file {@code .xml}, conforme al formato XML-OpenTrans, al percorso specificato da <i>inbound</i>
+	 * @param os - oggetto {@code OrderStructure}
+	 * @return <i>true</i> se l'operazione è andata a buon fine
+	 */
+	private boolean loadOrder(final OrderStructure os) {
 		
 		
-		String content = DataMapper.mapToXml(os);
-		String fileName = new StringBuilder()
-							.append("ORDER__")
-							.append(LocalDateTime.now().format(formatter)										)
-							.append(".xml")
-							.toString();
+		final String content = DataMapper.mapToXml(os);
+		final String fileName = new StringBuilder()
+										.append("ORDER__")
+										.append(LocalDateTime.now().format(FORMATTER))
+										.append(".xml")
+										.toString();
 		
-		Path filePath = Paths.get(inbound, fileName); 
+		final Path filePath = Paths.get(inbound, fileName); 
 		 
 		return writeToInbound(content, filePath);
 	}
 	
 	
-	
-	private boolean writeToInbound(String content, Path filePath) {
+	/**
+	 * Al percorso <i>filePath</i>, crea un nuovo file scrivendoci <i>content</i>.
+	 * @param content - String da scrivere
+	 * @param filePath - {@code Path} indicante il percorso al file creato
+	 * @return <i>true</i> se l'operazione è andata a buon fine
+	 */
+	private boolean writeToInbound(final String content, final Path filePath) {
 		
         try {
             // Crea la directory se non esiste
@@ -96,5 +133,31 @@ public class FTPHandler implements FTPHandlerPort{
         }
         return Files.exists(filePath);
 	}
+
+	/**
+	 * 
+	 * @return String indicante il percorso dove vengono depositati i file degli ordini. <br>Default: <i>"ftp/INBOUND"</i>
+	 */
+	public String getInbound() {
+		return inbound;
+	}
+
+	/**
+	 * 
+	 * @return String indicante il percorso dove recuperati i file delle conferme. <br>Default: <i>"ftp/OUTBOUND"</i>
+	 */
+	public String getOutbound() {
+		return outbound;
+	}
+
+	/**
+	 * 
+	 * @return String indicante il percorso dove archiviati i file delle conferme.<br>Default: <i>"ftp/OUTBOUND/ARCHIV"</i>
+	 */
+	public String getArchived() {
+		return archived;
+	}
+	
+	
 	
 }

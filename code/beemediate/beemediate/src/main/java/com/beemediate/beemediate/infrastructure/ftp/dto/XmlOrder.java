@@ -15,57 +15,57 @@ public class XmlOrder {
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true)
-	private final String xmlns = "http://www.opentrans.org/XMLSchema/2.1";
+	@JacksonXmlProperty(isAttribute=true, localName="xmlns")
+	private static final String XMLNS = "http://www.opentrans.org/XMLSchema/2.1";
 
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:xsi")
-	private final String xsi = "http://www.w3.org/2001/XMLSchema-instance";
+	private static final String XSI = "http://www.w3.org/2001/XMLSchema-instance";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:bmecat")
-	private final String bmecat = "http://www.bmecat.org/bmecat/2005";
+	private static final String BMECAT = "http://www.bmecat.org/bmecat/2005";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true)
-	private final String version="2.1";
+	@JacksonXmlProperty(isAttribute=true, localName="version")
+	private static final String VERSION="2.1";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true)
-	private final String type="standard";
+	@JacksonXmlProperty(isAttribute=true, localName="type")
+	private static final String TYPE="standard";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xsi:schemaLocation")
-	private final String schemaLocation = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
+	private static final String SCHEMA_LOCATION = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
 	
 	/**
 	 * Riferimento a DTO XmlOrderHeader per ORDER_HEADER
 	 */
 	@JacksonXmlProperty(localName="ORDER_HEADER")
-	public XmlOrderHeader oh;
+	public final XmlOrderHeader oh;
 	
 	/**
 	 * Riferimento a lista di DTO XmlItem per ORDER_ITEM. Jackson crea un tag wrapper ORDER_ITEM_LIST attorno ai ORDER_ITEM
 	 */
     @JacksonXmlElementWrapper(localName = "ORDER_ITEM_LIST", useWrapping = true) 
     @JacksonXmlProperty(localName = "ORDER_ITEM")  
-	private List<XmlItem> orderItem;
+	private final List<XmlItem> orderItem;
 	
     /**
      * Riferimento a DTO XmlOrderSummary per ORDER_SUMMARY.
      */
 	@JacksonXmlProperty(localName="ORDER_SUMMARY")
-	public XmlOrderSummary os;
+	public final XmlOrderSummary os;
 
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans dell'ordine. Crea la radice del documento contenente attributi relativi al namespace.
@@ -79,7 +79,7 @@ public class XmlOrder {
 	 * @param orderItem - {@code List<XmlItem>} per creare le strutture XML-OpenTrans ORDER_ITEM nel tag ORDER_ITEM_LIST
 	 * @param os - {@code XmlOrderSummary} per creare struttura XML-OpenTrans ORDER_SUMMARY
 	 */
-	public XmlOrder(XmlOrderHeader oh, List<XmlItem> orderItem, XmlOrderSummary os) {
+	public XmlOrder(final XmlOrderHeader oh, final List<XmlItem> orderItem, final XmlOrderSummary os) {
 		super();
 		this.oh = oh;
 		this.orderItem = orderItem;
@@ -91,7 +91,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getXmlns() {
-		return xmlns;
+		return XMLNS;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getXsi() {
-		return xsi;
+		return XSI;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getBmecat() {
-		return bmecat;
+		return BMECAT;
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getVersion() {
-		return version;
+		return VERSION;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getType() {
-		return type;
+		return TYPE;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getSchemaLocation() {
-		return schemaLocation;
+		return SCHEMA_LOCATION;
 	}
 
 	/**

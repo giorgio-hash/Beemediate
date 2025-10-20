@@ -4,7 +4,7 @@ package com.beemediate.beemediate.domain.pojo.order;
 public class Order {
 	
 	/***struttura dati dell'ordine*/
-	private /*@ spec_public @*/ OrderStructure data;
+	private /*@ spec_public @*/ final OrderStructure data;
 	
 	/***identificativo dell' ordine*/
 	private /*@ spec_public @*/ final String orderID;
@@ -161,7 +161,7 @@ public class Order {
 	//@ assignable quantity;
 	//@ requires q != null;
 	//@ ensures quantity == q;
-	public void setQuantity(QuantityFieldValue q) {
+	public void setQuantity(final QuantityFieldValue q) {
 		quantity = q;
 	}
 

@@ -14,13 +14,13 @@ public class XmlOrderHeader {
 	 * Riferimento a DTO XmlOrderInfo per ORDER_INFO.
 	 */
 	@JacksonXmlProperty(localName="ORDER_INFO")
-	private XmlOrderInfo orderInfo;
+	private final XmlOrderInfo orderInfo;
 
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans header ordine partendo dal POJO {@code OrderHeader}
 	 * @param head - OrderHeader
 	 */
-	public XmlOrderHeader(OrderHeader head) {
+	public XmlOrderHeader(final OrderHeader head) {
 		super();
 		this.orderInfo = new XmlOrderInfo( head );
 	}

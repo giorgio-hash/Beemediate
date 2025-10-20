@@ -50,7 +50,7 @@ public class OrderHeader {
 	  @			& deliveryIDRef!=null;
 	  @*/
 	//@ pure
-	public OrderHeader() {}
+	public OrderHeader() {/*empty constructor*/}
 	
 	/**
 	 * 

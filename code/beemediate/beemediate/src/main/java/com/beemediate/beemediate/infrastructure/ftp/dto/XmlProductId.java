@@ -10,6 +10,25 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 @JacksonXmlRootElement(localName = "PRODUCT_ID")
 public class XmlProductId{	
 	
+	
+	/**
+	 * tag per Numero di articolo del fornitore
+	 */
+	@JacksonXmlProperty(localName="bmecat:SUPPLIER_PID")
+	private final String supplierId;
+	
+	/**
+	 * Riferimento a BuyerID per tag numero di articolo del cliente (opzionale)
+	 */
+	@JacksonXmlProperty(localName="bmecat:BUYER_PID")
+	private final BuyerId buyerId;
+	
+	/**
+	 * Tag contenente descrizione prodotto 
+	 */
+	@JacksonXmlProperty(localName="bmecat:DESCRIPTION_SHORT")
+	private final String descriptionShort;
+	
 	/**
 	 * Mappatura XML-OpenTrans con identificativi del prodotto dal sistema informativo del cliente
 	 */
@@ -19,13 +38,13 @@ public class XmlProductId{
 		 * identificativo prodotto nel sistema informativo del cliente
 		 */
 		@JacksonXmlText
-		private String buyerId;
+		private final String buyerId;
 		
 		/**
 		 * Attributo conforme al formato XML-OpenTrans desiderato
 		 */
-		@JacksonXmlProperty(isAttribute=true)
-		private final String type="CODE";
+		@JacksonXmlProperty(isAttribute=true, localName="type")
+		private static final String TYPE="CODE";
 		
 		/**
 		 * Costruttore
@@ -49,27 +68,9 @@ public class XmlProductId{
 		 * @return String
 		 */
 		public String getType() {
-			return type;
+			return TYPE;
 		}
 	}
-	
-	/**
-	 * tag per Numero di articolo del fornitore
-	 */
-	@JacksonXmlProperty(localName="bmecat:SUPPLIER_PID")
-	private String supplierId;
-	
-	/**
-	 * Riferimento a BuyerID per tag numero di articolo del cliente (opzionale)
-	 */
-	@JacksonXmlProperty(localName="bmecat:BUYER_PID")
-	private BuyerId buyerId;
-	
-	/**
-	 * Tag contenente descrizione prodotto 
-	 */
-	@JacksonXmlProperty(localName="bmecat:DESCRIPTION_SHORT")
-	private String descriptionShort;
 
 	/**
 	 * Costruttore
@@ -77,7 +78,7 @@ public class XmlProductId{
 	 * @param buyerId - identificativo dell'articolo sul sistema cliente
 	 * @param descriptionShort - descrizione dell'articolo
 	 */
-	public XmlProductId(String supplierId, String buyerId, String descriptionShort) {
+	public XmlProductId(final String supplierId, final String buyerId, final String descriptionShort) {
 		super();
 		this.supplierId = supplierId;
 		this.buyerId = new BuyerId(buyerId);

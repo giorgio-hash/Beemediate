@@ -13,7 +13,7 @@ public class OrderSummary {
 	
 	/***Costruttore*/
 //	@SkipEsc
-	public OrderSummary() {}
+	public OrderSummary() {/*empty constructor*/}
 	
 	/**
 	 * 

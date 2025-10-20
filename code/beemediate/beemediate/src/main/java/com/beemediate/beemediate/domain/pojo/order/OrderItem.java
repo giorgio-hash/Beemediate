@@ -86,7 +86,7 @@ public class OrderItem {
 	 */
 	//@ public normal_behaviour
 	//@ ensures this.orderUnit!=null;
-	public void setOrderUnit(/*@ non_null @*/ String orderUnit) {
+	public void setOrderUnit(/*@ non_null @*/final String orderUnit) {
 		this.orderUnit = orderUnit;
 	}
 	

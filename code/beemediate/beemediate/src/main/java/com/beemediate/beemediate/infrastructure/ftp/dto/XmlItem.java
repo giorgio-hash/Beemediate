@@ -14,25 +14,25 @@ public class XmlItem {
 	 * tag per ordinare l'articolo
 	 */
 	@JacksonXmlProperty(localName="LINE_ITEM_ID")
-	private int lineItemId;
+	private final int lineItemId;
 	
 	/**
 	 * riferimento a DTO XmlProductId per PRODUCT_ID
 	 */
 	@JacksonXmlProperty(localName="PRODUCT_ID")
-	private XmlProductId prodId;
+	private final XmlProductId prodId;
 	
 	/**
 	 * tag per specificare quantità (con o senza cifre decimali; il separatore deve essere “.”)
 	 */
 	@JacksonXmlProperty(localName="QUANTITY")
-	private float quantity;
+	private final float quantity;
 	
 	/**
 	 * tag per Unità di misura (unità ISO, ma è possibile una mappatura personalizzata)
 	 */
 	@JacksonXmlProperty(localName="bmecat:ORDER_UNIT")
-	private String orderUnit;
+	private final String orderUnit;
 
 	
 	
@@ -40,7 +40,7 @@ public class XmlItem {
 	 * Costruttore per creare struttura XML-OpenTrans articolo ordine partendo dal POJO {@code OrderItem}
 	 * @param item - OrderItem
 	 */
-	public XmlItem(OrderItem item) {
+	public XmlItem(final OrderItem item) {
 		super();
 		this.lineItemId = Integer.parseInt(item.getLineItemID());
 		this.prodId = new XmlProductId(

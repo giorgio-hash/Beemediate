@@ -40,7 +40,7 @@ public class OrderStructure {
 	//@ public normal_behaviour
 	//@ ensures header == null & itemList == null & orderSummary == null;
 	//@ pure
-	public OrderStructure() {}
+	public OrderStructure() {/*empty constructor*/}
 	
 	/**
 	 * 

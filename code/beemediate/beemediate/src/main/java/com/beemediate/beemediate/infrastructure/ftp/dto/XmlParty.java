@@ -2,7 +2,6 @@ package com.beemediate.beemediate.infrastructure.ftp.dto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
  * Mappatura XML-OpenTrans con informazioni sul partner commerciale
@@ -14,20 +13,20 @@ public class XmlParty {
 	 * Riferimento a XmlPartyID
 	 */
 	@JacksonXmlProperty(localName="bmecat:PARTY_ID")
-	private XmlPartyID partyId;
+	private final XmlPartyID partyId;
 	
 	/**
 	 * tag per il ruolo del partner commerciale
 	 */
 	@JacksonXmlProperty(localName="PARTY_ROLE")
-	private String partyRole;
+	private final String partyRole;
 	
 	/**
 	 * Costruttore
 	 * @param partyId - XmlPartyID
 	 * @param partyRole - partyRole
 	 */
-	public XmlParty(XmlPartyID partyId, String partyRole) {
+	public XmlParty(final XmlPartyID partyId, final String partyRole) {
 		super();
 		this.partyId = partyId;
 		this.partyRole = partyRole;

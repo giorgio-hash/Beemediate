@@ -64,12 +64,12 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * @throws IOException se ci sono problemi nel recupero del file
      * @throws IllegalArgumentException se il file è vuoto
      */
-    private List<String> extractArticleNumbers() throws IOException, IllegalArgumentException {
+    private List<String> extractArticleNumbers() throws IOException {
         final List<String> numeriArticolo = new ArrayList<>();
 
         final Resource resource = resourceLoader.getResource(RESOURCE_PATH);
         try (InputStream is = resource.getInputStream();
-             final Workbook workbook = new XSSFWorkbook(is)) {
+             Workbook workbook = new XSSFWorkbook(is)) {
 
             final Sheet sheet = workbook.getSheetAt(0);
             final int headerRowNum = sheet.getFirstRowNum();

@@ -3,7 +3,6 @@ package com.beemediate.beemediate.infrastructure.ftp.dto;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -17,6 +16,43 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 public class XmlOrderInfo {
 	
 	/**
+	 * tag per numero d'ordine del cliente (35 cifre; (alfanumerico / numerico))
+	 */
+	@JacksonXmlProperty(localName="ORDER_ID")
+	private final String orderId;
+	
+	/**
+	 * tag per data dell'ordine
+	 */
+	@JacksonXmlProperty(localName="ORDER_DATE")
+	private final String orderDate;
+	
+	/**
+	 * riferimento a DTO XmlDeliveryDate per DELIVERY_DATE
+	 */
+	@JacksonXmlProperty(localName="DELIVERY_DATE")
+	private final XmlDeliveryDate deliveryDate;
+	
+	/**
+	 * Riferimento a lista di DTO XmlParty per PARTY. Jackson crea un tag wrapper PARTIES attorno ai PARTY
+	 */
+    @JacksonXmlElementWrapper(localName = "PARTIES", useWrapping = true) 
+    @JacksonXmlProperty(localName = "PARTY")  
+	private final List<XmlParty> orderParties;
+    
+    /**
+     * Riferimento a DTO XmlOrderPartiesReference per ORDER_PARTIES_REFERENCE
+     */
+    @JacksonXmlProperty(localName = "ORDER_PARTIES_REFERENCE")
+    private final XmlOrderPartiesReference orderPartiesReference;
+
+    /**
+     * tag per valuta
+     */
+    @JacksonXmlProperty(localName= "bmecat:CURRENCY")
+    private final String currency;
+	
+	/**
 	 * Mappatura XML-OpenTrans per struttura informazioni relative alle date per la consegna desiderati dal cliente.
 	 */
 	public class XmlDeliveryDate{
@@ -24,27 +60,27 @@ public class XmlOrderInfo {
 		/**
 		 * Attributo obbligatorio per conformità col formato XML-OpenTrans del fornitore
 		 */
-		@JacksonXmlProperty(isAttribute=true)
-		private final String type = "optional";
+		@JacksonXmlProperty(isAttribute=true, localName="type")
+		private static final String TYPE = "optional";
 		
 		/*
 		 * Data inizio periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_END_DATE)
 		 */
 		@JacksonXmlProperty(localName="DELIVERY_START_DATE")
-		private String deliveryStartDate;
+		private final String deliveryStartDate;
 		
 		/*
 		 * Data fine periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_START_DATE)
 		 */
 		@JacksonXmlProperty(localName="DELIVERY_END_DATE")
-		private String deliveryEndDate;
+		private final String deliveryEndDate;
 		
 		/**
 		 * Costruttore per creare struttura XML-OpenTrans data di consegna
 		 * @param deliveryStartDate - String con data in formato opportuno
 		 * @param deliveryEndDate - String con data in formato opportuno
 		 */
-		public XmlDeliveryDate(String deliveryStartDate, String deliveryEndDate) {
+		public XmlDeliveryDate(final String deliveryStartDate, final String deliveryEndDate) {
 			super();
 			this.deliveryStartDate = deliveryStartDate;
 			this.deliveryEndDate = deliveryEndDate;
@@ -67,50 +103,13 @@ public class XmlOrderInfo {
 		}
 		
 	}
-	
-	/**
-	 * tag per numero d'ordine del cliente (35 cifre; (alfanumerico / numerico))
-	 */
-	@JacksonXmlProperty(localName="ORDER_ID")
-	private String orderId;
-	
-	/**
-	 * tag per data dell'ordine
-	 */
-	@JacksonXmlProperty(localName="ORDER_DATE")
-	private String orderDate;
-	
-	/**
-	 * riferimento a DTO XmlDeliveryDate per DELIVERY_DATE
-	 */
-	@JacksonXmlProperty(localName="DELIVERY_DATE")
-	private XmlDeliveryDate deliveryDate;
-	
-	/**
-	 * Riferimento a lista di DTO XmlParty per PARTY. Jackson crea un tag wrapper PARTIES attorno ai PARTY
-	 */
-    @JacksonXmlElementWrapper(localName = "PARTIES", useWrapping = true) 
-    @JacksonXmlProperty(localName = "PARTY")  
-	private List<XmlParty> orderParties;
-    
-    /**
-     * Riferimento a DTO XmlOrderPartiesReference per ORDER_PARTIES_REFERENCE
-     */
-    @JacksonXmlProperty(localName = "ORDER_PARTIES_REFERENCE")
-    private XmlOrderPartiesReference orderPartiesReference;
-
-    /**
-     * tag per valuta
-     */
-    @JacksonXmlProperty(localName= "bmecat:CURRENCY")
-    private String currency;
     
     
     /**
      * Costruttore per creare struttura XML-OpenTrans informazioni del header ordine partendo dal POJO {@code OrderHeader}
      * @param head - OrderHeader
      */
-	public XmlOrderInfo(OrderHeader head) {
+	public XmlOrderInfo(final OrderHeader head) {
 		super();
 		this.orderId = head.getOrderID();
 		this.orderDate = head.getOrderDate();
@@ -165,7 +164,7 @@ public class XmlOrderInfo {
 
 	/**
 	 * 
-	 * @return List<XmlParty>
+	 * @return List&lt;XmlParty&gt;
 	 */
 	public List<XmlParty> getOrderParties() {
 		return orderParties;

@@ -27,7 +27,7 @@ public class FornitoreDTO{
 	 * Costruttore
 	 * @param map - Map contente una tupla del model <i>res.partner</i> di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-	public FornitoreDTO(Map<String, Object> map) {
+	public FornitoreDTO(final Map<String, Object> map) {
 		name = AttributeMapper.stringify(map.get("name"));
 		codiceAzienda = AttributeMapper.stringify(map.get("ref"));
 		id = AttributeMapper.intify(map.get("id"));

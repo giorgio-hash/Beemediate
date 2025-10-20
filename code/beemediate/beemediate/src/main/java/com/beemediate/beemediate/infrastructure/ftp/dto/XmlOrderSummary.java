@@ -14,13 +14,13 @@ public class XmlOrderSummary {
 	 * tag con numero di articoli dell'ordine
 	 */
 	@JacksonXmlProperty(localName="TOTAL_ITEM_NUM")
-	private int totalItemNum;
+	private final int totalItemNum;
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans sintesi dell'ordine partendo dal POJO {@code OrderSummary}
 	 * @param summary - OrderSummary
 	 */
-	public XmlOrderSummary(OrderSummary summary) {
+	public XmlOrderSummary(final OrderSummary summary) {
 		this.totalItemNum = summary.getTotalItemNum();
 	}
 	

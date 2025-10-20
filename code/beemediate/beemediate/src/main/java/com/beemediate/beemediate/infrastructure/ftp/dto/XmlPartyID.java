@@ -12,20 +12,20 @@ public class XmlPartyID{
 	 * Attributo conforme al formato XML-OpenTrans desiderato
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	private String type = null;
+	private final String type;
 	
 	/**
 	 * tag identificativo
 	 */
 	@JacksonXmlText
-	private String partyId;
+	private final String partyId;
 	
 	/**
 	 * Costruttore
 	 * @param partyId - identiifcativo partner commerciale
 	 * @param partyType - enum PartyType, specifica il sistema di riferimento nel quale è registrato l'identificativo
 	 */
-	public XmlPartyID(String partyId, PartyType partyType) {
+	public XmlPartyID(final String partyId, final PartyType partyType) {
 		this.partyId = partyId;
 		this.type = partyType.toString();
 	}

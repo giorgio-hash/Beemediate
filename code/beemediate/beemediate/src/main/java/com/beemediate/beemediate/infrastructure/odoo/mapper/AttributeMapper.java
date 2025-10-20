@@ -18,7 +18,7 @@ public final class AttributeMapper {
 	 */
 	private static final Logger LOG = LoggerFactory.getLogger(AttributeMapper.class);
 
-	private AttributeMapper() {}
+	private AttributeMapper() {/*empty constructor*/}
 	
 	/**
 	 * Valuta se l'oggetto in input è compatibile col tipo Java  String.
@@ -72,12 +72,12 @@ public final class AttributeMapper {
 	 */
 	public static Optional<LocalDateTime> toLocalDateTime(final Object o) {
 		
-		Optional<String> temp = stringify( o );
+		final Optional<String> temp = stringify( o );
 		if(temp.isEmpty())
 			return Optional.empty();
 		
-		String s = temp.get();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		final String s = temp.get();
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = null;
         try {
         	dateTime = LocalDateTime.parse(s, formatter);

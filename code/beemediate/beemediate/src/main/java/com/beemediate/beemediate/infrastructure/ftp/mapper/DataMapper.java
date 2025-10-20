@@ -2,6 +2,8 @@ package com.beemediate.beemediate.infrastructure.ftp.mapper;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
@@ -17,6 +19,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 public class DataMapper {
 
+	
+	private static final Logger log = LoggerFactory.getLogger(DataMapper.class);
+	
 	/**
 	 * Oggetto Jackson per gestire serializzazione/deserializzazione tra strutture dati XML e DTO.
 	 */
@@ -29,7 +34,7 @@ public class DataMapper {
 	 * @param os - OrderStructure
 	 * @return String - oggetto {@code XmlOrder } serializzato
 	 */
-	public static String mapToXml(OrderStructure os) {
+	public static String mapToXml(final OrderStructure os) {
 		
 		try {
 			return xmlMapper.writeValueAsString(
@@ -41,7 +46,7 @@ public class DataMapper {
 										new XmlOrderSummary(os.getOrderSummary())												)
 										);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			log.error("Errore nel mapping XML",e);
 		}
 		return null;
 	}
