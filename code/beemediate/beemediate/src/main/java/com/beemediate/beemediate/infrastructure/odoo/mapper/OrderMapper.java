@@ -32,6 +32,7 @@ public final class OrderMapper {
 		final OrderStructure ostr = new OrderStructure();
 		ostr.setHeader(oh);
 		ostr.setItemList(oi);
+		ostr.setOrderSummary(os);
 		
 		return ostr;
 	}
