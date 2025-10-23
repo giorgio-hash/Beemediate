@@ -20,13 +20,13 @@ public class XmlDeliveryDate{
 	private String type;
 	
 	/*
-	 * Data inizio periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_END_DATE)
+	 * Data di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_END_DATE)
 	 */
 	@JacksonXmlProperty(localName="DELIVERY_START_DATE")
 	private String deliveryStartDate;
 	
 	/*
-	 * Data fine periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_START_DATE)
+	 * Data di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_START_DATE)
 	 */
 	@JacksonXmlProperty(localName="DELIVERY_END_DATE")
 	private String deliveryEndDate;
