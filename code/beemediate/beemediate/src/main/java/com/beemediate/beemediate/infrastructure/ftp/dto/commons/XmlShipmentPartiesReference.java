@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  * Mappatura XML-OpenTrans con informazioni di destinazione
  */
 @JacksonXmlRootElement(localName="SHIPMENT_PARTIES_REFERENCE")
-public class ShipmentPartiesReference{
+public class XmlShipmentPartiesReference{
 	
 	@JacksonXmlProperty(localName="DELIVERY_IDREF")
 	private XmlPartyID deliveryIdRef;
@@ -15,13 +15,13 @@ public class ShipmentPartiesReference{
 	/**
 	 * Empty Constructor for Jackson deserializer
 	 */
-	public ShipmentPartiesReference() {/*Empty Constructor for Jackson deserializer*/}
+	public XmlShipmentPartiesReference() {/*Empty Constructor for Jackson deserializer*/}
 	
 	/**
 	 * Costruttore con identificativo del luogo di destinazione
 	 * @param deliveryIdRef
 	 */
-	public ShipmentPartiesReference(XmlPartyID deliveryIdRef) {
+	public XmlShipmentPartiesReference(XmlPartyID deliveryIdRef) {
 		super();
 		this.deliveryIdRef = deliveryIdRef;
 	}

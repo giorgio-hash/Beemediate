@@ -1,7 +1,7 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
-import com.beemediate.beemediate.infrastructure.ftp.dto.commons.ShipmentPartiesReference;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -28,7 +28,7 @@ public class XmlOrderPartiesReference {
 	 */
 	@JacksonXmlProperty(localName="SHIPMENT_PARTIES_REFERENCE")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private ShipmentPartiesReference shipmentPartiesRef;
+	private XmlShipmentPartiesReference shipmentPartiesRef;
 	
 	
 	/**
@@ -50,7 +50,7 @@ public class XmlOrderPartiesReference {
 		super();
 		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);
 		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);
-		this.shipmentPartiesRef = new ShipmentPartiesReference(
+		this.shipmentPartiesRef = new XmlShipmentPartiesReference(
 											new XmlPartyID( shipmentPartiesRef, shipmentPartyType)
 										);
 	}
@@ -75,7 +75,7 @@ public class XmlOrderPartiesReference {
 	 * 
 	 * @return XmlPartyID con informazioni sul luogo di destinazione
 	 */
-	public ShipmentPartiesReference getShipmentPartiesRef() {
+	public XmlShipmentPartiesReference getShipmentPartiesRef() {
 		return shipmentPartiesRef;
 	}
 
@@ -99,7 +99,7 @@ public class XmlOrderPartiesReference {
 	 * 
 	 * @param buyerIdRef - ShipmentPartiesReference
 	 */
-	public void setShipmentPartiesRef(ShipmentPartiesReference shipmentPartiesRef) {
+	public void setShipmentPartiesRef(XmlShipmentPartiesReference shipmentPartiesRef) {
 		this.shipmentPartiesRef = shipmentPartiesRef;
 	}
 	
