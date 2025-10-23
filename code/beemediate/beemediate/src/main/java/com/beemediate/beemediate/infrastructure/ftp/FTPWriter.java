@@ -99,7 +99,7 @@ public class FTPWriter implements FTPHandlerPort{
 	private boolean loadOrder(final OrderStructure os) {
 		
 		
-		final String content = DataMapper.mapToXml(os);
+		final String content = DataMapper.serializeXmlOrder(DataMapper.mapOrderToXml(os));
 		final String fileName = new StringBuilder()
 										.append("ORDER__")
 										.append(LocalDateTime.now().format(FORMATTER))
