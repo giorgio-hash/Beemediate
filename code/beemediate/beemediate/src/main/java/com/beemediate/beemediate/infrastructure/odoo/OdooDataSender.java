@@ -20,6 +20,7 @@ import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
@@ -61,43 +62,37 @@ public class OdooDataSender implements DataSenderPort{
 	@Override
 	public boolean signalShipped(final Order o) {
 
-		boolean res = false;
 		try {
-			res = updateTo(o.getOrderID(), OdooApiConfig
-											.OafStatus
-											.SHIPPED.toString() );
-		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			return signal(o, OafStatus.SHIPPED);
+		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
 			log.error(ERROR_MSG_ODOODB,e);
 		}
-		return res;
+		
+		return false;
 	}
 
 	@Override
 	public boolean signalOpenTransError(final Order o) {
 
-		boolean res = false;
 		try {
-			res = updateTo(o.getOrderID(), OdooApiConfig
-											.OafStatus
-											.OPENTRANSERROR.toString() );
-		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			return signal(o, OafStatus.OPENTRANSERROR);
+		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
 			log.error(ERROR_MSG_ODOODB,e);
 		}
-		return res;
+		
+		return false;
 	}
 
 	@Override
 	public boolean signalContentError(final  Order o) {
 
-		boolean res = false;
 		try {
-			res = updateTo(o.getOrderID(), OdooApiConfig
-											.OafStatus
-											.CONTENTERROR.toString() );
-		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			return signal(o, OafStatus.CONTENTERROR);
+		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
 			log.error(ERROR_MSG_ODOODB,e);
 		}
-		return res;
+		
+		return false;
 	}
 	
 	
@@ -105,6 +100,22 @@ public class OdooDataSender implements DataSenderPort{
 	//*******************************************//	
 	//******** metodi helper di servizio ********//
 	//*******************************************//
+
+	private boolean signal(Order o, OafStatus status) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
+		
+		// se non si è connessi, prova una connessione.
+		if(!odoo.isOnline())
+			odoo.connect();
+		
+		boolean res = false;
+		try {
+			res = updateTo(o.getOrderID(), status.toString() );
+		}catch(XmlRpcException e) {
+			log.info("Problema nella scrittura del db Odoo.",e);
+		}
+		return res;
+	}
+	
 	
 	private boolean signal(Confirmation c) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
 		
@@ -116,9 +127,9 @@ public class OdooDataSender implements DataSenderPort{
 		ConfirmationStructure data = c.getData();
 		String resourceID = c.getConfirmationId();
 		try {
-			res = updateTo(data.getOrderId(), OdooApiConfig
-												.OafStatus
-												.CONFIRMED.toString() );
+			res = updateTo(data.getOrderId(), OafStatus
+												.CONFIRMED
+												.toString() );
 			createWorkflowAnnotation(resourceID, data);
 		}catch(XmlRpcException | InconsistentDTOException e) {
 			log.info("Problema nella scrittura del db Odoo.",e);
