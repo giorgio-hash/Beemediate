@@ -93,7 +93,7 @@ public final class OaFBatchManager implements OaFManagerPort{
 			do {
 				c = confirmations.popConfirmation();
 				
-				if(ftp.archive(c) && ftp.delete(c)) //lazy evaluation
+				if(ftp.archive(c))
 					crm.signalConfirmation(c);
 				
 				confCount++;

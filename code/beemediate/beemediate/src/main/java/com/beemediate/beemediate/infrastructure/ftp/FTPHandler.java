@@ -25,7 +25,7 @@ import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
  * Adattatore di FTPHandlerPort che tratta la gestione dei file XML nel sistema FTP. 
  * Nello specifico, tratta 
  * <ul>
- * <li>la serializzazione e deserializzazione tra POJO e XML-OpenTrans</li>
+ * <li>la serializzazione POJO a XML-OpenTrans</li>
  * <li> il posizionamento delle strutture dati nel filesystem destinato alla comunicazione tra i partner commerciali</li> 
  * </ul>
  * Questo adattatore <b><u>non tratta il protocollo di comunicazione FTP</u></b>, bensì tratta le strutture dati trasmesse e ricevute sul sistema dedicato.
@@ -79,10 +79,6 @@ public class FTPHandler implements FTPHandlerPort{
 		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
-	@Override
-	public boolean delete(final Confirmation c) {
-		throw new UnsupportedOperationException("Not implemented yet.");
-	}
 
 	@Override
 	public boolean loadOrder(final Order o) {
