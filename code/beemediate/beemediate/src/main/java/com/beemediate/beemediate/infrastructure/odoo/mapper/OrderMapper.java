@@ -148,17 +148,17 @@ public final class OrderMapper {
 			oh.setDeliveryIDRef("");
 		}
 		
-		//startDate
-		if(prev.getDateApprove().isPresent())
-			oh.setStartDate(prev.getDateOrder().get().toString());
-		else
-			oh.setStartDate("");
-		
 		//orderDate
 		if(prev.getDateOrder().isPresent())
 			oh.setOrderDate(prev.getDateOrder().get().toString());
 		else
 			oh.setOrderDate("");
+		
+		//startDate
+		if(prev.getDateApprove().isPresent())
+			oh.setStartDate(prev.getDatePlanned().get().toString());
+		else
+			oh.setStartDate("");
 		
 		//endDate
 		if(prev.getDatePlanned().isPresent())
