@@ -20,7 +20,7 @@ public class Confirmation {
 	//@ requires d != null & oID!=null;
 	//@ ensures data == d & confirmationID == cID;
 	//@ pure
-	public Confirmation(final ConfirmationStructure d, final String cID) {
+	public Confirmation(final String cID, final ConfirmationStructure d) {
 		data = d;
 		confirmationId = cID;
 	}
