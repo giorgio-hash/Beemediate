@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderItem;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -20,7 +21,7 @@ public final class XmlItem {
 	 * riferimento a DTO XmlProductId per PRODUCT_ID
 	 */
 	@JacksonXmlProperty(localName="PRODUCT_ID")
-	private final XmlProductId prodId;
+	private final XmlProductID prodId;
 	
 	/**
 	 * tag per specificare quantità (con o senza cifre decimali; il separatore deve essere “.”)
@@ -43,7 +44,7 @@ public final class XmlItem {
 	public XmlItem(final OrderItem item) {
 		super();
 		this.lineItemId = Integer.parseInt(item.getLineItemID());
-		this.prodId = new XmlProductId(
+		this.prodId = new XmlProductID(
 								item.getSupplierID(),
 								item.getBuyerID(),
 								item.getDescriptionShort()
@@ -68,7 +69,7 @@ public final class XmlItem {
 	 * 
 	 * @return XmlProductId - DTO con numero articolo del sistema cliente e del sistema fornitore.
 	 */
-	public XmlProductId getProdId() {
+	public XmlProductID getProdId() {
 		return prodId;
 	}
 
