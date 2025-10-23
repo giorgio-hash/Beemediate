@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
-import com.beemediate.beemediate.infrastructure.ftp.dto.XmlItem;
-import com.beemediate.beemediate.infrastructure.ftp.dto.XmlOrder;
-import com.beemediate.beemediate.infrastructure.ftp.dto.XmlOrderHeader;
-import com.beemediate.beemediate.infrastructure.ftp.dto.XmlOrderSummary;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlItem;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrder;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderHeader;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderSummary;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
