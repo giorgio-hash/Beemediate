@@ -54,58 +54,6 @@ public class XmlOrderInfo {
      */
     @JacksonXmlProperty(localName= "bmecat:CURRENCY")
     private final String currency;
-	
-	/**
-	 * Mappatura XML-OpenTrans per struttura informazioni relative alle date per la consegna desiderati dal cliente.
-	 */
-	public class XmlDeliveryDate{
-		
-		/**
-		 * Attributo obbligatorio per conformità col formato XML-OpenTrans del fornitore
-		 */
-		@JacksonXmlProperty(isAttribute=true, localName="type")
-		private static final String TYPE = "optional";
-		
-		/*
-		 * Data inizio periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_END_DATE)
-		 */
-		@JacksonXmlProperty(localName="DELIVERY_START_DATE")
-		private final String deliveryStartDate;
-		
-		/*
-		 * Data fine periodo di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_START_DATE)
-		 */
-		@JacksonXmlProperty(localName="DELIVERY_END_DATE")
-		private final String deliveryEndDate;
-		
-		/**
-		 * Costruttore per creare struttura XML-OpenTrans data di consegna
-		 * @param deliveryStartDate - String con data in formato opportuno
-		 * @param deliveryEndDate - String con data in formato opportuno
-		 */
-		public XmlDeliveryDate(final String deliveryStartDate, final String deliveryEndDate) {
-			super();
-			this.deliveryStartDate = deliveryStartDate;
-			this.deliveryEndDate = deliveryEndDate;
-		}
-		
-		/**
-		 * 
-		 * @return String specificante data
-		 */
-		public String getDeliveryStartDate() {
-			return deliveryStartDate;
-		}
-		
-		/**
-		 * 
-		 * @return String specificante data
-		 */
-		public String getDeliveryEndDate() {
-			return deliveryEndDate;
-		}
-		
-	}
     
     
     /**
