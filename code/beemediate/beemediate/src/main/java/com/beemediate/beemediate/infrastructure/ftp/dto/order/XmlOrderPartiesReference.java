@@ -1,7 +1,9 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.ShipmentPartiesReference;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
@@ -15,61 +17,41 @@ public class XmlOrderPartiesReference {
 	 * Riferimentoa XmlPartyID con Informazioni sul cliente
 	 */
 	@JacksonXmlProperty(localName="BUYER_IDREF")
-	private final XmlPartyID buyerIdRef;
+	private XmlPartyID buyerIdRef;
 	/**
 	 * RIferimento a XmlPartyID con Informazioni sul fornitore
 	 */
 	@JacksonXmlProperty(localName="SUPPLIER_IDREF")
-	private final XmlPartyID supplierIdRef;
+	private XmlPartyID supplierIdRef;
 	/**
 	 * Riferimento a ShipmentPartiesReference con informazioni sul luogo di consegna
 	 */
 	@JacksonXmlProperty(localName="SHIPMENT_PARTIES_REFERENCE")
-	private final ShipmentPartiesReference shipmentPartiesRef;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private ShipmentPartiesReference shipmentPartiesRef;
+	
 	
 	/**
-	 * Mappatura XML-OpenTrans con informazioni di destinazione
+	 * Empty Constructor for Jackson deserializer
 	 */
-	public class ShipmentPartiesReference{
-		
-		/**
-		 * Riferimento ad XmlPartyID per DELIVERY_IDREF, con identificativo del luogo di destinazione
-		 */
-		@JacksonXmlProperty(localName="DELIVERY_IDREF")
-		private final XmlPartyID deliveryIdRef;
-
-		/**
-		 * Costruttore con identificativo del luogo di destinazione
-		 * @param deliveryIdRef
-		 */
-		public ShipmentPartiesReference(final XmlPartyID deliveryIdRef) {
-			super();
-			this.deliveryIdRef = deliveryIdRef;
-		}
-
-		/**
-		 * 
-		 * @return XmlPartyID con identificativo di destinazione
-		 */
-		public final XmlPartyID getDeliveryIdRef() {
-			return deliveryIdRef;
-		}
-			
-	}
-	
+	public XmlOrderPartiesReference() {/*Empty Constructor for Jackson deserializer*/}
 	
 	/**
 	 * Costruttore 
 	 * @param buyerIdRef - String con informazioni sul cliente
+	 * @param buyerIdType - ulteriori informazioni sul buyerIdRef
 	 * @param supplierIdRef - String con informazioni sul fornitore
+	 * @param supplierIdType - ulteriori informazioni sul supplierIdRef
 	 * @param shipmentPartiesRef - String con informazioni sul luogo di destinazione
+	 * @param shipmentPartyType - ulteriori informazioni sul tipo di spedizione
 	 */
-	public XmlOrderPartiesReference(final String buyerIdRef, final String supplierIdRef, final String shipmentPartiesRef) {
+	public XmlOrderPartiesReference(String buyerIdRef, PartyType buyerIdType, String supplierIdRef, PartyType supplierIdType,
+			String shipmentPartiesRef, PartyType shipmentPartyType) {
 		super();
-		this.buyerIdRef = new XmlPartyID( buyerIdRef, PartyType.SUPPLIER_SPECIFIC);
-		this.supplierIdRef = new XmlPartyID( supplierIdRef, PartyType.BUYER_SPECIFIC);
+		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);
+		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);
 		this.shipmentPartiesRef = new ShipmentPartiesReference(
-											new XmlPartyID( shipmentPartiesRef, PartyType.SUPPLIER_SPECIFIC)
+											new XmlPartyID( shipmentPartiesRef, shipmentPartyType)
 										);
 	}
 
@@ -96,6 +78,31 @@ public class XmlOrderPartiesReference {
 	public ShipmentPartiesReference getShipmentPartiesRef() {
 		return shipmentPartiesRef;
 	}
+
+	/**
+	 * 
+	 * @param buyerIdRef - XmlPartyID
+	 */
+	public void setBuyerIdRef(XmlPartyID buyerIdRef) {
+		this.buyerIdRef = buyerIdRef;
+	}
+
+	/**
+	 * 
+	 * @param supplierIdRef - XmlPartyID
+	 */
+	public void setSupplierIdRef(XmlPartyID supplierIdRef) {
+		this.supplierIdRef = supplierIdRef;
+	}
+
+	/**
+	 * 
+	 * @param buyerIdRef - ShipmentPartiesReference
+	 */
+	public void setShipmentPartiesRef(ShipmentPartiesReference shipmentPartiesRef) {
+		this.shipmentPartiesRef = shipmentPartiesRef;
+	}
+	
 	
 	
 }

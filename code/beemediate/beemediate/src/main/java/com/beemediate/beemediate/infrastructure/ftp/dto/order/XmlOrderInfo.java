@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate.DeliveryDateType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -64,7 +66,7 @@ public class XmlOrderInfo {
 		super();
 		this.orderId = head.getOrderID();
 		this.orderDate = head.getOrderDate();
-		this.deliveryDate = new XmlDeliveryDate(head.getStartDate(), head.getEndDate());
+		this.deliveryDate = new XmlDeliveryDate(head.getStartDate(), head.getEndDate(), DeliveryDateType.OPTIONAL);
 		this.orderParties = new ArrayList<>();
 		this.orderParties
 				.addAll(
@@ -81,9 +83,9 @@ public class XmlOrderInfo {
 								)
 						);
 		this.orderPartiesReference = new XmlOrderPartiesReference(
-											head.getBuyerIDRef(),
-											head.getSupplierIDRef(),
-											head.getDeliveryIDRef()
+												head.getBuyerIDRef(), PartyType.SUPPLIER_SPECIFIC,
+												head.getSupplierIDRef(), PartyType.BUYER_SPECIFIC,
+												head.getDeliveryIDRef(), PartyType.SUPPLIER_SPECIFIC
 											);
 		this.currency = head.getCurrency();
 	}
@@ -107,7 +109,7 @@ public class XmlOrderInfo {
 
 	/**
 	 * 
-	 * @return String indicante una data
+	 * @return XmlDeliveryDate indicante una data
 	 */
 	public XmlDeliveryDate getDeliveryDate() {
 		return deliveryDate;
@@ -128,6 +130,6 @@ public class XmlOrderInfo {
 	public XmlOrderPartiesReference getOrderPartiesReference() {
 		return orderPartiesReference;
 	}
-
-    
+	
+	
 }
