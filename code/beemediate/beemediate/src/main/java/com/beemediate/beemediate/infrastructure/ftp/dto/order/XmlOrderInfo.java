@@ -10,6 +10,7 @@ import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate.DeliveryDateType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -57,6 +58,9 @@ public class XmlOrderInfo {
     @JacksonXmlProperty(localName= "bmecat:CURRENCY")
     private final String currency;
     
+    @JacksonXmlProperty(localName= "PARTIAL_SHIPMENT_ALLOWED")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private boolean partialShipment;
     
     /**
      * Costruttore per creare struttura XML-OpenTrans informazioni del header ordine partendo dal POJO {@code OrderHeader}
