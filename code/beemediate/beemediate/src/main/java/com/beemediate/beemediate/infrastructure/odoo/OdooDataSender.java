@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.beemediate.beemediate.config.odoo.OdooApiConfig;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
  * Riferirsi alla documentazione ufficiale di Odoo per ulteriori informazioni.*/

@@ -1,8 +1,8 @@
 package com.beemediate.beemediate.infrastructure.odoo;
 
-import com.beemediate.beemediate.config.odoo.OdooApiConfig;
 import com.beemediate.beemediate.domain.pojo.order.*;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 import com.beemediate.beemediate.infrastructure.odoo.dto.*;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.*;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.OrderMapper;
