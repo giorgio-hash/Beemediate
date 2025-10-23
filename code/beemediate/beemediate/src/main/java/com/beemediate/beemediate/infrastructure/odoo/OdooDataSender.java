@@ -45,7 +45,7 @@ public class OdooDataSender implements DataSenderPort{
 		
 		boolean res = false;
 		try {
-			res = updateTo(c.getOrderID(), OdooApiConfig
+			res = updateTo(c.getConfirmationId(), OdooApiConfig
 											.OafStatus
 											.CONFIRMED.toString() );
 		}catch(XmlRpcException | NullSuppliedArgumentException e) {

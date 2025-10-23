@@ -3,14 +3,17 @@ package com.beemediate.beemediate.infrastructure.ftp;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -19,6 +22,7 @@ import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
+import com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig;
 import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
 
 /**
@@ -32,51 +36,53 @@ import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
  */
 @Component
 @PropertySource("classpath:ftpconfig.properties")
-public class FTPHandler implements FTPHandlerPort{
+public class FTPWriter implements FTPHandlerPort{
 
 	/**
 	 * Riferimento al Logger della classe
 	 */
-	private final Logger log = LoggerFactory.getLogger(FTPHandler.class);
+	private final Logger log = LoggerFactory.getLogger(FTPWriter.class);
 	
 	/**
-	 * Folder contenente gli ordini da mandare al fornitore
+	 * oggetto di configurazione del filesystem FTP
 	 */
-	private final String inbound;
-	/**
-	 * Folder contenente le conferme ricevute dal fornitore
-	 */
-	private final String outbound;
-	/**
-	 * Folder contenente le conferme archiviate. Una conferma diventa <i>archiviata</i> dopo esser stata individuata ed analizzata.
-	 */
-	private final String archived;
-	
+	private final FTPConfig ftp;
 	/**
 	 * Formattazione DateTime
 	 */
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
 	
-	/**
-	 * Crea una istanza di {@code FTPHandler} utilizzando i dati presenti in {@code resources/ftpconfig.properties}, obbligatoriamente presente nel progetto. In assenza di valori personalizzati, vengono applicati dei valori di default.
-	 * @param inbound - valore della chiave {@code file.inbound}, se presente (default: <i>"ftp/INBOUND"</i>)
-	 * @param outbound - valore della chiave {@code file.outbound}, se presente (default <i>"ftp/OUTBOUND"</i>)
-	 * @param archived - valore della chiave {@code file.archived}, se presente (default: <i>"ftp/OUTBOUND/ARCHIV"</i>)
-	 */
-	public FTPHandler(@Value("${file.inbound:ftp/INBOUND}") final String inbound,
-						@Value("${file.outbound:ftp/OUTBOUND}") final String outbound,
-						@Value("${file.archived:ftp/OUTBOUND/ARCHIV}") final String archived
-						) {
-
-		this.inbound = inbound;
-		this.outbound = outbound;
-		this.archived = archived;
+    /**
+     * Costruttore
+     * @param ftp - bean di configurazione FTPConfig
+     */
+    @Autowired 
+	public FTPWriter(FTPConfig ftp) {
+		this.ftp = ftp;
 	}
 	
 	
 	@Override
-	public boolean archive(final Confirmation c) {
-		throw new UnsupportedOperationException("Not implemented yet.");
+	public boolean archive(Confirmation c) {
+		
+		Path sourcePath = Paths.get(ftp.getOutboundFolder(), c.getConfirmationId());
+		Path targetPath = Paths.get(ftp.getArchivedFolder(), c.getConfirmationId());
+		
+        try {
+
+            // Sposta il file
+            Files.move(sourcePath, targetPath, StandardCopyOption.ATOMIC_MOVE);
+
+            log.info("File spostato con successo da {} a {}",sourcePath,targetPath);
+            return true;
+        } catch (NoSuchFileException e) {
+            log.error("Il file sorgente non esiste.",e);
+        } catch (IOException e) {
+            log.error("Errore durante lo spostamento del file.",e);
+        }
+        
+        return false;
+		
 	}
 
 
@@ -100,7 +106,7 @@ public class FTPHandler implements FTPHandlerPort{
 										.append(".xml")
 										.toString();
 		
-		final Path filePath = Paths.get(inbound, fileName); 
+		final Path filePath = Paths.get(ftp.getInboundFolder(), fileName); 
 		 
 		return writeToInbound(content, filePath);
 	}
@@ -129,31 +135,5 @@ public class FTPHandler implements FTPHandlerPort{
         }
         return Files.exists(filePath);
 	}
-
-	/**
-	 * 
-	 * @return String indicante il percorso dove vengono depositati i file degli ordini. <br>Default: <i>"ftp/INBOUND"</i>
-	 */
-	public String getInbound() {
-		return inbound;
-	}
-
-	/**
-	 * 
-	 * @return String indicante il percorso dove recuperati i file delle conferme. <br>Default: <i>"ftp/OUTBOUND"</i>
-	 */
-	public String getOutbound() {
-		return outbound;
-	}
-
-	/**
-	 * 
-	 * @return String indicante il percorso dove archiviati i file delle conferme.<br>Default: <i>"ftp/OUTBOUND/ARCHIV"</i>
-	 */
-	public String getArchived() {
-		return archived;
-	}
-	
-	
 	
 }
