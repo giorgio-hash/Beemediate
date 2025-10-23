@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderItem;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID;

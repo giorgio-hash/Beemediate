@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderSummary;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
