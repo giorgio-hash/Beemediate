@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

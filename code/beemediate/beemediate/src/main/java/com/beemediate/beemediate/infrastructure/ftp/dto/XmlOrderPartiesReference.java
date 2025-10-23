@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto;
 
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
