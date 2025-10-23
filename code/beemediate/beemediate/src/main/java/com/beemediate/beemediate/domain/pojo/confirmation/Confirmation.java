@@ -27,10 +27,10 @@ public class Confirmation {
 
 	/**
 	 * Restituisce la struttura dati della conferma d'ordine
-	 * @return oggetto Object
+	 * @return oggetto ConfirmationStructure
 	 */
 	//@ ensures \result == data;
-	public /*@ pure @*/ Object getData() {
+	public /*@ pure @*/ ConfirmationStructure getData() {
 		return data;
 	}
 	

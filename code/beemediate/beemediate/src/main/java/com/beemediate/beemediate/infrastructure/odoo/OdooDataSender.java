@@ -1,8 +1,12 @@
 package com.beemediate.beemediate.infrastructure.odoo;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.security.auth.login.FailedLoginException;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
@@ -11,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
+import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
  * Riferirsi alla documentazione ufficiale di Odoo per ulteriori informazioni.*/
@@ -43,15 +49,13 @@ public class OdooDataSender implements DataSenderPort{
 	@Override
 	public boolean signalConfirmation(final Confirmation c) {
 		
-		boolean res = false;
 		try {
-			res = updateTo(c.getConfirmationId(), OdooApiConfig
-											.OafStatus
-											.CONFIRMED.toString() );
-		}catch(XmlRpcException | NullSuppliedArgumentException e) {
+			return signal(c);
+		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
 			log.error(ERROR_MSG_ODOODB,e);
 		}
-		return res;
+		
+		return false;
 	}
 	
 	@Override
@@ -69,7 +73,7 @@ public class OdooDataSender implements DataSenderPort{
 	}
 
 	@Override
-	public boolean signalOpenTransError(Order o) {
+	public boolean signalOpenTransError(final Order o) {
 
 		boolean res = false;
 		try {
@@ -101,6 +105,26 @@ public class OdooDataSender implements DataSenderPort{
 	//*******************************************//	
 	//******** metodi helper di servizio ********//
 	//*******************************************//
+	
+	private boolean signal(Confirmation c) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
+		
+		// se non si è connessi, prova una connessione.
+		if(!odoo.isOnline())
+			odoo.connect();
+		
+		boolean res = false;
+		ConfirmationStructure data = c.getData();
+		String resourceID = c.getConfirmationId();
+		try {
+			res = updateTo(data.getOrderId(), OdooApiConfig
+												.OafStatus
+												.CONFIRMED.toString() );
+			createWorkflowAnnotation(resourceID, data);
+		}catch(XmlRpcException | InconsistentDTOException e) {
+			log.info("Problema nella scrittura del db Odoo.",e);
+		}
+		return res;
+	}
 	
 	
 	/**
@@ -144,6 +168,83 @@ public class OdooDataSender implements DataSenderPort{
 					    )
 					);
 		
+	}
+	
+	
+	
+	private void createWorkflowAnnotation(String filename, ConfirmationStructure cs) throws XmlRpcException, InconsistentDTOException {
+		
+		Object[] ids;
+		Object[] res;
+		Map<String, Object> requestInfo = new HashMap<>();
+		
+		requestInfo.clear();
+		requestInfo.put("limit", 1);
+		ids = (Object[]) odoo.models.execute("execute_kw",
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"purchase.order","search",
+						Arrays.asList(Arrays.asList(
+								Arrays.asList("name","=",cs.getOrderId())
+								)),
+						requestInfo
+						)
+				);
+		
+		if (ids.length>1) throw new InconsistentDTOException("name ambiguo");
+		if (ids.length==0) throw new InconsistentDTOException("name non trovato");
+		
+		//crea messaggio
+		requestInfo.clear();
+		requestInfo.put("model","purchase.order");
+		requestInfo.put("res_id",ids[0]);
+		requestInfo.put("message_type", "comment");
+		requestInfo.put("body", writeConfirmationMessage(filename, cs));
+		
+		odoo.models.execute("execute_kw", 
+				Arrays.asList(
+				    odoo.getDb(), odoo.getUid(), odoo.getPassword(),
+				    "mail.message", "create",
+				    Arrays.asList(requestInfo)
+				    )
+			    );
+	}
+	
+	
+	private String writeConfirmationMessage(String filename, ConfirmationStructure cs) {
+		return new StringBuilder()
+				.append("ORDERRESPONSE")
+				.append("<p>")
+					.append("Archiviato il file ")
+					.append(filename)
+					.append(" con risposta all'ordine ")
+					.append('\"').append(cs.getOrderId()).append('\"')
+					.append('.')
+				.append("</p>")
+				.append("<ul>")
+					.append("<li>").append("Data notifica: ")
+										.append(cs.getOrderResponseDate())
+										.append("</li>")
+					.append("<li>").append("Data Consegna:")
+										.append(cs.getDeliveryDate())
+										.append("</li>")
+					.append("<li>").append(cs.getTotalItemNum()).append(" articoli spediti a:")
+											.append("<ul style=\"list-style-type:none;\">")
+												.append("<li>").append(cs.getAddressName()).append("</li>")
+												.append("<li>").append(cs.getAddressStreet()).append("</li>")
+												.append("<li>").append(cs.getAddressCity())
+																	.append(", ").append(cs.getAddressCountry())
+																	.append('(').append(cs.getAddressCountryCoded()).append(')')
+																	.append("</li>")
+											.append("</ul>")
+										.append("</li>")
+					.append("<li>").append("Importo lordo: ")
+										.append(cs.getTotalAmount()).append(' ')
+										.append(cs.getCurrency())
+										.append("</li>")
+				.append("</ul>")
+				.append("<p>Vedi file archiviato per altre informazioni.</p>")
+				.toString();
 	}
 	
 }
