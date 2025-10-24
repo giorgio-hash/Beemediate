@@ -161,40 +161,50 @@
 	<reporting>
     <plugins>
     
-      <!--PMD report-->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.27.0</version>
- 		        <configuration>
-		            <includeTests>false</includeTests>
-		            <rulesets>
-		                <ruleset>config/pmd/ruleset.xml</ruleset>
-		            </rulesets>
-		            <linkXRef>false</linkXRef>
-		            <targetJdk>17</targetJdk>
-		            <minimumTokens>1</minimumTokens>
-		            <skipEmptyReport>false</skipEmptyReport>
-		        </configuration>
-      </plugin>
-    
-      <!--spotbugs report-->
-      <plugin>
-      <groupId>com.github.spotbugs</groupId>
-      <artifactId>spotbugs-maven-plugin</artifactId>
-      <version>4.9.5.0</version>
-      <configuration>
-        <effort>Max</effort>
-        <threshold>Low</threshold>
-        <plugins>
-          <plugin>
-            <groupId>com.h3xstream.findsecbugs</groupId>
-            <artifactId>findsecbugs-plugin</artifactId>
-            <version>1.12.0</version>
-          </plugin>
-        </plugins>
-      </configuration>
-    </plugin>
+	      <!--PMD report-->
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-pmd-plugin</artifactId>
+	        <version>3.27.0</version>
+	 		        <configuration>
+			            <includeTests>false</includeTests>
+			            <rulesets>
+			                <ruleset>config/pmd/ruleset.xml</ruleset>
+			            </rulesets>
+			            <linkXRef>false</linkXRef>
+			            <targetJdk>17</targetJdk>
+			            <minimumTokens>1</minimumTokens>
+			            <skipEmptyReport>false</skipEmptyReport>
+			        </configuration>
+	      </plugin>
+	    
+	      <!--spotbugs report-->
+	      <plugin>
+	      <groupId>com.github.spotbugs</groupId>
+	      <artifactId>spotbugs-maven-plugin</artifactId>
+	      <version>4.9.5.0</version>
+	      <configuration>
+	        <effort>Max</effort>
+	        <threshold>Low</threshold>
+	        <plugins>
+	          <plugin>
+	            <groupId>com.h3xstream.findsecbugs</groupId>
+	            <artifactId>findsecbugs-plugin</artifactId>
+	            <version>1.12.0</version>
+	          </plugin>
+	        </plugins>
+	      </configuration>
+	    </plugin>
+	    
+	    <!--Javadoc report-->
+	    <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<version>3.12.0</version>
+			<configuration>
+				  <show>private</show>
+			</configuration>
+		</plugin>
     </plugins>
   </reporting>
 
