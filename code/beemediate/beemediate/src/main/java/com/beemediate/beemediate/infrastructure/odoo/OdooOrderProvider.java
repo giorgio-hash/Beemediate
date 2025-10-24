@@ -87,7 +87,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 
 	@Override
 	public boolean hasNewOrder() {
-		return ordine == null;
+		return ordine != null;
 	}
 
 
@@ -177,9 +177,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			
 			
-		} catch (EmptyFetchException | InconsistentDTOException | ClassCastException e1) {
+		} catch (InconsistentDTOException | ClassCastException e1) {
 			log.error("Problema nel recupero degli ordini.",e1);
-		} 
+		} catch(EmptyFetchException e) {
+			log.info("Problema nel recupero degli ordini: {}",e.getMessage());
+		}
 		
 		return hasNewOrder();
 		
