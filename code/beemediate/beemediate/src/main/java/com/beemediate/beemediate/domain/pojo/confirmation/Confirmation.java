@@ -4,10 +4,10 @@ package com.beemediate.beemediate.domain.pojo.confirmation;
 public class Confirmation {
 	
 	/***struttura dati della conferma*/
-	private /*@ spec_public @*/ final Object data;
+	private /*@ spec_public @*/ final ConfirmationStructure data;
 	
 	/***identificativo dell'ordine di riferimento*/
-	private /*@ spec_public @*/ final String orderID;
+	private /*@ spec_public @*/ final String confirmationId;
 	
 	/*@ public invariant data != null; @*/
 	/*@ public invariant orderID != null; @*/
@@ -15,22 +15,22 @@ public class Confirmation {
 	/**
 	 * Costruttore
 	 * @param d - Oggetto struttura dati conferma d'ordine
-	 * @param oID - identificativo conferma d'ordine
+	 * @param cID - identificativo conferma d'ordine
 	 */
 	//@ requires d != null & oID!=null;
-	//@ ensures data == d & orderID == oID;
+	//@ ensures data == d & confirmationID == cID;
 	//@ pure
-	public Confirmation(final Object d, final String oID) {
+	public Confirmation(final String cID, final ConfirmationStructure d) {
 		data = d;
-		orderID = oID;
+		confirmationId = cID;
 	}
 
 	/**
 	 * Restituisce la struttura dati della conferma d'ordine
-	 * @return oggetto Object
+	 * @return oggetto ConfirmationStructure
 	 */
 	//@ ensures \result == data;
-	public /*@ pure @*/ Object getData() {
+	public /*@ pure @*/ ConfirmationStructure getData() {
 		return data;
 	}
 	
@@ -38,9 +38,9 @@ public class Confirmation {
 	 * Restituisce l'identificativo dell'ordine associato alla conferma
 	 * @return oggetto String
 	 */
-	//@ ensures \result == orderID;
-	public /*@ pure @*/ String getOrderID() {
-		return orderID;
+	//@ ensures \result == confirmationID;
+	public /*@ pure @*/ String getConfirmationId() {
+		return confirmationId;
 	}
 
 }

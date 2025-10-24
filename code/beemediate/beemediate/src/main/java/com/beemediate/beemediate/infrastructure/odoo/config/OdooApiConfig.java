@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.config.odoo;
+package com.beemediate.beemediate.infrastructure.odoo.config;
 
 import java.net.MalformedURLException;
 import java.net.URI;

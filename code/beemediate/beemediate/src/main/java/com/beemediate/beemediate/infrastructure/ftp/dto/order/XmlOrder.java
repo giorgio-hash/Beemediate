@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import java.util.List;
 

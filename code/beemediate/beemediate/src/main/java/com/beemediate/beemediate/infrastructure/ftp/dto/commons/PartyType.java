@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto;
+package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
 
 /**
  * Specifica i valori per degli attributi presenti nella struttura XML-OpenTrans

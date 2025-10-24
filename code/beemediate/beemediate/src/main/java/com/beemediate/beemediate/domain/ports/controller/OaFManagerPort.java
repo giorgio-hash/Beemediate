@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.domain.ports.entrypoint;
+package com.beemediate.beemediate.domain.ports.controller;
 
 /**
  * Interfaccia per controllare le operazioni fondamentali della piattaforma.
