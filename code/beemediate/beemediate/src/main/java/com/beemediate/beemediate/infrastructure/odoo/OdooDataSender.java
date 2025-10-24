@@ -210,7 +210,7 @@ public class OdooDataSender implements DataSenderPort{
 						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
 						"purchase.order","search",
 						Arrays.asList(Arrays.asList(
-								Arrays.asList("origin","=",orderId)
+								Arrays.asList("name","=",orderId)
 								)),
 						requestInfo
 						)
