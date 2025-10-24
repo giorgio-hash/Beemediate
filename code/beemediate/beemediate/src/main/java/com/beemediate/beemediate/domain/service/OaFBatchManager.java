@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
-import com.beemediate.beemediate.domain.ports.entrypoint.OaFManagerPort;
+import com.beemediate.beemediate.domain.ports.controller.OaFManagerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
