@@ -51,7 +51,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
     public String[] readArticleNumbers() {
         try {
             final List<String> numbers = extractArticleNumbers();
-            log.info("Catalogo caricato con successo.");
+            log.info("Catalogo caricato con successo ({} elementi)",numbers.size());
             return numbers.toArray(new String[0]);
         } catch (IOException | IllegalArgumentException e) {
             log.error("Errore durante la lettura del file XLSX", e);

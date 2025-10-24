@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.beemediate.beemediate.controller.http.ManagerRestControllerIF;
 import com.beemediate.beemediate.domain.ports.controller.OaFManagerPort;
 
+@RestController
 public class ManagerRestController implements ManagerRestControllerIF{
 
 	/***

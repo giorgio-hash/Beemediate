@@ -172,7 +172,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//costruzione struct ordine
 			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);
-			log.info(ordine.toString().toString().replaceAll("[\r\n]",""));
+			log.info(ordstr.toString().toString().replaceAll("[\r\n]",""));
 			//costruzione ordine
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			

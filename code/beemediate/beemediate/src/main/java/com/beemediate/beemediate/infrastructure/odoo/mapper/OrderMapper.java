@@ -109,7 +109,7 @@ public final class OrderMapper {
 		final OrderHeader oh = new OrderHeader();
 		
 		//orderID
-		if(prev.getOrigin().isPresent())
+		if(prev.getName().isPresent())
 			oh.setOrderID(prev.getOrigin().get());
 		else
 			oh.setOrderID("");

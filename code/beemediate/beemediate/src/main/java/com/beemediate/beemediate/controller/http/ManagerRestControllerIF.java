@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /***
  * Classe per input segnale verso il manager di servizio */
-@RestController
+
 @RequestMapping(path = "/manage")
 public interface ManagerRestControllerIF {
 
