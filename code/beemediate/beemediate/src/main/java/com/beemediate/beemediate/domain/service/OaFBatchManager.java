@@ -154,12 +154,12 @@ public final class OaFBatchManager implements OaFManagerPort{
 				if(o.hasOpenTransError()) {
 					crm.signalOpenTransError(o);
 				}
-				else if(toSend>oafBatchThreshold && ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm
+				else if(toSend>=oafBatchThreshold && ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm
 						crm.signalShipped(o);
 				}
 			}
 		}
-		return toSend;
+		return toSend>=oafBatchThreshold? toSend : 0;
 	}
 
 }

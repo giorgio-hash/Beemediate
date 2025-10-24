@@ -101,7 +101,7 @@ public class OaFBuffer {
 					//@ assert ordersLoaded+1 == buffer.size;
 					//@ set ordersLoaded = buffer.size;
 				}
-			}while( (t = or.popNewOrder())!=null);
+			}while(or.hasNewOrder());
 		}
 		
 		//@ assert ordersLoaded == buffer.size;
