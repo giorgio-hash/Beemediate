@@ -296,7 +296,7 @@ public class StringHandler {
 	
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
-		final char mainSeparator = ' ';
+		final char mainSeparator = 'T';
 		final char dateSeparator = '-';
 		final char timeSeparator = ':';
 		final int yYSize = 4; 
