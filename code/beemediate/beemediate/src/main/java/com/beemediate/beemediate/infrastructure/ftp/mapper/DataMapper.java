@@ -36,7 +36,7 @@ public class DataMapper {
 	 * Oggetto Jackson per gestire serializzazione/deserializzazione tra strutture dati XML e DTO.
 	 */
 	@Autowired
-	private static XmlMapper xmlMapper = initMapper();
+	private static final XmlMapper xmlMapper = initMapper();
 	
 	/**
 	 * Costruttore private
