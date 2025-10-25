@@ -404,9 +404,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 */
 	private CompagniaDTO estraiCompagnia(final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-		if (prv == null || prv.getPickingTypeId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
+		if (prv == null || prv.getCompanyId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
-		final Object id = prv.getPickingTypeId().getNum().get();
+		final Object id = prv.getCompanyId().getNum().get();
 		Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		

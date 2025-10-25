@@ -155,17 +155,14 @@ public final class OrderMapper {
 			oh.setOrderDate("");
 		
 		//startDate
-		if(prev.getDateApprove().isPresent())
-			oh.setStartDate(prev.getDatePlanned().get().toString());
-		else
-			oh.setStartDate("");
-		
 		//endDate
-		if(prev.getDatePlanned().isPresent())
+		if(prev.getDatePlanned().isPresent()) {
+			oh.setStartDate(prev.getDatePlanned().get().toString());
 			oh.setEndDate(prev.getDatePlanned().get().toString());
-		else
+		} else {
+			oh.setStartDate("");
 			oh.setEndDate("");
-		
+		}
 		
 		return oh;
 	}
