@@ -115,7 +115,4 @@ buildNumber.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/sonarqube
 
-
-
-# escludo i dati sulle api
-**/apiconfig.properties
+docs/**/cpd.html
