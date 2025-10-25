@@ -2,6 +2,7 @@ package com.beemediate.beemediate.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 //import org.jmlspecs.annotation.CodeBigintMath;
 
@@ -19,7 +20,7 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
  * <li>Un riferimento all'adattatore di OrderProviderPort.</li>
  * </ul>
  */
-//@Service
+@Service
 public class OaFBuffer {
 	
 	/***Riferimento alla struttura dati che gestisce gli Order con politica LIFO*/
@@ -51,7 +52,7 @@ public class OaFBuffer {
 	//@ pure
 //	@CodeBigintMath
 	@Autowired
-	public OaFBuffer(@Value("${app.buffer.capacity}") final int bufferCapacity, final OaFValidatorIF v, final OrderProviderPort orderRetriever) {
+	public OaFBuffer(@Value("${app.buffer.capacity:1}") final int bufferCapacity, final OaFValidatorIF v, final OrderProviderPort orderRetriever) {
 		buffer = new BoundedBuffer(bufferCapacity);
 		validator = v;
 		or = orderRetriever;
@@ -100,7 +101,7 @@ public class OaFBuffer {
 					//@ assert ordersLoaded+1 == buffer.size;
 					//@ set ordersLoaded = buffer.size;
 				}
-			}while( (t = or.popNewOrder())!=null);
+			}while(or.hasNewOrder());
 		}
 		
 		//@ assert ordersLoaded == buffer.size;

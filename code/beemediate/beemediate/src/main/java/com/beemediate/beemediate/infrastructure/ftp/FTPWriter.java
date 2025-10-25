@@ -35,7 +35,6 @@ import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
  * Questo adattatore <b><u>non tratta il protocollo di comunicazione FTP</u></b>, bensì tratta le strutture dati trasmesse e ricevute sul sistema dedicato.
  */
 @Component
-@PropertySource("classpath:ftpconfig.properties")
 public class FTPWriter implements FTPHandlerPort{
 
 	/**

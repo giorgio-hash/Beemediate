@@ -1,6 +1,9 @@
 package com.beemediate.beemediate.infrastructure.odoo.mapper;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.*;
+
+import java.time.format.DateTimeFormatter;
+
 import com.beemediate.beemediate.domain.pojo.order.*;
 
 /**
@@ -109,8 +112,8 @@ public final class OrderMapper {
 		final OrderHeader oh = new OrderHeader();
 		
 		//orderID
-		if(prev.getOrigin().isPresent())
-			oh.setOrderID(prev.getOrigin().get());
+		if(prev.getName().isPresent())
+			oh.setOrderID(prev.getName().get());
 		else
 			oh.setOrderID("");
 		
@@ -148,24 +151,22 @@ public final class OrderMapper {
 			oh.setDeliveryIDRef("");
 		}
 		
+		final DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 		//orderDate
 		if(prev.getDateOrder().isPresent())
-			oh.setOrderDate(prev.getDateOrder().get().toString());
+			oh.setOrderDate(prev.getDateOrder().get().format(format));
 		else
 			oh.setOrderDate("");
 		
 		//startDate
-		if(prev.getDateApprove().isPresent())
-			oh.setStartDate(prev.getDatePlanned().get().toString());
-		else
-			oh.setStartDate("");
-		
 		//endDate
-		if(prev.getDatePlanned().isPresent())
-			oh.setEndDate(prev.getDatePlanned().get().toString());
-		else
+		if(prev.getDatePlanned().isPresent()) {
+			oh.setStartDate(prev.getDatePlanned().get().format(format));
+			oh.setEndDate(prev.getDatePlanned().get().format(format));
+		} else {
+			oh.setStartDate("");
 			oh.setEndDate("");
-		
+		}
 		
 		return oh;
 	}

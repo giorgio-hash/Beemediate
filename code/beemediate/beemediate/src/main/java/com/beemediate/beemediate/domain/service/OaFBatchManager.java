@@ -3,6 +3,7 @@ package com.beemediate.beemediate.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 //import org.jmlspecs.annotation.CodeBigintMath;
 
@@ -18,7 +19,7 @@ import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort
 /**
  * Classe principale per la gestione della piattagorma. Implementa OaFManagerPort.
  */
-//@Service
+@Service
 public final class OaFBatchManager implements OaFManagerPort{
 	
 	/***riferimento al gestore buffer ordini*/
@@ -59,7 +60,7 @@ public final class OaFBatchManager implements OaFManagerPort{
 	  @*/
 //	@CodeBigintMath
 	@Autowired
-	public OaFBatchManager( @Value("${app.manager.threshold}") final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, final DataSenderPort u) throws UnreachableThresholdException{
+	public OaFBatchManager( @Value("${app.manager.threshold:1}") final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, final DataSenderPort u) throws UnreachableThresholdException{
 		
 		if(oafb.getBuffer().capacity()<threshold)
 			throw new UnreachableThresholdException("Capacit� del buffer di caricamento ordini inferiore alla soglia minima di invio.");
@@ -144,21 +145,19 @@ public final class OaFBatchManager implements OaFManagerPort{
 				
 				o = oaf.getBuffer().pop();
 				
-				//segnala al crm errori di contenuto (non critici)
-				if(o.hasContentError()) {
-					crm.signalContentError(o);
-				}
-				
 				//segnala al crm errori openTrans (critici) e non manda
 				if(o.hasOpenTransError()) {
 					crm.signalOpenTransError(o);
+				} else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)
+					crm.signalContentError(o);
 				}
-				else if(toSend>oafBatchThreshold && ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm
+				
+				else if(toSend>=oafBatchThreshold && ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm
 						crm.signalShipped(o);
 				}
 			}
 		}
-		return toSend;
+		return toSend>=oafBatchThreshold? toSend : 0;
 	}
 
 }
