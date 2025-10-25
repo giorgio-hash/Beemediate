@@ -15,38 +15,38 @@ public class XmlOrder {
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true, localName="xmlns")
-	private static final String XMLNS = "http://www.opentrans.org/XMLSchema/2.1";
+	@JacksonXmlProperty(isAttribute=true)
+	private final String xmlns = "http://www.opentrans.org/XMLSchema/2.1";
 
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:xsi")
-	private static final String XSI = "http://www.w3.org/2001/XMLSchema-instance";
+	private final String xsi = "http://www.w3.org/2001/XMLSchema-instance";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:bmecat")
-	private static final String BMECAT = "http://www.bmecat.org/bmecat/2005";
+	private final String bmecat = "http://www.bmecat.org/bmecat/2005";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true, localName="version")
-	private static final String VERSION="2.1";
+	@JacksonXmlProperty(isAttribute=true)
+	private final String version="2.1";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-	@JacksonXmlProperty(isAttribute=true, localName="type")
-	private static final String TYPE="standard";
+	@JacksonXmlProperty(isAttribute=true)
+	private final String type="standard";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xsi:schemaLocation")
-	private static final String SCHEMA_LOCATION = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
+	private final String schemaLocation = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
 	
 	/**
 	 * Riferimento a DTO XmlOrderHeader per ORDER_HEADER
@@ -91,7 +91,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getXmlns() {
-		return XMLNS;
+		return xmlns;
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getXsi() {
-		return XSI;
+		return xsi;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getBmecat() {
-		return BMECAT;
+		return bmecat;
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getVersion() {
-		return VERSION;
+		return version;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getType() {
-		return TYPE;
+		return type;
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getSchemaLocation() {
-		return SCHEMA_LOCATION;
+		return schemaLocation;
 	}
 
 	/**
