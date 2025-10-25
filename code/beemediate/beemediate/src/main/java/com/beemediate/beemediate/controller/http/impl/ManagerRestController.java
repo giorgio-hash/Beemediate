@@ -33,13 +33,9 @@ public class ManagerRestController implements ManagerRestControllerIF{
 		try {
 			int processed = oafManager.handleOrders();
 			log.info("manageOrders -> processed {} orders", processed);
-			if (processed > 0) {
-				// Restituisco 200 con messaggio esplicito sul numero di elementi processati
-				return ResponseEntity.ok("Processed " + processed + " orders.");
-			} else {
-				// Nessun ordine da processare: 204 No Content (nessun payload necessario)
-				return ResponseEntity.noContent().build();
-			}
+			
+			// Restituisco 200 con messaggio esplicito sul numero di elementi processati
+			return ResponseEntity.ok("Processed " + processed + " orders.");
 		} catch (Exception e) {
 			// Log dell'errore e risposta 500 con messaggio diagnostico minimale
 			log.error("manageOrders -> error while processing orders", e);
