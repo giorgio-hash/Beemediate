@@ -132,6 +132,7 @@ public class OdooDataSender implements DataSenderPort{
 		boolean res = false;
 		try {
 			res = updateTo(o.getOrderID(), status.toString() );
+			log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status.toString());
 		}catch(XmlRpcException e) {
 			log.info("Problema nella scrittura del db Odoo.",e);
 		}
@@ -173,14 +174,15 @@ public class OdooDataSender implements DataSenderPort{
 		if(!odoo.isOnline())
 			odoo.connect();
 		
+		final String stato = OafStatus.CONFIRMED.toString();
 		boolean res = false;
 		ConfirmationStructure data = c.getData();
 		String resourceID = c.getConfirmationId();
 		try {
-			res = updateTo(data.getOrderId(), OafStatus
-												.CONFIRMED
-												.toString() );
+			res = updateTo(data.getOrderId(),  stato );
+			log.info("Inviato update OaF di {} a {}.",data.getOrderId(), stato);
 			createWorkflowAnnotation(resourceID, data);
+			log.info("Inviato a {} messaggio di conferma d'ordine sul workflow.",data.getOrderId());
 		}catch(XmlRpcException | InconsistentDTOException e) {
 			log.info("Problema nella scrittura del db Odoo.",e);
 		}
