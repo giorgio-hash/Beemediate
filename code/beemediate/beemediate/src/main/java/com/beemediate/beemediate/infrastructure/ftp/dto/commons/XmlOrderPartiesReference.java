@@ -1,8 +1,5 @@
-package com.beemediate.beemediate.infrastructure.ftp.dto.order;
+package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
 
-import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
-import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference;
-import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -16,12 +13,12 @@ public class XmlOrderPartiesReference {
 	/**
 	 * Riferimentoa XmlPartyID con Informazioni sul cliente
 	 */
-	@JacksonXmlProperty(localName="BUYER_IDREF")
+	@JacksonXmlProperty(localName="bmecat:BUYER_IDREF")
 	private XmlPartyID buyerIdRef;
 	/**
 	 * RIferimento a XmlPartyID con Informazioni sul fornitore
 	 */
-	@JacksonXmlProperty(localName="SUPPLIER_IDREF")
+	@JacksonXmlProperty(localName="bmecat:SUPPLIER_IDREF")
 	private XmlPartyID supplierIdRef;
 	/**
 	 * Riferimento a ShipmentPartiesReference con informazioni sul luogo di consegna
