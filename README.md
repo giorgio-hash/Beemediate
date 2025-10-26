@@ -1,5 +1,5 @@
 # Beemediate
-A framework for immediate translation and load of ODOO purchase orders to FTP protocol.
+A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
 Documentation is hosted on Github Pages.
 - [javadoc API documentation](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
