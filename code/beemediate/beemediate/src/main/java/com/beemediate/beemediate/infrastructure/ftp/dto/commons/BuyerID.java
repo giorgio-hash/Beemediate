@@ -21,7 +21,7 @@ public class BuyerID{
 	 * Attributo conforme al formato XML-OpenTrans desiderato
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String type;
 	
 	/**
@@ -32,15 +32,7 @@ public class BuyerID{
 	/**
 	 * Costruttore
 	 * @param buyerId - String
-	 */
-	public BuyerID(String buyerId) {
-		super();
-		this.buyerId = buyerId;
-	}
-	
-	/**
-	 * Costruttore
-	 * @param buyerId - String
+	 * @param type - String
 	 */
 	public BuyerID(String buyerId, String type) {
 		super();

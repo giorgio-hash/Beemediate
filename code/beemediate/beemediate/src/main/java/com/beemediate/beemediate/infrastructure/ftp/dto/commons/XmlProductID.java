@@ -28,7 +28,7 @@ public class XmlProductID{
 	 * Tag contenente descrizione prodotto 
 	 */
 	@JacksonXmlProperty(localName="bmecat:DESCRIPTION_SHORT")
-	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String descriptionShort;
 
 	/**
@@ -46,7 +46,12 @@ public class XmlProductID{
 	public XmlProductID(String supplierId, String buyerId, String descriptionShort) {
 		super();
 		this.supplierId = supplierId;
-		this.buyerId = new BuyerID(buyerId);
+		
+		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())
+			this.buyerId = null;
+		else
+			this.buyerId = new BuyerID(buyerId, null);
+		
 		this.descriptionShort = descriptionShort;
 	}
 

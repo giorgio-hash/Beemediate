@@ -57,6 +57,7 @@ public class XmlOrderInfo {
      * tag per valuta
      */
     @JacksonXmlProperty(localName= "bmecat:CURRENCY")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final String currency;
     
     @JacksonXmlProperty(localName= "PARTIAL_SHIPMENT_ALLOWED")
