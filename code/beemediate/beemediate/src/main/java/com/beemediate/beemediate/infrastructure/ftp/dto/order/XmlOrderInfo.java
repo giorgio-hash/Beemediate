@@ -7,6 +7,7 @@ import java.util.List;
 import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlOrderPartiesReference;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate.DeliveryDateType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
@@ -56,6 +57,7 @@ public class XmlOrderInfo {
      * tag per valuta
      */
     @JacksonXmlProperty(localName= "bmecat:CURRENCY")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final String currency;
     
     @JacksonXmlProperty(localName= "PARTIAL_SHIPMENT_ALLOWED")

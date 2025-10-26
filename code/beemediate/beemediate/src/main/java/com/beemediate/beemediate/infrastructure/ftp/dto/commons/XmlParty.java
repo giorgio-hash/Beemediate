@@ -33,6 +33,11 @@ public class XmlParty {
 	private XmlAddress address;
 	
 	/**
+	 * empty constructor for Jackson deserializer
+	 */
+	public XmlParty() {/*empty constructor for Jackson deserializer*/}
+	
+	/**
 	 * Costruttore
 	 * @param partyId - XmlPartyID
 	 * @param partyRole - partyRole

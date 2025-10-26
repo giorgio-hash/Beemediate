@@ -47,6 +47,7 @@ public class XmlAddress {
 	 * nome del luogo di domicilio
 	 */
 	@JacksonXmlProperty(localName="bmecat:NAME3")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String name3;
 	
 	/**

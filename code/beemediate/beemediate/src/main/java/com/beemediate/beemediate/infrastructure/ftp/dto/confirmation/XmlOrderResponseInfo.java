@@ -3,8 +3,8 @@ package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
 import java.util.List;
 
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlOrderPartiesReference;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
-import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderPartiesReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
