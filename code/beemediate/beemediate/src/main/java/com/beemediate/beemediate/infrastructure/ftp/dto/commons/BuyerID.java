@@ -1,5 +1,6 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
@@ -20,7 +21,8 @@ public class BuyerID{
 	 * Attributo conforme al formato XML-OpenTrans desiderato
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	private final String type="CODE";
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String type;
 	
 	/**
 	 * empty costructor for Jackson deserializer
@@ -34,6 +36,16 @@ public class BuyerID{
 	public BuyerID(String buyerId) {
 		super();
 		this.buyerId = buyerId;
+	}
+	
+	/**
+	 * Costruttore
+	 * @param buyerId - String
+	 */
+	public BuyerID(String buyerId, String type) {
+		super();
+		this.buyerId = buyerId;
+		this.type = type;
 	}
 
 	/**

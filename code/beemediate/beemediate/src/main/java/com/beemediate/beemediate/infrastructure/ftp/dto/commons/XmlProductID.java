@@ -28,6 +28,7 @@ public class XmlProductID{
 	 * Tag contenente descrizione prodotto 
 	 */
 	@JacksonXmlProperty(localName="bmecat:DESCRIPTION_SHORT")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String descriptionShort;
 
 	/**
