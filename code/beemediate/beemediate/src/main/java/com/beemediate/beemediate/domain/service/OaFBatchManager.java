@@ -17,7 +17,7 @@ import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 
 /**
- * Classe principale per la gestione della piattagorma. Implementa OaFManagerPort.
+ * Classe principale per la gestione della piattaforma. Implementa OaFManagerPort.
  */
 @Service
 public final class OaFBatchManager implements OaFManagerPort{
