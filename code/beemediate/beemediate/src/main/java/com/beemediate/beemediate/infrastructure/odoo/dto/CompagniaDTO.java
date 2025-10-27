@@ -1,8 +1,15 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -18,6 +25,41 @@ public class CompagniaDTO{
 	 * Mapping di company_registry.
 	 */
 	private final Optional<String> companyRegistry;
+	
+	
+	/**
+	 * Static factory method che interagisce col model res.partner per estrarre informazioni di contatto della compagnia cliente, secondo il preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return CompagniaDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static CompagniaDTO fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+		if (prv == null || prv.getCompanyId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
+		
+		final Object id = prv.getCompanyId().getNum().get();
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("ref"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						odoo.RES_PARTNER,odoo.READ,
+						Arrays.asList(Arrays.asList(id)),
+						requestInfo
+						)
+				);
+		
+		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni della compagnia ");
+		
+		return new CompagniaDTO( (HashMap<String, Object>) res[0]);
+	}
 	
 	/**
 	 * Costruttore

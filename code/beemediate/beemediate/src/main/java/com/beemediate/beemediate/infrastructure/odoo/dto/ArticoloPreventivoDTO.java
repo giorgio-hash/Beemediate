@@ -1,19 +1,21 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
  * DTO che mappa gli articoli contenuti nel preventivo dell'ordine di acquisto. I campi rimappano alcuni attributi richiesti al model <i>purchase.order.line</i> di Odoo.
  */
 public class ArticoloPreventivoDTO{
-	
-//	 {'id': 13,
-//		  'order_id': [4, 'P00004'],
-//		  'product_id': [6, 'schienale sedia'],
-//		  'product_qty': 1.0}
 	
 	/**
 	 * Mapping di id.
@@ -31,6 +33,58 @@ public class ArticoloPreventivoDTO{
 	 * Mapping di product_qty.
 	 */
 	private final Optional<Double> productQty;
+	
+	
+	/**
+	 * Static Factory method che nteragisce col model purchase.order.line di Odoo per estrarre gli articoli contenuti nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return Array di elementi ArticoloPreventivoDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ArticoloPreventivoDTO[] fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
+		
+		Object[] ids;
+		Object[] res;
+		ArticoloPreventivoDTO[] artPrv;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		
+		
+		//verifica che il preventivo contenga le sue parti
+		ids = prv.getOrderLine().get();
+		
+		if(ids.length == 0) throw new EmptyFetchException ("Non sono stati trovati articoli nel preventivo " + prv);
+		
+		//estrai parti del preventivo
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("order_id","product_id","product_qty"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"purchase.order.line",odoo.READ,
+						Arrays.asList(Arrays.asList(ids)),
+						requestInfo
+						)
+				);
+		
+		if(res.length == 0) throw new EmptyFetchException ("Il preventivo ha articoli, ma non li trovo. Preventivo: " + prv);
+		
+		//collezione di POJO
+		artPrv = new ArticoloPreventivoDTO[res.length];
+		for(int i=0; i<res.length; i++) {
+			artPrv[i] = new ArticoloPreventivoDTO( (HashMap<String,Object>) res[i] );
+		}
+		
+		return artPrv;
+	}
+	
+	
 	
 	/**
 	 * Costruttore

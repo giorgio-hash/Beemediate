@@ -1,8 +1,15 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -18,6 +25,67 @@ public class ProdottoDTO{
 	 * Mapping di seller_ids
 	 */
 	private final Optional<Object[]> sellerIds;
+	
+	
+	/**
+	 * Static factory method che interagisce col model product.product di Odoo per estrarre i dettagli prodotto di ogni articolo contenuto nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param ap - Array di ArticoloPreventivoDTO
+	 * @return Array di elementi ProdottoDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ProdottoDTO[] fromXMLRPC(final OdooApiConfig odoo, final ArticoloPreventivoDTO[] ap) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+		if ( ap == null ) throw new InconsistentDTOException("Lista ArticoloPreventivoDTO null");
+		
+		final Object[] ids = new Object[ap.length];
+		Object[] res;
+		final ProdottoDTO[] prd = new ProdottoDTO[ap.length];
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		//estrai prodotti (per arricchire le info sulle parti del preventivo)
+		
+		//prima bisogna cercare gli id del prodotto
+		for(int i=0; i<ap.length; i++) {
+			
+			if(ap[i].getProductId().getNum().isEmpty()) 
+				throw new InconsistentDTOException("id prodotto non presente. articolo: " + ap[i]);
+			else
+				ids[i] = ap[i].getProductId().getNum().get();
+		}
+		
+		//estrazione
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("seller_ids"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"product.product",odoo.READ,
+						Arrays.asList(Arrays.asList(ids)),
+						requestInfo
+						)
+				);
+		
+		if(res.length==0) {
+			StringBuilder sb = new StringBuilder();
+			
+			for( ArticoloPreventivoDTO p : ap)
+				sb.append(p.toString()).append('\n');
+			
+			throw new EmptyFetchException("Non è stato possibile trovare alcun prodotto associato agli articoli: " + sb.toString());
+		}
+		
+		//collezione di POJO
+		for(int i=0; i<res.length; i++) {
+			prd[i] = new ProdottoDTO( (HashMap<String,Object>) res[i]);
+		}
+		
+		return prd;
+	}
+	
 	
 	/**
 	 * Costruttore

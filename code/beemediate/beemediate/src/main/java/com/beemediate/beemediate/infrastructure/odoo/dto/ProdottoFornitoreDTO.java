@@ -1,8 +1,17 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -38,6 +47,78 @@ public class ProdottoFornitoreDTO{
 	 * Mapping di product_uom_id
 	 */
 	private final IdentifierDTO productUomId;
+	
+	
+	/**
+	 * Static factory method che interagisce col model product.supplierinfo di Odoo per estrarre i dettagli prodotto specifici di un certo fornitore, per ogni prodotto dato in input.
+	 * @param odoo - OdooApiConfig
+	 * @param pr - Array di ProdottoDTO
+	 * @param f - FornitoreDTO
+	 * @return Array di ProdottoFornitoreDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ProdottoFornitoreDTO[] fromXMLRPC(final OdooApiConfig odoo, final ProdottoDTO[] pr, final FornitoreDTO f) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+		
+		if (f == null) throw new InconsistentDTOException("FornitoreDTO null");
+		if (pr == null) throw new InconsistentDTOException("Lista ProdottoDTO null");
+		
+		final Object[] ids;
+		final Object[] res;
+		final ProdottoFornitoreDTO[] prd;
+		final List<Object> elems;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		 
+		
+		//ora estraggo gli id che fanno riferimento ad un articolo a fornitore
+		elems = new ArrayList<>();
+		for(ProdottoDTO p : pr) {
+			if(  p.getSellerIds().isPresent()  ) {
+				if(p.getSellerIds().isEmpty())
+					throw new InconsistentDTOException("ProdottoDTO ha sellerIds vuoto");
+				for(Object o : p.getSellerIds().get() )
+					elems.add(o);
+			}else
+				throw new InconsistentDTOException("Il prodotto non ha nessun id a fornitore: " + p);
+		}
+
+		
+		if ( f.getName().isEmpty() ) throw new InconsistentDTOException("Fornitore non ha un nome.");
+		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
+		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"product.supplierinfo","search",
+						Arrays.asList(Arrays.asList(
+								Arrays.asList(odoo.PARTNER_ID_FIELD,"=", f.getName().get() ),
+								Arrays.asList("id","in",elems)
+								))
+						)
+				);
+
+		// ora estraggo
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",odoo.PARTNER_ID_FIELD,"product_uom_id"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"product.supplierinfo",odoo.READ,
+						Arrays.asList(Arrays.asList(ids)),
+						requestInfo
+						)
+				);
+		
+		prd = new ProdottoFornitoreDTO[res.length];
+		for(int i=0; i<res.length; i++) {
+			prd[i] = new ProdottoFornitoreDTO( (HashMap<String,Object>) res[i] );
+		}
+		
+		return prd;
+	}
+	
 	
 	/**
 	 * 

@@ -28,6 +28,30 @@ public class OdooApiConfig {
 	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);
 	
 	/**
+	 * String che identifica il comando RPC per l'esecuzione di procedura remota
+	 */
+	public static final String EXECUTE_KW = "execute_kw";
+	
+	/**
+	 * String che identifica il model dei contatti su model
+	 */
+	public static final String RES_PARTNER = "res.partner";
+	
+	/**
+	 * String per l'header utile a specificare i campi di un model
+	 */
+	public static final String FIELDS = "fields";
+	
+	/**
+	 * String che identifica l'operazione di lettura su model
+	 */
+	public static final String READ = "read";
+	
+	/**
+	 * String con campo identificativo di un partner dal model
+	 */
+	public static final String PARTNER_ID_FIELD = "partner_id";
+	/**
 	 * Riferimento alla risorsa online CRM.
 	 */
 	@Value("${api.host:noconf}")

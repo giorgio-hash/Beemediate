@@ -1,8 +1,15 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -18,6 +25,41 @@ public class ConsegnaDTO{
 	 * Mapping di warehouse_id.
 	 */
 	private final IdentifierDTO warehouseId;
+	
+	
+	/**
+	 * Static factory method che interagisce col model stock.picking.type di Odoo per estrarre il luogo di consegna definito nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return ConsegnaDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ConsegnaDTO fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
+		
+		final Object id = prv.getPickingTypeId().getNum().get();
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("warehouse_id"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"stock.picking.type",odoo.READ,
+						Arrays.asList(Arrays.asList(id)),
+						requestInfo
+						)
+				);
+		
+		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni sulla consegna.");
+		
+		return new ConsegnaDTO( (HashMap<String, Object>) res[0]);
+	}
 	
 	/**
 	 * Costruttore
