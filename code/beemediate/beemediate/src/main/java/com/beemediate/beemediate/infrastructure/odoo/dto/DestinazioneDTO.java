@@ -1,8 +1,15 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -18,6 +25,40 @@ public class DestinazioneDTO{
 	 * Mapping di ref.
 	 */
 	private final Optional<String> codiceDestinazione;
+	
+	
+	/**
+	 * Static factory method che interagisce col model res.partner di Odoo per estrarre informazioni di contatto relative al luogo di consegna.
+	 * @param concons - ContattoConsegnaDTO
+	 * @return DestinazioneDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static DestinazioneDTO fromXMLRPC(final OdooApiConfig odoo, final ContattoConsegnaDTO concons) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+
+		if (concons == null || concons.getPartnerId().getNum().isEmpty() ) throw new InconsistentDTOException("Oggetto ContattoConsegnaDTO non ha le informazioni necessarie");
+		
+		final Object id = concons.getPartnerId().getNum().get();
+		final Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("ref"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						odoo.RES_PARTNER,odoo.READ,
+						Arrays.asList(Arrays.asList(id)),
+						requestInfo
+						)
+				);
+		
+		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni della destinazione.");
+		
+		return new DestinazioneDTO( (HashMap<String, Object>) res[0]);
+	}
 	
 	/**
 	 * 

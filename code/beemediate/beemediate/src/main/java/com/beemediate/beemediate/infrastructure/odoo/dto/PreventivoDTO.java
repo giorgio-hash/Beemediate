@@ -1,9 +1,16 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
 
 /**
@@ -59,18 +66,61 @@ public class PreventivoDTO{
 	 * Mapping di date_planned
 	 */
 	private final Optional<LocalDateTime> datePlanned;
-//	[{'id': 4,
-//		  'name': 'P00004',
-//		  'partner_id': [8, 'GEALAN'],
-//		  'product_id': [3, 'gamba per sedia'],
-//		  'origin': 'OP/00006 - S00005, OP/00007 - S00005, OP/00005 - S00005, OP/00004 '
-//		            '- S00005',
-//		  'order_line': [10, 11, 12, 13],
-//		  'currency_id': [125, 'EUR'],
-//		  'date_order': '2025-09-18 12:00:00',
-//		  'date_approve': False,
-//		  'date_planned': '2025-09-19 12:00:00',
-//		  'picking_type_id': [1, 'edu-trySerramenti2: Receipts']]
+	
+	
+	/**
+	 * Static factory method che interagisce col model purchase.order di Odoo per estrarre informazioni sul preventivo per la fornitura.
+	 * @param odoo - OdooApiConfig
+	 * @param f - FornitoreDTO
+	 * @return PreventivoDTO
+	 * @throws EmptyFetchException
+	 * @throws InconsistentDTOException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static PreventivoDTO fromXMLRPC(final OdooApiConfig odoo, final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
+		
+		Object[] ids;
+		Object[] res;
+		final Map<String, Object> requestInfo = new HashMap<>();
+		
+		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException("Oggetto FornitoreDTO non ha le informazioni necessarie");
+		
+		//cerca un preventivo di GEALAN
+		requestInfo.clear();
+		requestInfo.put("limit", 1);
+		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"purchase.order","search",
+						Arrays.asList(Arrays.asList(
+								Arrays.asList(odoo.PARTNER_ID_FIELD,"=",f.getName().get()),
+								Arrays.asList("x_studio_oaf","=",OdooApiConfig
+																	.OafStatus
+																	.NEW.toString() )
+								)),
+						requestInfo
+						)
+				);
+		
+		if(ids.length == 0) throw new EmptyFetchException ("Nessun preventivo \"new\" per GEALAN");
+		
+		//estrai preventivo
+		requestInfo.clear();
+		requestInfo.put(odoo.FIELDS, Arrays.asList("name",odoo.PARTNER_ID_FIELD,"product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
+		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
+				Arrays.asList(
+						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
+						"purchase.order",odoo.READ,
+						Arrays.asList(ids),
+						requestInfo
+						)
+				);
+		
+		if(res.length == 0) throw new EmptyFetchException ("Trovato preventivi per GEALAN, ma nessuno estratto.");
+		
+		return new PreventivoDTO( (HashMap<String, Object>) res[0] ); //n.b. è possibile estrarre più preventivi. Al momento si tratterà un singolo preventivo
+	}
 	
 	/**
 	 * Costruttore
