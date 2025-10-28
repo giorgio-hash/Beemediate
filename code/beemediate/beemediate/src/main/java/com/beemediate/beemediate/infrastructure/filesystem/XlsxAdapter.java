@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import org.slf4j.Logger;
  * Adattatore di SupplierCatalogReaderPort per recuperare informazioni da sorgenti {@code .xlsx}.
  */
 @Component
+@PropertySource("classpath:datasources.properties")
 public class XlsxAdapter implements SupplierCatalogReaderPort{
 
 	/**
@@ -36,15 +39,17 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
     /**
      * Percorso al file {@code .xlsx}
      */
-    private static final String RESOURCE_PATH = "classpath:data/MasterData_IT.XLSX";
+    private final String RESOURCE_PATH;
 
     /**
      * Costruttore
      * @param resourceLoader - oggetto ResourceLoader
+     * @param path - String
      */
-    @Autowired
-    public XlsxAdapter(final ResourceLoader resourceLoader) {
+    public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,
+    					@Value("${datasource.path}") String path) {
         this.resourceLoader = resourceLoader;
+        this.RESOURCE_PATH = path;
     }
 
     @Override

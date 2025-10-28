@@ -3,9 +3,15 @@ on:
   push:
     branches:
       - main # the name of your main branch
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    branches: [main]
+    types: 
+      - completed
+
 jobs:
   pmd-code-scan:
-    if: github.actor == 'giorgio-hash'
+    if: github.actor == 'giorgio-hash' && ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
@@ -29,8 +35,10 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: pmd-report.sarif
+
+
   spotbugs-upload-report:
-    if: github.actor == 'giorgio-hash' && github.event_name != 'pull_request'
+    if: github.actor == 'giorgio-hash' && github.event_name != 'pull_request' && ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: write # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
