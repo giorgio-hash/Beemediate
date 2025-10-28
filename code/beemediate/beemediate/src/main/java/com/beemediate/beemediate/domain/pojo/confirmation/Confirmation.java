@@ -26,12 +26,12 @@ public class Confirmation {
 	}
 
 	/**
-	 * Restituisce la struttura dati della conferma d'ordine
+	 * Restituisce la copia della struttura dati della conferma d'ordine
 	 * @return oggetto ConfirmationStructure
 	 */
-	//@ ensures \result == data;
+	//@ ensures \result != \old(data);
 	public /*@ pure @*/ ConfirmationStructure getData() {
-		return data;
+		return new ConfirmationStructure(data);
 	}
 	
 	/**
