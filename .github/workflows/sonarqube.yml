@@ -1,11 +1,15 @@
 name: SonarQube Quality Check
 on:
-  push:
+  pull_request:
     branches:
-      - main # the name of your main branch
+      - main
+      - master
+    paths:
+      - 'code/beemediate/beemediate/**'
+      - '.github/workflows/**'
 jobs:
   sonar:
-    if: github.actor == 'giorgio-hash'
+    if: github.actor == 'giorgio-hash' && ${{ github.event.workflow_run.conclusion == 'success' }}
     name: SonarQube Build and analyze
     runs-on: ubuntu-latest
     defaults:

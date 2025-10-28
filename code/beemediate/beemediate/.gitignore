@@ -35,7 +35,8 @@ build/
 
 ##### aggiunte #######
 
-ftp/*
 **/main/resources/*
-*.properties
+**/*.properties
 !**/application.properties
+!**/datasources.properties
+!**/ftpconfig.properties
