@@ -36,10 +36,13 @@ public class Order {
 		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;
 	}
 
-	//@ public normal_behaviour
-	//@ ensures \result == data;
-	public /*@ pure @*/ OrderStructure getData() {
-		return data;
+	/*@ public normal_behaviour
+	  @ requires data != null; 
+	  @ ensures \result != null;
+	  @ ensures \result != data; 
+	  @*/
+	public OrderStructure getData() {
+		return new OrderStructure(data);
 	}
 
 	//@ public normal_behaviour

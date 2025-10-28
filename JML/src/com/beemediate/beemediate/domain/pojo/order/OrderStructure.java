@@ -25,6 +25,33 @@ public class OrderStructure {
 	//@ pure
 	private OrderStructure() {};
 	
+	/**
+	 * Copy Constructor
+	 */
+	/*@
+	  @ public normal_behaviour
+	  @ requires copy!=null & copy.header!=null & copy.itemList!=null & copy.orderSummary!=null;
+	  @ requires copy.itemList.length>0 
+	  				& (\forall int i; 0 <= i & i < copy.itemList.length; copy.itemList[i] != null)
+	  				& (\forall int i; 0<=i & i<copy.itemList.length; \typeof(copy.itemList[i]) == \type(OrderItem) )
+	  				& \elemtype(\typeof(copy.itemList)) == \type(OrderItem)
+	  				& copy.orderSummary.totalItemNum == copy.itemList.length;
+	  @ ensures this.header!=null & this.itemList!=null & this.orderSummary!=null;
+	  @ ensures this != copy;
+	  @ ensures \not_modified(copy);
+	  @*/
+	@CodeBigintMath
+	public /*@ pure @*/ OrderStructure(OrderStructure copy) {
+		this.header = new OrderHeader(copy.getHeader());
+		this.itemList = copy.getItemList().clone();
+		//@ assume itemList.length>0;
+		//@ assume (\forall int i; 0 <= i & i < itemList.length; itemList[i] != null);
+		//@ assume (\forall int i; 0<=i & i<itemList.length; \typeof(itemList[i]) == \type(OrderItem) );
+		//@ assume \elemtype(\typeof(itemList)) == \type(OrderItem);
+		//@ assume copy.orderSummary.totalItemNum == itemList.length;
+		this.orderSummary = new OrderSummary(copy.getOrderSummary());
+	}
+	
 	//@ public normal_behaviour
 	//@ requires header!=null;
 	//@ ensures \result==header;

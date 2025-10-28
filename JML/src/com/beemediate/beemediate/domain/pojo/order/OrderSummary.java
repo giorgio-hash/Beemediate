@@ -12,6 +12,19 @@ public class OrderSummary {
 	@SkipEsc
 	private OrderSummary() {}
 	
+	/**
+	 * Copy Constructor
+	 */
+	/*@ public normal_behaviour
+	  @ requires copy != null;
+	  @ ensures totalItemNum == copy.totalItemNum;
+	  @ ensures this != copy;
+	  @ ensures \not_modified(copy);
+	  @*/
+	public /*@ pure @*/ OrderSummary(OrderSummary copy) {
+		this.totalItemNum = copy.totalItemNum;
+	}
+	
 	//@ ensures \result==totalItemNum;
 	public /*@ pure @*/ int getTotalItemNum() {
 		return totalItemNum;
