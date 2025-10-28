@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.domain.ports.entrypoint;
+package com.beemediate.beemediate.domain.ports.controller;
 
 public interface OaFManagerPort {
 	
