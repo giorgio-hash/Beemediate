@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.DeliveryDateType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.PartyType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlOrderPartiesReference;
-import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate.DeliveryDateType;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlPartyID;
 import com.fasterxml.jackson.annotation.JsonInclude;
