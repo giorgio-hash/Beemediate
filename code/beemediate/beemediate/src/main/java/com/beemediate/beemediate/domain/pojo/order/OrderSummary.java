@@ -18,8 +18,8 @@ public class OrderSummary {
 	/**
 	 * Copy Constructor
 	 */
-	public OrderSummary(OrderSummary os) {
-		this.totalItemNum = os.getTotalItemNum();
+	public OrderSummary(OrderSummary copy) {
+		this.totalItemNum = copy.totalItemNum;
 	}
 	
 	/**
