@@ -26,6 +26,11 @@ on:
     paths:
       - 'code/beemediate/beemediate/**'
       - '.github/workflows/**'
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   analyze:

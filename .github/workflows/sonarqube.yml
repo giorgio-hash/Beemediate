@@ -7,6 +7,11 @@ on:
     paths:
       - 'code/beemediate/beemediate/**'
       - '.github/workflows/**'
+  workflow_run:
+    workflows: ["Java CI with Maven"]
+    branches: [main]
+    types: 
+      - completed
 jobs:
   sonar:
     if: github.actor == 'giorgio-hash' && ${{ github.event.workflow_run.conclusion == 'success' }}
