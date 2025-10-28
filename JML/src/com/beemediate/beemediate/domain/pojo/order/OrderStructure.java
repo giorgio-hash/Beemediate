@@ -37,6 +37,11 @@ public class OrderStructure {
 	  				& \elemtype(\typeof(copy.itemList)) == \type(OrderItem)
 	  				& copy.orderSummary.totalItemNum == copy.itemList.length;
 	  @ ensures this.header!=null & this.itemList!=null & this.orderSummary!=null;
+	  @ ensures itemList.length>0 
+	  				& (\forall int i; 0 <= i & i < itemList.length; itemList[i] != null)
+	  				& (\forall int i; 0<=i & i<itemList.length; \typeof(itemList[i]) == \type(OrderItem) )
+	  				& \elemtype(\typeof(itemList)) == \type(OrderItem)
+	  				& orderSummary.totalItemNum == itemList.length;
 	  @ ensures this != copy;
 	  @ ensures \not_modified(copy);
 	  @*/
