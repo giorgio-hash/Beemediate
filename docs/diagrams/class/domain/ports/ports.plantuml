@@ -1,0 +1,59 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+package infrastructure {
+
+    package ftp {
+            interface ConfirmationHandlerPort << interface >> {
+              + archive(Confirmation): boolean
+            }
+            interface ConfirmationProviderPort << interface >> {
+              + hasConfirmation(): boolean
+              + fetchConfirmations(): boolean
+              + popConfirmation(): Confirmation
+            }
+
+            interface FTPHandlerPort << interface >>
+
+            interface OrderSenderPort << interface >> {
+              + loadOrder(Order): boolean
+            }
+    }
+
+    package odoo {
+            interface OrderProviderPort << interface >> {
+              + hasNewOrder(): boolean
+              + popNewOrder(): Order
+              + fetchOrders(): boolean
+            }
+
+            interface DataSenderPort << interface >> {
+              + signalShipped(Order): boolean
+              + signalConfirmation(Confirmation): boolean
+              + signalContentError(Order): boolean
+              + signalOpenTransError(Order): boolean
+            }
+    }
+
+    package filesystem{
+            interface SupplierCatalogReaderPort << interface >> {
+              + readArticleNumbers(): String[]
+            }
+    }
+}
+
+
+package controller{
+    interface OaFManagerPort << interface >> {
+      + handleConfirmations(): int
+      + handleOrders(): int
+    }
+}
+
+
+
+FTPHandlerPort             -[#008200,plain]-^  ConfirmationHandlerPort
+FTPHandlerPort             -[#008200,plain]-^  OrderSenderPort
+@enduml

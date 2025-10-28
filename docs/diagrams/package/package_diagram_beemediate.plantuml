@@ -36,6 +36,12 @@ package domain {
       package ftp {
         interface FTPHandlerPort
         interface ConfirmationProviderPort
+        interface OrderSenderPort
+        interface ConfirmationHandlerPort
+      }
+
+      package filesystem {
+        interface SupplierCatalogReaderPort
       }
     }
     package controller {
@@ -145,6 +151,10 @@ package infrastructure {
       class DataMapper
     }
   }
+
+  package filesystem {
+    class XlsxAdapter <<Component>>
+  }
 }
 
 ' Relazioni (implementazioni / dipendenze)
@@ -155,15 +165,11 @@ OaFBatchManager ..|> domain.ports.controller.OaFManagerPort : implements
 
 OdooOrderProvider ..|> domain.ports.infrastructure.odoo.OrderProviderPort : implements
 OdooDataSender ..|> domain.ports.infrastructure.odoo.DataSenderPort : implements
-FTPWriter -[#41B343,dashed]-> domain.ports.infrastructure.ftp.FTPHandlerPort : implements
-FTPReader -[#41B343,dashed]-> domain.ports.infrastructure.ftp.ConfirmationProviderPort : implements
+FTPWriter -[#41B343,dashed]-|> domain.ports.infrastructure.ftp.FTPHandlerPort : implements
+FTPReader -[#41B343,dashed]-|> domain.ports.infrastructure.ftp.ConfirmationProviderPort : implements
+FTPHandlerPort ..|> ConfirmationHandlerPort  : implements
+FTPHandlerPort ..|> OrderSenderPort  : implements
+XlsxAdapter ..|> domain.ports.infrastructure.filesystem.SupplierCatalogReaderPort : implements
 
-Order --> OrderStructure : has a
-Order --> QuantityFieldValue : has a
-OrderStructure *-- OrderHeader
-OrderStructure *-- OrderItem
-OrderStructure *-- OrderSummary
-
-Confirmation --> ConfirmationStructure : has a
 
 @enduml

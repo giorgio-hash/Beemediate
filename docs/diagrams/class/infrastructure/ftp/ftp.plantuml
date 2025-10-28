@@ -1,0 +1,66 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+package mapper{
+    class DataMapper {
+      - DataMapper():
+      - xmlMapper: XmlMapper
+      - log: Logger
+      + serializeXmlOrder(XmlOrder): String?
+      + deserializeXmlOrderResponse(String): XmlOrderResponse?
+      - initMapper(): XmlMapper
+      + mapOrderToXml(OrderStructure): XmlOrder
+      + mapConfirmationFromXml(XmlOrderResponse): ConfirmationStructure
+    }
+}
+
+package config{
+    class FTPConfig {
+      + FTPConfig(String, String, String):
+      - outboundFolder: String
+      - archivedFolder: String
+      - inboundFolder: String
+      - check(String): void
+      + getArchivedFolder(): String
+      + getOutboundFolder(): String
+      + verifyDirectories(): void
+      + getInboundFolder(): String
+    }
+}
+
+class FTPReader {
+  + FTPReader(FTPConfig):
+  - ftp: FTPConfig
+  - log: Logger
+  - buffer: Stack<Confirmation>
+  + hasConfirmation(): boolean
+  - collectXmlFiles(Path): List<Path>
+  + fetchConfirmations(): boolean
+  - containsXmlFiles(Path): boolean
+  + popConfirmation(): Confirmation
+}
+class FTPWriter {
+  + FTPWriter(FTPConfig):
+  - ftp: FTPConfig
+  - FORMATTER: DateTimeFormatter
+  - log: Logger
+  + loadOrder(Order): boolean
+  - writeToInbound(String, Path): boolean
+  + archive(Confirmation): boolean
+  - loadOrder(OrderStructure): boolean
+}
+
+package exceptions{
+    class NullSuppliedArgumentException {
+      + NullSuppliedArgumentException(String):
+    }
+    class WrongPathException {
+      + WrongPathException(String):
+    }
+}
+
+FTPReader                     "1" *-[#595959,plain]-> "ftp\n1" FTPConfig
+FTPWriter                     "1" *-[#595959,plain]-> "ftp\n1" FTPConfig
+@enduml

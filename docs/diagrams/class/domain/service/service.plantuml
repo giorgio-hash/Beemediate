@@ -1,0 +1,56 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+class OaFBatchManager {
+  + OaFBatchManager(int, OaFBuffer, ConfirmationProviderPort, FTPHandlerPort, DataSenderPort):
+  - ftp: FTPHandlerPort
+  - oaf: OaFBuffer
+  - oafBatchThreshold: int
+  - crm: DataSenderPort
+  - confirmations: ConfirmationProviderPort
+  + handleConfirmations(): int
+  + handleOrders(): int
+}
+class OaFBuffer {
+  + OaFBuffer(int, OaFValidatorIF, OrderProviderPort):
+  - validator: OaFValidatorIF
+  - buffer: BoundedBuffer
+  - or: OrderProviderPort
+  + validateBuffer(): int
+  + getBuffer(): BoundedBuffer
+  + loadNewBuffer(): int
+}
+
+package validator{
+
+    package validator {
+            class OaFValidator {
+              + OaFValidator(SupplierCatalogReaderPort):
+              - QUANTITY_MEASURE: char
+              - DELIVERY_LOCATION_NUMBER: String[]
+              - articleNumbers: String[]
+              - CUSTOMER_NUMBER: String
+              - validateArticleNumber(OrderStructure): boolean
+              - isInCatalog(String): boolean
+              - validateQuantity(OrderStructure): QuantityFieldValue
+              - validateCustomerNumber(OrderStructure): boolean
+              - validateDeliveryLocationNumber(OrderStructure): boolean
+              - validateDeliveryDateContent(OrderStructure): boolean
+              + validate(Order): void
+              - validateQuantityMeasure(OrderStructure): boolean
+              - validateDeliveryDate(OrderStructure): boolean
+            }
+    }
+
+    interface OaFValidatorIF << interface >> {
+      + validate(Order): void
+    }
+
+}
+
+OaFBatchManager "1" *-[#595959,plain]-> "oaf\n1" OaFBuffer
+OaFBuffer       "1" *-[#595959,plain]-> "validator\n1" OaFValidatorIF
+OaFValidator     -[#008200,dashed]-^  OaFValidatorIF
+@enduml

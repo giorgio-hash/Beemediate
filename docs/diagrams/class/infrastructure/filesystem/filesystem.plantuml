@@ -1,0 +1,15 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+class XlsxAdapter {
+  + XlsxAdapter(ResourceLoader):
+  - RESOURCE_PATH: String
+  - log: Logger
+  - resourceLoader: ResourceLoader
+  + readArticleNumbers(): String[]
+  - extractArticleNumbers(): List<String>
+}
+
+@enduml
