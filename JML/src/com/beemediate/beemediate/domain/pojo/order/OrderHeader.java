@@ -35,6 +35,40 @@ public class OrderHeader {
 	//@ pure
 	public OrderHeader() {};
 	
+	/**
+	 * Copy Constructor
+	 */
+	/*@
+	  @ public normal_behaviour
+	  @ requires copy!=null;
+	  @ ensures this.buyerID == copy.buyerID &
+		this.buyerIDRef == copy.buyerIDRef &
+		this.currency == copy.currency &
+		this.deliveryID == copy.deliveryID &
+		this.deliveryIDRef == copy.deliveryIDRef &
+		this.endDate == copy.endDate &
+		this.orderDate == copy.orderDate &
+		this.orderID == copy.orderID &
+		this.startDate == copy.startDate &
+		this.supplierID == copy.supplierID &
+		this.supplierIDRef == copy.supplierIDRef;
+	  @ ensures this != copy;
+	  @ ensures \not_modified(copy);
+	  @*/
+	public /*@ pure @*/ OrderHeader(OrderHeader copy) {
+		this.buyerID = copy.buyerID;
+		this.buyerIDRef = copy.buyerIDRef ;
+		this.currency = copy.currency;
+		this.deliveryID = copy.deliveryID;
+		this.deliveryIDRef = copy.deliveryIDRef;
+		this.endDate = copy.endDate;
+		this.orderDate = copy.orderDate;
+		this.orderID = copy.orderID;
+		this.startDate = copy.startDate;
+		this.supplierID = copy.supplierID;
+		this.supplierIDRef = copy.supplierIDRef;
+	}
+	
 	//@ public normal_behaviour
 	//@ ensures \result == orderID;
 	public /*@ pure @*/ String getOrderID() {

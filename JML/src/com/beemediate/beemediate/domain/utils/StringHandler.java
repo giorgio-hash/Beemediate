@@ -245,14 +245,14 @@ public class StringHandler {
 	  @ also public normal_behaviour
 	  @ requires str.length()==19;
 	  @ requires (\exists int i; i==4 | i==7; str.charAt(i) != '-')
-      @	  			| str.charAt(10) != ' '
+      @	  			| str.charAt(10) != 'T'
       @				| (\exists int i; i==13 | i==16; str.charAt(i) != ':');
       @ ensures !\result;
       @
       @ also public normal_behaviour
 	  @ requires str.length()==19;
 	  @ requires (\forall int i; i==4 | i==7; str.charAt(i) == '-')
-      @	  			& str.charAt(10) == ' '
+      @	  			& str.charAt(10) == 'T'
       @				& (\forall int i; i==13 | i==16; str.charAt(i) == ':');
       @ ensures \result ==> isDigit(str.charAt(0),true);
       @ ensures \result ==> (\forall int i; 1<=i<str.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; isDigit(str.charAt(i),false) );
@@ -261,7 +261,7 @@ public class StringHandler {
 	
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
-		final char MAIN_SEPARATOR = ' ';
+		final char MAIN_SEPARATOR = 'T';
 		final char DATE_SEPARATOR = '-';
 		final char TIME_SEPARATOR = ':';
 		final int YSize = 4; 
@@ -290,68 +290,54 @@ public class StringHandler {
 				|| !isDigit(str.charAt(3), false) )
 			return false;
 		
-		//controllo MM, da "01" a "12"
-		if( str.charAt(5)=='0' ) {
-			if( !isDigit( str.charAt(6) ,true) )
-				return false;
-		}else if(str.charAt(5) == '1') {
-			if( str.charAt(6)<'0' || str.charAt(6)>'2' )
-				return false;
-		}else
-			return false;
-		
-		//controllo gg, da "01" a "31"
-		if( str.charAt(8)=='0' ) {
-			if( !isDigit( str.charAt(9) ,true) )
-				return false;
-		}else if( '0'<str.charAt(8) && str.charAt(8)<'3' ) {
-			if( !isDigit(str.charAt(9), false ) )
-				return false;
-		} else if( str.charAt(8) == '3' ) {
-			if( str.charAt(8)<'0' || str.charAt(8)>'1' )
-				return false;
-		}else
-			return false;
-		
-		//controllo HH, da "00" a "23"
-		if( str.charAt(11)=='0' ) {
-			if( !isDigit( str.charAt(12) ,false) )
-				return false;
-		}else if( '0'<str.charAt(11) && str.charAt(11)<'2' ) {
-			if( !isDigit(str.charAt(12) , false) )
-				return false;
-		}else if( str.charAt(11)=='2') {
-			if( str.charAt(12)<'0' || str.charAt(12)>'3')
-				return false;
-		} else
-			return false;
+		final int MM=5;//MM index:controllo MM, da "01" a "12"
+		final int dd=8;//dd index:controllo gg, da "01" a "31"
+		final int HH=11;//HH index:controllo HH, da "00" a "23" 
+		final int mm=14;//mm index:controllo mm, da "00" a "59"
+		final int ss=17;//ss index:controllo ss, da "00" a "59"
 
-
-		//controllo mm, da "00" a "59"
-		if( str.charAt(14)=='0' ) {
-			if( !isDigit( str.charAt(15) ,false) )
-				return false;
-		}else if( '0'<str.charAt(14) && str.charAt(14)<'6' ) {
-			if( !isDigit(str.charAt(15) , false) )
-				return false;
-		} else
-			return false;
-		
-		
-		//controllo ss, da "00" a "59"
-		if( str.charAt(17)=='0' ) {
-			if( !isDigit( str.charAt(18) ,false) )
-				return false;
-		}else if( '0'<str.charAt(17) && str.charAt(17)<'6' ) {
-			if( !isDigit(str.charAt(18) , false) )
-				return false;
-		} else
-			return false;
-		
-		
-		return true;
+		return has2DigitsBetween(str, MM, '0','0','1','9') && has2DigitsBetween(str, MM, '1','1','0','2') 
+					&& has2DigitsBetween(str, dd, '0','2','0','9') && has2DigitsBetween(str, dd, '3','3','0','1')
+					&& has2DigitsBetween(str, HH, '0','1','0','9') && has2DigitsBetween(str, HH, '2','2','0','3')
+					&& has2DigitsBetween(str, mm, '0','5','0','9') 
+					&& has2DigitsBetween(str, ss, '0','5','0','9');
 		
 		}
+	
+	/*@
+	  @ public normal_behaviour
+	  @ requires s == null || s.length()==0;
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s != null & s.length()>0;
+	  @ requires index<0 || index>s.length() || index+1>s.length();
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s!=null & s.length()>0;
+	  @ requires index>=0 & s.length()>index+1;
+	  @ ensures \result ==> (isDigit(startRangeFirstDigit, false) & isDigit(endRangeFirstDigit, false)
+        		& isDigit(startRangeSecondDigit, false) & isDigit(endRangeSecondDigit, false));
+      @ ensures \result ==> (s.charAt(index) >= startRangeFirstDigit & s.charAt(index) <= endRangeFirstDigit &
+        		s.charAt(index+1) >= startRangeSecondDigit & s.charAt(index+1) <= endRangeSecondDigit);
+	  @*/
+	@CodeBigintMath
+    public static /*@ pure @*/ boolean has2DigitsBetween(String s, int index, 
+    											char startRangeFirstDigit, char endRangeFirstDigit,
+    											char startRangeSecondDigit, char endRangeSecondDigit) {
+        if (s == null) return false;
+        if (index < 0 || index + 1 >= s.length()) return false;
+        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)
+        		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )
+        				return false;
+        
+        char c1 = s.charAt(index);
+        char c2 = s.charAt(index + 1);
+
+        return c1 >= startRangeFirstDigit && c1 <= endRangeFirstDigit && 
+        		c2 >= startRangeSecondDigit && c2 <= endRangeSecondDigit;
+    }
 	
 	/*@ public normal_behaviour
 	  @ requires date1!=null & date1.length()==19;
@@ -373,65 +359,59 @@ public class StringHandler {
 	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
 		
-		if(!StringHandler.isDateTime(date1) || !StringHandler.isDateTime(date2))
+		if(!isDateTime(date1) || !isDateTime(date2))
 			return false;
 		
-		int pos=0;//yyyy
+		final int yyyy=0;//yyyy index
+		final int MM=5;//MM index
+		final int dd=8;//dd index
+		final int HH=11;//HH index
+		final int mm=14;//mm index
+		final int ss=17;//ss index
 		
-		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=4;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 4-i;
-		for(int i=0; i<4;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
-				return false;
-		
-		pos=5;//MM
-		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=2;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 2-i;
-		for(int i=0; i<2;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
-				return false;
-		
-		pos=8;//dd
-		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=2;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 2-i;
-		for(int i=0; i<2;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
-				return false;
-		
-		pos=11;//HH
-		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=2;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 2-i;
-		for(int i=0; i<2;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
-				return false;
-		
-		pos=14;//mm
-		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=2;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 2-i;
-		for(int i=0; i<2;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
-				return false;
+		return (isSubstr1LessOrEqualThanSubstr2(date1,date2,yyyy,4)) &&
+				(isSubstr1LessOrEqualThanSubstr2(date1,date2,MM,2)) &&
+				(isSubstr1LessOrEqualThanSubstr2(date1,date2,dd,2)) &&
+				(isSubstr1LessOrEqualThanSubstr2(date1,date2,HH,2)) &&
+				(isSubstr1LessOrEqualThanSubstr2(date1,date2,mm,2)) &&
+					(isSubstr1LessOrEqualThanSubstr2(date1,date2,ss,2));
+	}
 
-		pos=17;//ss
+	/*@
+	  @ public normal_behaviour
+	  @ requires s1==null || s2==null || s1.length()==0 || s2.length()==0;
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()>0;
+	  @ requires pos<0 || substrSize<=0;
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()>0;
+	  @ requires pos>=0 & substrSize>0;
+	  @ ensures !\result <==> ((\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) )
+	  							| pos+substrSize>s1.length() 
+	  							| pos+substrSize>s2.length());
+	  @
+	  @*/
+	@CodeBigintMath
+	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(String s1, String s2, int pos, int substrSize) {
+
+		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;
+		if(pos<0 || substrSize<=0) return false;
+		if(pos+substrSize>s1.length() || pos+substrSize>s2.length()) return false;
+		
 		//@ loop_writes i;
-		//@ loop_invariant 0<=i<=2;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; date1.charAt(j)<=date2.charAt(j) );
-		//@ decreases 2-i;
-		for(int i=0; i<2;i++)
-			if(date1.charAt(pos+i)>date2.charAt(pos+i))
+		//@ loop_invariant 0<=i<=substrSize;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)<=s2.charAt(j) );
+		//@ decreases substrSize-i;
+		for(int i=0; i<substrSize; i++)
+			if(s1.charAt(pos+i)>s2.charAt(pos+i))
 				return false;
 		
 		return true;
 	}
-
 }

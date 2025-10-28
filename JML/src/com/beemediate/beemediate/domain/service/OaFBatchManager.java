@@ -6,7 +6,7 @@ import org.jmlspecs.annotation.CodeBigintMath;
 import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.order.Order;
-import com.beemediate.beemediate.domain.ports.entrypoint.OaFManagerPort;
+import com.beemediate.beemediate.domain.ports.controller.OaFManagerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
@@ -122,22 +122,19 @@ public class OaFBatchManager implements OaFManagerPort{
 				
 				o = oaf.getBuffer().pop();
 				
-				//segnala al crm errori di contenuto (non critici)
-				if(o.hasContentError()) {
-					crm.signalContentError(o);
-				}
-				
 				//segnala al crm errori openTrans (critici) e non manda
 				if(o.hasOpenTransError()) {
 					crm.signalOpenTransError(o);
 				}
-				else if(toSend>oafBatchThreshold) { //manda e, se l'operazione non d? errori, segnala al crm
-					if(ftp.loadOrder(o)) {
+				else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)
+					crm.signalContentError(o);
+				}
+				else if(toSend>=oafBatchThreshold && ftp.loadOrder(o)) { //manda e, se l'operazione non d? errori, segnala al crm
 						crm.signalShipped(o);
 					}
 				}
 			}
-		}
+		
 		return toSend;
 	}
 

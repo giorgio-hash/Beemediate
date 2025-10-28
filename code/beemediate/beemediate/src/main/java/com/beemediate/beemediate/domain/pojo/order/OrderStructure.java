@@ -46,10 +46,10 @@ public class OrderStructure {
 	 * Copy Constructor
 	 */
 	//@SkipEsc
-	public OrderStructure(OrderStructure os) {
-		this.header = new OrderHeader(os.getHeader());
-		this.itemList = os.getItemList().clone();
-		this.orderSummary = new OrderSummary(os.getOrderSummary());
+	public OrderStructure(OrderStructure copy) {
+		this.header = new OrderHeader(copy.getHeader());
+		this.itemList = copy.getItemList().clone();
+		this.orderSummary = new OrderSummary(copy.getOrderSummary());
 	}
 	
 	/**
