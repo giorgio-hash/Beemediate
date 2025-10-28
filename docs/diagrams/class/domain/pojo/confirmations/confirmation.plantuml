@@ -1,0 +1,60 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+class Confirmation {
+  + Confirmation(String, ConfirmationStructure):
+  - confirmationId: String
+  - data: ConfirmationStructure
+  + getData(): ConfirmationStructure
+  + getConfirmationId(): String
+}
+class ConfirmationStructure {
+  + ConfirmationStructure():
+  + ConfirmationStructure(ConfirmationStructure):
+  - addressName: String
+  - addressZip: String
+  - totalAmount: float
+  - currency: String
+  - orderId: String
+  - totalItemNum: int
+  - addressCity: String
+  - orderResponseDate: String
+  - addressStreet: String
+  - addressCountryCoded: String
+  - deliveryDate: String
+  - orderIdGealan: String
+  - addressCountry: String
+  + getAddressCity(): String
+  + setAddressCity(String): void
+  + getAddressStreet(): String
+  + setOrderResponseDate(String): void
+  + setOrderId(String): void
+  + getAddressName(): String
+  + getCurrency(): String
+  + getAddressZip(): String
+  + setAddressCountryCoded(String): void
+  + setAddressName(String): void
+  + setTotalItemNum(int): void
+  + setAddressStreet(String): void
+  + toString(): String
+  + setCurrency(String): void
+  + setAddressZip(String): void
+  + setTotalAmount(float): void
+  + getOrderId(): String
+  + setDeliveryDate(String): void
+  + getTotalItemNum(): int
+  + getAddressCountry(): String
+  + setOrderIdGealan(String): void
+  + getOrderIdGealan(): String
+  + setAddressCountry(String): void
+  + getAddressCountryCoded(): String
+  + getOrderResponseDate(): String
+  + getTotalAmount(): float
+  + getDeliveryDate(): String
+}
+
+Confirmation          "1" *-[#595959,plain]-> "data\n1" ConfirmationStructure
+Confirmation           -[#595959,dashed]->  ConfirmationStructure : "«create»"
+@enduml
