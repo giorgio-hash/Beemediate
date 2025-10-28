@@ -55,18 +55,18 @@ public class OrderHeader {
 	/**
 	 * Copy Constructor
 	 */
-	public OrderHeader(OrderHeader oh) {
-		this.buyerID = oh.getBuyerID();
-		this.buyerIDRef = oh.getBuyerIDRef();
-		this.currency = oh.getCurrency();
-		this.deliveryID = oh.getDeliveryID();
-		this.deliveryIDRef = oh.getDeliveryIDRef();
-		this.endDate = oh.getEndDate();
-		this.orderDate = oh.getOrderDate();
-		this.orderID = oh.getOrderID();
-		this.startDate = oh.getStartDate();
-		this.supplierID = oh.getSupplierID();
-		this.supplierIDRef = oh.getSupplierIDRef();
+	public OrderHeader(OrderHeader copy) {
+		this.buyerID = copy.buyerID;
+		this.buyerIDRef = copy.buyerIDRef ;
+		this.currency = copy.currency;
+		this.deliveryID = copy.deliveryID;
+		this.deliveryIDRef = copy.deliveryIDRef;
+		this.endDate = copy.endDate;
+		this.orderDate = copy.orderDate;
+		this.orderID = copy.orderID;
+		this.startDate = copy.startDate;
+		this.supplierID = copy.supplierID;
+		this.supplierIDRef = copy.supplierIDRef;
 	}
 	
 	/**
