@@ -10,15 +10,15 @@ public class Confirmation {
 	private /*@ spec_public @*/ final String confirmationId;
 	
 	/*@ public invariant data != null; @*/
-	/*@ public invariant orderID != null; @*/
+	/*@ public invariant confirmationId != null; @*/
 	
 	/**
 	 * Costruttore
 	 * @param d - Oggetto struttura dati conferma d'ordine
 	 * @param cID - identificativo conferma d'ordine
 	 */
-	//@ requires d != null & oID!=null;
-	//@ ensures data == d & confirmationID == cID;
+	//@ requires d != null & cID!=null;
+	//@ ensures data == d & confirmationId == cID;
 	//@ pure
 	public Confirmation(final String cID, final ConfirmationStructure d) {
 		data = d;
@@ -29,7 +29,11 @@ public class Confirmation {
 	 * Restituisce la copia della struttura dati della conferma d'ordine
 	 * @return oggetto ConfirmationStructure
 	 */
-	//@ ensures \result != \old(data);
+	/*@ public normal_behaviour
+	  @ requires data != null; 
+	  @ ensures \result != null;
+	  @ ensures \result != data; 
+	  @*/
 	public /*@ pure @*/ ConfirmationStructure getData() {
 		return new ConfirmationStructure(data);
 	}
@@ -38,7 +42,7 @@ public class Confirmation {
 	 * Restituisce l'identificativo dell'ordine associato alla conferma
 	 * @return oggetto String
 	 */
-	//@ ensures \result == confirmationID;
+	//@ ensures \result == confirmationId;
 	public /*@ pure @*/ String getConfirmationId() {
 		return confirmationId;
 	}

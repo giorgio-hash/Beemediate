@@ -53,8 +53,16 @@ public class Order {
 	 * Restituisce una copia difensiva (CWE-374) della struttura dati dell'ordine.
 	 * @return oggetto OrderStructure
 	 */
-	//@ public normal_behaviour
-	//@ ensures \result != data;
+	/*@ public normal_behaviour
+	  @ requires data!=null & data.header!=null & data.itemList!=null & data.orderSummary!=null;
+	  @ requires data.itemList.length>0 
+	  				& (\forall int i; 0 <= i & i < data.itemList.length; data.itemList[i] != null)
+	  				& (\forall int i; 0<=i & i<data.itemList.length; \typeof(data.itemList[i]) == \type(OrderItem) )
+	  				& \elemtype(\typeof(data.itemList)) == \type(OrderItem)
+	  				& data.orderSummary.totalItemNum == data.itemList.length; 
+	  @ ensures \result != null;
+	  @ ensures \result != data; 
+	  @*/
 	public /*@ pure @*/ OrderStructure getData() {
 		return new OrderStructure(data);
 	}
