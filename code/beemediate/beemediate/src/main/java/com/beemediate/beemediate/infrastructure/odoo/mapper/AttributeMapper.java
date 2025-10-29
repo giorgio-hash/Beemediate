@@ -62,7 +62,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente Double, oppure <i>Optional.empty()</i>;
 	 */
     public static Optional<Double> doublify(final Object o){
-    	return (o instanceof Double)? Optional.of((Double) o) : Optional.empty();
+    	return (o instanceof Number)? Optional.of( ((Number) o).doubleValue() ) : Optional.empty();
     }
 	
 	/**
