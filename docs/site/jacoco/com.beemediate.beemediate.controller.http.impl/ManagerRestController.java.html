@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ManagerRestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.controller.http.impl</a> &gt; <span class="el_source">ManagerRestController.java</span></div><h1>ManagerRestController.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.controller.http.impl;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.beemediate.beemediate.controller.http.ManagerRestControllerIF;
+import com.beemediate.beemediate.domain.ports.controller.OaFManagerPort;
+
+@RestController
+public class ManagerRestController implements ManagerRestControllerIF{
+
+	/***
+	 * Riferimento all'istanza singleton LoggerFactory.*/
+<span class="fc" id="L18">	private final Logger log = LoggerFactory.getLogger(ManagerRestController.class);</span>
+	
+	/**
+	 * Gestore delle funzionalità core dell'applicativo
+	 */
+	private final OaFManagerPort oafManager;
+	
+	@Autowired
+<span class="fc" id="L26">	public ManagerRestController(OaFManagerPort oafManagerPort) {</span>
+<span class="fc" id="L27">		this.oafManager = oafManagerPort;</span>
+<span class="fc" id="L28">	}</span>
+	
+	
+	@Override
+	public ResponseEntity manageOrders() {
+		try {
+<span class="nc" id="L34">			int processed = oafManager.handleOrders();</span>
+<span class="nc" id="L35">			log.info(&quot;manageOrders -&gt; processed {} orders&quot;, processed);</span>
+			
+			// Restituisco 200 con messaggio esplicito sul numero di elementi processati
+<span class="nc" id="L38">			return ResponseEntity.ok(&quot;Processed &quot; + processed + &quot; orders.&quot;);</span>
+<span class="nc" id="L39">		} catch (Exception e) {</span>
+			// Log dell'errore e risposta 500 con messaggio diagnostico minimale
+<span class="nc" id="L41">			log.error(&quot;manageOrders -&gt; error while processing orders&quot;, e);</span>
+<span class="nc" id="L42">			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L43">					.body(&quot;Error while processing orders: &quot; + e.getMessage());</span>
+		}
+	}
+
+	@Override
+	public ResponseEntity manageConfirmations() {
+		try {
+<span class="nc" id="L50">			int processed = oafManager.handleConfirmations();</span>
+<span class="nc" id="L51">			log.info(&quot;manageConfirmations -&gt; processed {} confirmations&quot;, processed);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">			if (processed &gt; 0) {</span>
+<span class="nc" id="L53">				return ResponseEntity.ok(&quot;Processed &quot; + processed + &quot; confirmations.&quot;);</span>
+			} else {
+<span class="nc" id="L55">				return ResponseEntity.noContent().build();</span>
+			}
+<span class="nc" id="L57">		} catch (Exception e) {</span>
+<span class="nc" id="L58">			log.error(&quot;manageConfirmations -&gt; error while processing confirmations&quot;, e);</span>
+<span class="nc" id="L59">			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L60">					.body(&quot;Error while processing confirmations: &quot; + e.getMessage());</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

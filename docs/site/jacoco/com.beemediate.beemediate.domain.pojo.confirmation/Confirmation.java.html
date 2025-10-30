@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Confirmation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.pojo.confirmation</a> &gt; <span class="el_source">Confirmation.java</span></div><h1>Confirmation.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.pojo.confirmation;
+
+/***Classe per gestire la conferma ordine*/
+public class Confirmation {
+	
+	/***struttura dati della conferma*/
+	private /*@ spec_public @*/ final ConfirmationStructure data;
+	
+	/***identificativo dell'ordine di riferimento*/
+	private /*@ spec_public @*/ final String confirmationId;
+	
+	/*@ public invariant data != null; @*/
+	/*@ public invariant confirmationId != null; @*/
+	
+	/**
+	 * Costruttore
+	 * @param d - Oggetto struttura dati conferma d'ordine
+	 * @param cID - identificativo conferma d'ordine
+	 */
+	//@ requires d != null &amp; cID!=null;
+	//@ ensures data == d &amp; confirmationId == cID;
+	//@ pure
+<span class="nc" id="L23">	public Confirmation(final String cID, final ConfirmationStructure d) {</span>
+<span class="nc" id="L24">		data = d;</span>
+<span class="nc" id="L25">		confirmationId = cID;</span>
+<span class="nc" id="L26">	}</span>
+
+	/**
+	 * Restituisce la copia della struttura dati della conferma d'ordine
+	 * @return oggetto ConfirmationStructure
+	 */
+	/*@ public normal_behaviour
+	  @ requires data != null; 
+	  @ ensures \result != null;
+	  @ ensures \result != data; 
+	  @*/
+	public /*@ pure @*/ ConfirmationStructure getData() {
+<span class="nc" id="L38">		return new ConfirmationStructure(data);</span>
+	}
+	
+	/**
+	 * Restituisce l'identificativo dell'ordine associato alla conferma
+	 * @return oggetto String
+	 */
+	//@ ensures \result == confirmationId;
+	public /*@ pure @*/ String getConfirmationId() {
+<span class="nc" id="L47">		return confirmationId;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

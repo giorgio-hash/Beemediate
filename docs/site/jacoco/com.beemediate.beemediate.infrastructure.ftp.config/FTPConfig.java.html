@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FTPConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.config</a> &gt; <span class="el_source">FTPConfig.java</span></div><h1>FTPConfig.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.config;
+
+import java.io.File;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+import com.beemediate.beemediate.infrastructure.ftp.exceptions.WrongPathException;
+
+import jakarta.annotation.PostConstruct;
+
+/**
+ * Classe di configurazione del sistema di cartelle FTP
+ */
+@Configuration
+@PropertySource(&quot;classpath:ftpconfig.properties&quot;)
+public class FTPConfig {
+
+	/**
+	 * Nome folder contenente gli ordini da mandare al fornitore
+	 */
+	private final String inboundFolder;
+	/**
+	 * Nome folder contenente le conferme ricevute dal fornitore
+	 */
+	private final String outboundFolder;
+	/**
+	 * Nome folder contenente le conferme archiviate. Una conferma diventa &lt;i&gt;archiviata&lt;/i&gt; dopo esser stata individuata ed analizzata.
+	 */
+	private final String archivedFolder;
+
+	/**
+	 * Crea il bean di configurazione del fileystem del FTP utilizzando i dati presenti in {@code resources/ftpconfig.properties}. In assenza di valori personalizzati, vengono applicati dei valori di default.
+	 * @param inbound - valore della chiave {@code ftp.inbound}
+	 * @param outbound - valore della chiave {@code ftp.outbound}
+	 * @param archived - valore della chiave {@code ftp.archived}
+	 */
+<span class="fc" id="L39">    public FTPConfig(</span>
+            @Value(&quot;${ftp.inbound}&quot;) String inbound,
+            @Value(&quot;${ftp.outbound}&quot;) String outbound,
+            @Value(&quot;${ftp.archived}&quot;) String archived) {
+<span class="fc" id="L43">        this.inboundFolder = inbound;</span>
+<span class="fc" id="L44">        this.outboundFolder = outbound;</span>
+<span class="fc" id="L45">        this.archivedFolder = archived;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Verifica e crea le directory dopo l'inizializzazione del bean.
+     * @throws WrongPathException 
+     */
+    @PostConstruct
+    public void verifyDirectories() throws WrongPathException {
+<span class="fc" id="L54">        check(inboundFolder);</span>
+<span class="fc" id="L55">        check(outboundFolder);</span>
+<span class="fc" id="L56">        check(archivedFolder);</span>
+<span class="fc" id="L57">    }</span>
+
+    /**
+     * Verifica che il percorso sia una directory esistente
+     * @param path - String indicante il percorso da verificare
+     * @throws WrongPathException - path non è una directory
+     */
+    private void check(String path) throws WrongPathException {
+<span class="fc" id="L65">        File dir = new File(path);</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">        if (!dir.exists() || !dir.isDirectory())</span>
+<span class="nc" id="L67">            throw new WrongPathException(&quot;Il path \&quot;&quot;+ path +&quot;\&quot; non porta ad una directory.&quot;);</span>
+<span class="fc" id="L68">    }</span>
+    
+    /**
+     * 
+     * @return String rappresentante la folder dei messaggi verso il fornitore
+     */
+    public String getInboundFolder() {
+<span class="nc" id="L75">        return inboundFolder;</span>
+    }
+    
+    /**
+     * 
+     * @return String rappresentante la folder dei messaggi in arrivo dal fornitore
+     */
+    public String getOutboundFolder() {
+<span class="nc" id="L83">        return outboundFolder;</span>
+    }
+
+    /**
+     * 
+     * @return String rappresentante la folder dei messaggi archiviati
+     */
+    public String getArchivedFolder() {
+<span class="nc" id="L91">        return archivedFolder;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

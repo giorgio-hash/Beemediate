@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OaFValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.service.validator.impl</a> &gt; <span class="el_source">OaFValidator.java</span></div><h1>OaFValidator.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.service.validator.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+//import org.jmlspecs.annotation.CodeBigintMath;
+
+//import org.jmlspecs.annotation.SkipEsc;
+
+import com.beemediate.beemediate.domain.exceptions.EmptyArrayException;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.pojo.order.OrderItem;
+import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
+import com.beemediate.beemediate.domain.pojo.order.QuantityFieldValue;
+import com.beemediate.beemediate.domain.ports.infrastructure.filesystem.SupplierCatalogReaderPort;
+import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
+import com.beemediate.beemediate.domain.utils.StringHandler;
+
+/**
+ * Classe incaricata di verificare la OrderStructure per confermare che le informazioni contenute rispettino i vincoli richiesti dal sistema fornitore.
+ */
+@Service
+public final class OaFValidator implements OaFValidatorIF{
+	
+
+	/***Numero cliente corretto*/
+	private /*@ spec_public */ static final String CUSTOMER_NUMBER = &quot;3024005150&quot;;
+	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
+	private /*@ spec_public */ static final char QUANTITY_MEASURE = 'M';
+	/***Numeri corretti di località di consegna*/
+<span class="fc" id="L31">	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {&quot;3024005150&quot;,&quot;30901505150&quot;};</span>
+	/***Elenco numeri articolo da catalogo fornitore.*/
+	private /*@ spec_public */ final String[] articleNumbers;
+	
+
+	/*@ public invariant 0&lt;articleNumbers.length&lt;=Integer.MAX_VALUE; @*/
+	/*@ public invariant (\forall int i; 0&lt;=i&lt;articleNumbers.length; articleNumbers[i]!=null); @*/
+	/*@ public invariant (\forall int i; 0&lt;=i&lt;articleNumbers.length; 0&lt;articleNumbers[i].length()&lt;=Integer.MAX_VALUE); @*/
+	
+	/**
+	 * Costruttore
+	 * @param catalog - adattatore SupplierCatalogReaderPort
+	 * @throws EmptyArrayException se l'elenco dei numeri articolo risulta vuoto
+	 */
+	/*@ public normal_behaviour
+	  @ requires catalog!=null;
+	  @ requires catalog.articleNumbers.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i&lt;catalog.articleNumbers.length; 0&lt;catalog.articleNumbers[i].length()&lt;=Integer.MAX_VALUE);
+	  @ requires (\forall int i; 0&lt;=i&lt;catalog.articleNumbers.length; \typeof(catalog.articleNumbers[i])==\type(String));
+	  @ ensures customerNumber!=null;
+	  @ ensures quantity != null;
+	  @ ensures quantityMeasure == 'M';
+	  @ ensures deliveryLocationNumber!=null &amp; deliveryLocationNumber.length==2;
+	  @ ensures articleNumbers!=null &amp; articleNumbers.length&gt;0;
+	  @
+	  @ also public exceptional_behaviour
+	  @ requires catalog!=null;
+	  @ requires catalog.articleNumbers.length==0;  
+	  @ signals_only EmptyArrayException;
+	  @*/
+//	@CodeBigintMath
+	@Autowired
+<span class="fc" id="L63">	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {</span>
+<span class="fc" id="L64">		final String[] rows = catalog.readArticleNumbers(); </span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">		if(rows.length == 0)</span>
+<span class="nc" id="L66">			throw new EmptyArrayException(&quot;ID articoli non trovati.&quot;);</span>
+<span class="fc" id="L67">		articleNumbers = rows;</span>
+<span class="fc" id="L68">	}</span>
+	
+//	@SkipEsc
+	@Override
+	public void validate(/*@ non_null @*/final Order o) {
+		
+<span class="nc" id="L74">		OrderStructure ost = o.getData();</span>
+			
+<span class="nc" id="L76">		o.setCustomerNumber( this.validateCustomerNumber( ost ) );</span>
+<span class="nc" id="L77">		o.setArticleNumber( this.validateArticleNumber( ost ) );</span>
+<span class="nc" id="L78">		o.setQuantityMeasure( this.validateQuantityMeasure( ost ) );</span>
+<span class="nc" id="L79">		o.setQuantity( this.validateQuantity( ost ) );</span>
+<span class="nc" id="L80">		o.setDeliveryLocationNumber( this.validateDeliveryLocationNumber( ost ) );</span>
+<span class="nc" id="L81">		o.setDeliveryDate( this.validateDeliveryDate( ost) );</span>
+<span class="nc" id="L82">		o.setDeliveryDateContent( this.validateDeliveryDateContent( ost ) );</span>
+<span class="nc" id="L83">	}</span>
+	
+	/**
+	 * Verifica che buyerID, buyerIDRef e customerNumber abbiano lo stesso valore.
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires ost.header.buyerID.length()!=customerNumber.length() | ost.header.buyerIDRef.length()!=customerNumber.length();
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires ost.header.buyerID.length()==ost.header.buyerIDRef.length() &amp; ost.header.buyerID.length()==customerNumber.length();
+	  @ requires (\exists int i; 0&lt;=i&lt;ost.header.buyerID.length(); ost.header.buyerIDRef.charAt(i) != customerNumber.charAt(i) | ost.header.buyerIDRef.charAt(i) != customerNumber.charAt(i) );
+	  @ ensures  !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires ost.header.buyerID.length()&gt;0;
+	  @ requires ost.header.buyerID.length()==ost.header.buyerIDRef.length() &amp; ost.header.buyerID.length()==customerNumber.length();
+	  @ requires (\forall int i; 0&lt;=i&lt;ost.header.buyerID.length(); ost.header.buyerIDRef.charAt(i) == customerNumber.charAt(i));
+	  @ requires (\forall int i; 0&lt;=i&lt;=ost.header.buyerIDRef.length(); ost.header.buyerIDRef.charAt(i) == customerNumber.charAt(i) );
+	  @ requires (\forall int i; 0&lt;=i&lt;=ost.header.buyerIDRef.length(); ost.header.buyerIDRef.charAt(i) == ost.header.buyerID.charAt(i) );
+	  @ ensures  \result;
+	  @*/
+//	@CodeBigintMath
+	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/final OrderStructure ost) {
+		
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">				&amp;&amp; StringHandler.equals(ost.getHeader().getBuyerID(), this.CUSTOMER_NUMBER);</span>
+	}
+	
+	/**
+	 * Verifica che i campi deliveryID, deliveryIDRef ed almeno una delle deliveryLocationNumver abbiano lo stesso valore.
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null &amp; deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0&lt;=i&lt;2; deliveryLocationNumber[i]!=null &amp; deliveryLocationNumber[i].length()&gt;0);
+	  @ requires (\forall int i; 0&lt;=i&lt;2; ost.header.deliveryID.length()!=deliveryLocationNumber[i].length())
+	  @				| (\forall int i; 0&lt;=i&lt;2; ost.header.deliveryIDRef.length()!=deliveryLocationNumber[i].length());
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null &amp; deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0&lt;=i&lt;2; deliveryLocationNumber[i]!=null &amp; deliveryLocationNumber[i].length()&gt;0);
+	  @	requires ost.header.deliveryID.length() != ost.header.deliveryIDRef.length();
+	  @ ensures  !\result;
+	  @
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.header!=null;
+	  @ requires deliveryLocationNumber!=null &amp; deliveryLocationNumber.length==2;
+	  @ requires (\forall int i; 0&lt;=i&lt;2; deliveryLocationNumber[i]!=null &amp; deliveryLocationNumber[i].length()&gt;0);
+	  @ requires (\exists int i; 0&lt;=i&lt;2; ost.header.deliveryID.length()==deliveryLocationNumber[i].length()
+	  @										&amp; (\forall int j; 0&lt;=j&lt;ost.header.deliveryID.length(); ost.header.deliveryID.charAt(j)==deliveryLocationNumber[i].charAt(j) ));
+	  @	requires ost.header.deliveryID.length() == ost.header.deliveryIDRef.length();
+	  @ requires (\forall int j; 0&lt;=j&lt;ost.header.deliveryID.length(); ost.header.deliveryID.charAt(j)==ost.header.deliveryIDRef.charAt(j) );
+	  @ ensures  \result;
+	  @*/
+//	@CodeBigintMath
+	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/final OrderStructure ost) {
+		
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				&amp;&amp; (StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[0])</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[1]));</span>
+	}
+	
+	/**
+	 * Verifica che ogni OrderItem in ost.getItemList() abbia supplierID con valore presente in articleNumbers.
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires articleNumbers!=null;
+	  @ requires ost!=null;
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.itemList!=null &amp; ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i].supplierID!=null &amp; ost.itemList[i].supplierID.length()&gt;0);
+	  @ ensures \result &lt;==&gt; (\forall int i; 0&lt;=i&lt;ost.itemList.length; isInCatalog(ost.itemList[i].supplierID) );
+	  @*/
+//	@CodeBigintMath
+	private /*@ spec_public pure @*/ boolean validateArticleNumber(/*@ non_null @*/final OrderStructure ost) {
+		
+<span class="nc" id="L176">		boolean found = true;</span>
+		
+		/*@ loop_writes found;
+		  @ loop_invariant \count &lt; ost.itemList.length ==&gt; il!=null;
+		  @ loop_invariant 0&lt;=\count&lt;=ost.itemList.length;
+		  @ loop_invariant found &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; isInCatalog(ost.itemList[j].supplierID) );
+		  @ decreases ost.itemList.length - \count;
+		  @*/
+<span class="nc bnc" id="L184" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">			if( !isInCatalog(il.getSupplierID()) ) {</span>
+<span class="nc" id="L186">				found = false;</span>
+<span class="nc" id="L187">				break;</span>
+			}
+		}
+		
+<span class="nc" id="L191">		return found;</span>
+	}
+	
+	/**
+	 * Verifica se &lt;i&gt;artNum&lt;/i&gt; è presente in &lt;i&gt;articleNumbers&lt;/i&gt;
+	 * @param artNum - String
+	 * @return &lt;i&gt;true&lt;/i&gt; se artNum è presente in &lt;i&gt;articleNumbers&lt;/i&gt;
+	 */
+	/*@ public normal_behaviour
+	  @ requires artNum!=null &amp; artNum.length()&gt;0;
+	  @ requires articleNumbers!=null;
+	  @ ensures \result &lt;==&gt; (\exists int i; 0&lt;=i&lt;articleNumbers.length; StringHandler.equals(articleNumbers[i],artNum)  );
+	  @*/
+	private /*@ spec_public pure @*/ boolean isInCatalog(/*@ non_null @*/final String artNum) {
+		
+<span class="nc" id="L206">		boolean inCatalog = false;</span>
+		
+		/*@ loop_writes inCatalog;
+		  @ loop_invariant \count &lt; articleNumbers.length ==&gt; a!=null;
+		  @ loop_invariant 0&lt;=\count&lt;=articleNumbers.length;
+		  @ loop_invariant !inCatalog &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; !StringHandler.equals(articleNumbers[j], artNum) );
+		  @ decreases articleNumbers.length - \count;
+		  @*/
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		for(String a : articleNumbers) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">			if( StringHandler.equals(a, artNum) ) {</span>
+<span class="nc" id="L216">				inCatalog = true;</span>
+<span class="nc" id="L217">				break;</span>
+			}
+		}
+<span class="nc" id="L220">		return inCatalog;</span>
+	}
+	
+	/**
+	 * Per ogni OrderItem presente in OrderStructure, quantityMeasure dev'essere uguale a 'M'.
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires articleNumbers!=null;
+	  @ requires ost!=null;
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.itemList!=null &amp; ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i].orderUnit!=null);
+	  @ ensures !\result &lt;==&gt; (\exists int i; 0&lt;=i&lt;ost.itemList.length; ost.itemList[i].orderUnit.length()!=1 | ost.itemList[i].orderUnit.charAt(0)!=quantityMeasure  );
+	  @*/
+	private /*@ spec_public pure @*/ boolean validateQuantityMeasure(/*@ non_null @*/final OrderStructure ost) {
+		
+<span class="nc" id="L242">		boolean rightMeasureUnit = true;</span>
+		
+		/*@ loop_writes rightMeasureUnit;
+		  @ loop_invariant \count &lt; ost.itemList.length ==&gt; il!=null;
+		  @ loop_invariant 0&lt;=\count&lt;=ost.itemList.length;
+		  @ loop_invariant rightMeasureUnit &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; ost.itemList[j].orderUnit.length()==1 &amp; ost.itemList[j].orderUnit.charAt(0) == quantityMeasure );
+		  @ decreases ost.itemList.length - \count;
+		  @*/
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="nc bnc" id="L251" title="All 4 branches missed.">			if( il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {</span>
+<span class="nc" id="L252">				rightMeasureUnit = false;</span>
+<span class="nc" id="L253">				break;</span>
+			}
+		}
+		
+<span class="nc" id="L257">		return rightMeasureUnit;</span>
+	}
+	
+	/**
+	 * Verifica la forma del campo quantity di ogni OrderItem.
+	 * &lt;ul&gt;
+	 * &lt;li&gt;Alla prima occorrenza di un campo quantity non numerico, restituisce &lt;i&gt;QuantityFieldValue.NAN&lt;/i&gt;;&lt;/li&gt;
+	 * &lt;li&gt;Alla prima occorrenza di un campo quantity contenente un numero a virgola mobile ma con &quot;,&quot; al posto di &quot;.&quot;, restituisce &lt;i&gt;QuantityFieldValue.FLOAT_WITH_COMMA&lt;/i&gt;.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * Se i precedenti due eventi non si verificano:
+	 * &lt;ul&gt;
+	 * &lt;li&gt;Se esiste almeno un campo quantity numerico senza virgola mobile, restituisce &lt;i&gt;QuantityFieldValue.INTEGER&lt;/i&gt;;&lt;/li&gt;
+	 * &lt;li&gt;Altrimenti, restituisce &lt;i&gt;QuantityFieldValue.FLOAT_WITH_DOT&lt;/i&gt;.&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * @param ost - OrderStructure
+	 * @return valore enum QuantityFieldValue
+	 */
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i].quantity!=null &amp; ost.itemList[i].quantity.length()&gt;=0);
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
+	  @*/
+//	@CodeBigintMath
+	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
+		
+		
+<span class="nc" id="L288">		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;</span>
+		
+		/*@ loop_writes \nothing;
+		  @ loop_invariant 0&lt;=\count&lt;=ost.itemList.length;
+		  @ loop_invariant \count &lt; ost.itemList.length ==&gt; (il!=null &amp; il.quantity.length()&gt;=0);
+		  @ loop_invariant (qfv==QuantityFieldValue.FLOAT_WITH_DOT &amp; \count&gt;0) ==&gt; (\forall int i; 0&lt;=i&lt;\count; StringHandler.isDouble(ost.itemList[i].quantity) );
+		  @ loop_invariant (qfv==QuantityFieldValue.INTEGER &amp; \count&gt;0) ==&gt; (\exists int i; 0&lt;=i&lt;\count; StringHandler.isInteger(ost.itemList[i].quantity));
+		  @ loop_invariant qfv==QuantityFieldValue.FLOAT_WITH_COMMA ==&gt; (!StringHandler.isDouble(il.quantity) &amp; StringHandler.containsChar(il.quantity,',') );
+		  @ loop_invariant qfv==QuantityFieldValue.NAN ==&gt; (!StringHandler.isDouble(il.quantity) &amp; !StringHandler.containsChar(il.quantity,',') );
+		  @ decreases ost.itemList.length - \count;
+		  @*/
+<span class="nc bnc" id="L299" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
+			
+<span class="nc bnc" id="L301" title="All 2 branches missed.">			if(StringHandler.isDouble(il.getQuantity()))</span>
+<span class="nc" id="L302">				continue;</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">			else if(StringHandler.isInteger(il.getQuantity())) {</span>
+<span class="nc" id="L304">				qfv = QuantityFieldValue.INTEGER;</span>
+<span class="nc" id="L305">				continue;</span>
+			} else {
+<span class="nc bnc" id="L307" title="All 2 branches missed.">				if(StringHandler.containsChar(il.getQuantity(),','))</span>
+<span class="nc" id="L308">					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;</span>
+				else
+<span class="nc" id="L310">					qfv = QuantityFieldValue.NAN;</span>
+				
+<span class="nc" id="L312">				return qfv;</span>
+			} 
+		}
+		
+<span class="nc" id="L316">		return qfv;</span>
+	}
+	
+	/**
+	 * Verifica che startDate, orderDate ed endDate siano delle stringhe rappresentanti un timestamp nel formato &quot;yyyy-MM-dd HH:mm:ss&quot;.
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ ensures !\result &lt;==&gt; (!StringHandler.isDateTime(ost.header.orderDate) | !StringHandler.isDateTime(ost.header.startDate) | !StringHandler.isDateTime(ost.header.endDate));
+	  @*/
+	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/final OrderStructure ost) {
+<span class="nc bnc" id="L335" title="All 4 branches missed.">		return ost.getHeader().getStartDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getStartDate())</span>
+<span class="nc bnc" id="L336" title="All 4 branches missed.">				&amp;&amp; ost.getHeader().getOrderDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getOrderDate())</span>
+<span class="nc bnc" id="L337" title="All 4 branches missed.">				&amp;&amp; ost.getHeader().getEndDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getEndDate());</span>
+	}
+	
+	/**
+	 * Verifica che siano rispettate tutte le seguenti condizioni:
+	 * &lt;ul&gt;
+	 * &lt;li&gt;startDate, orderDate ed endDate sono delle stringhe rappresentanti un timestamp nel formato &quot;yyyy-MM-dd HH:mm:ss&quot;;&lt;/li&gt;
+	 * &lt;li&gt;startDate precede temporalmente endDate;&lt;/li&gt;
+	 * &lt;li&gt;orderDate e endDate coincidono;&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * @param ost - OrderStructure
+	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
+	 */
+	/*@ public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ ensures \result ==&gt; (StringHandler.isDateTime(ost.header.orderDate) &amp; StringHandler.isDateTime(ost.header.startDate) &amp; StringHandler.isDateTime(ost.header.endDate));
+	  @ ensures \result ==&gt; (\forall int i; 1&lt;=i&lt;ost.header.orderDate.length() &amp; i!=4 &amp; i!=7 &amp; i!=10 &amp; i!=13 &amp; i!=16; ost.header.orderDate.charAt(i)&lt;=ost.header.endDate.charAt(i) );
+	  @ ensures \result ==&gt; (\forall int i; 1&lt;=i&lt;ost.header.orderDate.length() &amp; i!=4 &amp; i!=7 &amp; i!=10 &amp; i!=13 &amp; i!=16; ost.header.startDate.charAt(i)==ost.header.endDate.charAt(i) );
+	  @*/
+	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
+<span class="nc bnc" id="L363" title="All 2 branches missed.">		return validateDeliveryDateContent(ost) </span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">				&amp;&amp; StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">				&amp;&amp; StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

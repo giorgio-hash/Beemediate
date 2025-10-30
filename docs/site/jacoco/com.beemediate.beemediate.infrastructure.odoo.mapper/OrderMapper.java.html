@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.mapper</a> &gt; <span class="el_source">OrderMapper.java</span></div><h1>OrderMapper.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.mapper;
+
+import com.beemediate.beemediate.infrastructure.odoo.dto.*;
+
+import java.time.format.DateTimeFormatter;
+
+import com.beemediate.beemediate.domain.pojo.order.*;
+
+/**
+ * Classe utility per mappare i dati ricevuti da Odoo in un OrderStructure. A tale scopo, la classe si serve delle classi &quot;DTO&quot; presenti in &lt;i&gt;com.beemediate.beemediate.infrastructure.odoo.dto&lt;/i&gt;.
+ */
+public final class OrderMapper {
+	
+	private OrderMapper() {/*empty constructor*/}
+
+	/**
+	 * Crea un OrderStructure utilizzando i dati dei &quot;DTO&quot; forniti in input.
+	 * @param f - FornitoreDTO
+	 * @param prev - PreventivoDTO
+	 * @param artpr - Array di ArticoloPreventivoDTO
+	 * @param prodf - Array di ProdottoFornitoreDTO
+	 * @param dest - DestinazioneDTO
+	 * @param comp - CompagniaDTO
+	 * @return OrderStructure
+	 */
+	public static OrderStructure map(final FornitoreDTO f, final PreventivoDTO prev, final ArticoloPreventivoDTO[] artpr, final ProdottoFornitoreDTO[] prodf, final DestinazioneDTO dest, final CompagniaDTO comp) {
+		
+<span class="nc" id="L28">		final OrderSummary os = new OrderSummary();</span>
+<span class="nc" id="L29">		os.setTotalItemNum(artpr.length);</span>
+		
+<span class="nc" id="L31">		final OrderItem[] oi = mapOrderItemList(artpr,prodf);</span>
+		
+<span class="nc" id="L33">		final OrderHeader oh = mapOrderHeader(f,prev,dest,comp);</span>
+		
+<span class="nc" id="L35">		final OrderStructure ostr = new OrderStructure();</span>
+<span class="nc" id="L36">		ostr.setHeader(oh);</span>
+<span class="nc" id="L37">		ostr.setItemList(oi);</span>
+<span class="nc" id="L38">		ostr.setOrderSummary(os);</span>
+		
+<span class="nc" id="L40">		return ostr;</span>
+	}
+	
+	
+	
+	/**
+	 * Crea un array di OrderItem utilizzando i dati dei &quot;DTO&quot; forniti in input.
+	 * @param artpr - ArticoloPreventivoDTO
+	 * @param prodf - ProdottoFornitoreDTO
+	 * @return Array di OrderItem
+	 */
+	private static OrderItem[] mapOrderItemList(final ArticoloPreventivoDTO[] artpr, final ProdottoFornitoreDTO[] prodf) {
+		
+<span class="nc" id="L53">		final OrderItem[] oi = new OrderItem[artpr.length];</span>
+		
+		
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		for(int i=0; i&lt;artpr.length; i++) {</span>
+			
+<span class="nc" id="L58">			oi[i] = new OrderItem();</span>
+			
+			//buyerID
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			if(prodf[i].getProductId().getName().isPresent())</span>
+<span class="nc" id="L62">				oi[i].setBuyerID(prodf[i].getProductId().getName().get());</span>
+			else
+<span class="nc" id="L64">				oi[i].setBuyerID(&quot;&quot;);</span>
+			
+			//supplierID
+<span class="nc bnc" id="L67" title="All 2 branches missed.">			if(prodf[i].getProductCode().isPresent())</span>
+<span class="nc" id="L68">				oi[i].setSupplierID(prodf[i].getProductCode().get());</span>
+			else
+<span class="nc" id="L70">				oi[i].setSupplierID(&quot;&quot;);</span>
+			
+			//descriptionShort
+<span class="nc bnc" id="L73" title="All 2 branches missed.">			if(prodf[i].getProductName().isPresent())</span>
+<span class="nc" id="L74">				oi[i].setDescriptionShort(prodf[i].getProductName().get());</span>
+			else
+<span class="nc" id="L76">				oi[i].setDescriptionShort(&quot;&quot;);</span>
+			
+			//lineItemID
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			if(prodf[i].getSequence().isPresent())</span>
+<span class="nc" id="L80">				oi[i].setLineItemID(prodf[i].getSequence().get().toString());</span>
+			else
+<span class="nc" id="L82">				oi[i].setLineItemID(&quot;&quot;);</span>
+			
+			//quantity
+<span class="nc bnc" id="L85" title="All 2 branches missed.">			if(artpr[i].getProductQty().isPresent())</span>
+<span class="nc" id="L86">				oi[i].setQuantity(artpr[i].getProductQty().get().toString());</span>
+			else
+<span class="nc" id="L88">				oi[i].setLineItemID(&quot;&quot;);</span>
+			
+			//orderUnit
+<span class="nc bnc" id="L91" title="All 2 branches missed.">			if(prodf[i].getProductUomId().getName().isPresent())</span>
+<span class="nc" id="L92">				oi[i].setOrderUnit(prodf[i].getProductUomId().getName().get());</span>
+			else
+<span class="nc" id="L94">				oi[i].setOrderUnit(&quot;&quot;);</span>
+		}
+		
+<span class="nc" id="L97">		return oi;</span>
+	}
+	
+	
+	
+	/**
+	 * Crea un OrderHeader utilizzando i dati dei &quot;DTO&quot; forniti in input.
+	 * @param f - FornitoreDTO
+	 * @param prev - PreventivoDTO
+	 * @param dest - DestinazioneDTO
+	 * @param comp - CompagniaDTO
+	 * @return OrderHeader
+	 */
+	private static OrderHeader mapOrderHeader(final FornitoreDTO f, final PreventivoDTO prev, final DestinazioneDTO dest, final CompagniaDTO comp) {
+		
+<span class="nc" id="L112">		final OrderHeader oh = new OrderHeader();</span>
+		
+		//orderID
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		if(prev.getName().isPresent())</span>
+<span class="nc" id="L116">			oh.setOrderID(prev.getName().get());</span>
+		else
+<span class="nc" id="L118">			oh.setOrderID(&quot;&quot;);</span>
+		
+		//currency
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		if(prev.getCurrencyId().getName().isPresent())</span>
+<span class="nc" id="L122">			oh.setCurrency(prev.getCurrencyId().getName().get());</span>
+		else
+<span class="nc" id="L124">			oh.setCurrency(&quot;&quot;);</span>
+		
+		//buyerID
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if(comp.getCompanyRegistry().isPresent()) {</span>
+<span class="nc" id="L128">			oh.setBuyerID(comp.getCompanyRegistry().get());</span>
+<span class="nc" id="L129">			oh.setBuyerIDRef(comp.getCompanyRegistry().get());</span>
+<span class="nc" id="L130">		}else {</span>
+<span class="nc" id="L131">			oh.setBuyerID(&quot;&quot;);</span>
+<span class="nc" id="L132">			oh.setBuyerIDRef(&quot;&quot;);</span>
+		}
+		
+		//supplierID
+<span class="nc bnc" id="L136" title="All 2 branches missed.">		if(f.getCodiceAzienda().isPresent()) {</span>
+<span class="nc" id="L137">			oh.setSupplierID(f.getCodiceAzienda().get());</span>
+<span class="nc" id="L138">			oh.setSupplierIDRef(f.getCodiceAzienda().get());</span>
+<span class="nc" id="L139">		}else {</span>
+<span class="nc" id="L140">			oh.setSupplierID(&quot;&quot;);</span>
+<span class="nc" id="L141">			oh.setSupplierIDRef(&quot;&quot;);</span>
+		}
+		
+		//deliveryID
+		//deliveryIDRef
+<span class="nc bnc" id="L146" title="All 2 branches missed.">		if(dest.getCodiceDestinazione().isPresent()) {</span>
+<span class="nc" id="L147">			oh.setDeliveryID(dest.getCodiceDestinazione().get());</span>
+<span class="nc" id="L148">			oh.setDeliveryIDRef(dest.getCodiceDestinazione().get());</span>
+<span class="nc" id="L149">		}else {</span>
+<span class="nc" id="L150">			oh.setDeliveryID(&quot;&quot;);</span>
+<span class="nc" id="L151">			oh.setDeliveryIDRef(&quot;&quot;);</span>
+		}
+		
+<span class="nc" id="L154">		final DateTimeFormatter format = DateTimeFormatter.ISO_LOCAL_DATE_TIME;</span>
+		//orderDate
+<span class="nc bnc" id="L156" title="All 2 branches missed.">		if(prev.getDateOrder().isPresent())</span>
+<span class="nc" id="L157">			oh.setOrderDate(prev.getDateOrder().get().format(format));</span>
+		else
+<span class="nc" id="L159">			oh.setOrderDate(&quot;&quot;);</span>
+		
+		//startDate
+		//endDate
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		if(prev.getDatePlanned().isPresent()) {</span>
+<span class="nc" id="L164">			oh.setStartDate(prev.getDatePlanned().get().format(format));</span>
+<span class="nc" id="L165">			oh.setEndDate(prev.getDatePlanned().get().format(format));</span>
+<span class="nc" id="L166">		} else {</span>
+<span class="nc" id="L167">			oh.setStartDate(&quot;&quot;);</span>
+<span class="nc" id="L168">			oh.setEndDate(&quot;&quot;);</span>
+		}
+		
+<span class="nc" id="L171">		return oh;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

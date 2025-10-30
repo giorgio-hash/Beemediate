@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OdooApiConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.config</a> &gt; <span class="el_source">OdooApiConfig.java</span></div><h1>OdooApiConfig.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.config;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collections;
+
+import javax.security.auth.login.FailedLoginException;
+
+import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+/**
+ * Classe di configurazione per comunicare con Odoo External API in protocollo XML-RPC. Le informazioni di configurazioni vengono prese dal file &lt;i&gt;src/main/resources/apiconfig.properties&lt;/i&gt;.
+ */
+@Configuration
+@PropertySource(&quot;classpath:apiconfig.properties&quot;)
+<span class="fc" id="L25">public class OdooApiConfig {</span>
+
+	/***oggetto Logger*/
+<span class="fc" id="L28">	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);</span>
+	
+	/**
+	 * String che identifica il comando RPC per l'esecuzione di procedura remota
+	 */
+	public static final String EXECUTE_KW = &quot;execute_kw&quot;;
+	
+	/**
+	 * String che identifica il model dei contatti su model
+	 */
+	public static final String RES_PARTNER = &quot;res.partner&quot;;
+	
+	/**
+	 * String per l'header utile a specificare i campi di un model
+	 */
+	public static final String FIELDS = &quot;fields&quot;;
+	
+	/**
+	 * String che identifica l'operazione di lettura su model
+	 */
+	public static final String READ = &quot;read&quot;;
+	
+	/**
+	 * String con campo identificativo di un partner dal model
+	 */
+	public static final String PARTNER_ID_FIELD = &quot;partner_id&quot;;
+	/**
+	 * Riferimento alla risorsa online CRM.
+	 */
+	@Value(&quot;${api.host:noconf}&quot;)
+	public String url;// scade 4.10
+	/**
+	 * Riferimento alla risorsa online database del CRM.
+	 */
+	@Value(&quot;${api.db:noconf}&quot;)
+	public String db; // scade 4.10
+	/**
+	 * Dato per l'autenticazione.
+	 */
+	@Value(&quot;${api.username:noconf}&quot;)
+	public String username;
+	/**
+	 * Token di autenticazione alle API Odoo.
+	 */
+	@Value(&quot;${api.key:noconf}&quot;)
+	public String password;// scade 23.09
+	/**
+	 * Serve a gestire il protocollo XML-RPC.
+	 */
+<span class="fc" id="L77">	public final XmlRpcClient client = new XmlRpcClient();</span>
+	/**
+	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
+<span class="fc" id="L81">	public final XmlRpcClientConfigImpl commmonConfig = new XmlRpcClientConfigImpl();</span>
+	/**
+	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
+<span class="fc" id="L85">	public final XmlRpcClientConfigImpl objectConfig = new XmlRpcClientConfigImpl();</span>
+	/**
+	 * Oggetto di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
+	 */
+<span class="fc" id="L89">	public final XmlRpcClient models = new XmlRpcClient();</span>
+	/**
+	 * Identificativo di sessione.
+	 */
+	private int uid;
+	/**
+	 * flag per segnalare stato della connessione.
+	 */
+<span class="fc" id="L97">	private boolean online = false;</span>
+	/**
+	 * Stato degli Ordini a Fornitore, ovvero gli Ordini di Acquisto di Odoo.
+	 */
+<span class="nc" id="L101">	public enum OafStatus{</span>
+<span class="nc" id="L102">		NEW(&quot;NEW&quot;),</span>
+<span class="nc" id="L103">		SHIPPED(&quot;SHIPPED&quot;),</span>
+<span class="nc" id="L104">		CONFIRMED(&quot;CONFIRMED&quot;),</span>
+<span class="nc" id="L105">		OPENTRANSERROR(&quot;OPENTRANSERROR&quot;),</span>
+<span class="nc" id="L106">		CONTENTERROR(&quot;CONTENTERROR&quot;);</span>
+		
+		/**
+		 * String corrispondente allo stato
+		 */
+		public final String label;
+		
+		/**
+		 * Costruttore privato
+		 * @param label - String
+		 */
+<span class="nc" id="L117">		OafStatus(final String label) {</span>
+<span class="nc" id="L118">			this.label = label;</span>
+<span class="nc" id="L119">		}</span>
+		
+		@Override
+		public String toString() {
+<span class="nc" id="L123">			return label;</span>
+		}
+	}
+	
+	
+	/**
+	 * Inizializza le configurazioni, verifica la connessione ed effettua autenticazione verso il CRM Odoo.
+	 * @throws MalformedURLException
+	 * @throws FailedLoginException
+	 * @throws XmlRpcException
+	 * @throws URISyntaxException 
+	 */
+	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
+		
+		//informazioni sul server
+<span class="nc" id="L138">		commmonConfig.setServerURL( (new URI(String.format(&quot;%s/xmlrpc/2/common&quot;, url))).toURL() );</span>
+<span class="nc" id="L139">		final Object ver = client.execute(commmonConfig, &quot;version&quot;, Collections.emptyList());</span>
+		
+		//login
+		try {
+<span class="nc" id="L143">			uid = (int) client.execute(commmonConfig, &quot;authenticate&quot;, Arrays.asList(db, username, password, Collections.emptyMap()));</span>
+
+<span class="nc" id="L145">			log.info(&quot;Versione server: {}&quot;, ver.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) );</span>
+<span class="nc" id="L146">			log.info(&quot;Session uid: {}&quot;, uid);</span>
+			
+			//oggetto per interagire coi models di ODOO
+<span class="nc" id="L149">			objectConfig.setServerURL( new URI(String.format(&quot;%s/xmlrpc/2/object&quot;, url)).toURL() );</span>
+<span class="nc" id="L150">			models.setConfig(objectConfig);</span>
+			
+<span class="nc" id="L152">			online = true;</span>
+		
+<span class="nc" id="L154">		} catch ( ClassCastException e ) {</span>
+			
+<span class="nc" id="L156">			online = false;</span>
+			
+<span class="nc" id="L158">			final FailedLoginException ex = new FailedLoginException(&quot;Eccezione durante il recupero uid di sessione, verificare il login.&quot;);</span>
+<span class="nc" id="L159">			ex.initCause(e);</span>
+<span class="nc" id="L160">			throw ex;</span>
+		}
+<span class="nc" id="L162">	}</span>
+	
+	/**
+	 * 
+	 * @return &lt;i&gt;true&lt;/i&gt; se il servizio non ha riscontrato problemi di connessione con Odoo fino ad ora.
+	 */
+	public boolean isOnline() {
+<span class="nc" id="L169">		return online;</span>
+	}
+
+	/**
+	 * Restitusice l'identificativo di sessione.
+	 * @return int - uid di sessione
+	 */
+	public int getUid() {
+<span class="nc" id="L177">		return uid;</span>
+	}
+
+	/**
+	 * Restituisce il riferimento alla risorsa CRM online.
+	 * @return String - un URL, indirizzo web 
+	 */
+	public String getUrl() {
+<span class="nc" id="L185">		return url;</span>
+	}
+
+	/**
+	 * Restituicse il riferimento alla risorsa database del CRM online.
+	 * @return String - un URL, indirizzo web
+	 */
+	public String getDb() {
+<span class="nc" id="L193">		return db;</span>
+	}
+
+	/**
+	 * Restituisce il token di autenticazione alle API Odoo.
+	 * @return String - password
+	 */
+	public String getPassword() {
+<span class="nc" id="L201">		return password;</span>
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

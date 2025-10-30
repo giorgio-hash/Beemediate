@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlOrderResponseItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.confirmation</a> &gt; <span class="el_source">XmlOrderResponseItem.java</span></div><h1>XmlOrderResponseItem.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
+
+import java.util.List;
+
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Conferma per l'articolo dell'ordine
+ */
+@JacksonXmlRootElement(localName=&quot;ORDERRESPONSE_ITEM&quot;)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="nc" id="L19">public class XmlOrderResponseItem {</span>
+	
+	/**
+	 * Numero d'ordine del cliente
+	 */
+	@JacksonXmlProperty(localName=&quot;LINE_ITEM_ID&quot;)
+	private int lineItemId;
+	
+	/**
+	 * Identificativi del prodotto
+	 */
+	@JacksonXmlProperty(localName=&quot;PRODUCT_ID&quot;)
+	private XmlProductID productId;
+	
+	/**
+	 * Quantità ordinata in pezzi
+	 */
+	@JacksonXmlProperty(localName=&quot;QUANTITY&quot;)
+	private float quantity;
+	
+	/**
+	 * Unità ISO “pezzo”
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:ORDER_UNIT&quot;)
+	private String orderUnit;
+	
+	/**
+	 * Prezzo netto quantità articolo più supplementi e sconti
+
+	 */
+	@JacksonXmlProperty(localName=&quot;PRICE_LINE_AMOUNT&quot;)
+	private float priceLineAmount;
+	
+	/**
+	 * Prezzi fissi per il prodotto (tasse e prezzo base)
+	 */
+	@JacksonXmlProperty(localName=&quot;PRODUCT_PRICE_FIX&quot;)
+	private XmlProductPriceFix productPriceFix;
+	
+	/**
+	 * Proprietà dell'articolo
+	 */
+	@JacksonXmlElementWrapper(localName = &quot;PRODUCT_FEATURES&quot;, useWrapping = true)
+	@JacksonXmlProperty(localName=&quot;FEATURE&quot;)
+	private List&lt;XmlProductFeature&gt; productFeatures;
+	
+	/**
+	 * Data di consegna
+	 */
+	@JacksonXmlProperty(localName=&quot;DELIVERY_DATE&quot;)
+	private XmlDeliveryDate deliveryDate;
+	
+	/**
+	 * Numero d'ordine del fornitore
+	 */
+	@JacksonXmlProperty(localName=&quot;REMARKS&quot;)
+	private XmlRemarks remarks;
+
+	
+	/**
+	 * 
+	 * @return int
+	 */
+	public int getLineItemId() {
+<span class="nc" id="L83">		return lineItemId;</span>
+	}
+
+	/**
+	 * 
+	 * @param lineItemId - int
+	 */
+	public void setLineItemId(int lineItemId) {
+<span class="nc" id="L91">		this.lineItemId = lineItemId;</span>
+<span class="nc" id="L92">	}</span>
+
+	/**
+	 * 
+	 * @return XmlProductID
+	 */
+	public XmlProductID getProductId() {
+<span class="nc" id="L99">		return productId;</span>
+	}
+
+	/**
+	 * 
+	 * @param productId - XmlProductID
+	 */
+	public void setProductId(XmlProductID productId) {
+<span class="nc" id="L107">		this.productId = productId;</span>
+<span class="nc" id="L108">	}</span>
+
+	/**
+	 * 
+	 * @return float
+	 */
+	public float getQuantity() {
+<span class="nc" id="L115">		return quantity;</span>
+	}
+
+	/**
+	 * 
+	 * @param quantity - float
+	 */
+	public void setQuantity(float quantity) {
+<span class="nc" id="L123">		this.quantity = quantity;</span>
+<span class="nc" id="L124">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getOrderUnit() {
+<span class="nc" id="L131">		return orderUnit;</span>
+	}
+
+	/**
+	 * 
+	 * @param orderUnit - String
+	 */
+	public void setOrderUnit(String orderUnit) {
+<span class="nc" id="L139">		this.orderUnit = orderUnit;</span>
+<span class="nc" id="L140">	}</span>
+
+	/**
+	 * 
+	 * @return float
+	 */
+	public float getPriceLineAmount() {
+<span class="nc" id="L147">		return priceLineAmount;</span>
+	}
+
+	/**
+	 * 
+	 * @param priceLineAmount - float
+	 */
+	public void setPriceLineAmount(float priceLineAmount) {
+<span class="nc" id="L155">		this.priceLineAmount = priceLineAmount;</span>
+<span class="nc" id="L156">	}</span>
+
+	/**
+	 * 
+	 * @return XmlProductPriceFix
+	 */
+	public XmlProductPriceFix getProductPriceFix() {
+<span class="nc" id="L163">		return productPriceFix;</span>
+	}
+
+	/**
+	 * 
+	 * @param productPriceFix - XmlProductPriceFix
+	 */
+	public void setProductPriceFix(XmlProductPriceFix productPriceFix) {
+<span class="nc" id="L171">		this.productPriceFix = productPriceFix;</span>
+<span class="nc" id="L172">	}</span>
+
+	/**
+	 * 
+	 * @return List di XmlProductFeature
+	 */
+	public List&lt;XmlProductFeature&gt; getProductFeatures() {
+<span class="nc" id="L179">		return productFeatures;</span>
+	}
+
+	/**
+	 * 
+	 * @param productFeatures - List di XmlProductFeature
+	 */
+	public void setProductFeatures(List&lt;XmlProductFeature&gt; productFeatures) {
+<span class="nc" id="L187">		this.productFeatures = productFeatures;</span>
+<span class="nc" id="L188">	}</span>
+
+	/**
+	 * 
+	 * @return XmlDeliveryDate
+	 */
+	public XmlDeliveryDate getDeliveryDate() {
+<span class="nc" id="L195">		return deliveryDate;</span>
+	}
+
+	/**
+	 * 
+	 * @param deliveryDate - XmlDeliveryDate
+	 */
+	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+<span class="nc" id="L203">		this.deliveryDate = deliveryDate;</span>
+<span class="nc" id="L204">	}</span>
+
+	/**
+	 * 
+	 * @return XmlRemarks
+	 */
+	public XmlRemarks getRemarks() {
+<span class="nc" id="L211">		return remarks;</span>
+	}
+
+	/**
+	 * 
+	 * @param remarks - XmlRemarks
+	 */
+	public void setRemarks(XmlRemarks remarks) {
+<span class="nc" id="L219">		this.remarks = remarks;</span>
+<span class="nc" id="L220">	}</span>
+
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
