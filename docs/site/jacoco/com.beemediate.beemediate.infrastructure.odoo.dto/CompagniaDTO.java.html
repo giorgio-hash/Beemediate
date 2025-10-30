@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompagniaDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">CompagniaDTO.java</span></div><h1>CompagniaDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa i dati della compagnia cliente che gestisce il CRM Odoo. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;res.partner&lt;/i&gt; di Odoo.
+ */
+public class CompagniaDTO{
+	
+	/**
+	 * Mapping di id.
+	 */
+	private final Optional&lt;Integer&gt; id;
+	/**
+	 * Mapping di company_registry.
+	 */
+	private final Optional&lt;String&gt; companyRegistry;
+	
+	
+	/**
+	 * Static factory method che interagisce col model res.partner per estrarre informazioni di contatto della compagnia cliente, secondo il preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return CompagniaDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static CompagniaDTO fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+<span class="nc bnc" id="L42" title="All 4 branches missed.">		if (prv == null || prv.getCompanyId().getNum().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
+		
+<span class="nc" id="L44">		final Object id = prv.getCompanyId().getNum().get();</span>
+		Object[] res;
+<span class="nc" id="L46">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+<span class="nc" id="L48">		requestInfo.clear();</span>
+<span class="nc" id="L49">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;ref&quot;));</span>
+<span class="nc" id="L50">		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
+<span class="nc" id="L51">				Arrays.asList(</span>
+<span class="nc" id="L52">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
+<span class="nc" id="L53">						odoo.RES_PARTNER,odoo.READ,</span>
+<span class="nc" id="L54">						Arrays.asList(Arrays.asList(id)),</span>
+<span class="nc" id="L55">						requestInfo</span>
+						)
+				);
+		
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni della compagnia &quot;);</span>
+		
+<span class="nc" id="L61">		return new CompagniaDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
+	}
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;res.partner&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L68">	public CompagniaDTO( final Map&lt;String, Object&gt; map ) {</span>
+<span class="fc" id="L69">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+<span class="fc" id="L70">		companyRegistry = AttributeMapper.stringify( map.get(&quot;ref&quot;) ); </span>
+<span class="fc" id="L71">	}</span>
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L78">		return id;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional&lt;String&gt; getCompanyRegistry() {
+<span class="fc" id="L86">		return companyRegistry;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L91">		return &quot;CompagniaDTO [id=&quot; + id + &quot;, company_registry=&quot; + companyRegistry + &quot;]&quot;;</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

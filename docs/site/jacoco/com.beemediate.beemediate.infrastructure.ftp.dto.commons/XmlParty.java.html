@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlParty.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.commons</a> &gt; <span class="el_source">XmlParty.java</span></div><h1>XmlParty.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Mappatura XML-OpenTrans con informazioni sul partner commerciale
+ */
+@JacksonXmlRootElement(localName = &quot;PARTY&quot;)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class XmlParty {
+	
+	/**
+	 * Riferimento a XmlPartyID
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:PARTY_ID&quot;)
+	private XmlPartyID partyId;
+	
+	/**
+	 * tag per il ruolo del partner commerciale
+	 */
+	@JacksonXmlProperty(localName=&quot;PARTY_ROLE&quot;)
+	private String partyRole;
+	
+	/**
+	 * tag per i dettagli di domicilio
+	 */
+	@JacksonXmlProperty(localName=&quot;ADDRESS&quot;)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private XmlAddress address;
+	
+	/**
+	 * empty constructor for Jackson deserializer
+	 */
+<span class="nc" id="L38">	public XmlParty() {/*empty constructor for Jackson deserializer*/}</span>
+	
+	/**
+	 * Costruttore
+	 * @param partyId - XmlPartyID
+	 * @param partyRole - partyRole
+	 */
+	public XmlParty(final XmlPartyID partyId, final String partyRole) {
+<span class="nc" id="L46">		super();</span>
+<span class="nc" id="L47">		this.partyId = partyId;</span>
+<span class="nc" id="L48">		this.partyRole = partyRole;</span>
+<span class="nc" id="L49">	}</span>
+	
+	/**
+	 * 
+	 * @return XmlPartyID
+	 */
+	public XmlPartyID getPartyId() {
+<span class="nc" id="L56">		return partyId;</span>
+	}
+	
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getPartyRole() {
+<span class="nc" id="L64">		return partyRole;</span>
+	}
+
+	/**
+	 * 
+	 * @return XmlAddress
+	 */
+	public XmlAddress getAddress() {
+<span class="nc" id="L72">		return address;</span>
+	}
+	
+	
+	/**
+	 * @param XmlPartyID
+	 */
+	public void setPartyId(XmlPartyID partyId) {
+<span class="nc" id="L80">		this.partyId = partyId;</span>
+<span class="nc" id="L81">	}</span>
+
+	/**
+	 * 
+	 * @param partyRole
+	 */
+	public void setPartyRole(String partyRole) {
+<span class="nc" id="L88">		this.partyRole = partyRole;</span>
+<span class="nc" id="L89">	}</span>
+
+	/**
+	 * 
+	 * @param address
+	 */
+	public void setAddress(XmlAddress address) {
+<span class="nc" id="L96">		this.address = address;</span>
+<span class="nc" id="L97">	}</span>
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

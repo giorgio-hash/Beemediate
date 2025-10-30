@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PreventivoDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">PreventivoDTO.java</span></div><h1>PreventivoDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa informazioni sul preventivo per la fornitura. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;purchase.order&lt;/i&gt; di Odoo.
+ */
+public class PreventivoDTO{
+	
+	/**
+	 * Mapping di id
+	 */
+	private final Optional&lt;Integer&gt; id;
+	/**
+	 * Mapping di name
+	 */
+	private final Optional&lt;String&gt; name;
+	/**
+	 * Mapping di partner_id
+	 */
+	private final IdentifierDTO partnerId;
+	/**
+	 * Mapping di product_id
+	 */
+	private final IdentifierDTO productId;
+	/**
+	 * Mapping di currency_id
+	 */
+	private final IdentifierDTO currencyId;
+	/**
+	 * Mapping di picking_type_id
+	 */
+	private final IdentifierDTO pickingTypeId;
+	/**
+	 * Mapping di company_id
+	 */
+	private final IdentifierDTO companyId;
+	/**
+	 * Mapping di origin
+	 */
+	private final Optional&lt;String&gt; origin;
+	/**
+	 * Mapping di order_line
+	 */
+	private final Optional&lt;Object[]&gt; orderLine;
+	/**
+	 * Mapping di date_order
+	 */
+	private final Optional&lt;LocalDateTime&gt; dateOrder;
+	/**
+	 * Mapping di date_approve
+	 */
+	private final Optional&lt;LocalDateTime&gt; dateApprove;
+	/**
+	 * Mapping di date_planned
+	 */
+	private final Optional&lt;LocalDateTime&gt; datePlanned;
+	
+	
+	/**
+	 * Static factory method che interagisce col model purchase.order di Odoo per estrarre informazioni sul preventivo per la fornitura.
+	 * @param odoo - OdooApiConfig
+	 * @param f - FornitoreDTO
+	 * @return PreventivoDTO
+	 * @throws EmptyFetchException
+	 * @throws InconsistentDTOException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static PreventivoDTO fromXMLRPC(final OdooApiConfig odoo, final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
+		
+		Object[] ids;
+		Object[] res;
+<span class="nc" id="L85">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+<span class="nc bnc" id="L87" title="All 4 branches missed.">		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException(&quot;Oggetto FornitoreDTO non ha le informazioni necessarie&quot;);</span>
+		
+		//cerca un preventivo di GEALAN
+<span class="nc" id="L90">		requestInfo.clear();</span>
+<span class="nc" id="L91">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="nc" id="L92">		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
+<span class="nc" id="L93">				Arrays.asList(</span>
+<span class="nc" id="L94">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
+<span class="nc" id="L95">						&quot;purchase.order&quot;,&quot;search&quot;,</span>
+<span class="nc" id="L96">						Arrays.asList(Arrays.asList(</span>
+<span class="nc" id="L97">								Arrays.asList(odoo.PARTNER_ID_FIELD,&quot;=&quot;,f.getName().get()),</span>
+<span class="nc" id="L98">								Arrays.asList(&quot;x_studio_oaf&quot;,&quot;=&quot;,OdooApiConfig</span>
+																	.OafStatus
+<span class="nc" id="L100">																	.NEW.toString() )</span>
+								)),
+<span class="nc" id="L102">						requestInfo</span>
+						)
+				);
+		
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Nessun preventivo \&quot;new\&quot; per GEALAN&quot;);</span>
+		
+		//estrai preventivo
+<span class="nc" id="L109">		requestInfo.clear();</span>
+<span class="nc" id="L110">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;name&quot;,odoo.PARTNER_ID_FIELD,&quot;product_id&quot;,&quot;origin&quot;,&quot;order_line&quot;,&quot;currency_id&quot;,&quot;date_order&quot;,&quot;date_approve&quot;,&quot;date_planned&quot;,&quot;picking_type_id&quot;,&quot;company_id&quot;,&quot;x_studio_oaf&quot;));</span>
+<span class="nc" id="L111">		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
+<span class="nc" id="L112">				Arrays.asList(</span>
+<span class="nc" id="L113">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
+<span class="nc" id="L114">						&quot;purchase.order&quot;,odoo.READ,</span>
+<span class="nc" id="L115">						Arrays.asList(ids),</span>
+<span class="nc" id="L116">						requestInfo</span>
+						)
+				);
+		
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato preventivi per GEALAN, ma nessuno estratto.&quot;);</span>
+		
+<span class="nc" id="L122">		return new PreventivoDTO( (HashMap&lt;String, Object&gt;) res[0] ); //n.b. è possibile estrarre più preventivi. Al momento si tratterà un singolo preventivo</span>
+	}
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;purchase.order&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L129">	public PreventivoDTO( final Map&lt;String, Object&gt; map) {</span>
+		
+<span class="fc" id="L131">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+		
+<span class="fc" id="L133">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
+		
+<span class="fc" id="L135">		partnerId = new IdentifierDTO( (Object[]) map.get(&quot;partner_id&quot;) );</span>
+		
+<span class="fc" id="L137">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
+		
+<span class="fc" id="L139">		currencyId = new IdentifierDTO( (Object[]) map.get(&quot;currency_id&quot;) );</span>
+		
+<span class="fc" id="L141">		pickingTypeId = new IdentifierDTO( (Object[]) map.get(&quot;picking_type_id&quot;) );</span>
+		
+<span class="fc" id="L143">		companyId = new IdentifierDTO( (Object[]) map.get(&quot;company_id&quot;) );</span>
+		
+<span class="fc" id="L145">		origin = AttributeMapper.stringify( map.get(&quot;origin&quot;) );</span>
+		
+<span class="fc" id="L147">		orderLine = AttributeMapper.toArray( map.get(&quot;order_line&quot;) );</span>
+		
+<span class="fc" id="L149">		dateOrder = AttributeMapper.toLocalDateTime( map.get(&quot;date_order&quot;) );</span>
+		
+<span class="fc" id="L151">		dateApprove = AttributeMapper.toLocalDateTime( map.get(&quot;date_approve&quot;) );</span>
+		
+<span class="fc" id="L153">		datePlanned = AttributeMapper.toLocalDateTime( map.get(&quot;date_planned&quot;) );</span>
+<span class="fc" id="L154">	}</span>
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L161">		return id;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional&lt;String&gt; getName() {
+<span class="fc" id="L169">		return name;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del fornitore.
+	 */
+	public IdentifierDTO getPartnerId() {
+<span class="fc" id="L177">		return partnerId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del prodotto che ha attivato il preventivo.
+	 */
+	public IdentifierDTO getProductId() {
+<span class="fc" id="L185">		return productId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della valuta specificata nel preventivo.
+	 */
+	public IdentifierDTO getCurrencyId() {
+<span class="fc" id="L193">		return currencyId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della &quot;procedura di consegna&quot; specificato nel preventivo.
+	 */
+	public IdentifierDTO getPickingTypeId() {
+<span class="fc" id="L201">		return pickingTypeId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo della compagnia cliente del preventivo.
+	 */
+	public IdentifierDTO getCompanyId() {
+<span class="fc" id="L209">		return companyId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional&lt;String&gt; getOrigin() {
+<span class="fc" id="L217">		return origin;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
+	 */
+	public Optional&lt;Object[]&gt; getOrderLine() {
+<span class="fc" id="L225">		return orderLine;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional&lt;LocalDateTime&gt; getDateOrder() {
+<span class="fc" id="L233">		return dateOrder;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional&lt;LocalDateTime&gt; getDateApprove() {
+<span class="fc" id="L241">		return dateApprove;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
+	 */
+	public Optional&lt;LocalDateTime&gt; getDatePlanned() {
+<span class="fc" id="L249">		return datePlanned;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L254">		return &quot;PreventivoDTO [id=&quot; + id + &quot;, name=&quot; + name + &quot;, partner_id=&quot; + partnerId + &quot;, product_id=&quot;</span>
+<span class="nc" id="L255">				+ productId + &quot;, currency_id=&quot; + currencyId + &quot;, picking_type_id=&quot; + pickingTypeId + &quot;, company_id=&quot;</span>
+<span class="nc" id="L256">				+ companyId + &quot;, origin=&quot; + origin + &quot;, order_line=&quot; + orderLine + &quot;, date_order=&quot; + dateOrder</span>
+<span class="nc" id="L257">				+ &quot;, date_approve=&quot; + dateApprove + &quot;, date_planned=&quot; + datePlanned </span>
+				+  &quot;]&quot;;
+	}
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

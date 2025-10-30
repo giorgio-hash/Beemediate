@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.mapper</a> &gt; <span class="el_source">DataMapper.java</span></div><h1>DataMapper.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.mapper;
+
+import java.util.Arrays;
+
+import javax.xml.stream.XMLInputFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
+import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
+import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlAddress;
+import com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponse;
+import com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo;
+import com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseSummary;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlItem;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrder;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderHeader;
+import com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderSummary;
+import com.ctc.wstx.stax.WstxInputFactory;
+import com.ctc.wstx.stax.WstxOutputFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.dataformat.xml.XmlFactory;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
+/**
+ * Classe utility per mappare gli oggetti POJO del dominio con le strutture XML. A tale scopo, la classe si serve delle classi con prefisso &quot;Xml&quot; presenti in &lt;i&gt;com.beemediate.beemediate.infrastructure.ftp.dto&lt;/i&gt;.
+ */
+public class DataMapper {
+
+	
+<span class="nc" id="L33">	private static final Logger log = LoggerFactory.getLogger(DataMapper.class);</span>
+	
+	/**
+	 * Oggetto Jackson per gestire serializzazione/deserializzazione tra strutture dati XML e DTO.
+	 */
+	@Autowired
+<span class="nc" id="L39">	private static final XmlMapper xmlMapper = initMapper();</span>
+	
+	/**
+	 * Costruttore private
+	 */
+	private DataMapper() {/*empty constructor*/}
+	
+	/**
+	 * Inizializza istanza di XmlMapper disattivando la valutazione dei namespace. 
+	 * Questa scelta è volta a semplificare l'implementazione degli adattatori FTP. Andrebbe ponderata una strategia che coinvolga XML-schema.
+	 * @return XmlMapper
+	 */
+	private static XmlMapper initMapper() {
+		// disattiva la risoluzione del namespace: 
+		// https://github.com/FasterXML/jackson-dataformat-xml/issues/63
+<span class="nc" id="L54">		XMLInputFactory f = new WstxInputFactory();</span>
+<span class="nc" id="L55">		f.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);</span>
+<span class="nc" id="L56">		return new XmlMapper(new XmlFactory(f, new WstxOutputFactory()));</span>
+	}
+	
+	/**
+	 * Converte OrderStructure in una struttura serializzaibile.
+	 * @param os - OrderStructure
+	 * @return XmlOrder
+	 */
+	public static XmlOrder mapOrderToXml(OrderStructure os) {
+
+<span class="nc" id="L66">		return new XmlOrder(</span>
+<span class="nc" id="L67">							new XmlOrderHeader(os.getHeader()),</span>
+<span class="nc" id="L68">							Arrays.stream(os.getItemList())</span>
+<span class="nc" id="L69">							          .map(XmlItem::new)</span>
+<span class="nc" id="L70">							          .toList(),</span>
+<span class="nc" id="L71">							new XmlOrderSummary(os.getOrderSummary())</span>
+							);
+	}
+	
+	/**
+	 * Serializza l'oggetto XmlOrder per ottenere la struttura dati ORDER.
+	 * @param xo - XmlOrder
+	 * @return String con l'ordine serializzato
+	 */
+	public static String serializeXmlOrder(XmlOrder xo) {
+		try {
+<span class="nc" id="L82">			return xmlMapper.writeValueAsString(xo);</span>
+<span class="nc" id="L83">		} catch (JsonProcessingException e) {</span>
+<span class="nc" id="L84">			e.printStackTrace();</span>
+		}
+		
+<span class="nc" id="L87">		return null;</span>
+	}
+	
+	/**
+	 * Deserializza la struttura dati ORDERRESPONSE in un oggetto XmlOrderResponse.
+	 * @param data - String contenente struttura serializzata
+	 * @return XmlOrderResponse
+	 */
+	public static XmlOrderResponse deserializeXmlOrderResponse(String data) {
+		
+		try {
+<span class="nc" id="L98">			return xmlMapper.readValue(data, XmlOrderResponse.class);</span>
+<span class="nc" id="L99">		}catch(JsonProcessingException e) {</span>
+<span class="nc" id="L100">			e.printStackTrace();</span>
+		}
+		
+<span class="nc" id="L103">		return null;</span>
+	}
+	
+	/**
+	 * Mappa XmlOrderResponse nella struttura ConfirmationStructure, con dati di sintesi della conferma d'ordine.
+	 * @param xor - XmlOrderResponse
+	 * @return ConfirmationStructure
+	 */
+	public static ConfirmationStructure mapConfirmationFromXml(XmlOrderResponse xor) {
+		
+<span class="nc" id="L113">		ConfirmationStructure cs = new ConfirmationStructure();</span>
+		
+		
+<span class="nc" id="L116">		XmlOrderResponseInfo info = xor.getOrderResponseHeader()</span>
+<span class="nc" id="L117">										.getOrderResponseInfo();</span>
+<span class="nc" id="L118">		cs.setOrderResponseDate(info.getOrderResponseDate());</span>
+<span class="nc" id="L119">		cs.setDeliveryDate(info.getDeliveryDate()</span>
+<span class="nc" id="L120">								.getDeliveryEndDate());</span>
+<span class="nc" id="L121">		cs.setOrderId(info.getOrderId());</span>
+<span class="nc" id="L122">		cs.setOrderIdGealan(info.getSupplierOrderId());</span>
+<span class="nc" id="L123">		cs.setCurrency(info.getCurrency());</span>
+		
+		
+<span class="nc" id="L126">		XmlAddress addr = info.getParties()</span>
+<span class="nc" id="L127">								.get(0)</span>
+<span class="nc" id="L128">								.getAddress();</span>
+<span class="nc" id="L129">		cs.setAddressCity(addr.getCity());</span>
+<span class="nc" id="L130">		cs.setAddressCountry(addr.getCountry());</span>
+<span class="nc" id="L131">		cs.setAddressCountryCoded(addr.getCountryCoded());</span>
+<span class="nc" id="L132">		cs.setAddressName(addr.getName());</span>
+<span class="nc" id="L133">		cs.setAddressStreet(addr.getStreet());</span>
+<span class="nc" id="L134">		cs.setAddressZip(addr.getZip());</span>
+		
+		
+<span class="nc" id="L137">		XmlOrderResponseSummary summary = xor.getOrderSummary();</span>
+<span class="nc" id="L138">		cs.setTotalAmount(summary.getTotalAmount());</span>
+<span class="nc" id="L139">		cs.setTotalItemNum(summary.getTotalItemNum());</span>
+		
+<span class="nc" id="L141">		return cs;</span>
+		
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
