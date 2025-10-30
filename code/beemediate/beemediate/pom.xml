@@ -32,6 +32,35 @@
 		<sonar.organization>giorgio-hash</sonar.organization>
 	</properties>
 	<dependencies>
+	
+		<!--JaCoCo-->
+		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.12</version>
+        </dependency>
+        
+        <!--JUnit5-->
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+          <!-- JUnit4 legacy tests -->
+		  <dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <scope>test</scope>
+		  </dependency>
+		
+		  <!-- Vintage engine: permette alla JUnit Platform di eseguire test JUnit4 -->
+		  <dependency>
+		    <groupId>org.junit.vintage</groupId>
+		    <artifactId>junit-vintage-engine</artifactId>
+		    <scope>test</scope>
+		  </dependency>
 
 		<!--HTML sanitizer della OWASP-->	
 		<!-- https://mvnrepository.com/artifact/org.owasp.encoder/encoder -->
@@ -155,11 +184,38 @@
 		            	</execution>
 		            </executions>
 				</plugin>
-		</plugins>
+				
+				<!--JaCoCo-->
+				<plugin>
+		            <groupId>org.jacoco</groupId>
+		            <artifactId>jacoco-maven-plugin</artifactId>
+		            <version>0.8.12</version>
+		            <executions>
+		                <execution>
+		                    <goals>
+		                        <goal>prepare-agent</goal>
+		                    </goals>
+		                </execution>
+					    <!-- genera report dopo i test -->
+					    <execution>
+					      <id>report</id>
+					      <phase>verify</phase>
+					      <goals><goal>report</goal></goals>
+					    </execution>
+					  </executions>
+		        </plugin>
+			</plugins>
 	</build>
 	
 	<reporting>
     <plugins>
+    
+          <!-- Project Information (dependencies, summary, scm, contributors, license, etc) -->
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-project-info-reports-plugin</artifactId>
+	        <version>3.4.3</version>
+	      </plugin>
     
 	      <!--PMD report-->
 	      <plugin>
@@ -202,9 +258,24 @@
 			<artifactId>maven-javadoc-plugin</artifactId>
 			<version>3.12.0</version>
 			<configuration>
+				  <failOnError>false</failOnError>
 				  <show>private</show>
 			</configuration>
 		</plugin>
+		
+		    <!--JaCoCo report-->
+		      <plugin>
+		        <groupId>org.jacoco</groupId>
+		        <artifactId>jacoco-maven-plugin</artifactId>
+		        <reportSets>
+		          <reportSet>
+		            <reports>
+		              <!-- select non-aggregate reports -->
+		              <report>report</report>
+		            </reports>
+		          </reportSet>
+		        </reportSets>
+		      </plugin>
     </plugins>
   </reporting>
 
