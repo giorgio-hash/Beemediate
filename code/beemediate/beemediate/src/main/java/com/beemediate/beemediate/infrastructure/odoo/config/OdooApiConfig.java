@@ -233,7 +233,15 @@ public class OdooApiConfig {
 	 */
 	public boolean updateOnModel(String modelName, Map<String, Object> details, Object id) throws XmlRpcException {
 		
-		return (boolean) remoteProcedureOnModel(EXECUTE_KW,modelName,WRITE,details,id)[0];
+		return (boolean) models.execute(EXECUTE_KW,
+											Arrays.asList(
+													db,uid,password,
+													modelName,WRITE,
+													Arrays.asList(
+															Arrays.asList(id),
+															details
+														))
+											);
 	}
 	
 	/**
