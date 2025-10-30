@@ -88,28 +88,14 @@ public class ProdottoFornitoreDTO{
 		
 		if ( f.getName().isEmpty() ) throw new InconsistentDTOException("Fornitore non ha un nome.");
 		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
-		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"product.supplierinfo","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList(odoo.PARTNER_ID_FIELD,"=", f.getName().get() ),
-								Arrays.asList("id","in",elems)
-								))
-						)
-				);
+		ids = odoo.searchFromModel("product.supplierinfo", requestInfo, 
+									Arrays.asList(odoo.PARTNER_ID_FIELD,"=", f.getName().get() ),
+									Arrays.asList("id","in",elems));
 
 		// ora estraggo
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",odoo.PARTNER_ID_FIELD,"product_uom_id"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"product.supplierinfo",odoo.READ,
-						Arrays.asList(Arrays.asList(ids)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("product.supplierinfo", requestInfo, ids);
 		
 		prd = new ProdottoFornitoreDTO[res.length];
 		for(int i=0; i<res.length; i++) {

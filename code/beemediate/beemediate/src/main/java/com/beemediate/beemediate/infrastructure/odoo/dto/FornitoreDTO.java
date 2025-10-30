@@ -1,7 +1,9 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -43,28 +45,14 @@ public class FornitoreDTO{
 		
 		//cerca GEALAN
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						odoo.RES_PARTNER,"search",
-						Arrays.asList(Arrays.asList(Arrays.asList("name","=","GEALAN"))),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel(odoo.RES_PARTNER, requestInfo, Arrays.asList("name","=","GEALAN"));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Non trovo GEALAN");
 		
 		//estrai GEALAN
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("name","ref"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						odoo.RES_PARTNER,odoo.READ,
-						Arrays.asList(ids),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Trovato GEALAN, ma non riesco ad estrarlo.");
 		

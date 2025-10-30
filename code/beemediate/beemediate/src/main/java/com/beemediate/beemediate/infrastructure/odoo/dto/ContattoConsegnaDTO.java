@@ -47,14 +47,7 @@ public class ContattoConsegnaDTO{
 		
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList(odoo.PARTNER_ID_FIELD));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"stock.warehouse",odoo.READ,
-						Arrays.asList(Arrays.asList(id)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("stock.warehouse", requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni del contatto di consegna.");
 		

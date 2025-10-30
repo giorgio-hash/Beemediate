@@ -47,14 +47,7 @@ public class ConsegnaDTO{
 		
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("warehouse_id"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"stock.picking.type",odoo.READ,
-						Arrays.asList(Arrays.asList(id)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("stock.picking.type", requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni sulla consegna.");
 		

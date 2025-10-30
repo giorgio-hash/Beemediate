@@ -207,29 +207,12 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList("name","=",orderId)
-								)),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",orderId));
 		
 		requestInfo.clear();		
 		requestInfo.put("x_studio_oaf", oafState );
 		
-		return (boolean) odoo.models.execute("execute_kw", 
-						Arrays.asList(
-						    odoo.getDb(), odoo.getUid(), odoo.getPassword(),
-						    "purchase.order", "write",
-						    Arrays.asList(Arrays.asList(ids[0]),
-						    requestInfo
-						    )
-					    )
-					);
+		return odoo.updateOnModel("purchase.order", requestInfo, ids[0]);
 		
 	}
 	
@@ -269,16 +252,7 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList("name","=",cs.getOrderId())
-								)),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",cs.getOrderId()));
 		
 		if (ids.length>1) throw new InconsistentDTOException("name ambiguo");
 		if (ids.length==0) throw new InconsistentDTOException("name non trovato");
@@ -290,13 +264,8 @@ public class OdooDataSender implements DataSenderPort{
 		requestInfo.put("message_type", "comment");
 		requestInfo.put("body", writeConfirmationMessage(filename, cs));
 		
-		odoo.models.execute("execute_kw", 
-				Arrays.asList(
-				    odoo.getDb(), odoo.getUid(), odoo.getPassword(),
-				    "mail.message", "create",
-				    Arrays.asList(requestInfo)
-				    )
-			    );
+		int msgId = odoo.insertOnModel("mail.message", requestInfo);
+		log.info("Risposta dal model: {}",msgId);
 	}
 	
 	/**

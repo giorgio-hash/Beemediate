@@ -60,14 +60,7 @@ public class ProdottoDTO{
 		//estrazione
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("seller_ids"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"product.product",odoo.READ,
-						Arrays.asList(Arrays.asList(ids)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("product.product", requestInfo, ids);
 		
 		if(res.length==0) {
 			StringBuilder sb = new StringBuilder();
