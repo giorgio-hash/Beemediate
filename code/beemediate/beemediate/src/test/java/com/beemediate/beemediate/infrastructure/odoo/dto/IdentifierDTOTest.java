@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 @RunWith(Parameterized.class)
 public class IdentifierDTOTest {
 	
