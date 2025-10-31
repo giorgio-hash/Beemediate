@@ -64,6 +64,7 @@ public class ProdottoFornitoreDTO{
 		
 		
 		if (f == null) throw new InconsistentDTOException("FornitoreDTO null");
+		if ( f.getName().isEmpty() ) throw new InconsistentDTOException("Fornitore non ha un nome.");
 		if (pr == null) throw new InconsistentDTOException("Lista ProdottoDTO null");
 		
 		final Object[] ids;
@@ -76,9 +77,7 @@ public class ProdottoFornitoreDTO{
 		//ora estraggo gli id che fanno riferimento ad un articolo a fornitore
 		elems = new ArrayList<>();
 		for(ProdottoDTO p : pr) {
-			if(  p.getSellerIds().isPresent()  ) {
-				if(p.getSellerIds().isEmpty())
-					throw new InconsistentDTOException("ProdottoDTO ha sellerIds vuoto");
+			if(  p.getSellerIds().isPresent()  && p.getSellerIds().get().length>0) {
 				for(Object o : p.getSellerIds().get() )
 					elems.add(o);
 			}else
@@ -86,16 +85,19 @@ public class ProdottoFornitoreDTO{
 		}
 
 		
-		if ( f.getName().isEmpty() ) throw new InconsistentDTOException("Fornitore non ha un nome.");
 		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
 		ids = odoo.searchFromModel("product.supplierinfo", requestInfo, 
 									Arrays.asList(odoo.PARTNER_ID_FIELD,"=", f.getName().get() ),
 									Arrays.asList("id","in",elems));
+		
+		if (ids.length == 0) throw new EmptyFetchException("Id prodottoFornitoreDTO non trovati");
 
 		// ora estraggo
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",odoo.PARTNER_ID_FIELD,"product_uom_id"));
 		res = odoo.readFromModel("product.supplierinfo", requestInfo, ids);
+		
+		if (res.length == 0) throw new EmptyFetchException("Non sono stati trovati i prodotti fornitore");
 		
 		prd = new ProdottoFornitoreDTO[res.length];
 		for(int i=0; i<res.length; i++) {
