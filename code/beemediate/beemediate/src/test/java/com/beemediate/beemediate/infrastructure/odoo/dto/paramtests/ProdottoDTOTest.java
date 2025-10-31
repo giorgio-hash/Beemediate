@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.odoo.dto;
+package com.beemediate.beemediate.infrastructure.odoo.dto.paramtests;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoDTO;
 
 @SpringBootTest
 @RunWith(Parameterized.class)

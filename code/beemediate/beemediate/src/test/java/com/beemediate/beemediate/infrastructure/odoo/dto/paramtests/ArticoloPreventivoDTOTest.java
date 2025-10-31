@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.odoo.dto;
+package com.beemediate.beemediate.infrastructure.odoo.dto.paramtests;
 
 
 
@@ -18,6 +18,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
 
 @SpringBootTest
 @RunWith(Parameterized.class)
