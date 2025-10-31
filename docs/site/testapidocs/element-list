@@ -1,2 +1,4 @@
 com.beemediate.beemediate
-com.beemediate.beemediate.infrastructure.odoo.dto
+com.beemediate.beemediate.infrastructure.odoo.dto.paramtests
+com.beemediate.beemediate.infrastructure.odoo.dto.tostring
+com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest

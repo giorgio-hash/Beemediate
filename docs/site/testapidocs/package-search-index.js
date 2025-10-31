@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.beemediate.beemediate"},{"l":"com.beemediate.beemediate.infrastructure.odoo.dto"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.beemediate.beemediate"},{"l":"com.beemediate.beemediate.infrastructure.odoo.dto.paramtests"},{"l":"com.beemediate.beemediate.infrastructure.odoo.dto.tostring"},{"l":"com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest"}];updateSearchResults();
