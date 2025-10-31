@@ -126,9 +126,10 @@ public class ProdottoFornitoreDTOXMLRPCTest {
     
     @Test
     public void testInconsistentDTOException_whenProdottoIsNull_withMock() {
-    	pr = null;
+    	when(f.getName()).thenReturn(Optional.of("GEALAN"));
+    	
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, null, f);
         } );
     }
     
@@ -178,6 +179,7 @@ public class ProdottoFornitoreDTOXMLRPCTest {
         } );
     }
     
+    @Test
     public void testEmptyFetchException_whenIdFetched_butNoResourceFound_withMock() throws XmlRpcException {
  
 
