@@ -65,7 +65,7 @@ public class ProdottoFornitoreDTO{
 		
 <span class="fc bfc" id="L66" title="All 2 branches covered.">		if (f == null) throw new InconsistentDTOException(&quot;FornitoreDTO null&quot;);</span>
 <span class="fc bfc" id="L67" title="All 2 branches covered.">		if ( f.getName().isEmpty() ) throw new InconsistentDTOException(&quot;Fornitore non ha un nome.&quot;);</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">		if (pr == null) throw new InconsistentDTOException(&quot;Lista ProdottoDTO null&quot;);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		if (pr == null) throw new InconsistentDTOException(&quot;Lista ProdottoDTO null&quot;);</span>
 		
 		final Object[] ids;
 		final Object[] res;
@@ -97,7 +97,7 @@ public class ProdottoFornitoreDTO{
 <span class="fc" id="L97">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;id&quot;,&quot;product_id&quot;,&quot;sequence&quot;,&quot;product_name&quot;,&quot;product_code&quot;,odoo.PARTNER_ID_FIELD,&quot;product_uom_id&quot;));</span>
 <span class="fc" id="L98">		res = odoo.readFromModel(&quot;product.supplierinfo&quot;, requestInfo, ids);</span>
 		
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">		if (res.length == 0) throw new EmptyFetchException(&quot;Non sono stati trovati i prodotti fornitore&quot;);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		if (res.length == 0) throw new EmptyFetchException(&quot;Non sono stati trovati i prodotti fornitore&quot;);</span>
 		
 <span class="fc" id="L102">		prd = new ProdottoFornitoreDTO[res.length];</span>
 <span class="fc bfc" id="L103" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
