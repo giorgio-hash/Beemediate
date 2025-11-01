@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.odoo.config;
+package com.beemediate.beemediate.infrastructure.ftp.config;
 
 import com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.WrongPathException;
