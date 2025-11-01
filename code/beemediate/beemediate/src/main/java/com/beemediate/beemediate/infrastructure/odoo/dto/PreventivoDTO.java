@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
 import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
 
+import com.beemediate.beemediate.infrastructure.odoo.config.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
@@ -91,7 +93,7 @@ public class PreventivoDTO{
 		requestInfo.put("limit", 1);
 		ids = odoo.searchFromModel("purchase.order", requestInfo, 
 									Arrays.asList(odoo.PARTNER_ID_FIELD,"=",f.getName().get()),
-									Arrays.asList("x_studio_oaf","=",OdooApiConfig.OafStatus.NEW.toString() ));
+									Arrays.asList("x_studio_oaf","=",OafStatus.NEW.toString() ));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Nessun preventivo \"new\" per GEALAN");
 		

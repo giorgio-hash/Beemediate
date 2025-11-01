@@ -36,10 +36,10 @@ public class FTPConfig {
 	 * @param outbound - valore della chiave {@code ftp.outbound}
 	 * @param archived - valore della chiave {@code ftp.archived}
 	 */
-<span class="fc" id="L39">    public FTPConfig(</span>
+    public FTPConfig(
             @Value(&quot;${ftp.inbound}&quot;) String inbound,
             @Value(&quot;${ftp.outbound}&quot;) String outbound,
-            @Value(&quot;${ftp.archived}&quot;) String archived) {
+<span class="fc" id="L42">            @Value(&quot;${ftp.archived}&quot;) String archived) {</span>
 <span class="fc" id="L43">        this.inboundFolder = inbound;</span>
 <span class="fc" id="L44">        this.outboundFolder = outbound;</span>
 <span class="fc" id="L45">        this.archivedFolder = archived;</span>
@@ -63,8 +63,8 @@ public class FTPConfig {
      */
     private void check(String path) throws WrongPathException {
 <span class="fc" id="L65">        File dir = new File(path);</span>
-<span class="pc bpc" id="L66" title="2 of 4 branches missed.">        if (!dir.exists() || !dir.isDirectory())</span>
-<span class="nc" id="L67">            throw new WrongPathException(&quot;Il path \&quot;&quot;+ path +&quot;\&quot; non porta ad una directory.&quot;);</span>
+<span class="fc bfc" id="L66" title="All 4 branches covered.">        if (!dir.exists() || !dir.isDirectory())</span>
+<span class="fc" id="L67">            throw new WrongPathException(&quot;Il path \&quot;&quot;+ path +&quot;\&quot; non porta ad una directory.&quot;);</span>
 <span class="fc" id="L68">    }</span>
     
     /**
@@ -72,7 +72,7 @@ public class FTPConfig {
      * @return String rappresentante la folder dei messaggi verso il fornitore
      */
     public String getInboundFolder() {
-<span class="nc" id="L75">        return inboundFolder;</span>
+<span class="fc" id="L75">        return inboundFolder;</span>
     }
     
     /**
@@ -80,7 +80,7 @@ public class FTPConfig {
      * @return String rappresentante la folder dei messaggi in arrivo dal fornitore
      */
     public String getOutboundFolder() {
-<span class="nc" id="L83">        return outboundFolder;</span>
+<span class="fc" id="L83">        return outboundFolder;</span>
     }
 
     /**
@@ -88,7 +88,7 @@ public class FTPConfig {
      * @return String rappresentante la folder dei messaggi archiviati
      */
     public String getArchivedFolder() {
-<span class="nc" id="L91">        return archivedFolder;</span>
+<span class="fc" id="L91">        return archivedFolder;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

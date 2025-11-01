@@ -127,9 +127,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
 <span class="fc" id="L129">			dest = DestinazioneDTO.fromXMLRPC(</span>
-<span class="fc" id="L130">							odoo,</span>
+							odoo,
 <span class="fc" id="L131">							ContattoConsegnaDTO.fromXMLRPC(</span>
-<span class="fc" id="L132">										odoo,</span>
+										odoo,
 <span class="fc" id="L133">										ConsegnaDTO.fromXMLRPC(odoo, prev)</span>
 									)
 							);
@@ -147,9 +147,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
 <span class="fc" id="L149">			prodf = ProdottoFornitoreDTO.fromXMLRPC(</span>
-<span class="fc" id="L150">								odoo,</span>
+								odoo,
 <span class="fc" id="L151">								ProdottoDTO.fromXMLRPC(odoo, artpr),</span>
-<span class="fc" id="L152">								f</span>
+								f
 							);
 <span class="fc bfc" id="L154" title="All 2 branches covered.">			for(ProdottoFornitoreDTO p : prodf) {</span>
 <span class="fc" id="L155">				log.info(p.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
@@ -166,7 +166,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 <span class="fc" id="L166">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e1);</span>
 <span class="fc" id="L167">		} catch(EmptyFetchException e) {</span>
 <span class="fc" id="L168">			log.info(&quot;Problema nel recupero degli ordini: {}&quot;,e.getMessage());</span>
-		}
+<span class="fc" id="L169">		}</span>
 		
 <span class="fc" id="L171">		return hasNewOrder();</span>
 		

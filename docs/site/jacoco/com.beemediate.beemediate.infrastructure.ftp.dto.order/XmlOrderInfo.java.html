@@ -77,15 +77,15 @@ public class XmlOrderInfo {
 <span class="nc" id="L77">		this.orderParties</span>
 <span class="nc" id="L78">				.addAll(</span>
 <span class="nc" id="L79">						Arrays.asList(</span>
-<span class="nc" id="L80">								new XmlParty(</span>
+								new XmlParty(
 <span class="nc" id="L81">										new XmlPartyID( head.getBuyerID(), PartyType.SUPPLIER_SPECIFIC)</span>
-<span class="nc" id="L82">										,&quot;buyer&quot;),</span>
-<span class="nc" id="L83">								new XmlParty(</span>
+										,&quot;buyer&quot;),
+								new XmlParty(
 <span class="nc" id="L84">										new XmlPartyID( head.getSupplierID(), PartyType.BUYER_SPECIFIC)</span>
-<span class="nc" id="L85">										,&quot;supplier&quot;),</span>
-<span class="nc" id="L86">								new XmlParty(</span>
+										,&quot;supplier&quot;),
+								new XmlParty(
 <span class="nc" id="L87">										new XmlPartyID( head.getDeliveryID(), PartyType.SUPPLIER_SPECIFIC)</span>
-<span class="nc" id="L88">										,&quot;delivery&quot;)</span>
+										,&quot;delivery&quot;)
 								)
 						);
 <span class="nc" id="L91">		this.orderPartiesReference = new XmlOrderPartiesReference(</span>

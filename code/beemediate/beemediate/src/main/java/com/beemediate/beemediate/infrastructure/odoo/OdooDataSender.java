@@ -20,8 +20,8 @@ import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
+import com.beemediate.beemediate.infrastructure.odoo.config.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 

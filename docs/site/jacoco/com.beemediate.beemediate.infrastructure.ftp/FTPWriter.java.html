@@ -78,7 +78,7 @@ public class FTPWriter implements FTPHandlerPort{
 <span class="nc" id="L78">            log.error(&quot;Il file sorgente non esiste.&quot;,e);</span>
 <span class="nc" id="L79">        } catch (IOException e) {</span>
 <span class="nc" id="L80">            log.error(&quot;Errore durante lo spostamento del file.&quot;,e);</span>
-        }
+<span class="nc" id="L81">        }</span>
         
 <span class="nc" id="L83">        return false;</span>
 		
@@ -125,13 +125,13 @@ public class FTPWriter implements FTPHandlerPort{
 
             // Scrive il contenuto nel file (sovrascrive se esiste)
 <span class="nc" id="L127">            Files.write(filePath, content.getBytes(StandardCharsets.UTF_8),</span>
-<span class="nc" id="L128">                        StandardOpenOption.CREATE,</span>
-<span class="nc" id="L129">                        StandardOpenOption.TRUNCATE_EXISTING);</span>
+                        StandardOpenOption.CREATE,
+                        StandardOpenOption.TRUNCATE_EXISTING);
 
 <span class="nc" id="L131">            log.info(&quot;File scritto con successo: {}&quot;, filePath.toAbsolutePath().toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) );</span>
 <span class="nc" id="L132">        } catch (IOException e) {</span>
 <span class="nc" id="L133">        	log.error(&quot;Problema di scrittura sul filesystem:&quot;.concat(filePath.toAbsolutePath().toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) ),e);</span>
-        }
+<span class="nc" id="L134">        }</span>
 <span class="nc" id="L135">        return Files.exists(filePath);</span>
 	}
 	

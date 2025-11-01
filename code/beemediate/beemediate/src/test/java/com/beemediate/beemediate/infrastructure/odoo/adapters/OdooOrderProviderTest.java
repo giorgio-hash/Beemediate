@@ -1,14 +1,17 @@
 package com.beemediate.beemediate.infrastructure.odoo.adapters;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.beemediate.beemediate.domain.pojo.order.Order;
-import com.beemediate.beemediate.infrastructure.odoo.OdooOrderProvider;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.dto.*;
-import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
-import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.junit.Before;
@@ -16,11 +19,21 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import javax.security.auth.login.FailedLoginException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.time.LocalDateTime;
-import java.util.Optional;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.infrastructure.odoo.OdooOrderProvider;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.CompagniaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ContattoConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.DestinazioneDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.FornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.PreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoFornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 public class OdooOrderProviderTest {
 
