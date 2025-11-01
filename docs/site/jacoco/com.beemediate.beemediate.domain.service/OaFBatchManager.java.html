@@ -148,10 +148,10 @@ public final class OaFBatchManager implements OaFManagerPort{
 				//segnala al crm errori openTrans (critici) e non manda
 <span class="nc bnc" id="L149" title="All 2 branches missed.">				if(o.hasOpenTransError()) {</span>
 <span class="nc" id="L150">					crm.signalOpenTransError(o);</span>
-<span class="nc" id="L151">				} </span>
+				} 
 <span class="nc bnc" id="L152" title="All 2 branches missed.">				else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)</span>
 <span class="nc" id="L153">					crm.signalContentError(o);</span>
-<span class="nc" id="L154">				}</span>
+				}
 <span class="nc bnc" id="L155" title="All 4 branches missed.">				else if(toSend&gt;=oafBatchThreshold &amp;&amp; ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm</span>
 <span class="nc" id="L156">						crm.signalShipped(o);</span>
 				}

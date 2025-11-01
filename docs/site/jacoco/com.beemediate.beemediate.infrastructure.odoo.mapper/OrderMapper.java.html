@@ -127,7 +127,7 @@ public final class OrderMapper {
 <span class="fc bfc" id="L127" title="All 2 branches covered.">		if(comp.getCompanyRegistry().isPresent()) {</span>
 <span class="fc" id="L128">			oh.setBuyerID(comp.getCompanyRegistry().get());</span>
 <span class="fc" id="L129">			oh.setBuyerIDRef(comp.getCompanyRegistry().get());</span>
-<span class="fc" id="L130">		}else {</span>
+		}else {
 <span class="fc" id="L131">			oh.setBuyerID(&quot;&quot;);</span>
 <span class="fc" id="L132">			oh.setBuyerIDRef(&quot;&quot;);</span>
 		}
@@ -136,7 +136,7 @@ public final class OrderMapper {
 <span class="fc bfc" id="L136" title="All 2 branches covered.">		if(f.getCodiceAzienda().isPresent()) {</span>
 <span class="fc" id="L137">			oh.setSupplierID(f.getCodiceAzienda().get());</span>
 <span class="fc" id="L138">			oh.setSupplierIDRef(f.getCodiceAzienda().get());</span>
-<span class="fc" id="L139">		}else {</span>
+		}else {
 <span class="fc" id="L140">			oh.setSupplierID(&quot;&quot;);</span>
 <span class="fc" id="L141">			oh.setSupplierIDRef(&quot;&quot;);</span>
 		}
@@ -146,7 +146,7 @@ public final class OrderMapper {
 <span class="fc bfc" id="L146" title="All 2 branches covered.">		if(dest.getCodiceDestinazione().isPresent()) {</span>
 <span class="fc" id="L147">			oh.setDeliveryID(dest.getCodiceDestinazione().get());</span>
 <span class="fc" id="L148">			oh.setDeliveryIDRef(dest.getCodiceDestinazione().get());</span>
-<span class="fc" id="L149">		}else {</span>
+		}else {
 <span class="fc" id="L150">			oh.setDeliveryID(&quot;&quot;);</span>
 <span class="fc" id="L151">			oh.setDeliveryIDRef(&quot;&quot;);</span>
 		}
@@ -163,7 +163,7 @@ public final class OrderMapper {
 <span class="fc bfc" id="L163" title="All 2 branches covered.">		if(prev.getDatePlanned().isPresent()) {</span>
 <span class="fc" id="L164">			oh.setStartDate(prev.getDatePlanned().get().format(format));</span>
 <span class="fc" id="L165">			oh.setEndDate(prev.getDatePlanned().get().format(format));</span>
-<span class="fc" id="L166">		} else {</span>
+		} else {
 <span class="fc" id="L167">			oh.setStartDate(&quot;&quot;);</span>
 <span class="fc" id="L168">			oh.setEndDate(&quot;&quot;);</span>
 		}

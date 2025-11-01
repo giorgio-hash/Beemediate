@@ -15,7 +15,9 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -24,10 +26,10 @@ import org.springframework.context.annotation.PropertySource;
  */
 @Configuration
 @PropertySource(&quot;classpath:apiconfig.properties&quot;)
-<span class="fc" id="L27">public class OdooApiConfig {</span>
+public class OdooApiConfig {
 
 	/***oggetto Logger*/
-<span class="fc" id="L30">	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);</span>
+<span class="nc" id="L32">	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);</span>
 	
 	/**
 	 * String che identifica il comando RPC per l'esecuzione di procedura remota
@@ -71,39 +73,35 @@ import org.springframework.context.annotation.PropertySource;
 	/**
 	 * Riferimento alla risorsa online CRM.
 	 */
-	@Value(&quot;${api.host:noconf}&quot;)
-	private String url;// scade 4.10
+	private final String url;// scade 4.10
 	/**
 	 * Riferimento alla risorsa online database del CRM.
 	 */
-	@Value(&quot;${api.db:noconf}&quot;)
-	private String db; // scade 4.10
+	private final String db; // scade 4.10
 	/**
 	 * Dato per l'autenticazione.
 	 */
-	@Value(&quot;${api.username:noconf}&quot;)
-	private String username;
+	private final String username;
 	/**
 	 * Token di autenticazione alle API Odoo.
 	 */
-	@Value(&quot;${api.key:noconf}&quot;)
-	private String password;// scade 23.09
+	private final String password;// scade 23.09
 	/**
 	 * Serve a gestire il protocollo XML-RPC.
 	 */
-<span class="fc" id="L94">	private final XmlRpcClient client = new XmlRpcClient();</span>
-	/**
-	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
-	 */
-<span class="fc" id="L98">	private final XmlRpcClientConfigImpl commonConfig = new XmlRpcClientConfigImpl();</span>
-	/**
-	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
-	 */
-<span class="fc" id="L102">	private final XmlRpcClientConfigImpl objectConfig = new XmlRpcClientConfigImpl();</span>
+	private final XmlRpcClient client;
 	/**
 	 * Oggetto di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
 	 */
-<span class="fc" id="L106">	private final XmlRpcClient models = new XmlRpcClient();</span>
+	private final XmlRpcClient models;
+	/**
+	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl commonConfig;
+	/**
+	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl objectConfig;
 	/**
 	 * Identificativo di sessione.
 	 */
@@ -111,35 +109,29 @@ import org.springframework.context.annotation.PropertySource;
 	/**
 	 * flag per segnalare stato della connessione.
 	 */
-<span class="fc" id="L114">	private boolean online = false;</span>
+<span class="nc" id="L112">	private boolean online = false;</span>
+	
+	
 	/**
-	 * Stato degli Ordini a Fornitore, ovvero gli Ordini di Acquisto di Odoo.
+	 * Costruttore usato da Spring per costruire la configurazione Odoo.
+	 *
+	 * I parametri annotati con @Value sono prelevati dal contesto delle proprietà &quot;apiconfig.properties&quot;.
+	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
 	 */
-<span class="fc" id="L118">	public enum OafStatus{</span>
-<span class="fc" id="L119">		NEW(&quot;NEW&quot;),</span>
-<span class="fc" id="L120">		SHIPPED(&quot;SHIPPED&quot;),</span>
-<span class="fc" id="L121">		CONFIRMED(&quot;CONFIRMED&quot;),</span>
-<span class="fc" id="L122">		OPENTRANSERROR(&quot;OPENTRANSERROR&quot;),</span>
-<span class="fc" id="L123">		CONTENTERROR(&quot;CONTENTERROR&quot;);</span>
-		
-		/**
-		 * String corrispondente allo stato
-		 */
-		public final String label;
-		
-		/**
-		 * Costruttore privato
-		 * @param label - String
-		 */
-<span class="fc" id="L134">		OafStatus(final String label) {</span>
-<span class="fc" id="L135">			this.label = label;</span>
-<span class="fc" id="L136">		}</span>
-		
-		@Override
-		public String toString() {
-<span class="fc" id="L140">			return label;</span>
-		}
-	}
+	@Autowired
+<span class="nc" id="L122">	public OdooApiConfig (@Value(&quot;${api.host:noconf}&quot;) String url, @Value(&quot;${api.db:noconf}&quot;) String db, </span>
+							@Value(&quot;${api.username:noconf}&quot;) String username, @Value(&quot;${api.key:noconf}&quot;) String password,
+							@Qualifier(&quot;xmlRpcClientCommon&quot;) XmlRpcClient client, @Qualifier(&quot;xmlRpcClientModels&quot;) XmlRpcClient models,
+							 @Qualifier(&quot;commonConfig&quot;) XmlRpcClientConfigImpl commonConfig, @Qualifier(&quot;objectConfig&quot;) XmlRpcClientConfigImpl objectConfig) {
+<span class="nc" id="L126">		this.url = url;</span>
+<span class="nc" id="L127">		this.db = db;</span>
+<span class="nc" id="L128">		this.username = username;</span>
+<span class="nc" id="L129">		this.password = password;</span>
+<span class="nc" id="L130">		this.client = client;</span>
+<span class="nc" id="L131">		this.models = models;</span>
+<span class="nc" id="L132">		this.commonConfig = commonConfig;</span>
+<span class="nc" id="L133">		this.objectConfig = objectConfig;</span>
+<span class="nc" id="L134">	}</span>
 	
 	
 	/**
@@ -152,31 +144,31 @@ import org.springframework.context.annotation.PropertySource;
 	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
 		
 		//informazioni sul server
-<span class="nc" id="L155">		commonConfig.setServerURL( (new URI(String.format(&quot;%s/xmlrpc/2/common&quot;, url))).toURL() );</span>
-<span class="nc" id="L156">		final Object ver = client.execute(commonConfig, &quot;version&quot;, Collections.emptyList());</span>
+<span class="nc" id="L147">		commonConfig.setServerURL( (new URI(String.format(&quot;%s/xmlrpc/2/common&quot;, url))).toURL() );</span>
+<span class="nc" id="L148">		final Object ver = client.execute(commonConfig, &quot;version&quot;, Collections.emptyList());</span>
 		
 		//login
 		try {
-<span class="nc" id="L160">			uid = (int) client.execute(commonConfig, &quot;authenticate&quot;, Arrays.asList(db, username, password, Collections.emptyMap()));</span>
+<span class="nc" id="L152">			uid = (int) client.execute(commonConfig, &quot;authenticate&quot;, Arrays.asList(db, username, password, Collections.emptyMap()));</span>
 
-<span class="nc" id="L162">			log.info(&quot;Versione server: {}&quot;, ver.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) );</span>
-<span class="nc" id="L163">			log.info(&quot;Session uid: {}&quot;, uid);</span>
+<span class="nc" id="L154">			log.info(&quot;Versione server: {}&quot;, ver.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) );</span>
+<span class="nc" id="L155">			log.info(&quot;Session uid: {}&quot;, uid);</span>
 			
 			//oggetto per interagire coi models di ODOO
-<span class="nc" id="L166">			objectConfig.setServerURL( new URI(String.format(&quot;%s/xmlrpc/2/object&quot;, url)).toURL() );</span>
-<span class="nc" id="L167">			models.setConfig(objectConfig);</span>
+<span class="nc" id="L158">			objectConfig.setServerURL( new URI(String.format(&quot;%s/xmlrpc/2/object&quot;, url)).toURL() );</span>
+<span class="nc" id="L159">			models.setConfig(objectConfig);</span>
 			
-<span class="nc" id="L169">			online = true;</span>
+<span class="nc" id="L161">			online = true;</span>
 		
-<span class="nc" id="L171">		} catch ( ClassCastException e ) {</span>
+<span class="nc" id="L163">		} catch ( ClassCastException e ) {</span>
 			
-<span class="nc" id="L173">			online = false;</span>
+<span class="nc" id="L165">			online = false;</span>
 			
-<span class="nc" id="L175">			final FailedLoginException ex = new FailedLoginException(&quot;Eccezione durante il recupero uid di sessione, verificare il login.&quot;);</span>
-<span class="nc" id="L176">			ex.initCause(e);</span>
-<span class="nc" id="L177">			throw ex;</span>
+<span class="nc" id="L167">			final FailedLoginException ex = new FailedLoginException(&quot;Eccezione durante il recupero uid di sessione, verificare il login.&quot;);</span>
+<span class="nc" id="L168">			ex.initCause(e);</span>
+<span class="nc" id="L169">			throw ex;</span>
 		}
-<span class="nc" id="L179">	}</span>
+<span class="nc" id="L171">	}</span>
 	
 	
 	/**
@@ -184,7 +176,7 @@ import org.springframework.context.annotation.PropertySource;
 	 * @return &lt;i&gt;true&lt;/i&gt; se il servizio non ha riscontrato problemi di connessione con Odoo fino ad ora.
 	 */
 	public boolean isOnline() {
-<span class="nc" id="L187">		return online;</span>
+<span class="nc" id="L179">		return online;</span>
 	}
 	
 	
@@ -199,7 +191,7 @@ import org.springframework.context.annotation.PropertySource;
 	 * @throws XmlRpcException in caso di errori di comunicazione/risposta dal server Odoo
 	 */
 	public Object[] searchFromModel(String modelName, Map&lt;String, Object&gt; details, List&lt;Object&gt;... searchParams) throws XmlRpcException {
-<span class="nc" id="L202">		return	remoteProcedureOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);</span>
+<span class="nc" id="L194">		return	remoteQueryOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);</span>
 	}
 	
 	/**
@@ -216,7 +208,7 @@ import org.springframework.context.annotation.PropertySource;
 	 */
 	public Object[] readFromModel(String modelName, Map&lt;String, Object&gt; details, Object... ids) throws XmlRpcException {
 		
-<span class="nc" id="L219">		return remoteProcedureOnModel(EXECUTE_KW,modelName,READ,details,ids);</span>
+<span class="nc" id="L211">		return remoteQueryOnModel(EXECUTE_KW,modelName,READ,details,ids);</span>
 	}
 	
 	/**
@@ -233,13 +225,13 @@ import org.springframework.context.annotation.PropertySource;
 	 */
 	public boolean updateOnModel(String modelName, Map&lt;String, Object&gt; details, Object id) throws XmlRpcException {
 		
-<span class="nc" id="L236">		return (boolean) models.execute(EXECUTE_KW,</span>
-<span class="nc" id="L237">											Arrays.asList(</span>
-<span class="nc" id="L238">													db,uid,password,</span>
-<span class="nc" id="L239">													modelName,WRITE,</span>
-<span class="nc" id="L240">													Arrays.asList(</span>
-<span class="nc" id="L241">															Arrays.asList(id),</span>
-<span class="nc" id="L242">															details</span>
+<span class="nc" id="L228">		return (boolean) models.execute(EXECUTE_KW,</span>
+<span class="nc" id="L229">											Arrays.asList(</span>
+<span class="nc" id="L230">													db,uid,password,</span>
+<span class="nc" id="L231">													modelName,WRITE,</span>
+<span class="nc" id="L232">													Arrays.asList(</span>
+<span class="nc" id="L233">															Arrays.asList(id),</span>
+<span class="nc" id="L234">															details</span>
 														))
 											);
 	}
@@ -259,18 +251,18 @@ import org.springframework.context.annotation.PropertySource;
 	 */
 	public int insertOnModel(String modelName, Map&lt;String, Object&gt; details) throws XmlRpcException {
 		
-<span class="nc" id="L262">		return (int) models.execute(EXECUTE_KW, </span>
-<span class="nc" id="L263">						Arrays.asList(</span>
-<span class="nc" id="L264">						    db,uid,password,</span>
-<span class="nc" id="L265">						    modelName, CREATE,</span>
-<span class="nc" id="L266">						    Arrays.asList(details)</span>
+<span class="nc" id="L254">		return (int) models.execute(EXECUTE_KW, </span>
+<span class="nc" id="L255">						Arrays.asList(</span>
+<span class="nc" id="L256">						    db,uid,password,</span>
+<span class="nc" id="L257">						    modelName, CREATE,</span>
+<span class="nc" id="L258">						    Arrays.asList(details)</span>
 						    )
 					    );
 	}
 	
 	
 	/**
-	 * Esegue una chiamata XML-RPC generica su un model Odoo usando il procedure specificato.
+	 * Esegue una chiamata XML-RPC in lettura su un model Odoo usando il procedure specificato.
 	 *
 	 * @param procedure nome della procedure XML-RPC (es. &quot;execute_kw&quot; o &quot;execute&quot;)
 	 * @param model     nome del model Odoo (es. &quot;res.partner&quot;)
@@ -280,14 +272,14 @@ import org.springframework.context.annotation.PropertySource;
 	 * @return          array di oggetti restituito dall'esecuzione XML-RPC (castare secondo il formato atteso)
 	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	private Object[] remoteProcedureOnModel(String procedure, String model, String operation, Map&lt;String,Object&gt; details, Object... params) throws XmlRpcException {
+	private Object[] remoteQueryOnModel(String procedure, String model, String operation, Map&lt;String,Object&gt; details, Object... params) throws XmlRpcException {
 		
-<span class="nc" id="L285">		return (Object[]) models.execute(procedure,</span>
-<span class="nc" id="L286">				Arrays.asList(</span>
-<span class="nc" id="L287">						db,uid,password,</span>
-<span class="nc" id="L288">						model,	operation,</span>
-<span class="nc" id="L289">						Arrays.asList(Arrays.asList(params)),</span>
-<span class="nc" id="L290">						details</span>
+<span class="nc" id="L277">		return (Object[]) models.execute(procedure,</span>
+<span class="nc" id="L278">				Arrays.asList(</span>
+<span class="nc" id="L279">						db,uid,password,</span>
+<span class="nc" id="L280">						model,	operation,</span>
+<span class="nc" id="L281">						Arrays.asList(Arrays.asList(params)),</span>
+<span class="nc" id="L282">						details</span>
 						)
 				);
 	}
