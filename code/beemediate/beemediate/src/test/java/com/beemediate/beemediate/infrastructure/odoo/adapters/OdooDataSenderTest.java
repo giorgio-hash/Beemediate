@@ -142,6 +142,7 @@ public class OdooDataSenderTest {
     }
     
     //-----------------------------signal CONFIRMATION
+    /**/
 
     @Test
     public void signalConfirmation_happyPath_returnsTrue() throws Exception {
