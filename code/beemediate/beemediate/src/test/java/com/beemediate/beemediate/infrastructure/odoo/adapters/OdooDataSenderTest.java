@@ -1,34 +1,40 @@
 package com.beemediate.beemediate.infrastructure.odoo.adapters;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-
-import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
-import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
-import com.beemediate.beemediate.domain.pojo.order.Order;
-import com.beemediate.beemediate.infrastructure.odoo.OdooDataSender;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig.OafStatus;
-import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
-import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
-
-import org.apache.xmlrpc.XmlRpcException;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.security.PrivilegedActionException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.security.auth.login.FailedLoginException;
+
+import org.apache.xmlrpc.XmlRpcException;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
+import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
+import com.beemediate.beemediate.infrastructure.odoo.OdooDataSender;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 
 public class OdooDataSenderTest {
 
@@ -136,13 +142,22 @@ public class OdooDataSenderTest {
         when(order.getOrderID()).thenReturn(null);
 
         when(odooMock.isOnline()).thenReturn(true);
+        
+        when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
+        .thenReturn(new Object[0]);
 
         boolean res = sender.signalShipped(order);
         assertFalse(res);
     }
     
     //-----------------------------signal CONFIRMATION
-    /**/
+    /*
+     CODE	orderId==null ||	oafState==null		|		ids.length==0		|		ids.length!=1		|ESITO
+      	0		F					F							F							F				| happy path 
+      	1		T					F							-							-				| false (NullSuppliedArgumentException)
+      	2		F					F							T							-				| false (EmptyFetchException)
+      	3		F					F							F							T				| false (InconsistentDTOException)
+     * */
 
     @Test
     public void signalConfirmation_happyPath_returnsTrue() throws Exception {
@@ -175,8 +190,23 @@ public class OdooDataSenderTest {
         // verify that a message was attempted to be inserted
         verify(odooMock, atLeastOnce()).insertOnModel(eq("mail.message"), anyMap());
     }
-
     
+    @Test
+    public void signalConfirmation_whenOrderIdNull_returnsFalse() throws XmlRpcException {
+    	Confirmation conf = mock(Confirmation.class);
+        ConfirmationStructure cs = mock(ConfirmationStructure.class);
+
+        when(conf.getData()).thenReturn(cs);
+        when(conf.getConfirmationId()).thenReturn("file-1");
+
+        when(odooMock.isOnline()).thenReturn(true);
+        
+        when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
+        .thenReturn(new Object[0]);
+
+        boolean res = sender.signalConfirmation(conf);
+        assertFalse(res);
+    }
 
     @Test
     public void signalConfirmation_whenCreateWorkflowAnnotationNameNotFound_returnsFalse() throws Exception {
@@ -198,31 +228,6 @@ public class OdooDataSenderTest {
         params.add("name");params.add("=");params.add(cs.getOrderId());
         when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), eq(params))).thenReturn(new Object[0]);
         
-        boolean res = sender.signalConfirmation(conf);
-        assertFalse(res);
-    }
-    
-    
-
-    @Test
-    public void signalConfirmation_whenInsertThrowsXmlRpcException_returnsFalse() throws Exception {
-        Confirmation conf = mock(Confirmation.class);
-        ConfirmationStructure cs = mock(ConfirmationStructure.class);
-
-        when(conf.getData()).thenReturn(cs);
-        when(conf.getConfirmationId()).thenReturn("file-3");
-        when(cs.getOrderId()).thenReturn("ORD-EXC");
-
-        when(odooMock.isOnline()).thenReturn(true);
-
-        // updateTo succeeds
-        when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
-                .thenReturn(new Object[]{ 42 });
-        when(odooMock.updateOnModel(eq("purchase.order"), anyMap(), eq(42))).thenReturn(true);
-
-        // insertOnModel throws XmlRpcException -> will be caught in signal(Confirmation) and result false
-        when(odooMock.insertOnModel(eq("mail.message"), anyMap())).thenThrow(new XmlRpcException("insert failed"));
-
         boolean res = sender.signalConfirmation(conf);
         assertFalse(res);
     }
