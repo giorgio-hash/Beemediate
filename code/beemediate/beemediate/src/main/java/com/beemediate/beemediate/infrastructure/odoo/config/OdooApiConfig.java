@@ -15,7 +15,9 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -71,39 +73,35 @@ public class OdooApiConfig {
 	/**
 	 * Riferimento alla risorsa online CRM.
 	 */
-	@Value("${api.host:noconf}")
-	private String url;// scade 4.10
+	private final String url;// scade 4.10
 	/**
 	 * Riferimento alla risorsa online database del CRM.
 	 */
-	@Value("${api.db:noconf}")
-	private String db; // scade 4.10
+	private final String db; // scade 4.10
 	/**
 	 * Dato per l'autenticazione.
 	 */
-	@Value("${api.username:noconf}")
-	private String username;
+	private final String username;
 	/**
 	 * Token di autenticazione alle API Odoo.
 	 */
-	@Value("${api.key:noconf}")
-	private String password;// scade 23.09
+	private final String password;// scade 23.09
 	/**
 	 * Serve a gestire il protocollo XML-RPC.
 	 */
-	private final XmlRpcClient client = new XmlRpcClient();
-	/**
-	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
-	 */
-	private final XmlRpcClientConfigImpl commonConfig = new XmlRpcClientConfigImpl();
-	/**
-	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
-	 */
-	private final XmlRpcClientConfigImpl objectConfig = new XmlRpcClientConfigImpl();
+	private final XmlRpcClient client;
 	/**
 	 * Oggetto di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
 	 */
-	private final XmlRpcClient models = new XmlRpcClient();
+	private final XmlRpcClient models;
+	/**
+	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl commonConfig;
+	/**
+	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl objectConfig;
 	/**
 	 * Identificativo di sessione.
 	 */
@@ -139,6 +137,28 @@ public class OdooApiConfig {
 		public String toString() {
 			return label;
 		}
+	}
+	
+	
+	/**
+	 * Costruttore usato da Spring per costruire la configurazione Odoo.
+	 *
+	 * I parametri annotati con @Value sono prelevati dal contesto delle proprietà "apiconfig.properties".
+	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
+	 */
+	@Autowired
+	public OdooApiConfig (@Value("${api.host:noconf}") String url, @Value("${api.db:noconf}") String db, 
+							@Value("${api.username:noconf}") String username, @Value("${api.key:noconf}") String password,
+							@Qualifier("xmlRpcClientCommon") XmlRpcClient client, @Qualifier("xmlRpcClientModels") XmlRpcClient models,
+							 @Qualifier("commonConfig") XmlRpcClientConfigImpl commonConfig, @Qualifier("objectConfig") XmlRpcClientConfigImpl objectConfig) {
+		this.url = url;
+		this.db = db;
+		this.username = username;
+		this.password = password;
+		this.client = client;
+		this.models = models;
+		this.commonConfig = commonConfig;
+		this.objectConfig = objectConfig;
 	}
 	
 	
@@ -199,7 +219,7 @@ public class OdooApiConfig {
 	 * @throws XmlRpcException in caso di errori di comunicazione/risposta dal server Odoo
 	 */
 	public Object[] searchFromModel(String modelName, Map<String, Object> details, List<Object>... searchParams) throws XmlRpcException {
-		return	remoteProcedureOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);
+		return	remoteQueryOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);
 	}
 	
 	/**
@@ -216,7 +236,7 @@ public class OdooApiConfig {
 	 */
 	public Object[] readFromModel(String modelName, Map<String, Object> details, Object... ids) throws XmlRpcException {
 		
-		return remoteProcedureOnModel(EXECUTE_KW,modelName,READ,details,ids);
+		return remoteQueryOnModel(EXECUTE_KW,modelName,READ,details,ids);
 	}
 	
 	/**
@@ -270,7 +290,7 @@ public class OdooApiConfig {
 	
 	
 	/**
-	 * Esegue una chiamata XML-RPC generica su un model Odoo usando il procedure specificato.
+	 * Esegue una chiamata XML-RPC in lettura su un model Odoo usando il procedure specificato.
 	 *
 	 * @param procedure nome della procedure XML-RPC (es. "execute_kw" o "execute")
 	 * @param model     nome del model Odoo (es. "res.partner")
@@ -280,7 +300,7 @@ public class OdooApiConfig {
 	 * @return          array di oggetti restituito dall'esecuzione XML-RPC (castare secondo il formato atteso)
 	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	private Object[] remoteProcedureOnModel(String procedure, String model, String operation, Map<String,Object> details, Object... params) throws XmlRpcException {
+	private Object[] remoteQueryOnModel(String procedure, String model, String operation, Map<String,Object> details, Object... params) throws XmlRpcException {
 		
 		return (Object[]) models.execute(procedure,
 				Arrays.asList(
