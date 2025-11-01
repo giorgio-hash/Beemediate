@@ -33,13 +33,6 @@
 	</properties>
 	<dependencies>
 	
-		<!--Pitest-->
-		<dependency>
-		    <groupId>org.pitest</groupId>
-		    <artifactId>pitest-maven</artifactId>
-		    <version>1.21.0</version>
-		</dependency>
-	
 		<!--JaCoCo-->
 		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
         <dependency>
