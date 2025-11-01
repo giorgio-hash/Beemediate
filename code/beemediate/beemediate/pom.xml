@@ -33,6 +33,13 @@
 	</properties>
 	<dependencies>
 	
+		<!--Pitest-->
+		<dependency>
+		    <groupId>org.pitest</groupId>
+		    <artifactId>pitest-maven</artifactId>
+		    <version>1.21.0</version>
+		</dependency>
+	
 		<!--JaCoCo-->
 		<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
         <dependency>
@@ -116,6 +123,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<!-- Pitest -->
+			<plugin>
+			    <groupId>org.pitest</groupId>
+			    <artifactId>pitest-maven</artifactId>
+			</plugin>
+			
 			
 			<!--PMD-->
 		      <plugin>
