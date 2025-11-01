@@ -11,26 +11,26 @@ import org.springframework.context.annotation.Configuration;
  * need to perform XML-RPC calls to Odoo, improving testability and configurability.
  */
 @Configuration
-<span class="nc" id="L14">public class OdooBeans {</span>
+<span class="fc" id="L14">public class OdooBeans {</span>
 
     @Bean
     public XmlRpcClientConfigImpl commonConfig() {
-<span class="nc" id="L18">        return new XmlRpcClientConfigImpl();</span>
+<span class="fc" id="L18">        return new XmlRpcClientConfigImpl();</span>
     }
 
     @Bean
     public XmlRpcClientConfigImpl objectConfig() {
-<span class="nc" id="L23">        return new XmlRpcClientConfigImpl();</span>
+<span class="fc" id="L23">        return new XmlRpcClientConfigImpl();</span>
     }
 
     @Bean
     public XmlRpcClient xmlRpcClientCommon() {
-<span class="nc" id="L28">        return new XmlRpcClient();</span>
+<span class="fc" id="L28">        return new XmlRpcClient();</span>
     }
 
     @Bean
     public XmlRpcClient xmlRpcClientModels() {
-<span class="nc" id="L33">        return new XmlRpcClient();</span>
+<span class="fc" id="L33">        return new XmlRpcClient();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -2,12 +2,12 @@
 /**
  * Stato degli Ordini a Fornitore, ovvero gli Ordini di Acquisto di Odoo.
  */
-<span class="nc" id="L5">public enum OafStatus{</span>
-<span class="nc" id="L6">	NEW(&quot;NEW&quot;),</span>
-<span class="nc" id="L7">	SHIPPED(&quot;SHIPPED&quot;),</span>
-<span class="nc" id="L8">	CONFIRMED(&quot;CONFIRMED&quot;),</span>
-<span class="nc" id="L9">	OPENTRANSERROR(&quot;OPENTRANSERROR&quot;),</span>
-<span class="nc" id="L10">	CONTENTERROR(&quot;CONTENTERROR&quot;);</span>
+<span class="fc" id="L5">public enum OafStatus{</span>
+<span class="fc" id="L6">	NEW(&quot;NEW&quot;),</span>
+<span class="fc" id="L7">	SHIPPED(&quot;SHIPPED&quot;),</span>
+<span class="fc" id="L8">	CONFIRMED(&quot;CONFIRMED&quot;),</span>
+<span class="fc" id="L9">	OPENTRANSERROR(&quot;OPENTRANSERROR&quot;),</span>
+<span class="fc" id="L10">	CONTENTERROR(&quot;CONTENTERROR&quot;);</span>
 	
 	/**
 	 * String corrispondente allo stato
@@ -18,13 +18,13 @@
 	 * Costruttore privato
 	 * @param label - String
 	 */
-<span class="nc" id="L21">	OafStatus(final String label) {</span>
-<span class="nc" id="L22">		this.label = label;</span>
-<span class="nc" id="L23">	}</span>
+<span class="fc" id="L21">	OafStatus(final String label) {</span>
+<span class="fc" id="L22">		this.label = label;</span>
+<span class="fc" id="L23">	}</span>
 	
 	@Override
 	public String toString() {
-<span class="nc" id="L27">		return label;</span>
+<span class="fc" id="L27">		return label;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
