@@ -124,12 +124,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			
-			<!-- Pitest -->
-			<plugin>
-			    <groupId>org.pitest</groupId>
-			    <artifactId>pitest-maven</artifactId>
-			</plugin>
-			
 			
 			<!--PMD-->
 		      <plugin>
