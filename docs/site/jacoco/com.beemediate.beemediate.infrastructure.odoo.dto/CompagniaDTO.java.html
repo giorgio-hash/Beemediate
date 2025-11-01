@@ -39,43 +39,36 @@ public class CompagniaDTO{
 	 */
 	public static CompagniaDTO fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-<span class="nc bnc" id="L42" title="All 4 branches missed.">		if (prv == null || prv.getCompanyId().getNum().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
+<span class="fc bfc" id="L42" title="All 4 branches covered.">		if (prv == null || prv.getCompanyId().getNum().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
 		
-<span class="nc" id="L44">		final Object id = prv.getCompanyId().getNum().get();</span>
+<span class="fc" id="L44">		final Object id = prv.getCompanyId().getNum().get();</span>
 		Object[] res;
-<span class="nc" id="L46">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L46">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
-<span class="nc" id="L48">		requestInfo.clear();</span>
-<span class="nc" id="L49">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;ref&quot;));</span>
-<span class="nc" id="L50">		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
-<span class="nc" id="L51">				Arrays.asList(</span>
-<span class="nc" id="L52">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
-<span class="nc" id="L53">						odoo.RES_PARTNER,odoo.READ,</span>
-<span class="nc" id="L54">						Arrays.asList(Arrays.asList(id)),</span>
-<span class="nc" id="L55">						requestInfo</span>
-						)
-				);
+<span class="fc" id="L48">		requestInfo.clear();</span>
+<span class="fc" id="L49">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;ref&quot;));</span>
+<span class="fc" id="L50">		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, id);</span>
 		
-<span class="nc bnc" id="L59" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni della compagnia &quot;);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni della compagnia &quot;);</span>
 		
-<span class="nc" id="L61">		return new CompagniaDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
+<span class="fc" id="L54">		return new CompagniaDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
 	}
 	
 	/**
 	 * Costruttore
 	 * @param map - Map contente una tupla del model &lt;i&gt;res.partner&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="fc" id="L68">	public CompagniaDTO( final Map&lt;String, Object&gt; map ) {</span>
-<span class="fc" id="L69">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
-<span class="fc" id="L70">		companyRegistry = AttributeMapper.stringify( map.get(&quot;ref&quot;) ); </span>
-<span class="fc" id="L71">	}</span>
+<span class="fc" id="L61">	public CompagniaDTO( final Map&lt;String, Object&gt; map ) {</span>
+<span class="fc" id="L62">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+<span class="fc" id="L63">		companyRegistry = AttributeMapper.stringify( map.get(&quot;ref&quot;) ); </span>
+<span class="fc" id="L64">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="fc" id="L78">		return id;</span>
+<span class="fc" id="L71">		return id;</span>
 	}
 
 	/**
@@ -83,12 +76,12 @@ public class CompagniaDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getCompanyRegistry() {
-<span class="fc" id="L86">		return companyRegistry;</span>
+<span class="fc" id="L79">		return companyRegistry;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L91">		return &quot;CompagniaDTO [id=&quot; + id + &quot;, company_registry=&quot; + companyRegistry + &quot;]&quot;;</span>
+<span class="fc" id="L84">		return &quot;CompagniaDTO [id=&quot; + id + &quot;, company_registry=&quot; + companyRegistry + &quot;]&quot;;</span>
 	}
 	
 	

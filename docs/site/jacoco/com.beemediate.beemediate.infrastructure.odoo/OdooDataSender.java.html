@@ -22,6 +22,7 @@ import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig.OafStatus;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
@@ -30,7 +31,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
 public class OdooDataSender implements DataSenderPort{
 
 	/***logger di {@code Slf4j}*/
-<span class="fc" id="L33">	private final Logger log = LoggerFactory.getLogger(OdooDataSender.class);</span>
+<span class="fc" id="L34">	private final Logger log = LoggerFactory.getLogger(OdooDataSender.class);</span>
 	/***Configurazione per comunicare con API del CRM Odoo.*/
 	private final OdooApiConfig odoo;
 
@@ -43,57 +44,37 @@ public class OdooDataSender implements DataSenderPort{
 	 * Costruttore
 	 * @param oggetto {@code OdooApiConfig}*/
 	@Autowired
-<span class="fc" id="L46">	public OdooDataSender(final OdooApiConfig odoo) {</span>
-<span class="fc" id="L47">		this.odoo = odoo;</span>
-<span class="fc" id="L48">	}</span>
+<span class="fc" id="L47">	public OdooDataSender(final OdooApiConfig odoo) {</span>
+<span class="fc" id="L48">		this.odoo = odoo;</span>
+<span class="fc" id="L49">	}</span>
 	
 	
 	@Override
 	public boolean signalConfirmation(final Confirmation c) {
 		
-		try {
-<span class="nc" id="L55">			return signal(c);</span>
-<span class="nc" id="L56">		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {</span>
-<span class="nc" id="L57">			log.error(ERROR_MSG_ODOODB,e);</span>
-		}
+<span class="fc" id="L55">		return executeSignalSafely(c, OafStatus.CONFIRMED);</span>
 		
-<span class="nc" id="L60">		return false;</span>
 	}
 	
 	@Override
 	public boolean signalShipped(final Order o) {
 
-		try {
-<span class="nc" id="L67">			return signal(o, OafStatus.SHIPPED);</span>
-<span class="nc" id="L68">		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {</span>
-<span class="nc" id="L69">			log.error(ERROR_MSG_ODOODB,e);</span>
-		}
+<span class="fc" id="L62">		return executeSignalSafely(o, OafStatus.SHIPPED);</span>
 		
-<span class="nc" id="L72">		return false;</span>
 	}
 
 	@Override
 	public boolean signalOpenTransError(final Order o) {
 
-		try {
-<span class="nc" id="L79">			return signal(o, OafStatus.OPENTRANSERROR);</span>
-<span class="nc" id="L80">		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {</span>
-<span class="nc" id="L81">			log.error(ERROR_MSG_ODOODB,e);</span>
-		}
+<span class="fc" id="L69">		return executeSignalSafely(o, OafStatus.OPENTRANSERROR);</span>
 		
-<span class="nc" id="L84">		return false;</span>
 	}
 
 	@Override
 	public boolean signalContentError(final  Order o) {
-
-		try {
-<span class="nc" id="L91">			return signal(o, OafStatus.CONTENTERROR);</span>
-<span class="nc" id="L92">		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {</span>
-<span class="nc" id="L93">			log.error(ERROR_MSG_ODOODB,e);</span>
-		}
 		
-<span class="nc" id="L96">		return false;</span>
+<span class="fc" id="L76">		return executeSignalSafely(o, OafStatus.CONTENTERROR);</span>
+	
 	}
 	
 	
@@ -102,6 +83,32 @@ public class OdooDataSender implements DataSenderPort{
 	//******** metodi helper di servizio ********//
 	//*******************************************//
 
+	/**
+	 * Esegue in modo sicuro l'invio di uno stato verso Odoo invocando signal(...)
+	 * e catturando tutte le checked exception legate alla comunicazione/URL.
+	 * &lt;ul&gt;
+	 * &lt;li&gt; Se signal() completa correttamente ritorna il suo valore booleano.&lt;/li&gt;
+	 * &lt;li&gt; Se viene sollevata una delle eccezioni previste viene loggato l'errore
+	 *   e viene restituito false (fallimento silenzioso gestito qui).&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 */
+	private boolean executeSignalSafely(Object o, OafStatus status) {
+		
+		try {
+			// se non si è connessi, prova una connessione.
+<span class="fc bfc" id="L99" title="All 2 branches covered.">			if(!odoo.isOnline())</span>
+<span class="fc" id="L100">				odoo.connect();</span>
+			
+<span class="fc bfc" id="L102" title="All 2 branches covered.">			return status == OafStatus.CONFIRMED? signal((Confirmation) o ) : signal((Order) o, status);</span>
+			
+<span class="fc" id="L104">		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException | InconsistentDTOException | NullSuppliedArgumentException | EmptyFetchException e) {</span>
+<span class="fc" id="L105">			log.error(ERROR_MSG_ODOODB,e);</span>
+		}
+		
+<span class="fc" id="L108">		return false;</span>
+	}
+	
+	
 	/**
 	 * Segnala (invia) un aggiornamento di stato per un ordine al servizio Odoo.
 	 *
@@ -122,21 +129,15 @@ public class OdooDataSender implements DataSenderPort{
 	 *         Nota: l'eventuale {@code XmlRpcException} generata da {@code updateTo(...)} è
 	 *         catturata all'interno del metodo e non viene propagata.
 	 * @throws URISyntaxException se l'URI usato per la connessione è invalido
+	 * @throws EmptyFetchException 
+	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Order o, OafStatus status) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
+	private boolean signal(Order o, OafStatus status) throws NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
-		// se non si è connessi, prova una connessione.
-<span class="nc bnc" id="L129" title="All 2 branches missed.">		if(!odoo.isOnline())</span>
-<span class="nc" id="L130">			odoo.connect();</span>
+<span class="fc" id="L137">		boolean res = updateTo(o.getOrderID(), status.toString() );</span>
+<span class="fc" id="L138">		log.info(&quot;Inviato update OaF di {} a {}.&quot;,o.getOrderID(),status.toString());</span>
 		
-<span class="nc" id="L132">		boolean res = false;</span>
-		try {
-<span class="nc" id="L134">			res = updateTo(o.getOrderID(), status.toString() );</span>
-<span class="nc" id="L135">			log.info(&quot;Inviato update OaF di {} a {}.&quot;,o.getOrderID(),status.toString());</span>
-<span class="nc" id="L136">		}catch(XmlRpcException e) {</span>
-<span class="nc" id="L137">			log.info(&quot;Problema nella scrittura del db Odoo.&quot;,e);</span>
-		}
-<span class="nc" id="L139">		return res;</span>
+<span class="fc" id="L140">		return res;</span>
 	}
 	
 
@@ -160,33 +161,27 @@ public class OdooDataSender implements DataSenderPort{
 	 * @return {@code true} se l'aggiornamento dello stato su Odoo è andato a buon fine,
 	 *         {@code false} in caso contrario (inclusi i casi in cui si verifica un'eccezione
 	 *         gestita internamente e loggata)
-	 * @throws FailedLoginException se il tentativo di connessione a Odoo fallisce a causa di credenziali non valide
-	 * @throws MalformedURLException se l'URL usato per connettersi a Odoo è malformato
 	 * @throws XmlRpcException se una chiamata di connessione/interazione con Odoo (es. {@code odoo.connect()})
 	 *         solleva questa eccezione prima che venga eseguito l'aggiornamento; le XmlRpcException
 	 *         sollevate da {@code updateTo(...)} o {@code createWorkflowAnnotation(...)} sono invece
 	 *         catturate e non propagate.
-	 * @throws URISyntaxException se l'URI usato per la connessione è invalido
+	 * @throws InconsistentDTOException 
+	 * @throws EmptyFetchException 
+	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Confirmation c) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
+	private boolean signal(Confirmation c) throws InconsistentDTOException, NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
-		// se non si è connessi, prova una connessione.
-<span class="nc bnc" id="L174" title="All 2 branches missed.">		if(!odoo.isOnline())</span>
-<span class="nc" id="L175">			odoo.connect();</span>
+<span class="fc" id="L174">		final String stato = OafStatus.CONFIRMED.toString();</span>
+<span class="fc" id="L175">		boolean res = false;</span>
+<span class="fc" id="L176">		ConfirmationStructure data = c.getData();</span>
+<span class="fc" id="L177">		String resourceID = c.getConfirmationId();</span>
 		
-<span class="nc" id="L177">		final String stato = OafStatus.CONFIRMED.toString();</span>
-<span class="nc" id="L178">		boolean res = false;</span>
-<span class="nc" id="L179">		ConfirmationStructure data = c.getData();</span>
-<span class="nc" id="L180">		String resourceID = c.getConfirmationId();</span>
-		try {
-<span class="nc" id="L182">			res = updateTo(data.getOrderId(),  stato );</span>
-<span class="nc" id="L183">			log.info(&quot;Inviato update OaF di {} a {}.&quot;,data.getOrderId(), stato);</span>
-<span class="nc" id="L184">			createWorkflowAnnotation(resourceID, data);</span>
-<span class="nc" id="L185">			log.info(&quot;Inviato a {} messaggio di conferma d'ordine sul workflow.&quot;,data.getOrderId());</span>
-<span class="nc" id="L186">		}catch(XmlRpcException | InconsistentDTOException e) {</span>
-<span class="nc" id="L187">			log.info(&quot;Problema nella scrittura del db Odoo.&quot;,e);</span>
-		}
-<span class="nc" id="L189">		return res;</span>
+<span class="fc" id="L179">		res = updateTo(data.getOrderId(),  stato );</span>
+<span class="fc" id="L180">		log.info(&quot;Inviato update OaF di {} a {}.&quot;,data.getOrderId(), stato);</span>
+<span class="fc" id="L181">		createWorkflowAnnotation(resourceID, data);</span>
+<span class="fc" id="L182">		log.info(&quot;Inviato a {} messaggio di conferma d'ordine sul workflow.&quot;,data.getOrderId());</span>
+
+<span class="fc" id="L184">		return res;</span>
 	}
 	
 	
@@ -196,40 +191,27 @@ public class OdooDataSender implements DataSenderPort{
 	 * @param oafState - String
 	 * @return &lt;i&gt;true&lt;/i&gt; se l'operazione è andata a buon fine
 	 * @throws XmlRpcException per problemi legati alla applicazione del protocollo XML-RPC
+	 * @throws EmptyFetchException per problemi legati alla ricerca dell'ordine obiettivo
+	 * @throws NullSuppliedArgumentException
 	 */
-	private boolean updateTo(final String orderId, final String oafState) throws XmlRpcException, NullSuppliedArgumentException {
+	private boolean updateTo(final String orderId, final String oafState) throws XmlRpcException, NullSuppliedArgumentException, EmptyFetchException {
 		
-<span class="nc bnc" id="L202" title="All 4 branches missed.">		if(orderId==null || oafState==null)</span>
-<span class="nc" id="L203">			throw new NullSuppliedArgumentException (&quot;Non sono ammessi argomenti null&quot;);</span>
+<span class="pc bpc" id="L199" title="1 of 4 branches missed.">		if(orderId==null || oafState==null)</span>
+<span class="fc" id="L200">			throw new NullSuppliedArgumentException (&quot;Non sono ammessi argomenti null&quot;);</span>
 		
 		Object[] ids;
-<span class="nc" id="L206">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L203">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
-<span class="nc" id="L208">		requestInfo.clear();</span>
-<span class="nc" id="L209">		requestInfo.put(&quot;limit&quot;, 1);</span>
-<span class="nc" id="L210">		ids = (Object[]) odoo.models.execute(&quot;execute_kw&quot;,</span>
-<span class="nc" id="L211">				Arrays.asList(</span>
-<span class="nc" id="L212">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
-<span class="nc" id="L213">						&quot;purchase.order&quot;,&quot;search&quot;,</span>
-<span class="nc" id="L214">						Arrays.asList(Arrays.asList(</span>
-<span class="nc" id="L215">								Arrays.asList(&quot;name&quot;,&quot;=&quot;,orderId)</span>
-								)),
-<span class="nc" id="L217">						requestInfo</span>
-						)
-				);
+<span class="fc" id="L205">		requestInfo.clear();</span>
+<span class="fc" id="L206">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="fc" id="L207">		ids = odoo.searchFromModel(&quot;purchase.order&quot;, requestInfo, Arrays.asList(&quot;name&quot;,&quot;=&quot;,orderId));</span>
 		
-<span class="nc" id="L221">		requestInfo.clear();		</span>
-<span class="nc" id="L222">		requestInfo.put(&quot;x_studio_oaf&quot;, oafState );</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException(&quot;Ordine &quot;+orderId+&quot; da aggiornare non è stato trovato&quot;);</span>
 		
-<span class="nc" id="L224">		return (boolean) odoo.models.execute(&quot;execute_kw&quot;, </span>
-<span class="nc" id="L225">						Arrays.asList(</span>
-<span class="nc" id="L226">						    odoo.getDb(), odoo.getUid(), odoo.getPassword(),</span>
-<span class="nc" id="L227">						    &quot;purchase.order&quot;, &quot;write&quot;,</span>
-<span class="nc" id="L228">						    Arrays.asList(Arrays.asList(ids[0]),</span>
-<span class="nc" id="L229">						    requestInfo</span>
-						    )
-					    )
-					);
+<span class="fc" id="L211">		requestInfo.clear();		</span>
+<span class="fc" id="L212">		requestInfo.put(&quot;x_studio_oaf&quot;, oafState );</span>
+		
+<span class="fc" id="L214">		return odoo.updateOnModel(&quot;purchase.order&quot;, requestInfo, ids[0]);</span>
 		
 	}
 	
@@ -265,39 +247,24 @@ public class OdooDataSender implements DataSenderPort{
 		
 		Object[] ids;
 		Object[] res;
-<span class="nc" id="L268">		Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L250">		Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
-<span class="nc" id="L270">		requestInfo.clear();</span>
-<span class="nc" id="L271">		requestInfo.put(&quot;limit&quot;, 1);</span>
-<span class="nc" id="L272">		ids = (Object[]) odoo.models.execute(&quot;execute_kw&quot;,</span>
-<span class="nc" id="L273">				Arrays.asList(</span>
-<span class="nc" id="L274">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
-<span class="nc" id="L275">						&quot;purchase.order&quot;,&quot;search&quot;,</span>
-<span class="nc" id="L276">						Arrays.asList(Arrays.asList(</span>
-<span class="nc" id="L277">								Arrays.asList(&quot;name&quot;,&quot;=&quot;,cs.getOrderId())</span>
-								)),
-<span class="nc" id="L279">						requestInfo</span>
-						)
-				);
+<span class="fc" id="L252">		requestInfo.clear();</span>
+<span class="fc" id="L253">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="fc" id="L254">		ids = odoo.searchFromModel(&quot;purchase.order&quot;, requestInfo, Arrays.asList(&quot;name&quot;,&quot;=&quot;,cs.getOrderId()));</span>
 		
-<span class="nc bnc" id="L283" title="All 2 branches missed.">		if (ids.length&gt;1) throw new InconsistentDTOException(&quot;name ambiguo&quot;);</span>
-<span class="nc bnc" id="L284" title="All 2 branches missed.">		if (ids.length==0) throw new InconsistentDTOException(&quot;name non trovato&quot;);</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">		if (ids.length!=1) throw new InconsistentDTOException(&quot;name ambiguo o non trovato&quot;);</span>
 		
 		//crea messaggio
-<span class="nc" id="L287">		requestInfo.clear();</span>
-<span class="nc" id="L288">		requestInfo.put(&quot;model&quot;,&quot;purchase.order&quot;);</span>
-<span class="nc" id="L289">		requestInfo.put(&quot;res_id&quot;,ids[0]);</span>
-<span class="nc" id="L290">		requestInfo.put(&quot;message_type&quot;, &quot;comment&quot;);</span>
-<span class="nc" id="L291">		requestInfo.put(&quot;body&quot;, writeConfirmationMessage(filename, cs));</span>
+<span class="fc" id="L259">		requestInfo.clear();</span>
+<span class="fc" id="L260">		requestInfo.put(&quot;model&quot;,&quot;purchase.order&quot;);</span>
+<span class="fc" id="L261">		requestInfo.put(&quot;res_id&quot;,ids[0]);</span>
+<span class="fc" id="L262">		requestInfo.put(&quot;message_type&quot;, &quot;comment&quot;);</span>
+<span class="fc" id="L263">		requestInfo.put(&quot;body&quot;, writeConfirmationMessage(filename, cs));</span>
 		
-<span class="nc" id="L293">		odoo.models.execute(&quot;execute_kw&quot;, </span>
-<span class="nc" id="L294">				Arrays.asList(</span>
-<span class="nc" id="L295">				    odoo.getDb(), odoo.getUid(), odoo.getPassword(),</span>
-<span class="nc" id="L296">				    &quot;mail.message&quot;, &quot;create&quot;,</span>
-<span class="nc" id="L297">				    Arrays.asList(requestInfo)</span>
-				    )
-			    );
-<span class="nc" id="L300">	}</span>
+<span class="fc" id="L265">		int msgId = odoo.insertOnModel(&quot;mail.message&quot;, requestInfo);</span>
+<span class="fc" id="L266">		log.info(&quot;Risposta dal model: {}&quot;,msgId);</span>
+<span class="fc" id="L267">	}</span>
 	
 	/**
 	 * Costruisce il corpo HTML del messaggio di conferma (workflow annotation) da inviare a Odoo.
@@ -317,51 +284,51 @@ public class OdooDataSender implements DataSenderPort{
 	 */	
 	private String writeConfirmationMessage(String filename, ConfirmationStructure cs) {
 	    // Format/convert i valori (date/numero) a stringa prima di codificarli
-<span class="nc bnc" id="L320" title="All 2 branches missed.">	    String fn = Encode.forHtmlContent(filename == null ? &quot;&quot; : filename);</span>
-<span class="nc" id="L321">	    String orderId = Encode.forHtmlContent(cs.getOrderId());</span>
-<span class="nc" id="L322">	    String responseDate = Encode.forHtmlContent(String.valueOf(cs.getOrderResponseDate()));</span>
-<span class="nc" id="L323">	    String deliveryDate = Encode.forHtmlContent(String.valueOf(cs.getDeliveryDate()));</span>
-<span class="nc" id="L324">	    String totalItems = Encode.forHtmlContent(String.valueOf(cs.getTotalItemNum()));</span>
-<span class="nc" id="L325">	    String addrName = Encode.forHtmlContent(cs.getAddressName());</span>
-<span class="nc" id="L326">	    String addrStreet = Encode.forHtmlContent(cs.getAddressStreet());</span>
-<span class="nc" id="L327">	    String addrCity = Encode.forHtmlContent(cs.getAddressCity());</span>
-<span class="nc" id="L328">	    String addrCountry = Encode.forHtmlContent(cs.getAddressCountry());</span>
-<span class="nc" id="L329">	    String addrCountryCoded = Encode.forHtmlContent(cs.getAddressCountryCoded());</span>
-<span class="nc" id="L330">	    String totalAmount = Encode.forHtmlContent(String.valueOf(cs.getTotalAmount()));</span>
-<span class="nc" id="L331">	    String currency = Encode.forHtmlContent(cs.getCurrency());</span>
-<span class="nc" id="L332">		return new StringBuilder()</span>
-<span class="nc" id="L333">				.append(&quot;ORDERRESPONSE&quot;)</span>
-<span class="nc" id="L334">				.append(&quot;&lt;p&gt;&quot;)</span>
-<span class="nc" id="L335">					.append(&quot;Archiviato il file &quot;)</span>
-<span class="nc" id="L336">					.append(fn)</span>
-<span class="nc" id="L337">					.append(&quot; con risposta all'ordine &quot;)</span>
-<span class="nc" id="L338">					.append('\&quot;').append(orderId).append('\&quot;')</span>
-<span class="nc" id="L339">					.append('.')</span>
-<span class="nc" id="L340">				.append(&quot;&lt;/p&gt;&quot;)</span>
-<span class="nc" id="L341">				.append(&quot;&lt;ul&gt;&quot;)</span>
-<span class="nc" id="L342">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Data notifica: &quot;)</span>
-<span class="nc" id="L343">										.append(responseDate)</span>
-<span class="nc" id="L344">										.append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L345">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Data Consegna:&quot;)</span>
-<span class="nc" id="L346">										.append(deliveryDate)</span>
-<span class="nc" id="L347">										.append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L348">					.append(&quot;&lt;li&gt;&quot;).append(totalItems).append(&quot; articoli spediti a:&quot;)</span>
-<span class="nc" id="L349">											.append(&quot;&lt;ul style=\&quot;list-style-type:none;\&quot;&gt;&quot;)</span>
-<span class="nc" id="L350">												.append(&quot;&lt;li&gt;&quot;).append(addrName).append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L351">												.append(&quot;&lt;li&gt;&quot;).append(addrStreet).append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L352">												.append(&quot;&lt;li&gt;&quot;).append(addrCity)</span>
-<span class="nc" id="L353">																	.append(&quot;, &quot;).append(addrCountry)</span>
-<span class="nc" id="L354">																	.append('(').append(addrCountryCoded).append(')')</span>
-<span class="nc" id="L355">																	.append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L356">											.append(&quot;&lt;/ul&gt;&quot;)</span>
-<span class="nc" id="L357">										.append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L358">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Importo lordo: &quot;)</span>
-<span class="nc" id="L359">										.append(totalAmount).append(' ')</span>
-<span class="nc" id="L360">										.append(currency)</span>
-<span class="nc" id="L361">										.append(&quot;&lt;/li&gt;&quot;)</span>
-<span class="nc" id="L362">				.append(&quot;&lt;/ul&gt;&quot;)</span>
-<span class="nc" id="L363">				.append(&quot;&lt;p&gt;Vedi file archiviato per altre informazioni.&lt;/p&gt;&quot;)</span>
-<span class="nc" id="L364">				.toString();</span>
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">	    String fn = Encode.forHtmlContent(filename == null ? &quot;&quot; : filename);</span>
+<span class="fc" id="L288">	    String orderId = Encode.forHtmlContent(cs.getOrderId());</span>
+<span class="fc" id="L289">	    String responseDate = Encode.forHtmlContent(String.valueOf(cs.getOrderResponseDate()));</span>
+<span class="fc" id="L290">	    String deliveryDate = Encode.forHtmlContent(String.valueOf(cs.getDeliveryDate()));</span>
+<span class="fc" id="L291">	    String totalItems = Encode.forHtmlContent(String.valueOf(cs.getTotalItemNum()));</span>
+<span class="fc" id="L292">	    String addrName = Encode.forHtmlContent(cs.getAddressName());</span>
+<span class="fc" id="L293">	    String addrStreet = Encode.forHtmlContent(cs.getAddressStreet());</span>
+<span class="fc" id="L294">	    String addrCity = Encode.forHtmlContent(cs.getAddressCity());</span>
+<span class="fc" id="L295">	    String addrCountry = Encode.forHtmlContent(cs.getAddressCountry());</span>
+<span class="fc" id="L296">	    String addrCountryCoded = Encode.forHtmlContent(cs.getAddressCountryCoded());</span>
+<span class="fc" id="L297">	    String totalAmount = Encode.forHtmlContent(String.valueOf(cs.getTotalAmount()));</span>
+<span class="fc" id="L298">	    String currency = Encode.forHtmlContent(cs.getCurrency());</span>
+<span class="fc" id="L299">		return new StringBuilder()</span>
+<span class="fc" id="L300">				.append(&quot;ORDERRESPONSE&quot;)</span>
+<span class="fc" id="L301">				.append(&quot;&lt;p&gt;&quot;)</span>
+<span class="fc" id="L302">					.append(&quot;Archiviato il file &quot;)</span>
+<span class="fc" id="L303">					.append(fn)</span>
+<span class="fc" id="L304">					.append(&quot; con risposta all'ordine &quot;)</span>
+<span class="fc" id="L305">					.append('\&quot;').append(orderId).append('\&quot;')</span>
+<span class="fc" id="L306">					.append('.')</span>
+<span class="fc" id="L307">				.append(&quot;&lt;/p&gt;&quot;)</span>
+<span class="fc" id="L308">				.append(&quot;&lt;ul&gt;&quot;)</span>
+<span class="fc" id="L309">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Data notifica: &quot;)</span>
+<span class="fc" id="L310">										.append(responseDate)</span>
+<span class="fc" id="L311">										.append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L312">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Data Consegna:&quot;)</span>
+<span class="fc" id="L313">										.append(deliveryDate)</span>
+<span class="fc" id="L314">										.append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L315">					.append(&quot;&lt;li&gt;&quot;).append(totalItems).append(&quot; articoli spediti a:&quot;)</span>
+<span class="fc" id="L316">											.append(&quot;&lt;ul style=\&quot;list-style-type:none;\&quot;&gt;&quot;)</span>
+<span class="fc" id="L317">												.append(&quot;&lt;li&gt;&quot;).append(addrName).append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L318">												.append(&quot;&lt;li&gt;&quot;).append(addrStreet).append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L319">												.append(&quot;&lt;li&gt;&quot;).append(addrCity)</span>
+<span class="fc" id="L320">																	.append(&quot;, &quot;).append(addrCountry)</span>
+<span class="fc" id="L321">																	.append('(').append(addrCountryCoded).append(')')</span>
+<span class="fc" id="L322">																	.append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L323">											.append(&quot;&lt;/ul&gt;&quot;)</span>
+<span class="fc" id="L324">										.append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L325">					.append(&quot;&lt;li&gt;&quot;).append(&quot;Importo lordo: &quot;)</span>
+<span class="fc" id="L326">										.append(totalAmount).append(' ')</span>
+<span class="fc" id="L327">										.append(currency)</span>
+<span class="fc" id="L328">										.append(&quot;&lt;/li&gt;&quot;)</span>
+<span class="fc" id="L329">				.append(&quot;&lt;/ul&gt;&quot;)</span>
+<span class="fc" id="L330">				.append(&quot;&lt;p&gt;Vedi file archiviato per altre informazioni.&lt;/p&gt;&quot;)</span>
+<span class="fc" id="L331">				.toString();</span>
 	}
 	
 }

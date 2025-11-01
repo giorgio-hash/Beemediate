@@ -13,7 +13,7 @@ public class OrderSummary {
 	
 	/***Costruttore*/
 //	@SkipEsc
-<span class="nc" id="L16">	public OrderSummary() {/*empty constructor*/}</span>
+<span class="fc" id="L16">	public OrderSummary() {/*empty constructor*/}</span>
 	
 	/**
 	 * Copy Constructor
@@ -34,7 +34,7 @@ public class OrderSummary {
 	 */
 	//@ ensures \result==totalItemNum;
 	public /*@ pure @*/ int getTotalItemNum() {
-<span class="nc" id="L37">		return totalItemNum;</span>
+<span class="fc" id="L37">		return totalItemNum;</span>
 	}
 
 	/**
@@ -45,13 +45,13 @@ public class OrderSummary {
 	//@ ensures this.totalItemNum&gt;0;
 //	@CodeBigintMath
 	public void setTotalItemNum(final int totalItemNum) {
-<span class="nc" id="L48">		this.totalItemNum = totalItemNum;</span>
-<span class="nc" id="L49">	}</span>
+<span class="fc" id="L48">		this.totalItemNum = totalItemNum;</span>
+<span class="fc" id="L49">	}</span>
 
 //	@SkipEsc
 	@Override
 	public String toString() {
-<span class="nc" id="L54">		return &quot;OrderSummary [totalItemNum=&quot; + totalItemNum + &quot;]&quot;;</span>
+<span class="fc" id="L54">		return &quot;OrderSummary [totalItemNum=&quot; + totalItemNum + &quot;]&quot;;</span>
 	}
 
 	

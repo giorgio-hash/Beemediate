@@ -63,60 +63,48 @@ public class ProdottoFornitoreDTO{
 	public static ProdottoFornitoreDTO[] fromXMLRPC(final OdooApiConfig odoo, final ProdottoDTO[] pr, final FornitoreDTO f) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
 		
-<span class="nc bnc" id="L66" title="All 2 branches missed.">		if (f == null) throw new InconsistentDTOException(&quot;FornitoreDTO null&quot;);</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (pr == null) throw new InconsistentDTOException(&quot;Lista ProdottoDTO null&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		if (f == null) throw new InconsistentDTOException(&quot;FornitoreDTO null&quot;);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">		if ( f.getName().isEmpty() ) throw new InconsistentDTOException(&quot;Fornitore non ha un nome.&quot;);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		if (pr == null) throw new InconsistentDTOException(&quot;Lista ProdottoDTO null&quot;);</span>
 		
 		final Object[] ids;
 		final Object[] res;
 		final ProdottoFornitoreDTO[] prd;
 		final List&lt;Object&gt; elems;
-<span class="nc" id="L73">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L74">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		 
 		
 		//ora estraggo gli id che fanno riferimento ad un articolo a fornitore
-<span class="nc" id="L77">		elems = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">		for(ProdottoDTO p : pr) {</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">			if(  p.getSellerIds().isPresent()  ) {</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">				if(p.getSellerIds().isEmpty())</span>
-<span class="nc" id="L81">					throw new InconsistentDTOException(&quot;ProdottoDTO ha sellerIds vuoto&quot;);</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">				for(Object o : p.getSellerIds().get() )</span>
-<span class="nc" id="L83">					elems.add(o);</span>
-<span class="nc" id="L84">			}else</span>
-<span class="nc" id="L85">				throw new InconsistentDTOException(&quot;Il prodotto non ha nessun id a fornitore: &quot; + p);</span>
+<span class="fc" id="L78">		elems = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">		for(ProdottoDTO p : pr) {</span>
+<span class="fc bfc" id="L80" title="All 4 branches covered.">			if(  p.getSellerIds().isPresent()  &amp;&amp; p.getSellerIds().get().length&gt;0) {</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">				for(Object o : p.getSellerIds().get() )</span>
+<span class="fc" id="L82">					elems.add(o);</span>
+<span class="fc" id="L83">			}else</span>
+<span class="fc" id="L84">				throw new InconsistentDTOException(&quot;Il prodotto non ha nessun id a fornitore: &quot; + p);</span>
 		}
 
 		
-<span class="nc bnc" id="L89" title="All 2 branches missed.">		if ( f.getName().isEmpty() ) throw new InconsistentDTOException(&quot;Fornitore non ha un nome.&quot;);</span>
 		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
-<span class="nc" id="L91">		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
-<span class="nc" id="L92">				Arrays.asList(</span>
-<span class="nc" id="L93">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
-<span class="nc" id="L94">						&quot;product.supplierinfo&quot;,&quot;search&quot;,</span>
-<span class="nc" id="L95">						Arrays.asList(Arrays.asList(</span>
-<span class="nc" id="L96">								Arrays.asList(odoo.PARTNER_ID_FIELD,&quot;=&quot;, f.getName().get() ),</span>
-<span class="nc" id="L97">								Arrays.asList(&quot;id&quot;,&quot;in&quot;,elems)</span>
-								))
-						)
-				);
+<span class="fc" id="L89">		ids = odoo.searchFromModel(&quot;product.supplierinfo&quot;, requestInfo, </span>
+<span class="fc" id="L90">									Arrays.asList(odoo.PARTNER_ID_FIELD,&quot;=&quot;, f.getName().get() ),</span>
+<span class="fc" id="L91">									Arrays.asList(&quot;id&quot;,&quot;in&quot;,elems));</span>
+		
+<span class="fc bfc" id="L93" title="All 2 branches covered.">		if (ids.length == 0) throw new EmptyFetchException(&quot;Id prodottoFornitoreDTO non trovati&quot;);</span>
 
 		// ora estraggo
-<span class="nc" id="L103">		requestInfo.clear();</span>
-<span class="nc" id="L104">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;id&quot;,&quot;product_id&quot;,&quot;sequence&quot;,&quot;product_name&quot;,&quot;product_code&quot;,odoo.PARTNER_ID_FIELD,&quot;product_uom_id&quot;));</span>
-<span class="nc" id="L105">		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,</span>
-<span class="nc" id="L106">				Arrays.asList(</span>
-<span class="nc" id="L107">						odoo.getDb(),odoo.getUid(),odoo.getPassword(),</span>
-<span class="nc" id="L108">						&quot;product.supplierinfo&quot;,odoo.READ,</span>
-<span class="nc" id="L109">						Arrays.asList(Arrays.asList(ids)),</span>
-<span class="nc" id="L110">						requestInfo</span>
-						)
-				);
+<span class="fc" id="L96">		requestInfo.clear();</span>
+<span class="fc" id="L97">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;id&quot;,&quot;product_id&quot;,&quot;sequence&quot;,&quot;product_name&quot;,&quot;product_code&quot;,odoo.PARTNER_ID_FIELD,&quot;product_uom_id&quot;));</span>
+<span class="fc" id="L98">		res = odoo.readFromModel(&quot;product.supplierinfo&quot;, requestInfo, ids);</span>
 		
-<span class="nc" id="L114">		prd = new ProdottoFornitoreDTO[res.length];</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">		for(int i=0; i&lt;res.length; i++) {</span>
-<span class="nc" id="L116">			prd[i] = new ProdottoFornitoreDTO( (HashMap&lt;String,Object&gt;) res[i] );</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		if (res.length == 0) throw new EmptyFetchException(&quot;Non sono stati trovati i prodotti fornitore&quot;);</span>
+		
+<span class="fc" id="L102">		prd = new ProdottoFornitoreDTO[res.length];</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
+<span class="fc" id="L104">			prd[i] = new ProdottoFornitoreDTO( (HashMap&lt;String,Object&gt;) res[i] );</span>
 		}
 		
-<span class="nc" id="L119">		return prd;</span>
+<span class="fc" id="L107">		return prd;</span>
 	}
 	
 	
@@ -124,29 +112,29 @@ public class ProdottoFornitoreDTO{
 	 * 
 	 * @param map - Map contente una tupla del model &lt;i&gt;product.supplierinfo&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="fc" id="L127">	public ProdottoFornitoreDTO( final Map&lt;String, Object&gt; map ) {</span>
+<span class="fc" id="L115">	public ProdottoFornitoreDTO( final Map&lt;String, Object&gt; map ) {</span>
 		
-<span class="fc" id="L129">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+<span class="fc" id="L117">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
 		
-<span class="fc" id="L131">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
+<span class="fc" id="L119">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
 		
-<span class="fc" id="L133">		sequence = AttributeMapper.intify( map.get(&quot;sequence&quot;) );</span>
+<span class="fc" id="L121">		sequence = AttributeMapper.intify( map.get(&quot;sequence&quot;) );</span>
 		
-<span class="fc" id="L135">		productName = AttributeMapper.stringify( map.get(&quot;product_name&quot;) );</span>
+<span class="fc" id="L123">		productName = AttributeMapper.stringify( map.get(&quot;product_name&quot;) );</span>
 		
-<span class="fc" id="L137">		productCode = AttributeMapper.stringify( map.get(&quot;product_code&quot;) );</span>
+<span class="fc" id="L125">		productCode = AttributeMapper.stringify( map.get(&quot;product_code&quot;) );</span>
 		
-<span class="fc" id="L139">		partnerId = new IdentifierDTO( (Object[]) map.get(&quot;partner_id&quot;));</span>
+<span class="fc" id="L127">		partnerId = new IdentifierDTO( (Object[]) map.get(&quot;partner_id&quot;));</span>
 		
-<span class="fc" id="L141">		productUomId = new IdentifierDTO( (Object[]) map.get(&quot;product_uom_id&quot;) );</span>
-<span class="fc" id="L142">	}</span>
+<span class="fc" id="L129">		productUomId = new IdentifierDTO( (Object[]) map.get(&quot;product_uom_id&quot;) );</span>
+<span class="fc" id="L130">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="fc" id="L149">		return id;</span>
+<span class="fc" id="L137">		return id;</span>
 	}
 
 	/**
@@ -154,7 +142,7 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto IdentifierDTO con identificativo del prodotto.
 	 */
 	public IdentifierDTO getProductId() {
-<span class="fc" id="L157">		return productId;</span>
+<span class="fc" id="L145">		return productId;</span>
 	}
 
 	/**
@@ -162,7 +150,7 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getSequence() {
-<span class="fc" id="L165">		return sequence;</span>
+<span class="fc" id="L153">		return sequence;</span>
 	}
 
 	/**
@@ -170,7 +158,7 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getProductName() {
-<span class="fc" id="L173">		return productName;</span>
+<span class="fc" id="L161">		return productName;</span>
 	}
 
 	/**
@@ -178,7 +166,7 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getProductCode() {
-<span class="fc" id="L181">		return productCode;</span>
+<span class="fc" id="L169">		return productCode;</span>
 	}
 
 	/**
@@ -186,7 +174,7 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto IdentifierDTO con identificativo del fornitore.
 	 */
 	public IdentifierDTO getPartnerId() {
-<span class="fc" id="L189">		return partnerId;</span>
+<span class="fc" id="L177">		return partnerId;</span>
 	}
 
 	/**
@@ -194,15 +182,15 @@ public class ProdottoFornitoreDTO{
 	 * @return oggetto IdentifierDTO con identificativo dell'unità di misura per la quantità di prodotto.
 	 */
 	public IdentifierDTO getProductUomId() {
-<span class="fc" id="L197">		return productUomId;</span>
+<span class="fc" id="L185">		return productUomId;</span>
 	}
 
 
 	@Override
 	public String toString() {
-<span class="nc" id="L203">		return &quot;ProdottoFornitoreDTO [id=&quot; + id + &quot;, product_id=&quot; + productId + &quot;, sequence=&quot; + sequence</span>
-<span class="nc" id="L204">				+ &quot;, product_name=&quot; + productName + &quot;, product_code=&quot; + productCode + &quot;, partner_id=&quot; + partnerId</span>
-<span class="nc" id="L205">				+ &quot;, product_uom_id=&quot; + productUomId </span>
+<span class="fc" id="L191">		return &quot;ProdottoFornitoreDTO [id=&quot; + id + &quot;, product_id=&quot; + productId + &quot;, sequence=&quot; + sequence</span>
+<span class="fc" id="L192">				+ &quot;, product_name=&quot; + productName + &quot;, product_code=&quot; + productCode + &quot;, partner_id=&quot; + partnerId</span>
+<span class="fc" id="L193">				+ &quot;, product_uom_id=&quot; + productUomId </span>
 				+ &quot;]&quot;;
 	}
 	

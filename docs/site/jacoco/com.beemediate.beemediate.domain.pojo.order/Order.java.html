@@ -42,12 +42,12 @@ public class Order {
 	  @						&amp;&amp; !deliveryLocationNumber &amp;&amp; !deliveryDate &amp;&amp; !deliveryDateContent;						
 	  @ pure
 	  @*/
-<span class="nc" id="L45">	public Order(/*@ non_null*/final OrderStructure d,final String oID) {</span>
-<span class="nc" id="L46">		data = d;</span>
-<span class="nc" id="L47">		orderID = oID;</span>
-<span class="nc" id="L48">		quantity = QuantityFieldValue.NAN;</span>
-<span class="nc" id="L49">		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;</span>
-<span class="nc" id="L50">	}</span>
+<span class="fc" id="L45">	public Order(/*@ non_null*/final OrderStructure d,final String oID) {</span>
+<span class="fc" id="L46">		data = d;</span>
+<span class="fc" id="L47">		orderID = oID;</span>
+<span class="fc" id="L48">		quantity = QuantityFieldValue.NAN;</span>
+<span class="fc" id="L49">		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;</span>
+<span class="fc" id="L50">	}</span>
 
 	/**
 	 * Restituisce una copia difensiva (CWE-374) della struttura dati dell'ordine.
@@ -243,7 +243,7 @@ public class Order {
 	//@ public normal_behaviour
 	//@ ensures \result == orderID; 
 	public /*@ pure @*/ String getOrderID() {
-<span class="nc" id="L246">		return orderID;</span>
+<span class="fc" id="L246">		return orderID;</span>
 	}
 
 }
