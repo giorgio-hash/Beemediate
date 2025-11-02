@@ -331,9 +331,9 @@ public class StringHandler {
 		final int mm=14;//mm index:controllo mm, da "00" a "59"
 		final int ss=17;//ss index:controllo ss, da "00" a "59"
 
-		return has2DigitsBetween(str, MM, '0','0','1','9') && has2DigitsBetween(str, MM, '1','1','0','2') 
-					&& has2DigitsBetween(str, dd, '0','2','0','9') && has2DigitsBetween(str, dd, '3','3','0','1')
-					&& has2DigitsBetween(str, HH, '0','1','0','9') && has2DigitsBetween(str, HH, '2','2','0','3')
+		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) 
+					&& (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))
+					&& (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))
 					&& has2DigitsBetween(str, mm, '0','5','0','9') 
 					&& has2DigitsBetween(str, ss, '0','5','0','9');
 		
