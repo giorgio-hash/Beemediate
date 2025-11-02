@@ -26,7 +26,11 @@ public class ManagerRestController implements ManagerRestControllerIF{
 	public ManagerRestController(OaFManagerPort oafManagerPort) {
 		this.oafManager = oafManagerPort;
 	}
-	
+
+	@Override
+    public ResponseEntity<String> checkHealth() {
+        return ResponseEntity.ok("Backend attiva");
+    }
 	
 	@Override
 	public ResponseEntity manageOrders() {
@@ -49,11 +53,9 @@ public class ManagerRestController implements ManagerRestControllerIF{
 		try {
 			int processed = oafManager.handleConfirmations();
 			log.info("manageConfirmations -> processed {} confirmations", processed);
-			if (processed > 0) {
-				return ResponseEntity.ok("Processed " + processed + " confirmations.");
-			} else {
-				return ResponseEntity.noContent().build();
-			}
+			
+			// Restituisco 200 con messaggio esplicito sul numero di elementi processati
+			return ResponseEntity.ok("Processed " + processed + " confirmations.");
 		} catch (Exception e) {
 			log.error("manageConfirmations -> error while processing confirmations", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
