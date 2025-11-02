@@ -195,7 +195,7 @@
 <span class="nc bnc" id="L195" title="All 2 branches missed.">				if (str.charAt(i) == comma) {</span>
 <span class="nc" id="L196">					numOfCommas++;</span>
 					//@ set numOfCommas=numOfCommas+1;
-				}else
+<span class="nc" id="L198">				}else</span>
 <span class="nc" id="L199">					return false;</span>
 			
 			}		
@@ -331,9 +331,9 @@
 <span class="nc" id="L331">		final int mm=14;//mm index:controllo mm, da &quot;00&quot; a &quot;59&quot;</span>
 <span class="nc" id="L332">		final int ss=17;//ss index:controllo ss, da &quot;00&quot; a &quot;59&quot;</span>
 
-<span class="nc bnc" id="L334" title="All 4 branches missed.">		return has2DigitsBetween(str, MM, '0','0','1','9') &amp;&amp; has2DigitsBetween(str, MM, '1','1','0','2') </span>
-<span class="nc bnc" id="L335" title="All 4 branches missed.">					&amp;&amp; has2DigitsBetween(str, dd, '0','2','0','9') &amp;&amp; has2DigitsBetween(str, dd, '3','3','0','1')</span>
-<span class="nc bnc" id="L336" title="All 4 branches missed.">					&amp;&amp; has2DigitsBetween(str, HH, '0','1','0','9') &amp;&amp; has2DigitsBetween(str, HH, '2','2','0','3')</span>
+<span class="nc bnc" id="L334" title="All 4 branches missed.">		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) </span>
+<span class="nc bnc" id="L335" title="All 6 branches missed.">					&amp;&amp; (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))</span>
+<span class="nc bnc" id="L336" title="All 4 branches missed.">					&amp;&amp; (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))</span>
 <span class="nc bnc" id="L337" title="All 2 branches missed.">					&amp;&amp; has2DigitsBetween(str, mm, '0','5','0','9') </span>
 <span class="nc bnc" id="L338" title="All 2 branches missed.">					&amp;&amp; has2DigitsBetween(str, ss, '0','5','0','9');</span>
 		
@@ -403,8 +403,8 @@
 <span class="nc" id="L403">        char c1 = s.charAt(index);</span>
 <span class="nc" id="L404">        char c2 = s.charAt(index + 1);</span>
 
-<span class="nc bnc" id="L406" title="All 8 branches missed.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
-        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;
+<span class="nc bnc" id="L406" title="All 6 branches missed.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;</span>
     }
 	
 	/**

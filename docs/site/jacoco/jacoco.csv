@@ -25,7 +25,7 @@ beemediate,com.beemediate.beemediate.infrastructure.ftp,FTPReader,159,15,14,0,32
 beemediate,com.beemediate.beemediate.domain.exceptions,EmptyArrayException,4,0,0,0,2,0,1,0,1,0
 beemediate,com.beemediate.beemediate.domain.exceptions,UnreachableThresholdException,4,0,0,0,2,0,1,0,1,0
 beemediate,com.beemediate.beemediate.domain.utils,BoundedBuffer,95,14,14,0,20,5,14,2,7,2
-beemediate,com.beemediate.beemediate.domain.utils,StringHandler,531,0,158,0,106,0,89,0,10,0
+beemediate,com.beemediate.beemediate.domain.utils,StringHandler,539,0,160,0,108,0,90,0,10,0
 beemediate,com.beemediate.beemediate.infrastructure.odoo.config,OafStatus,0,49,0,0,0,10,0,3,0,3
 beemediate,com.beemediate.beemediate.infrastructure.odoo.config,OdooBeans,0,19,0,0,0,5,0,5,0,5
 beemediate,com.beemediate.beemediate.infrastructure.odoo.config,OdooApiConfig,0,312,0,0,0,43,0,8,0,8
