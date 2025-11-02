@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Front-end Java Backend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+			background-color: lightblue;
+        }
+        #status {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Beemediate UI</h1>
+
+<div id="status">Verifica stato backend...</div>
+
+<button onclick="callEndpoint('/manage/orders')">Gestione ordini</button>
+<button onclick="callEndpoint('/manage/confirmations')">Gestione conferme</button>
+
+<div id="response">Risposta apparirà qui...</div>
+
+<script>
+    const statusEl = document.getElementById('status');
+    const responseEl = document.getElementById('response');
+    const backendUrl = 'http://localhost:8888';
+
+    // Funzione per controllare se la backend è attiva
+    async function checkBackend() {
+        try {
+            const res = await fetch(`${backendUrl}/manage/healthcheck`);
+            if (res.ok) {
+                statusEl.textContent = '🟢 Backend attiva';
+                return true;
+            } else {
+                statusEl.textContent = `⚠️ Backend risponde con errore: ${res.status}`;
+                return false;
+            }
+        } catch (e) {
+            statusEl.textContent = '🔴 Backend non raggiungibile';
+            return false;
+        }
+    }
+
+    // Polling automatico ogni 5 secondi
+    setInterval(checkBackend, 5000);
+    checkBackend(); // Controllo immediato all'apertura
+
+    // Chiamata healthcheck (/manage/healthcheck)
+    async function checkRoot() {
+        const online = await checkBackend();
+        if (!online) {
+            responseEl.textContent = 'Impossibile contattare Beemediate.';
+            return;
+        }
+
+        try {
+            const res = await fetch(`${backendUrl}/manage/healthcheck`);
+            const text = await res.text();
+            responseEl.textContent = text;
+        } catch (e) {
+            responseEl.textContent = 'Errore durante durante controllo stato Beemediate.';
+        }
+    }
+
+    // Chiamata a /manage/orders o /manage/confirmations
+    async function callEndpoint(endpoint) {
+        const online = await checkBackend();
+        if (!online) {
+            responseEl.textContent = 'Impossibile contattare Beemediate. La richiesta non è stata inviata.';
+            return;
+        }
+
+        try {
+            const res = await fetch(`${backendUrl}${endpoint}`);
+            const text = await res.text();
+			// Gestione specifica dell'errore 500 solo per /manage/orders
+			if (res.status === 500 && endpoint === '/manage/orders') {
+			    responseEl.textContent = "C'è stato un problema durante la procedura. Controlla la connessione ai servizi remoti e riprova.";
+			} else {
+			    responseEl.textContent = `Risposta da ${endpoint}:\n${text}`;
+			}
+        } catch (e) {
+            responseEl.textContent = `Errore durante la chiamata a ${endpoint}`;
+        }
+    }
+</script>
+
+</body>
+</html>
