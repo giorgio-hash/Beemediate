@@ -73,7 +73,7 @@
                     <span class="status-dot status-warn"></span>
                     <span id="status-text">Verifica stato backend...</span>
                 </div>
-                <button class="btn btn-sm btn-outline-secondary" onclick="checkRoot()">Controllo ora</button>
+                <div class="small text-muted mt-2">check automatico ogni 5 secondi</div>
             </div>
         </div>
     </div>
@@ -94,26 +94,16 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card mt-3 shadow-sm">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Info backend</h6>
-                    <ul class="list-unstyled mb-0">
-                        <li><strong>URL:</strong> <code id="backendUrlText">http://localhost:8888</code></li>
-                        <li class="mt-2"><small class="text-muted">Polling automatico ogni 5 secondi</small></li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">Risposta</h5>
-                    <p class="card-text text-muted">Risultati e messaggi provenienti dal backend appariranno qui sotto.</p>
+                    <p class="card-text text-muted">Visualizza qui l'esito dell'operazione.</p>
 
                     <div id="response" class="border rounded p-3 bg-white">
-                        Risposta apparirà qui...
+                        Risposta dal server...
                     </div>
 
                     <div class="mt-3 d-flex justify-content-between">
@@ -140,7 +130,6 @@
     const statusDotEl = document.querySelector('.status-dot');
     const responseEl = document.getElementById('response');
     const backendUrl = 'http://localhost:8888';
-    document.getElementById('backendUrlText').textContent = backendUrl;
 
     // Funzione per aggiornare UI stato
     function setStatus(state, text) {
@@ -149,8 +138,6 @@
         if (state === 'online') statusDotEl.classList.add('status-online');
         else if (state === 'offline') statusDotEl.classList.add('status-offline');
         else statusDotEl.classList.add('status-warn');
-
-        document.getElementById('lastUpdated').textContent = 'Ultimo aggiornamento: ' + new Date().toLocaleString();
     }
 
     // Funzione per controllare se il backend è attivo
@@ -173,23 +160,6 @@
     // Polling automatico ogni 5 secondi
     setInterval(checkBackend, 5000);
     checkBackend(); // Controllo immediato all'apertura
-
-    // Chiamata healthcheck (/manage/healthcheck) manuale
-    async function checkRoot() {
-        const online = await checkBackend();
-        if (!online) {
-            responseEl.textContent = 'Impossibile contattare Beemediate.';
-            return;
-        }
-
-        try {
-            const res = await fetch(`${backendUrl}/manage/healthcheck`);
-            const text = await res.text();
-            responseEl.textContent = text;
-        } catch (e) {
-            responseEl.textContent = 'Errore durante controllo stato Beemediate.';
-        }
-    }
 
     // Chiamata a /manage/orders o /manage/confirmations
     async function callEndpoint(endpoint) {
