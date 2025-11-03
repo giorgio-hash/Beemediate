@@ -1,0 +1,11 @@
+> NuSMV -dynamic -coi -quiet integrazione.smv
+-- specification EF outboundMessages > 0  is true
+-- specification AG (((ftpGEALAN = CONFIRM_ORDER & outboundMessages > 0) & !(ftpGEALAN != CONFIRM_ORDER | state = ORDER)) -> !E [ !(ftpGEALAN != CONFIRM_ORDER | state = ORDER) U !(!(outboundMessages = 0) | (ftpGEALAN != CONFIRM_ORDER | state = ORDER)) ] )  is true
+-- specification !E [ !((ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) & AF inboundMessages = 0) U !(!(ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) | ((ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) & AF inboundMessages = 0)) ]   is true
+-- specification EF (EX (inboundMessages > 0 & raisedSignal(CONTENT_ERROR)) & inboundMessages = 0)  is true
+-- specification  G ((outboundMessages = 0 &  Y outboundMessages > 0) -> archivedOutboundMessages > 0)  is true
+-- specification  G (( Y inboundMessages = 0 & inboundMessages > 0) -> ( Y state = ORDER & !raisedSignal(OPENTRANS_ERROR)))  is true
+-- invariant (archivedOutboundMessages = 0 -> !raisedSignal(ODA_CONFIRMATION))  is true
+-- invariant (raisedSignal(ODA_CONFIRMATION) -> (archivedOutboundMessages > 0 & outboundMessages = 0))  is true
+
+model checking (w execution) finished

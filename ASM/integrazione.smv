@@ -1,0 +1,74 @@
+--file C:\Users\gchir\OneDrive\Desktop\uni\Gestione Sistemi ICT\progetto\tools_x_tvsw_2025\eclipse_latest\workspace\ASM\integrazione.smv
+-- options: flatten? true
+MODULE main
+	VAR
+		archivedOutboundMessages: {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}; --controlled
+		ftpGEALAN: {CONFIRM_ORDER, GEALANOPERATION_UNDEF, OFFLINE, WITHDRAW_ORDER}; --monitored
+		hasContent_DELIVERY_DATE: boolean; --monitored
+		hasQuantity_QUANTITY: {FLOAT_WITH_COMMA, FLOAT_WITH_DOT, INTEGER, NAN, QUANTITYFIELDVALUE_UNDEF}; --monitored
+		hasRightValue_ARTICLE_NUMBER: boolean; --monitored
+		hasRightValue_CUSTOMER_NUMBER: boolean; --monitored
+		hasRightValue_DELIVERY_DATE_CONTENT: boolean; --monitored
+		hasRightValue_DELIVERY_LOCATION_NUMBER: boolean; --monitored
+		hasRightValue_QUANTITY_MEASURE: boolean; --monitored
+		inboundMessages: {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}; --controlled
+		outboundMessages: {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}; --controlled
+		raisedSignal_CONTENT_ERROR: boolean; --controlled
+		raisedSignal_ODA_CONFIRMATION: boolean; --controlled
+		raisedSignal_OPENTRANS_ERROR: boolean; --controlled
+		state: {NO_ORDER, ORDER, SERVICESTATE_UNDEF}; --monitored
+	DEFINE
+	CONSTANTS CUSTOMER_NUMBER, ARTICLE_NUMBER, QUANTITY_MEASURE, DELIVERY_LOCATION_NUMBER, DELIVERY_DATE_CONTENT, CONSTRAINEDFIELD_UNDEF, QUANTITY, QUANTITYFIELD_UNDEF, SERVICESTATE_UNDEF, NO_ORDER, ORDER, QUANTITYFIELDVALUE_UNDEF, FLOAT_WITH_COMMA, FLOAT_WITH_DOT, INTEGER, NAN, GEALANOPERATION_UNDEF, CONFIRM_ORDER, OFFLINE, WITHDRAW_ORDER, SIGNAL_UNDEF, CONTENT_ERROR, ODA_CONFIRMATION, OPENTRANS_ERROR, DELIVERY_DATE, NONEMPTYFIELD_UNDEF;
+	ASSIGN
+		init(archivedOutboundMessages) := 0;
+		init(inboundMessages) := 0;
+		init(outboundMessages) := 0;
+		init(raisedSignal_CONTENT_ERROR) := FALSE;
+		init(raisedSignal_ODA_CONFIRMATION) := FALSE;
+		init(raisedSignal_OPENTRANS_ERROR) := FALSE;
+		next(archivedOutboundMessages) :=
+			case
+				((((state = ORDER) & (outboundMessages > 0)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) & (outboundMessages > 0))) | ((!(state = ORDER) & (OFFLINE = ftpGEALAN)) & (outboundMessages > 0))) & (archivedOutboundMessages + outboundMessages) in {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}: (archivedOutboundMessages + outboundMessages);
+				TRUE: archivedOutboundMessages;
+			esac;
+		next(inboundMessages) :=
+			case
+				(!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) & 0 in {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}: 0;
+				(!((!(hasContent_DELIVERY_DATE) | (!(hasRightValue_DELIVERY_LOCATION_NUMBER) | !(hasRightValue_CUSTOMER_NUMBER))) | (hasQuantity_QUANTITY != FLOAT_WITH_DOT)) & (state = ORDER)) & (inboundMessages + 1) in {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}: (inboundMessages + 1);
+				TRUE: inboundMessages;
+			esac;
+		next(outboundMessages) :=
+			case
+				(!(state = ORDER) & (CONFIRM_ORDER = ftpGEALAN)) & (outboundMessages + 1) in {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}: (outboundMessages + 1);
+				((((state = ORDER) & (outboundMessages > 0)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) & (outboundMessages > 0))) | ((!(state = ORDER) & (OFFLINE = ftpGEALAN)) & (outboundMessages > 0))) & 0 in {-2147483647, 0, 1, 10, 100, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 3, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 4, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 7, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 8, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 9, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99}: 0;
+				TRUE: outboundMessages;
+			esac;
+		next(raisedSignal_CONTENT_ERROR) :=
+			case
+				(state = ORDER): ((!(hasRightValue_ARTICLE_NUMBER) | !(hasRightValue_QUANTITY_MEASURE)) | (hasContent_DELIVERY_DATE -> !(hasRightValue_DELIVERY_DATE_CONTENT)));
+				((!(state = ORDER) & (CONFIRM_ORDER = ftpGEALAN)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) | (!(state = ORDER) & (OFFLINE = ftpGEALAN)))): FALSE;
+				TRUE: raisedSignal_CONTENT_ERROR;
+			esac;
+		next(raisedSignal_ODA_CONFIRMATION) :=
+			case
+				((((state = ORDER) & (outboundMessages > 0)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) & (outboundMessages > 0))) | ((!(state = ORDER) & (OFFLINE = ftpGEALAN)) & (outboundMessages > 0))): TRUE;
+				((((state = ORDER) & !(outboundMessages > 0)) | ((!(state = ORDER) & (CONFIRM_ORDER = ftpGEALAN)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) & !(outboundMessages > 0)))) | ((!(state = ORDER) & (OFFLINE = ftpGEALAN)) & !(outboundMessages > 0))): FALSE;
+				TRUE: raisedSignal_ODA_CONFIRMATION;
+			esac;
+		next(raisedSignal_OPENTRANS_ERROR) :=
+			case
+				(state = ORDER): ((!(hasContent_DELIVERY_DATE) | (!(hasRightValue_DELIVERY_LOCATION_NUMBER) | !(hasRightValue_CUSTOMER_NUMBER))) | (hasQuantity_QUANTITY != FLOAT_WITH_DOT));
+				((!(state = ORDER) & (CONFIRM_ORDER = ftpGEALAN)) | ((!(state = ORDER) & (WITHDRAW_ORDER = ftpGEALAN)) | (!(state = ORDER) & (OFFLINE = ftpGEALAN)))): FALSE;
+				TRUE: raisedSignal_OPENTRANS_ERROR;
+			esac;
+--LTL properties
+LTLSPEC NAME ltl0 := G(((Y((inboundMessages = 0)) & (inboundMessages > 0)) -> (Y((state = ORDER)) & !(raisedSignal_OPENTRANS_ERROR))));
+LTLSPEC NAME ltl1 := G((((outboundMessages = 0) & Y((outboundMessages > 0))) -> (archivedOutboundMessages > 0)));
+--CTL properties
+CTLSPEC NAME ctl0 := EF((EX(((inboundMessages > 0) & raisedSignal_CONTENT_ERROR)) & (inboundMessages = 0)));
+CTLSPEC NAME ctl1 := ! E[ !(((ftpGEALAN = WITHDRAW_ORDER) & (state = NO_ORDER)) & AF((inboundMessages = 0))) U !(!((ftpGEALAN = WITHDRAW_ORDER) & (state = NO_ORDER)) | (((ftpGEALAN = WITHDRAW_ORDER) & (state = NO_ORDER)) & AF((inboundMessages = 0))))];
+CTLSPEC NAME ctl2 := EF((outboundMessages > 0));
+CTLSPEC NAME ctl3 := AG((((ftpGEALAN = CONFIRM_ORDER) & (outboundMessages > 0)) & !((ftpGEALAN != CONFIRM_ORDER) | (state = ORDER))) -> ! E[ !((ftpGEALAN != CONFIRM_ORDER) | (state = ORDER)) U !(!(outboundMessages = 0) | ((ftpGEALAN != CONFIRM_ORDER) | (state = ORDER)))]);
+--AsmetaL invariants
+INVARSPEC NAME inv_archived := ((archivedOutboundMessages = 0) -> !(raisedSignal_ODA_CONFIRMATION));
+INVARSPEC NAME inv_confirmed := (raisedSignal_ODA_CONFIRMATION -> ((archivedOutboundMessages > 0) & (outboundMessages = 0)));

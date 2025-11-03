@@ -1,0 +1,51 @@
+model advising on .\integrazione.asm
+parsing file .\integrazione.asm
+file successfully parsed for asm integrazione
+updateMap [archivedOutboundMessages, inboundMessages, outboundMessages, raisedSignal_CONTENT_ERROR, raisedSignal_ODA_CONFIRMATION, raisedSignal_OPENTRANS_ERROR]
+MP1: No inconsistent update is ever performed
+NONE
+
+MP2: Every conditional rule must be complete
+ConditionalRule if (and(and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN)),not(gt(outboundMessages,0)))) is not complete.
+ConditionalRule if (and(eq(state,ORDER),not(gt(outboundMessages,0)))) is not complete.
+ConditionalRule if (and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN))) is not complete.
+ConditionalRule if (and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN))) is not complete.
+ConditionalRule if (and(and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN)),not(gt(outboundMessages,0)))) is not complete.
+ConditionalRule if (and(eq(state,ORDER),not(checkOpenTransError))) is not complete.
+ConditionalRule if (and(and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN)),gt(outboundMessages,0))) is not complete.
+ConditionalRule if (and(and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN)),gt(outboundMessages,0))) is not complete.
+ConditionalRule if (eq(state,ORDER)) is not complete.
+ConditionalRule if (and(not(eq(state,ORDER)),eq(CONFIRM_ORDER,ftpGEALAN))) is not complete.
+ConditionalRule if (and(eq(state,ORDER),gt(outboundMessages,0))) is not complete.
+
+MP2: Every case rule without otherwise must be complete
+NONE
+
+MP3: Choose rule is always/sometimes/never not empty
+NONE
+
+MP3: Forall rule is always/sometimes/never not empty
+NONE
+
+MP3: Conditional rule eval to true
+NONE
+
+MP4: No assignment is always trivial
+NONE
+
+MP5: For every domain element e, there exists a location which has value e
+NONE
+
+MP6: Every controlled location can take any value in its codomain
+NONE
+
+MP7: a location could be removed
+NONE
+
+MP7: a controlled location is never updated
+NONE
+
+MP7: a controlled location could be static
+NONE
+
+model advising finished
