@@ -1,14 +1,15 @@
 asm integrazione
 
-import ./STDL/StandardLibrary
-import ./STDL/CTLLibrary
-import ./STDL/LTLLibrary
+
+import ../STDL/StandardLibrary
+import ../STDL/CTLLibrary
+import ../STDL/LTLLibrary
 
 signature:
 
 	//******************DOMINI PER IL SERVIZIO******************
-	enum domain ServiceState = {NO_ORDER|ORDER}
-	enum domain GEALANOperation = {WITHDRAW_ORDER|CONFIRM_ORDER|OFFLINE}
+	enum domain ServiceState = {NO_ORDER|ORDER|CONFIRMATION}
+	enum domain GEALANOperation = {OFFLINE|WITHDRAW_ORDER|CONFIRM_ORDER}
 	enum domain Signal = {OPENTRANS_ERROR|CONTENT_ERROR|ODA_CONFIRMATION}
 	domain DiscreteIntDomain subsetof Integer //per le LTL/CTL
 	//*************************************************
@@ -82,7 +83,8 @@ definitions:
 							not hasRightValue(customer_number)
 							or not hasRightValue(delivery_location_number)
 							or not hasContent(delivery_date)
-							or hasQuantity(quantity) != FLOAT_WITH_DOT
+							or hasQuantity(quantity) = FLOAT_WITH_COMMA
+							or hasQuantity(quantity) = NAN
 							
 	// verifica la presenza di un'errore ContentError. Vedi "FUNZIONI PER L'XML" nella sezione "signature"
 	function checkContentError = 
@@ -109,6 +111,11 @@ definitions:
 		if not(checkOpenTransError) then
 			inboundMessages := inboundMessages + 1
 		endif
+		
+		
+	//per reimpostare i segnali qualora non sono utilizzati
+	rule r_resetSignals = forall $s in Signal do raisedSignal($s):=false	
+	rule r_resetSignalsExcept($signal in Signal) = forall $s in Signal with $s!=$signal do raisedSignal($s):=false
 
 		
 	rule r_checkConfirmation =
@@ -116,25 +123,22 @@ definitions:
 			seq
 				archivedOutboundMessages := archivedOutboundMessages + outboundMessages
 				outboundMessages := 0
+				r_resetSignalsExcept[ODA_CONFIRMATION]
 				raisedSignal(ODA_CONFIRMATION) := true
 			endseq
 		else
-			raisedSignal(ODA_CONFIRMATION) := false
+			par
+				r_resetSignalsExcept[ODA_CONFIRMATION]
+				raisedSignal(ODA_CONFIRMATION) := false
+			endpar
 		endif
-
-
-
-	rule r_resetSignalsExcept($signal in Signal) = forall $s in Signal with $s!=$signal do raisedSignal($s):=false
-	
-	rule r_resetSignals = forall $s in Signal do raisedSignal($s):=false	
 	
 	rule r_ftpInteraction =
 			switch ftpGEALAN
 				case WITHDRAW_ORDER :
 					par
+						r_resetSignals[]
 						inboundMessages := 0
-						r_resetSignalsExcept[ODA_CONFIRMATION]
-						r_checkConfirmation[]
 					endpar
 				case CONFIRM_ORDER :
 					par
@@ -142,10 +146,7 @@ definitions:
 						outboundMessages := outboundMessages + 1
 					endpar
 				case OFFLINE :
-					par
-						r_resetSignalsExcept[ODA_CONFIRMATION]
-						r_checkConfirmation[]
-					endpar
+						r_resetSignals[]
 			endswitch
 	
 	//-------------------------------------------------
@@ -160,51 +161,62 @@ definitions:
 	
 	
 	// LTL/CTL
-	//perchè inbound sia caricato, devono valere le seguenti condizioni: state=ORDER e not opentranserror
-	//In altre parole: lo stato precedente ha avuto come input ORDER e non ha segnalato OPENTRANS_ERROR
-	LTLSPEC g( 
-			(y(inboundMessages=0) and inboundMessages>0) 
+	// se c'è un'ordine e tutti i campi valutati sono ok, allora all'istante successivo ho per forza inbound>0
+		LTLSPEC g( 
+			(state=ORDER and checkOpenTransError=false and checkOpenTransError=false) 
 			implies 
-			( y(state=ORDER) and not(raisedSignal(OPENTRANS_ERROR)) )
+			( x(inboundMessages>0) )
 	)
-	//contenterror non impedisce il caricamento. Esistono stati con state=ORDER in cui ottengo contenterror ma carico comunque inbound.
-	CTLSPEC ef(
-					inboundMessages=0 and ex(inboundMessages>0 and raisedSignal(CONTENT_ERROR))
+	// se ciò non accade, nell'istante successivo avrò signal(OPENTRANS_ERROR) oppure signal(CONTENT_ERROR) a seconda dei casi
+			LTLSPEC g( 
+			(state=ORDER and checkOpenTransError)
+			implies 
+			( x(raisedSignal(OPENTRANS_ERROR)))
 	)
-	// eventualmente GEALAN passerà a recuperare da inbound. dopodichè, inbound sarà vuoto (pattern "After")
-	CTLSPEC aw(
-		not(ftpGEALAN=WITHDRAW_ORDER and state=NO_ORDER), 
-		(ftpGEALAN=WITHDRAW_ORDER and state=NO_ORDER) and af(inboundMessages=0)
+	
+				CTLSPEC ag( 
+			(state=ORDER and checkOpenTransError and inboundMessages=0)
+			implies 
+			ax( raisedSignal(OPENTRANS_ERROR) and inboundMessages=0 )
 	)
-	// gealan può inserire conferme in outbound eventualmente
-	CTLSPEC ef(outboundMessages>0)
-	// una volta che le conferme sono inserite, queste rimangono fino a quando il middleware non effettua un controllo. Tale controllo può essere fatto in qualsiasi momento in cui state=ORDER oppure ftpGEALAN!=CONFIRM_ORDER
-	CTLSPEC absenceAfterUntil( 
-		outboundMessages=0 , 
-		(ftpGEALAN=CONFIRM_ORDER and outboundMessages>0) , 
-		(state=ORDER or ftpGEALAN!=CONFIRM_ORDER)
+	
+				LTLSPEC g( 
+			(state=ORDER and checkContentError)
+			implies 
+			( x(raisedSignal(CONTENT_ERROR)) )
 	)
-	// svuotare outboundMessages implica rendere non vuoto archivedMessages
-	LTLSPEC g(
-		(y(outboundMessages>0) and outboundMessages=0)
-		implies
-		(archivedOutboundMessages>0)
+	
+					CTLSPEC ag( 
+			(state=ORDER and checkContentError and inboundMessages=0)
+			implies 
+			ex( (raisedSignal(CONTENT_ERROR)) and inboundMessages>=0)
 	)
+	// se inbound>0 allora resterà tale fino a che ftpGEALAN=WITHDRAW_ORDER
+	CTLSPEC inboundMessages>0 implies au(inboundMessages>0, ftpGEALAN=WITHDRAW_ORDER)
+	//quando ftpGEALAN=CONFIRM_ORDER allora dopo avrò che outbound>0
+	LTLSPEC (state=NO_ORDER and ftpGEALAN=CONFIRM_ORDER)  implies x(outboundMessages>0)
+	//se outbound>0 e CONFIRMATION allora nell'istante successivo avrò outbound=0 e archived>0 e signal(ODA_CONFIRMATION)
+	LTLSPEC (outboundMessages=0 and raisedSignal(ODA_CONFIRMATION)) implies y(state=CONFIRMATION and outboundMessages>0)
+	LTLSPEC (archivedOutboundMessages>0 and raisedSignal(ODA_CONFIRMATION)) implies y(state=CONFIRMATION and outboundMessages>0)
+	//se archived>0 allora non tornerà mai archived=0
+	CTLSPEC archivedOutboundMessages>0 implies af(archivedOutboundMessages>0)
+	
 	//-------------------------------------------------
 	
 	
 	// MAIN RULE
-	
 	main rule r_mainWorkflow =
-		if state=ORDER then
-			par
-				r_calculateErrors[]
-				r_sendOrder[]
+		switch state
+			case ORDER:
+				par
+					r_calculateErrors[]
+					r_sendOrder[]
+				endpar
+			case CONFIRMATION:
 				r_checkConfirmation[]
-			endpar
-		else
-			r_ftpInteraction[]
-		endif
+			case NO_ORDER:
+				r_ftpInteraction[]
+		endswitch
 	
 	//-------------------------------------------------
 

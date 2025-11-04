@@ -1,22 +1,16 @@
 model advising on .\integrazione.asm
-parsing file .\integrazione.asm
-file successfully parsed for asm integrazione
 updateMap [archivedOutboundMessages, inboundMessages, outboundMessages, raisedSignal_CONTENT_ERROR, raisedSignal_ODA_CONFIRMATION, raisedSignal_OPENTRANS_ERROR]
 MP1: No inconsistent update is ever performed
 NONE
 
 MP2: Every conditional rule must be complete
-ConditionalRule if (and(and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN)),not(gt(outboundMessages,0)))) is not complete.
-ConditionalRule if (and(eq(state,ORDER),not(gt(outboundMessages,0)))) is not complete.
-ConditionalRule if (and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN))) is not complete.
-ConditionalRule if (and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN))) is not complete.
-ConditionalRule if (and(and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN)),not(gt(outboundMessages,0)))) is not complete.
-ConditionalRule if (and(eq(state,ORDER),not(checkOpenTransError))) is not complete.
-ConditionalRule if (and(and(not(eq(state,ORDER)),eq(OFFLINE,ftpGEALAN)),gt(outboundMessages,0))) is not complete.
-ConditionalRule if (and(and(not(eq(state,ORDER)),eq(WITHDRAW_ORDER,ftpGEALAN)),gt(outboundMessages,0))) is not complete.
-ConditionalRule if (eq(state,ORDER)) is not complete.
-ConditionalRule if (and(not(eq(state,ORDER)),eq(CONFIRM_ORDER,ftpGEALAN))) is not complete.
-ConditionalRule if (and(eq(state,ORDER),gt(outboundMessages,0))) is not complete.
+ConditionalRule if (and(eq(NO_ORDER,state),eq(WITHDRAW_ORDER,ftpGEALAN))) is not complete.
+ConditionalRule if (and(eq(CONFIRMATION,state),gt(outboundMessages,0))) is not complete.
+ConditionalRule if (and(eq(NO_ORDER,state),eq(CONFIRM_ORDER,ftpGEALAN))) is not complete.
+ConditionalRule if (and(eq(CONFIRMATION,state),not(gt(outboundMessages,0)))) is not complete.
+ConditionalRule if (eq(ORDER,state)) is not complete.
+ConditionalRule if (and(eq(NO_ORDER,state),eq(OFFLINE,ftpGEALAN))) is not complete.
+ConditionalRule if (and(eq(ORDER,state),not(checkOpenTransError))) is not complete.
 
 MP2: Every case rule without otherwise must be complete
 NONE

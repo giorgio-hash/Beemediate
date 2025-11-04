@@ -1,10 +1,16 @@
+Execution of NuSMV code ...
+------------------------------------------------------------
 > NuSMV -dynamic -coi -quiet integrazione.smv
--- specification EF outboundMessages > 0  is true
--- specification AG (((ftpGEALAN = CONFIRM_ORDER & outboundMessages > 0) & !(ftpGEALAN != CONFIRM_ORDER | state = ORDER)) -> !E [ !(ftpGEALAN != CONFIRM_ORDER | state = ORDER) U !(!(outboundMessages = 0) | (ftpGEALAN != CONFIRM_ORDER | state = ORDER)) ] )  is true
--- specification !E [ !((ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) & AF inboundMessages = 0) U !(!(ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) | ((ftpGEALAN = WITHDRAW_ORDER & state = NO_ORDER) & AF inboundMessages = 0)) ]   is true
--- specification EF (EX (inboundMessages > 0 & raisedSignal(CONTENT_ERROR)) & inboundMessages = 0)  is true
--- specification  G ((outboundMessages = 0 &  Y outboundMessages > 0) -> archivedOutboundMessages > 0)  is true
--- specification  G (( Y inboundMessages = 0 & inboundMessages > 0) -> ( Y state = ORDER & !raisedSignal(OPENTRANS_ERROR)))  is true
+-- specification (archivedOutboundMessages > 0 -> AF archivedOutboundMessages > 0)  is true
+-- specification (inboundMessages > 0 -> A [ inboundMessages > 0 U ftpGEALAN = WITHDRAW_ORDER ] )  is true
+-- specification AG (((state = ORDER & (((!hasContent(DELIVERY_DATE) | (!hasRightValue(DELIVERY_LOCATION_NUMBER) | !hasRightValue(CUSTOMER_NUMBER))) | hasQuantity(QUANTITY) = FLOAT_WITH_COMMA) | hasQuantity(QUANTITY) = NAN)) & inboundMessages = 0) -> AX (raisedSignal(OPENTRANS_ERROR) & inboundMessages = 0))  is true
+-- specification AG ((inboundMessages = 0 & (((!hasRightValue(ARTICLE_NUMBER) | !hasRightValue(QUANTITY_MEASURE)) | (hasContent(DELIVERY_DATE) -> !hasRightValue(DELIVERY_DATE_CONTENT))) & state = ORDER)) -> EX (inboundMessages >= 0 & raisedSignal(CONTENT_ERROR)))  is true
+-- specification ((ftpGEALAN = CONFIRM_ORDER & state = NO_ORDER) ->  X outboundMessages > 0)  is true
+-- specification ((outboundMessages = 0 & raisedSignal(ODA_CONFIRMATION)) ->  Y (state = CONFIRMATION & outboundMessages > 0))  is true
+-- specification ((archivedOutboundMessages > 0 & raisedSignal(ODA_CONFIRMATION)) ->  Y (state = CONFIRMATION & outboundMessages > 0))  is true
+-- specification  G ((!(((!hasContent(DELIVERY_DATE) | (!hasRightValue(DELIVERY_LOCATION_NUMBER) | !hasRightValue(CUSTOMER_NUMBER))) | hasQuantity(QUANTITY) = FLOAT_WITH_COMMA) | hasQuantity(QUANTITY) = NAN) & (!(((!hasContent(DELIVERY_DATE) | (!hasRightValue(DELIVERY_LOCATION_NUMBER) | !hasRightValue(CUSTOMER_NUMBER))) | hasQuantity(QUANTITY) = FLOAT_WITH_COMMA) | hasQuantity(QUANTITY) = NAN) & state = ORDER)) ->  X inboundMessages > 0)  is true
+-- specification  G ((state = ORDER & (((!hasContent(DELIVERY_DATE) | (!hasRightValue(DELIVERY_LOCATION_NUMBER) | !hasRightValue(CUSTOMER_NUMBER))) | hasQuantity(QUANTITY) = FLOAT_WITH_COMMA) | hasQuantity(QUANTITY) = NAN)) ->  X raisedSignal(OPENTRANS_ERROR))  is true
+-- specification  G ((((!hasRightValue(ARTICLE_NUMBER) | !hasRightValue(QUANTITY_MEASURE)) | (hasContent(DELIVERY_DATE) -> !hasRightValue(DELIVERY_DATE_CONTENT))) & state = ORDER) ->  X raisedSignal(CONTENT_ERROR))  is true
 -- invariant (archivedOutboundMessages = 0 -> !raisedSignal(ODA_CONFIRMATION))  is true
 -- invariant (raisedSignal(ODA_CONFIRMATION) -> (archivedOutboundMessages > 0 & outboundMessages = 0))  is true
 
