@@ -1,0 +1,41 @@
+//// starting scenario
+scenario checkConfirmation
+load ../integrazione.asm
+
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+set state := CONFIRMATION;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := NO_ORDER;
+set ftpGEALAN := CONFIRM_ORDER;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 1;
+check raisedSignal(CONTENT_ERROR) = false;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := CONFIRMATION;
+set ftpGEALAN := CONFIRM_ORDER;
+step
+check archivedOutboundMessages = 1;
+check raisedSignal(ODA_CONFIRMATION) = true;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := NO_ORDER;
+set ftpGEALAN := WITHDRAW_ORDER;
+step
+check archivedOutboundMessages = 1;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check raisedSignal(OPENTRANS_ERROR) = false;
+check inboundMessages = 0;
+set state := NO_ORDER;
+step
