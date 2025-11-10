@@ -1,0 +1,142 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class ArticoloPreventivoDTO {
+  + ArticoloPreventivoDTO(Map<String, Object>): 
+  - productId: IdentifierDTO
+  - id: Optional<Integer>
+  - productQty: Optional<Double>
+  - orderId: IdentifierDTO
+  + fromXMLRPC(OdooApiConfig, PreventivoDTO): ArticoloPreventivoDTO[]
+  + getOrderId(): IdentifierDTO
+  + getId(): Optional<Integer>
+  + getProductQty(): Optional<Double>
+  + toString(): String
+  + getProductId(): IdentifierDTO
+}
+class CompagniaDTO {
+  + CompagniaDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - companyRegistry: Optional<String>
+  + toString(): String
+  + fromXMLRPC(OdooApiConfig, PreventivoDTO): CompagniaDTO
+  + getId(): Optional<Integer>
+  + getCompanyRegistry(): Optional<String>
+}
+class ConsegnaDTO {
+  + ConsegnaDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - warehouseId: IdentifierDTO
+  + fromXMLRPC(OdooApiConfig, PreventivoDTO): ConsegnaDTO
+  + getId(): Optional<Integer>
+  + toString(): String
+  + getWarehouseId(): IdentifierDTO
+}
+class ContattoConsegnaDTO {
+  + ContattoConsegnaDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - partnerId: IdentifierDTO
+  + getPartnerId(): IdentifierDTO
+  + getId(): Optional<Integer>
+  + fromXMLRPC(OdooApiConfig, ConsegnaDTO): ContattoConsegnaDTO
+  + toString(): String
+}
+class DestinazioneDTO {
+  + DestinazioneDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - codiceDestinazione: Optional<String>
+  + getId(): Optional<Integer>
+  + getCodiceDestinazione(): Optional<String>
+  + fromXMLRPC(OdooApiConfig, ContattoConsegnaDTO): DestinazioneDTO
+  + toString(): String
+}
+class FornitoreDTO {
+  + FornitoreDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - name: Optional<String>
+  - codiceAzienda: Optional<String>
+  + getCodiceAzienda(): Optional<String>
+  + fromXMLRPC(OdooApiConfig): FornitoreDTO
+  + getName(): Optional<String>
+  + toString(): String
+  + getId(): Optional<Integer>
+}
+class IdentifierDTO {
+  + IdentifierDTO(Object[]): 
+  - num: Optional<Integer>
+  - name: Optional<String>
+  + getName(): Optional<String>
+  + toString(): String
+  + getNum(): Optional<Integer>
+}
+class PreventivoDTO {
+  + PreventivoDTO(Map<String, Object>): 
+  - partnerId: IdentifierDTO
+  - currencyId: IdentifierDTO
+  - orderLine: Optional<Object[]>
+  - datePlanned: Optional<LocalDateTime>
+  - companyId: IdentifierDTO
+  - dateOrder: Optional<LocalDateTime>
+  - id: Optional<Integer>
+  - productId: IdentifierDTO
+  - name: Optional<String>
+  - pickingTypeId: IdentifierDTO
+  - origin: Optional<String>
+  - dateApprove: Optional<LocalDateTime>
+  + getId(): Optional<Integer>
+  + getDatePlanned(): Optional<LocalDateTime>
+  + getPickingTypeId(): IdentifierDTO
+  + getName(): Optional<String>
+  + getOrderLine(): Optional<Object[]>
+  + toString(): String
+  + getPartnerId(): IdentifierDTO
+  + getDateOrder(): Optional<LocalDateTime>
+  + getCurrencyId(): IdentifierDTO
+  + getCompanyId(): IdentifierDTO
+  + getOrigin(): Optional<String>
+  + getProductId(): IdentifierDTO
+  + getDateApprove(): Optional<LocalDateTime>
+  + fromXMLRPC(OdooApiConfig, FornitoreDTO): PreventivoDTO
+}
+class ProdottoDTO {
+  + ProdottoDTO(Map<String, Object>): 
+  - id: Optional<Integer>
+  - sellerIds: Optional<Object[]>
+  + toString(): String
+  + getId(): Optional<Integer>
+  + getSellerIds(): Optional<Object[]>
+  + fromXMLRPC(OdooApiConfig, ArticoloPreventivoDTO[]): ProdottoDTO[]
+}
+class ProdottoFornitoreDTO {
+  + ProdottoFornitoreDTO(Map<String, Object>): 
+  - productId: IdentifierDTO
+  - sequence: Optional<Integer>
+  - productCode: Optional<String>
+  - partnerId: IdentifierDTO
+  - productUomId: IdentifierDTO
+  - productName: Optional<String>
+  - id: Optional<Integer>
+  + fromXMLRPC(OdooApiConfig, ProdottoDTO[], FornitoreDTO): ProdottoFornitoreDTO[]
+  + getPartnerId(): IdentifierDTO
+  + toString(): String
+  + getProductUomId(): IdentifierDTO
+  + getId(): Optional<Integer>
+  + getProductCode(): Optional<String>
+  + getSequence(): Optional<Integer>
+  + getProductName(): Optional<String>
+  + getProductId(): IdentifierDTO
+}
+
+ArticoloPreventivoDTO "1" *-[#595959,plain]-> "orderId\n1" IdentifierDTO         
+ArticoloPreventivoDTO  -[#595959,dashed]->  IdentifierDTO         : "«create»"
+ConsegnaDTO           "1" *-[#595959,plain]-> "warehouseId\n1" IdentifierDTO         
+ConsegnaDTO            -[#595959,dashed]->  IdentifierDTO         : "«create»"
+ContattoConsegnaDTO   "1" *-[#595959,plain]-> "partnerId\n1" IdentifierDTO         
+ContattoConsegnaDTO    -[#595959,dashed]->  IdentifierDTO         : "«create»"
+PreventivoDTO          -[#595959,dashed]->  IdentifierDTO         : "«create»"
+PreventivoDTO         "1" *-[#595959,plain]-> "partnerId\n1" IdentifierDTO         
+ProdottoFornitoreDTO  "1" *-[#595959,plain]-> "productId\n1" IdentifierDTO         
+ProdottoFornitoreDTO   -[#595959,dashed]->  IdentifierDTO         : "«create»"
+@enduml
