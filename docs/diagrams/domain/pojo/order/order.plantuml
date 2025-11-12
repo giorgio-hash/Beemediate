@@ -1,0 +1,136 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class Order {
+  + Order(OrderStructure, String): 
+  - data: OrderStructure
+  - customerNumber: boolean
+  - quantity: QuantityFieldValue
+  - deliveryLocationNumber: boolean
+  - articleNumber: boolean
+  - orderID: String
+  - quantityMeasure: boolean
+  - deliveryDateContent: boolean
+  - deliveryDate: boolean
+  + isArticleNumber(): boolean
+  + setDeliveryDate(boolean): void
+  + setDeliveryDateContent(boolean): void
+  + setQuantity(QuantityFieldValue): void
+  + isCustomerNumber(): boolean
+  + setCustomerNumber(boolean): void
+  + hasContentError(): boolean
+  + getData(): OrderStructure
+  + setArticleNumber(boolean): void
+  + setQuantityMeasure(boolean): void
+  + isDeliveryDate(): boolean
+  + isDeliveryDateContent(): boolean
+  + isQuantityMeasure(): boolean
+  + getQuantity(): QuantityFieldValue
+  + hasOpenTransError(): boolean
+  + getOrderID(): String
+  + setDeliveryLocationNumber(boolean): void
+  + isDeliveryLocationNumber(): boolean
+}
+class OrderHeader {
+  + OrderHeader(OrderHeader): 
+  + OrderHeader(): 
+  - buyerID: String
+  - deliveryIDRef: String
+  - startDate: String
+  - orderID: String
+  - supplierID: String
+  - orderDate: String
+  - deliveryID: String
+  - currency: String
+  - endDate: String
+  - buyerIDRef: String
+  - supplierIDRef: String
+  + getCurrency(): String
+  + setSupplierIDRef(String): void
+  + setSupplierID(String): void
+  + setEndDate(String): void
+  + setBuyerIDRef(String): void
+  + getEndDate(): String
+  + setCurrency(String): void
+  + getDeliveryID(): String
+  + setStartDate(String): void
+  + setDeliveryID(String): void
+  + setDeliveryIDRef(String): void
+  + setBuyerID(String): void
+  + getStartDate(): String
+  + getSupplierID(): String
+  + getOrderID(): String
+  + getBuyerID(): String
+  + setOrderID(String): void
+  + toString(): String
+  + setOrderDate(String): void
+  + getBuyerIDRef(): String
+  + getDeliveryIDRef(): String
+  + getOrderDate(): String
+  + getSupplierIDRef(): String
+}
+class OrderItem {
+  + OrderItem(): 
+  - orderUnit: String
+  - descriptionShort: String
+  - quantity: String
+  - supplierID: String
+  - lineItemID: String
+  - buyerID: String
+  + setDescriptionShort(String): void
+  + toString(): String
+  + getBuyerID(): String
+  + setSupplierID(String): void
+  + getDescriptionShort(): String
+  + getOrderUnit(): String
+  + setBuyerID(String): void
+  + setOrderUnit(String): void
+  + getSupplierID(): String
+  + setLineItemID(String): void
+  + getQuantity(): String
+  + setQuantity(String): void
+  + getLineItemID(): String
+}
+class OrderStructure {
+  + OrderStructure(OrderStructure): 
+  + OrderStructure(): 
+  - itemList: OrderItem[]
+  - orderSummary: OrderSummary
+  - header: OrderHeader
+  + setItemList(OrderItem[]): void
+  + toString(): String
+  + getOrderSummary(): OrderSummary
+  + setHeader(OrderHeader): void
+  + getHeader(): OrderHeader
+  + setOrderSummary(OrderSummary): void
+  + getItemList(): OrderItem[]
+}
+class OrderSummary {
+  + OrderSummary(OrderSummary): 
+  + OrderSummary(): 
+  - totalItemNum: int
+  + getTotalItemNum(): int
+  + setTotalItemNum(int): void
+  + toString(): String
+}
+enum QuantityFieldValue << enumeration >> {
+  + QuantityFieldValue(): 
+  + INTEGER: 
+  + FLOAT_WITH_COMMA: 
+  + FLOAT_WITH_DOT: 
+  + NAN: 
+  + values(): QuantityFieldValue[]
+  + valueOf(String): QuantityFieldValue
+}
+
+Order              "1" *-[#595959,plain]-> "data\n1" OrderStructure     
+Order               -[#595959,dashed]->  OrderStructure     : "«create»"
+Order              "1" *-[#595959,plain]-> "quantity\n1" QuantityFieldValue 
+OrderStructure      -[#595959,dashed]->  OrderHeader        : "«create»"
+OrderStructure     "1" *-[#595959,plain]-> "header\n1" OrderHeader        
+OrderStructure     "1" *-[#595959,plain]-> "itemList\n*" OrderItem          
+OrderStructure      -[#595959,dashed]->  OrderSummary       : "«create»"
+OrderStructure     "1" *-[#595959,plain]-> "orderSummary\n1" OrderSummary       
+@enduml

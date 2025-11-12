@@ -1,0 +1,45 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+package odoo {
+interface DataSenderPort << interface >> {
+                + signalShipped(Order): boolean
+                + signalOpenTransError(Order): boolean
+                + signalConfirmation(Confirmation): boolean
+                + signalContentError(Order): boolean
+              }
+              interface OrderProviderPort << interface >> {
+                + popNewOrder(): Order
+                + fetchOrders(): boolean
+                + hasNewOrder(): boolean
+              }
+
+}
+
+package filesystem{
+        interface SupplierCatalogReaderPort << interface >> {
+          + readArticleNumbers(): String[]
+        }
+}
+
+package ftp {
+
+    interface ConfirmationHandlerPort << interface >> {
+      + archive(Confirmation): boolean
+    }
+    interface ConfirmationProviderPort << interface >> {
+      + fetchConfirmations(): boolean
+      + popConfirmation(): Confirmation
+      + hasConfirmation(): boolean
+    }
+    interface FTPHandlerPort << interface >>
+    interface OrderSenderPort << interface >> {
+      + loadOrder(Order): boolean
+    }
+}
+
+FTPHandlerPort             -[#008200,plain]-^  ConfirmationHandlerPort   
+FTPHandlerPort             -[#008200,plain]-^  OrderSenderPort           
+@enduml

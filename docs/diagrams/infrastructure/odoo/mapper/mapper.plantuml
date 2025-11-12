@@ -1,0 +1,23 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class AttributeMapper {
+  - AttributeMapper(): 
+  - LOG: Logger
+  + stringify(Object): Optional<String>
+  + intify(Object): Optional<Integer>
+  + toLocalDateTime(Object): Optional<LocalDateTime>
+  + booleanify(Object): Optional<Boolean>
+  + toArray(Object): Optional<Object[]>
+  + doublify(Object): Optional<Double>
+}
+class OrderMapper {
+  - OrderMapper(): 
+  + map(FornitoreDTO, PreventivoDTO, ArticoloPreventivoDTO[], ProdottoFornitoreDTO[], DestinazioneDTO, CompagniaDTO): OrderStructure
+  - mapOrderHeader(FornitoreDTO, PreventivoDTO, DestinazioneDTO, CompagniaDTO): OrderHeader
+  - mapOrderItemList(ArticoloPreventivoDTO[], ProdottoFornitoreDTO[]): OrderItem[]
+}
+
+@enduml

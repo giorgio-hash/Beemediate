@@ -1,0 +1,68 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+annotation Component << annotation >> {
+  + value(): String
+}
+interface ConfirmationProviderPort << interface >> {
+  + fetchConfirmations(): boolean
+  + popConfirmation(): Confirmation
+  + hasConfirmation(): boolean
+}
+
+package config {
+    class FTPConfig {
+      + FTPConfig(String, String, String):
+      - inboundFolder: String
+      - outboundFolder: String
+      - archivedFolder: String
+      + getInboundFolder(): String
+      + verifyDirectories(): void
+      + getOutboundFolder(): String
+      + getArchivedFolder(): String
+      - check(String): void
+    }
+}
+
+
+class FTPReader {
+  + FTPReader(FTPConfig): 
+  - buffer: Stack<Confirmation>
+  - ftp: FTPConfig
+  - log: Logger
+  + fetchConfirmations(): boolean
+  - containsXmlFiles(Path): boolean
+  + popConfirmation(): Confirmation
+  - collectXmlFiles(Path): List<Path>
+  + hasConfirmation(): boolean
+}
+class FTPWriter {
+  + FTPWriter(FTPConfig): 
+  - ftp: FTPConfig
+  - FORMATTER: DateTimeFormatter
+  - log: Logger
+  + archive(Confirmation): boolean
+  - writeToInbound(String, Path): boolean
+  + loadOrder(Order): boolean
+  - loadOrder(OrderStructure): boolean
+}
+
+package exceptions {
+  class WrongPathException {
+    + WrongPathException(String):
+  }
+  class NullSuppliedArgumentException {
+    + NullSuppliedArgumentException(String):
+  }
+}
+
+FTPConfig                      -[#595959,dashed]->  WrongPathException            : "«create»"
+FTPReader                      -[#999900,dotted]-  Component                     
+FTPReader                      -[#008200,dashed]-^  ConfirmationProviderPort      
+FTPReader                     "1" *-[#595959,plain]-> "ftp\n1" FTPConfig                     
+FTPReader                      -[#595959,dashed]->  WrongPathException            : "«create»"
+FTPWriter                      -[#999900,dotted]-  Component                     
+FTPWriter                     "1" *-[#595959,plain]-> "ftp\n1" FTPConfig                     
+@enduml
