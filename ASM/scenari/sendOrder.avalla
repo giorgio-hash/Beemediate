@@ -1,0 +1,183 @@
+//// starting scenario
+scenario sendOrder
+
+load ../integrazione.asm
+
+/**
+ * ** Coverage Info: **
+** covered rules: **
+integrazione::r_mainWorkflow()
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: - (no update rules to be covered)
+integrazione::r_calculateErrors()
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: 100.0%
+integrazione::r_sendOrder()
+-> branch coverage: 100.0%
+-> update rule coverage: 100.0%
+** NOT covered rules: **
+integrazione::r_resetSignals()
+integrazione::r_resetSignalsExcept(Signal)
+integrazione::r_checkConfirmation()
+integrazione::r_ftpInteraction()
+
+validation terminated without errors
+validating (w coverage) finished
+ 
+ */
+
+
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := INTEGER;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 1;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := ORDER;
+set hasRightValue(customer_number) := false;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = true;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := false;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = true;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := false;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = true;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = true;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_COMMA;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = true;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := NAN;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
+check inboundMessages = 2;
+check raisedSignal(OPENTRANS_ERROR) = true;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := false;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = true;
+check inboundMessages = 3;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := false;
+set hasRightValue(delivery_date_content) := true;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = true;
+check inboundMessages = 4;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasContent(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasRightValue(delivery_date_content) := false;
+step
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = true;
+check inboundMessages = 5;
+check raisedSignal(OPENTRANS_ERROR) = false;
+step
