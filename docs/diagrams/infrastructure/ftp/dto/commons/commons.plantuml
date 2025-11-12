@@ -1,0 +1,130 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class BuyerID {
+  + BuyerID(String, String): 
+  + BuyerID(): 
+  - buyerId: String
+  - type: String
+  + getBuyerId(): String
+  + getType(): String
+  + setBuyerId(String): void
+}
+enum DeliveryDateType << enumeration >> {
+  - DeliveryDateType(String): 
+  + FIXED: 
+  - type: String
+  + OPTIONAL: 
+  + values(): DeliveryDateType[]
+  + valueOf(String): DeliveryDateType
+  + toString(): String
+}
+enum PartyType << enumeration >> {
+  - PartyType(String): 
+  + SUPPLIER_SPECIFIC: 
+  - type: String
+  + BUYER_SPECIFIC: 
+  + toString(): String
+  + values(): PartyType[]
+  + valueOf(String): PartyType
+}
+class XmlAddress {
+  + XmlAddress(): 
+  + XmlAddress(String, String, String, String, String, String): 
+  - countryCoded: String
+  - name3: String
+  - city: String
+  - country: String
+  - street: String
+  - name: String
+  - zip: String
+  + getZip(): String
+  + getStreet(): String
+  + getCity(): String
+  + getCountry(): String
+  + getName(): String
+  + getCountryCoded(): String
+}
+class XmlDeliveryDate {
+  + XmlDeliveryDate(): 
+  + XmlDeliveryDate(String, String, DeliveryDateType): 
+  - type: String
+  - deliveryStartDate: String
+  - deliveryEndDate: String
+  + getDeliveryEndDate(): String
+  + getType(): String
+  + setType(String): void
+  + setDeliveryStartDate(String): void
+  + setDeliveryEndDate(String): void
+  + getDeliveryStartDate(): String
+}
+class XmlOrderPartiesReference {
+  + XmlOrderPartiesReference(String, PartyType, String, PartyType, String, PartyType): 
+  + XmlOrderPartiesReference(): 
+  - supplierIdRef: XmlPartyID
+  - shipmentPartiesRef: XmlShipmentPartiesReference
+  - buyerIdRef: XmlPartyID
+  + setSupplierIdRef(XmlPartyID): void
+  + getBuyerIdRef(): XmlPartyID
+  + setBuyerIdRef(XmlPartyID): void
+  + getShipmentPartiesRef(): XmlShipmentPartiesReference
+  + setShipmentPartiesRef(XmlShipmentPartiesReference): void
+  + getSupplierIdRef(): XmlPartyID
+}
+class XmlParty {
+  + XmlParty(): 
+  + XmlParty(XmlPartyID, String): 
+  - partyId: XmlPartyID
+  - partyRole: String
+  - address: XmlAddress
+  + getAddress(): XmlAddress
+  + getPartyId(): XmlPartyID
+  + setPartyRole(String): void
+  + getPartyRole(): String
+  + setAddress(XmlAddress): void
+  + setPartyId(XmlPartyID): void
+}
+class XmlPartyID {
+  + XmlPartyID(): 
+  + XmlPartyID(String): 
+  + XmlPartyID(String, PartyType): 
+  - type: String
+  - partyId: String
+  + getType(): String
+  + setPartyId(String): void
+  + setType(String): void
+  + getPartyId(): String
+}
+class XmlProductID {
+  + XmlProductID(): 
+  + XmlProductID(String, String, String): 
+  - buyerId: BuyerID
+  - supplierId: String
+  - descriptionShort: String
+  + getBuyerId(): BuyerID
+  + setSupplierId(String): void
+  + getSupplierId(): String
+  + setDescriptionShort(String): void
+  + setBuyerId(BuyerID): void
+  + getDescriptionShort(): String
+}
+class XmlShipmentPartiesReference {
+  + XmlShipmentPartiesReference(): 
+  + XmlShipmentPartiesReference(XmlPartyID): 
+  - deliveryIdRef: XmlPartyID
+  + getDeliveryIdRef(): XmlPartyID
+  + setDeliveryIdRef(XmlPartyID): void
+}
+
+XmlOrderPartiesReference     -[#595959,dashed]->  XmlPartyID                  : "«create»"
+XmlOrderPartiesReference    "1" *-[#595959,plain]-> "buyerIdRef\n1" XmlPartyID                  
+XmlOrderPartiesReference     -[#595959,dashed]->  XmlShipmentPartiesReference : "«create»"
+XmlOrderPartiesReference    "1" *-[#595959,plain]-> "shipmentPartiesRef\n1" XmlShipmentPartiesReference 
+XmlParty                    "1" *-[#595959,plain]-> "address\n1" XmlAddress                  
+XmlParty                    "1" *-[#595959,plain]-> "partyId\n1" XmlPartyID                  
+XmlProductID                 -[#595959,dashed]->  BuyerID                     : "«create»"
+XmlProductID                "1" *-[#595959,plain]-> "buyerId\n1" BuyerID                     
+XmlShipmentPartiesReference "1" *-[#595959,plain]-> "deliveryIdRef\n1" XmlPartyID                  
+@enduml

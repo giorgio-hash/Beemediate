@@ -1,0 +1,97 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+package exceptions {
+    class EmptyFetchException {
+      + EmptyFetchException(String):
+    }
+    class InconsistentDTOException {
+      + InconsistentDTOException(String):
+    }
+}
+
+package config {
+    enum OafStatus << enumeration >> {
+      - OafStatus(String):
+      + SHIPPED:
+      + CONFIRMED:
+      + label: String
+      + CONTENTERROR:
+      + NEW:
+      + OPENTRANSERROR:
+      + values(): OafStatus[]
+      + valueOf(String): OafStatus
+      + toString(): String
+    }
+    class OdooApiConfig {
+      + OdooApiConfig(String, String, String, String, XmlRpcClient, XmlRpcClient, XmlRpcClientConfigImpl, XmlRpcClientConfigImpl):
+      + EXECUTE_KW: String
+      + FIELDS: String
+      + WRITE: String
+      - url: String
+      - password: String
+      - uid: int
+      + RES_PARTNER: String
+      + SEARCH: String
+      - username: String
+      + READ: String
+      - commonConfig: XmlRpcClientConfigImpl
+      - objectConfig: XmlRpcClientConfigImpl
+      - db: String
+      + PARTNER_ID_FIELD: String
+      + CREATE: String
+      - client: XmlRpcClient
+      - log: Logger
+      - models: XmlRpcClient
+      - online: boolean
+      + updateOnModel(String, Map<String, Object>, Object): boolean
+      + insertOnModel(String, Map<String, Object>): int
+      + readFromModel(String, Map<String, Object>, Object[]): Object[]
+      + searchFromModel(String, Map<String, Object>, List<Object>[]): Object[]
+      + isOnline(): boolean
+      - remoteQueryOnModel(String, String, String, Map<String, Object>, Object[]): Object[]
+      + connect(): void
+    }
+    class OdooBeans {
+      + OdooBeans():
+      + xmlRpcClientCommon(): XmlRpcClient
+      + xmlRpcClientModels(): XmlRpcClient
+      + commonConfig(): XmlRpcClientConfigImpl
+      + objectConfig(): XmlRpcClientConfigImpl
+    }
+}
+
+class OdooDataSender {
+  + OdooDataSender(OdooApiConfig): 
+  - log: Logger
+  - odoo: OdooApiConfig
+  - ERROR_MSG_ODOODB: String
+  + signalContentError(Order): boolean
+  + signalConfirmation(Confirmation): boolean
+  + signalShipped(Order): boolean
+  + signalOpenTransError(Order): boolean
+  - updateTo(String, String): boolean
+  - writeConfirmationMessage(String, ConfirmationStructure): String
+  - createWorkflowAnnotation(String, ConfirmationStructure): void
+  - signal(Confirmation): boolean
+  - signal(Order, OafStatus): boolean
+  - executeSignalSafely(Object, OafStatus): boolean
+}
+class OdooOrderProvider {
+  + OdooOrderProvider(OdooApiConfig): 
+  - log: Logger
+  - odoo: OdooApiConfig
+  - ordine: Order
+  + popNewOrder(): Order
+  + hasNewOrder(): boolean
+  + fetchOrders(): boolean
+  - fetchData(): boolean
+}
+
+OdooDataSender            -[#595959,dashed]->  EmptyFetchException      : "«create»"
+OdooDataSender            -[#595959,dashed]->  InconsistentDTOException : "«create»"
+OdooDataSender           "1" *-[#595959,plain]-> "odoo\n1" OdooApiConfig            
+OdooOrderProvider        "1" *-[#595959,plain]-> "odoo\n1" OdooApiConfig            
+@enduml
