@@ -23,40 +23,6 @@ public class XmlOrderHeader {
 	@JacksonXmlProperty(localName="AGREEMENT")
 	private XmlAgreement agreement;
 	
-	/**
-	 * Ordini di contratto
-	 */
-	public class XmlAgreement {
-		/**
-		 * Numero di contratto
-		 */
-		@JacksonXmlProperty(localName="bmecat:AGREEMENT_ID")
-		@JsonInclude(JsonInclude.Include.ALWAYS)
-		private String id;
-
-		/**
-		 * Costruttore
-		 * @param id
-		 */
-		public XmlAgreement(String id) {
-			this.id=id;
-		}
-		/**
-		 * 
-		 * @return
-		 */
-		public String getId() {
-			return id;
-		}
-
-		/**
-		 * 
-		 * @param id
-		 */
-		public void setId(String id) {
-			this.id = id;
-		}	
-	}
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans header ordine partendo dal POJO {@code OrderHeader}
