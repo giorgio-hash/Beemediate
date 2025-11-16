@@ -259,6 +259,8 @@ public class StringHandler {
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 	
+		if (str == null) return false;
+
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
 		final char MAIN_SEPARATOR = 'T';
