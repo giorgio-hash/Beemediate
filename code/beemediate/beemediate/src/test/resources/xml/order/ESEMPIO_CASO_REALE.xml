@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ORDER xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bmecat="http://www.bmecat.org/bmecat/2005" xmlns="http://www.opentrans.org/XMLSchema/2.1" version="2.1" type="standard" xsi:schemaLocation="http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd">
+  <ORDER_HEADER>
+    <ORDER_INFO>
+      <ORDER_ID>24/029496F</ORDER_ID>
+      <ORDER_DATE>2024-04-30T00:00:00.000Z</ORDER_DATE>
+      <DELIVERY_DATE type="optional">
+        <DELIVERY_START_DATE>2024-05-27T00:00:00.000Z</DELIVERY_START_DATE>
+        <DELIVERY_END_DATE>2024-05-27T00:00:00.000Z</DELIVERY_END_DATE>
+      </DELIVERY_DATE>
+      <PARTIES>
+        <PARTY>
+          <bmecat:PARTY_ID type="supplier_specific">3024005190</bmecat:PARTY_ID>
+          <PARTY_ROLE>buyer</PARTY_ROLE>
+        </PARTY>
+        <PARTY>
+          <bmecat:PARTY_ID type="buyer_specific">GEALAN</bmecat:PARTY_ID>
+          <PARTY_ROLE>supplier</PARTY_ROLE>
+        </PARTY>
+        <PARTY>
+          <bmecat:PARTY_ID type="supplier_specific">3090205190</bmecat:PARTY_ID>
+          <PARTY_ROLE>delivery</PARTY_ROLE>
+        </PARTY>
+      </PARTIES>
+      <ORDER_PARTIES_REFERENCE>
+        <bmecat:BUYER_IDREF type="supplier_specific">3024005190</bmecat:BUYER_IDREF>
+        <bmecat:SUPPLIER_IDREF type="buyer_specific">GEALAN</bmecat:SUPPLIER_IDREF>
+        <SHIPMENT_PARTIES_REFERENCE>
+          <DELIVERY_IDREF type="supplier_specific">3090205190</DELIVERY_IDREF>
+        </SHIPMENT_PARTIES_REFERENCE>
+      </ORDER_PARTIES_REFERENCE>
+      <bmecat:CURRENCY>EUR</bmecat:CURRENCY>
+    </ORDER_INFO>
+  </ORDER_HEADER>
+  <ORDER_ITEM_LIST>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>1</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>326300</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.326300</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Scatolato con biadesivo 30x8 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>48</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>2</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>326523 915205</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.3265915205</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Profilo aggiuntivo 60 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>12</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>3</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>702313U915205I</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7023915205I/00E</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Z Telaio 72/26 35 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>12</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>4</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>702713U915205I</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7027915205I/00E</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Z Telaio 54/26 65 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>12</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>5</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>706013U915205I</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7060915205I/00E</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Scambio Battuta 75 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>6</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>6</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>707213U915205I</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7072915205I/00E</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Z Anta 72 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>30</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>7</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>722423G915205</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7224915205</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Fermavetro 32 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>24</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+    <ORDER_ITEM>
+      <LINE_ITEM_ID>8</LINE_ITEM_ID>
+      <PRODUCT_ID>
+        <bmecat:SUPPLIER_PID>722623G915205</bmecat:SUPPLIER_PID>
+        <bmecat:BUYER_PID type="CODE">.7226915205</bmecat:BUYER_PID>
+        <bmecat:DESCRIPTION_SHORT>Fermavetro 30 mm</bmecat:DESCRIPTION_SHORT>
+      </PRODUCT_ID>
+      <QUANTITY>6</QUANTITY>
+      <bmecat:ORDER_UNIT>M</bmecat:ORDER_UNIT>
+    </ORDER_ITEM>
+  </ORDER_ITEM_LIST>
+  <ORDER_SUMMARY>
+    <TOTAL_ITEM_NUM>8</TOTAL_ITEM_NUM>
+  </ORDER_SUMMARY>
+</ORDER>
