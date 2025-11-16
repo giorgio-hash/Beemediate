@@ -86,7 +86,6 @@ public class FTPReader implements ConfirmationProviderPort{
 			for(Path p : collectXmlFiles(outboundPath)) {
 				
 				or = Files.readString(p, StandardCharsets.UTF_8);
-				log.info(or);
 				
 				c = new Confirmation( 
 							p.getFileName().toString(),

@@ -508,10 +508,13 @@ public class StringHandler {
 		//@ loop_invariant 0<=i<=substrSize;
 		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)<=s2.charAt(j) );
 		//@ decreases substrSize-i;
-		for(int i=0; i<substrSize; i++)
+		for(int i=0; i<substrSize; i++) {
 			if(s1.charAt(pos+i)>s2.charAt(pos+i))
 				return false;
-		
+			if(s1.charAt(pos+i)<s2.charAt(pos+i))
+				return true;
+		}
+	
 		return true;
 	}
 }
