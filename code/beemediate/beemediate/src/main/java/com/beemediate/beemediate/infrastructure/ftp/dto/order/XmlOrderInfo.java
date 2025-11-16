@@ -137,5 +137,7 @@ public class XmlOrderInfo {
 		return orderPartiesReference;
 	}
 	
-	
+	public String getCurrency() {
+		return currency;
+	}
 }
