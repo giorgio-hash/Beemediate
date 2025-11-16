@@ -294,6 +294,9 @@ public class StringHandler {
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 		
+		if (str == null) return false;
+		
+		
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
 		final char MAIN_SEPARATOR = 'T';
@@ -305,6 +308,7 @@ public class StringHandler {
 		final int hSize = 2; 
 		final int mSize = 2; 
 		final int sSize = 2;
+		
 		
 		//mi aspetto una certa forma
 		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )
