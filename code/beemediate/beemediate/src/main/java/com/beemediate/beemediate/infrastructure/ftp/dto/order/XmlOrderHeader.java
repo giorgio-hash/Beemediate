@@ -21,6 +21,7 @@ public class XmlOrderHeader {
 	 * Rifeirmento a DTO XmlAgreement per AGREEMENT
 	 */
 	@JacksonXmlProperty(localName="AGREEMENT")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private XmlAgreement agreement;
 	
 	/**
@@ -35,7 +36,6 @@ public class XmlOrderHeader {
 	public XmlOrderHeader(final OrderHeader head) {
 		super();
 		this.orderInfo = new XmlOrderInfo( head );
-		this.agreement = new XmlAgreement(null);
 	}
 
 	/**

@@ -49,11 +49,13 @@ public class XmlProductID{
 			this.supplierId = null;
 		else
 			this.supplierId = new XmlPartyID(supplierId);
-		
+			
 		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())
 			this.buyerId = null;
-		else
+		else {
 			this.buyerId = new XmlPartyID(buyerId);
+			this.buyerId.setType("CODE");
+		}
 		
 		this.descriptionShort = descriptionShort;
 	}

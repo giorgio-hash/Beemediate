@@ -13,7 +13,7 @@ public class XmlAgreement {
 	 * Numero di contratto
 	 */
 	@JacksonXmlProperty(localName="bmecat:AGREEMENT_ID")
-	@JsonInclude(JsonInclude.Include.ALWAYS)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String id;
 
 	
