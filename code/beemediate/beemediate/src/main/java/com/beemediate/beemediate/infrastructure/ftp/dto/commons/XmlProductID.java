@@ -15,14 +15,14 @@ public class XmlProductID{
 	 * tag per Numero di articolo del fornitore
 	 */
 	@JacksonXmlProperty(localName="bmecat:SUPPLIER_PID")
-	private String supplierId;
+	private XmlPartyID supplierId;
 	
 	/**
 	 * Riferimento a BuyerID per tag numero di articolo del cliente (opzionale)
 	 */
 	@JacksonXmlProperty(localName="bmecat:BUYER_PID")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private BuyerID buyerId;
+	private XmlPartyID buyerId;
 	
 	/**
 	 * Tag contenente descrizione prodotto 
@@ -45,12 +45,15 @@ public class XmlProductID{
 	 */
 	public XmlProductID(String supplierId, String buyerId, String descriptionShort) {
 		super();
-		this.supplierId = supplierId;
+		if(supplierId==null || supplierId.isEmpty() || supplierId.isBlank())
+			this.supplierId = null;
+		else
+			this.supplierId = new XmlPartyID(supplierId);
 		
 		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())
 			this.buyerId = null;
 		else
-			this.buyerId = new BuyerID(buyerId, null);
+			this.buyerId = new XmlPartyID(buyerId);
 		
 		this.descriptionShort = descriptionShort;
 	}
@@ -59,7 +62,7 @@ public class XmlProductID{
 	 * 
 	 * @return String
 	 */
-	public String getSupplierId() {
+	public XmlPartyID getSupplierId() {
 		return supplierId;
 	}
 
@@ -67,7 +70,7 @@ public class XmlProductID{
 	 * 
 	 * @return BuyerID con identificativo ordine
 	 */
-	public void setSupplierId(String supplierId) {
+	public void setSupplierId(XmlPartyID supplierId) {
 		this.supplierId = supplierId;
 	}
 
@@ -75,11 +78,11 @@ public class XmlProductID{
 	 * 
 	 * @return String
 	 */
-	public BuyerID getBuyerId() {
+	public XmlPartyID getBuyerId() {
 		return buyerId;
 	}
 
-	public void setBuyerId(BuyerID buyerId) {
+	public void setBuyerId(XmlPartyID buyerId) {
 		this.buyerId = buyerId;
 	}
 

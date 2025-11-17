@@ -15,7 +15,7 @@ public class XmlOrderHeader {
 	 * Riferimento a DTO XmlOrderInfo per ORDER_INFO.
 	 */
 	@JacksonXmlProperty(localName="ORDER_INFO")
-	private final XmlOrderInfo orderInfo;
+	private XmlOrderInfo orderInfo;
 
 	/**
 	 * Rifeirmento a DTO XmlAgreement per AGREEMENT
@@ -23,6 +23,10 @@ public class XmlOrderHeader {
 	@JacksonXmlProperty(localName="AGREEMENT")
 	private XmlAgreement agreement;
 	
+	/**
+	 * empty constructor for deserializer
+	 */
+	public XmlOrderHeader() {/*empty constructor*/}
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans header ordine partendo dal POJO {@code OrderHeader}
@@ -40,6 +44,18 @@ public class XmlOrderHeader {
 	 */
 	public XmlOrderInfo getOrderInfo() {
 		return orderInfo;
+	}
+
+	public XmlAgreement getAgreement() {
+		return agreement;
+	}
+
+	public void setAgreement(XmlAgreement agreement) {
+		this.agreement = agreement;
+	}
+
+	public void setOrderInfo(XmlOrderInfo orderInfo) {
+		this.orderInfo = orderInfo;
 	}
 
 	

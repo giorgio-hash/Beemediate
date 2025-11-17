@@ -26,43 +26,48 @@ public class XmlOrderInfo {
 	 * tag per numero d'ordine del cliente (35 cifre; (alfanumerico / numerico))
 	 */
 	@JacksonXmlProperty(localName="ORDER_ID")
-	private final String orderId;
+	private String orderId;
 	
 	/**
 	 * tag per data dell'ordine
 	 */
 	@JacksonXmlProperty(localName="ORDER_DATE")
-	private final String orderDate;
+	private String orderDate;
 	
 	/**
 	 * riferimento a DTO XmlDeliveryDate per DELIVERY_DATE
 	 */
 	@JacksonXmlProperty(localName="DELIVERY_DATE")
-	private final XmlDeliveryDate deliveryDate;
+	private XmlDeliveryDate deliveryDate;
 	
 	/**
 	 * Riferimento a lista di DTO XmlParty per PARTY. Jackson crea un tag wrapper PARTIES attorno ai PARTY
 	 */
     @JacksonXmlElementWrapper(localName = "PARTIES", useWrapping = true) 
     @JacksonXmlProperty(localName = "PARTY")  
-	private final List<XmlParty> orderParties;
+	private List<XmlParty> orderParties;
     
     /**
      * Riferimento a DTO XmlOrderPartiesReference per ORDER_PARTIES_REFERENCE
      */
     @JacksonXmlProperty(localName = "ORDER_PARTIES_REFERENCE")
-    private final XmlOrderPartiesReference orderPartiesReference;
+    private XmlOrderPartiesReference orderPartiesReference;
 
     /**
      * tag per valuta
      */
     @JacksonXmlProperty(localName= "bmecat:CURRENCY")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private final String currency;
+    private String currency;
     
     @JacksonXmlProperty(localName= "PARTIAL_SHIPMENT_ALLOWED")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private boolean partialShipment;
+    
+    /**
+     * Empty constructor
+     */
+    public XmlOrderInfo() {/*Empty constructor for deserialization*/}
     
     /**
      * Costruttore per creare struttura XML-OpenTrans informazioni del header ordine partendo dal POJO {@code OrderHeader}
@@ -140,4 +145,46 @@ public class XmlOrderInfo {
 	public String getCurrency() {
 		return currency;
 	}
+
+
+	public boolean isPartialShipment() {
+		return partialShipment;
+	}
+
+
+	public void setPartialShipment(boolean partialShipment) {
+		this.partialShipment = partialShipment;
+	}
+
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+
+
+	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+
+	public void setOrderParties(List<XmlParty> orderParties) {
+		this.orderParties = orderParties;
+	}
+
+
+	public void setOrderPartiesReference(XmlOrderPartiesReference orderPartiesReference) {
+		this.orderPartiesReference = orderPartiesReference;
+	}
+
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	
+	
 }
