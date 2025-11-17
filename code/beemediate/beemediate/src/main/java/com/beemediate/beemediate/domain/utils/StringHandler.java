@@ -294,6 +294,9 @@ public class StringHandler {
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 		
+		if (str == null) return false;
+		
+		
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
 		final char MAIN_SEPARATOR = 'T';
@@ -305,6 +308,7 @@ public class StringHandler {
 		final int hSize = 2; 
 		final int mSize = 2; 
 		final int sSize = 2;
+		
 		
 		//mi aspetto una certa forma
 		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )
@@ -331,9 +335,9 @@ public class StringHandler {
 		final int mm=14;//mm index:controllo mm, da "00" a "59"
 		final int ss=17;//ss index:controllo ss, da "00" a "59"
 
-		return has2DigitsBetween(str, MM, '0','0','1','9') && has2DigitsBetween(str, MM, '1','1','0','2') 
-					&& has2DigitsBetween(str, dd, '0','2','0','9') && has2DigitsBetween(str, dd, '3','3','0','1')
-					&& has2DigitsBetween(str, HH, '0','1','0','9') && has2DigitsBetween(str, HH, '2','2','0','3')
+		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) 
+					&& (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))
+					&& (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))
 					&& has2DigitsBetween(str, mm, '0','5','0','9') 
 					&& has2DigitsBetween(str, ss, '0','5','0','9');
 		
@@ -504,10 +508,13 @@ public class StringHandler {
 		//@ loop_invariant 0<=i<=substrSize;
 		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)<=s2.charAt(j) );
 		//@ decreases substrSize-i;
-		for(int i=0; i<substrSize; i++)
+		for(int i=0; i<substrSize; i++) {
 			if(s1.charAt(pos+i)>s2.charAt(pos+i))
 				return false;
-		
+			if(s1.charAt(pos+i)<s2.charAt(pos+i))
+				return true;
+		}
+	
 		return true;
 	}
 }

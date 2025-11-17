@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlOrderResponseSummary.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.confirmation</a> &gt; <span class="el_source">XmlOrderResponseSummary.java</span></div><h1>XmlOrderResponseSummary.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Riepilogo dell'ordine
+
+ */
+@JacksonXmlRootElement(localName=&quot;ORDERRESPONSE_SUMMARY&quot;)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="nc" id="L18">public class XmlOrderResponseSummary {</span>
+
+	/**
+	 * Numero di articoli dell'ordine
+
+	 */
+	@JacksonXmlProperty(localName=&quot;TOTAL_ITEM_NUM&quot;)
+	private int totalItemNum;
+
+	/**
+	 * Importo totale lordo finale
+
+	 */
+	@JacksonXmlProperty(localName=&quot;TOTAL_AMOUNT&quot;)
+	private float totalAmount;
+	
+	/**
+	 * 	lista di supplementi/sconti
+	 */
+	@JacksonXmlElementWrapper(localName = &quot;ALLOW_OR_CHARGES_FIX&quot;, useWrapping = true)
+	@JacksonXmlProperty(localName=&quot;ALLOW_OR_CHARGE&quot;)
+	private List&lt;XmlAllowOrCharge&gt; allowOrChargesFix;
+
+	
+	/**
+	 * 
+	 * @return int
+	 */
+	public int getTotalItemNum() {
+<span class="nc" id="L47">		return totalItemNum;</span>
+	}
+
+	/**
+	 * 
+	 * @param totalItemNum - int
+	 */
+	public void setTotalItemNum(int totalItemNum) {
+<span class="nc" id="L55">		this.totalItemNum = totalItemNum;</span>
+<span class="nc" id="L56">	}</span>
+
+	/**
+	 * 
+	 * @return float
+	 */
+	public float getTotalAmount() {
+<span class="nc" id="L63">		return totalAmount;</span>
+	}
+
+	/**
+	 * 
+	 * @param totalAmount - float
+	 */
+	public void setTotalAmount(float totalAmount) {
+<span class="nc" id="L71">		this.totalAmount = totalAmount;</span>
+<span class="nc" id="L72">	}</span>
+
+	/**
+	 * 
+	 * @return XmlAllowOrCharge
+	 */
+	public List&lt;XmlAllowOrCharge&gt; getAllowOrChargesFix() {
+<span class="nc" id="L79">		return allowOrChargesFix;</span>
+	}
+
+	/**
+	 * 
+	 * @param allowOrChargesFix - {@code List} di {@code XmlAllowOrCharge}
+	 */
+	public void setAllowOrChargesFix(List&lt;XmlAllowOrCharge&gt; allowOrChargesFix) {
+<span class="nc" id="L87">		this.allowOrChargesFix = allowOrChargesFix;</span>
+<span class="nc" id="L88">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

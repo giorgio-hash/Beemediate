@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArticoloPreventivoDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">ArticoloPreventivoDTO.java</span></div><h1>ArticoloPreventivoDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa gli articoli contenuti nel preventivo dell'ordine di acquisto. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;purchase.order.line&lt;/i&gt; di Odoo.
+ */
+public class ArticoloPreventivoDTO{
+	
+	/**
+	 * Mapping di id.
+	 */
+	private final Optional&lt;Integer&gt; id;
+	/**
+	 * Mapping di order_id.
+	 */
+	private final IdentifierDTO orderId;
+	/**
+	 * Mapping di product_id.
+	 */
+	private final IdentifierDTO productId;
+	/**
+	 * Mapping di product_qty.
+	 */
+	private final Optional&lt;Double&gt; productQty;
+	
+	
+	/**
+	 * Static Factory method che nteragisce col model purchase.order.line di Odoo per estrarre gli articoli contenuti nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return Array di elementi ArticoloPreventivoDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ArticoloPreventivoDTO[] fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+<span class="fc bfc" id="L50" title="All 4 branches covered.">		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
+		
+		Object[] ids;
+		Object[] res;
+		ArticoloPreventivoDTO[] artPrv;
+<span class="fc" id="L55">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+		
+		
+		//verifica che il preventivo contenga le sue parti
+<span class="fc" id="L60">		ids = prv.getOrderLine().get();</span>
+		
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Non sono stati trovati articoli nel preventivo &quot; + prv);</span>
+		
+		//estrai parti del preventivo
+<span class="fc" id="L65">		requestInfo.clear();</span>
+<span class="fc" id="L66">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;order_id&quot;,&quot;product_id&quot;,&quot;product_qty&quot;));</span>
+<span class="fc" id="L67">		res = odoo.readFromModel(&quot;purchase.order.line&quot;, requestInfo, ids);</span>
+		
+<span class="fc bfc" id="L69" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Il preventivo ha articoli, ma non li trovo. Preventivo: &quot; + prv);</span>
+		
+		//collezione di POJO
+<span class="fc" id="L72">		artPrv = new ArticoloPreventivoDTO[res.length];</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
+<span class="fc" id="L74">			artPrv[i] = new ArticoloPreventivoDTO( (HashMap&lt;String,Object&gt;) res[i] );</span>
+		}
+		
+<span class="fc" id="L77">		return artPrv;</span>
+	}
+	
+	
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;purchase.order.line&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L86">	public ArticoloPreventivoDTO( final Map&lt;String, Object&gt; map ) {</span>
+		
+<span class="fc" id="L88">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+		
+<span class="fc" id="L90">		orderId = new IdentifierDTO( (Object[]) map.get(&quot;order_id&quot;) );</span>
+		
+<span class="fc" id="L92">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
+		
+<span class="fc" id="L94">		productQty = AttributeMapper.doublify( map.get(&quot;product_qty&quot;) );</span>
+<span class="fc" id="L95">	}</span>
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L102">		return id;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo dell'ordine
+	 */
+	public IdentifierDTO getOrderId() {
+<span class="fc" id="L110">		return orderId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del prodotto associato a questo articolo.
+	 */
+	public IdentifierDTO getProductId() {
+<span class="fc" id="L118">		return productId;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Double, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Double&gt; getProductQty() {
+<span class="fc" id="L126">		return productQty;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L131">		return &quot;ArticoloPreventivoDTO [id=&quot; + id + &quot;, order_id=&quot; + orderId + &quot;, product_id=&quot; + productId</span>
+				+ &quot;, product_qty=&quot; + productQty + &quot;]&quot;;
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

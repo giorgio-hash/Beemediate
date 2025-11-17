@@ -5,6 +5,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import javax.security.auth.login.FailedLoginException;
 
@@ -13,7 +15,9 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -48,45 +52,56 @@ public class OdooApiConfig {
 	public static final String READ = "read";
 	
 	/**
+	 * String che identifica l'operazione di scrittura su model
+	 */
+	public static final String WRITE = "write";
+	
+	/**
+	 * String che identifica l'operazione di ricerca su model
+	 */
+	public static final String SEARCH = "search";
+	
+	/**
+	 * String che identifica l'operazione di inserimento su model
+	 */
+	public static final String CREATE = "create";
+	
+	/**
 	 * String con campo identificativo di un partner dal model
 	 */
 	public static final String PARTNER_ID_FIELD = "partner_id";
 	/**
 	 * Riferimento alla risorsa online CRM.
 	 */
-	@Value("${api.host:noconf}")
-	public String url;// scade 4.10
+	private final String url;// scade 4.10
 	/**
 	 * Riferimento alla risorsa online database del CRM.
 	 */
-	@Value("${api.db:noconf}")
-	public String db; // scade 4.10
+	private final String db; // scade 4.10
 	/**
 	 * Dato per l'autenticazione.
 	 */
-	@Value("${api.username:noconf}")
-	public String username;
+	private final String username;
 	/**
 	 * Token di autenticazione alle API Odoo.
 	 */
-	@Value("${api.key:noconf}")
-	public String password;// scade 23.09
+	private final String password;// scade 23.09
 	/**
 	 * Serve a gestire il protocollo XML-RPC.
 	 */
-	public final XmlRpcClient client = new XmlRpcClient();
-	/**
-	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
-	 */
-	public final XmlRpcClientConfigImpl commmonConfig = new XmlRpcClientConfigImpl();
-	/**
-	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
-	 */
-	public final XmlRpcClientConfigImpl objectConfig = new XmlRpcClientConfigImpl();
+	private final XmlRpcClient client;
 	/**
 	 * Oggetto di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
 	 */
-	public final XmlRpcClient models = new XmlRpcClient();
+	private final XmlRpcClient models;
+	/**
+	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl commonConfig;
+	/**
+	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl objectConfig;
 	/**
 	 * Identificativo di sessione.
 	 */
@@ -95,33 +110,27 @@ public class OdooApiConfig {
 	 * flag per segnalare stato della connessione.
 	 */
 	private boolean online = false;
+	
+	
 	/**
-	 * Stato degli Ordini a Fornitore, ovvero gli Ordini di Acquisto di Odoo.
+	 * Costruttore usato da Spring per costruire la configurazione Odoo.
+	 *
+	 * I parametri annotati con @Value sono prelevati dal contesto delle proprietà "apiconfig.properties".
+	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
 	 */
-	public enum OafStatus{
-		NEW("NEW"),
-		SHIPPED("SHIPPED"),
-		CONFIRMED("CONFIRMED"),
-		OPENTRANSERROR("OPENTRANSERROR"),
-		CONTENTERROR("CONTENTERROR");
-		
-		/**
-		 * String corrispondente allo stato
-		 */
-		public final String label;
-		
-		/**
-		 * Costruttore privato
-		 * @param label - String
-		 */
-		OafStatus(final String label) {
-			this.label = label;
-		}
-		
-		@Override
-		public String toString() {
-			return label;
-		}
+	@Autowired
+	public OdooApiConfig (@Value("${api.host:noconf}") String url, @Value("${api.db:noconf}") String db, 
+							@Value("${api.username:noconf}") String username, @Value("${api.key:noconf}") String password,
+							@Qualifier("xmlRpcClientCommon") XmlRpcClient client, @Qualifier("xmlRpcClientModels") XmlRpcClient models,
+							 @Qualifier("commonConfig") XmlRpcClientConfigImpl commonConfig, @Qualifier("objectConfig") XmlRpcClientConfigImpl objectConfig) {
+		this.url = url;
+		this.db = db;
+		this.username = username;
+		this.password = password;
+		this.client = client;
+		this.models = models;
+		this.commonConfig = commonConfig;
+		this.objectConfig = objectConfig;
 	}
 	
 	
@@ -135,12 +144,12 @@ public class OdooApiConfig {
 	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
 		
 		//informazioni sul server
-		commmonConfig.setServerURL( (new URI(String.format("%s/xmlrpc/2/common", url))).toURL() );
-		final Object ver = client.execute(commmonConfig, "version", Collections.emptyList());
+		commonConfig.setServerURL( (new URI(String.format("%s/xmlrpc/2/common", url))).toURL() );
+		final Object ver = client.execute(commonConfig, "version", Collections.emptyList());
 		
 		//login
 		try {
-			uid = (int) client.execute(commmonConfig, "authenticate", Arrays.asList(db, username, password, Collections.emptyMap()));
+			uid = (int) client.execute(commonConfig, "authenticate", Arrays.asList(db, username, password, Collections.emptyMap()));
 
 			log.info("Versione server: {}", ver.toString().replaceAll("[\r\n]","") );
 			log.info("Session uid: {}", uid);
@@ -161,6 +170,7 @@ public class OdooApiConfig {
 		}
 	}
 	
+	
 	/**
 	 * 
 	 * @return <i>true</i> se il servizio non ha riscontrato problemi di connessione con Odoo fino ad ora.
@@ -168,37 +178,110 @@ public class OdooApiConfig {
 	public boolean isOnline() {
 		return online;
 	}
-
+	
+	
 	/**
-	 * Restitusice l'identificativo di sessione.
-	 * @return int - uid di sessione
+	 * Esegue una ricerca ("search") su un model Odoo tramite XML-RPC usando "execute_kw".
+	 * Costruisce il payload con db/uid/password, il model, il metodo SEARCH e i parametri di ricerca.
+	 *
+	 * @param modelName  nome del model Odoo (es. "res.partner")
+	 * @param details    kwargs opzionali (es. "fields", "limit", "order"); può essere null
+	 * @param searchParams varargs di condizioni di ricerca (es. List.of(List.of("field","ilike","val")))
+	 * @return           array di oggetti restituito dall'XML-RPC (castare in base al formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione/risposta dal server Odoo
 	 */
-	public int getUid() {
-		return uid;
+	public Object[] searchFromModel(String modelName, Map<String, Object> details, List<Object>... searchParams) throws XmlRpcException {
+		return	remoteQueryOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);
 	}
-
+	
 	/**
-	 * Restituisce il riferimento alla risorsa CRM online.
-	 * @return String - un URL, indirizzo web 
+	 * Esegue una lettura ("read") su un model Odoo delegando a remoteExcecuteOnModel.
+	 *
+	 * Invoca la procedure {@code execute_kw} sul servizio "models" per richiedere i record
+	 * identificati da {@code ids}, applicando gli kwargs forniti in {@code details}.
+	 *
+	 * @param modelName nome del model Odoo (es. {@code "purchase.request"})
+	 * @param details   mappa di kwargs opzionali (es. {@code "fields", "limit"}); può essere null
+	 * @param ids       identificativi dei record da leggere (varargs); singoli id diventano {@code [[id1,id2,...]]}
+	 * @return          array di oggetti restituito dall'XML-RPC (castare secondo il formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	public String getUrl() {
-		return url;
+	public Object[] readFromModel(String modelName, Map<String, Object> details, Object... ids) throws XmlRpcException {
+		
+		return remoteQueryOnModel(EXECUTE_KW,modelName,READ,details,ids);
 	}
-
+	
 	/**
-	 * Restituicse il riferimento alla risorsa database del CRM online.
-	 * @return String - un URL, indirizzo web
+	 * Esegue una scrittura ("write") su un model Odoo delegando alla chiamata remota generica.
+	 *
+	 * Invoca la procedure {@code execute_kw} sul model specificato per aggiornare il record
+	 * identificato da {@code id} con i valori presenti in {@code details}.
+	 *
+	 * @param modelName nome del model Odoo (es. {@code "purchase.request"})
+	 * @param details   mappa contenente i campi e i valori da aggiornare (es. {@code "field": value})
+	 * @param id        identificativo del record da modificare
+	 * @return          {@code true} se l'operazione ha avuto successo, altrimenti {@code false}
+	 * @throws XmlRpcException in caso di errori nella chiamata XML-RPC
 	 */
-	public String getDb() {
-		return db;
+	public boolean updateOnModel(String modelName, Map<String, Object> details, Object id) throws XmlRpcException {
+		
+		return (boolean) models.execute(EXECUTE_KW,
+											Arrays.asList(
+													db,uid,password,
+													modelName,WRITE,
+													Arrays.asList(
+															Arrays.asList(id),
+															details
+														))
+											);
 	}
-
+	
 	/**
-	 * Restituisce il token di autenticazione alle API Odoo.
-	 * @return String - password
+	 * Inserisce un nuovo record su un model Odoo tramite XML-RPC e ritorna l'id creato.
+	 *
+	 * Invoca la procedure {@code execute_kw} (endpoint "models") con il metodo {@code create}
+	 * per inserire i valori forniti in {@code details}. Nota: il model passato al payload
+	 * è hardcoded a "mail.message" nel body della chiamata; se si vuole usare
+	 * {@code modelName} sostituire opportunamente la stringa.
+	 *
+	 * @param modelName nome del model (non usato nell'attuale payload; attenzione al valore hardcoded)
+	 * @param details   mappa dei campi e valori da inserire (es. {@code "subject": "...", "body": "..."})
+	 * @return          identificativo intero del record creato restituito dal server Odoo
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	public String getPassword() {
-		return password;
+	public int insertOnModel(String modelName, Map<String, Object> details) throws XmlRpcException {
+		
+		return (int) models.execute(EXECUTE_KW, 
+						Arrays.asList(
+						    db,uid,password,
+						    modelName, CREATE,
+						    Arrays.asList(details)
+						    )
+					    );
+	}
+	
+	
+	/**
+	 * Esegue una chiamata XML-RPC in lettura su un model Odoo usando il procedure specificato.
+	 *
+	 * @param procedure nome della procedure XML-RPC (es. "execute_kw" o "execute")
+	 * @param model     nome del model Odoo (es. "res.partner")
+	 * @param operation metodo da invocare sul model (es. "read", "search", "write")
+	 * @param details   mappa di kwargs opzionali per la chiamata (es. "fields", "limit"); può essere null
+	 * @param params    parametri/argomenti varargs per l'operazione (es. condizioni di ricerca o id)
+	 * @return          array di oggetti restituito dall'esecuzione XML-RPC (castare secondo il formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
+	 */
+	private Object[] remoteQueryOnModel(String procedure, String model, String operation, Map<String,Object> details, Object... params) throws XmlRpcException {
+		
+		return (Object[]) models.execute(procedure,
+				Arrays.asList(
+						db,uid,password,
+						model,	operation,
+						Arrays.asList(Arrays.asList(params)),
+						details
+						)
+				);
 	}
 
 	

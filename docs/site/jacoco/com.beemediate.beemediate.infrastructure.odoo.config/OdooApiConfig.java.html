@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OdooApiConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.config</a> &gt; <span class="el_source">OdooApiConfig.java</span></div><h1>OdooApiConfig.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.config;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.security.auth.login.FailedLoginException;
+
+import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+/**
+ * Classe di configurazione per comunicare con Odoo External API in protocollo XML-RPC. Le informazioni di configurazioni vengono prese dal file &lt;i&gt;src/main/resources/apiconfig.properties&lt;/i&gt;.
+ */
+@Configuration
+@PropertySource(&quot;classpath:apiconfig.properties&quot;)
+public class OdooApiConfig {
+
+	/***oggetto Logger*/
+<span class="fc" id="L32">	private final Logger log = LoggerFactory.getLogger(OdooApiConfig.class);</span>
+	
+	/**
+	 * String che identifica il comando RPC per l'esecuzione di procedura remota
+	 */
+	public static final String EXECUTE_KW = &quot;execute_kw&quot;;
+	
+	/**
+	 * String che identifica il model dei contatti su model
+	 */
+	public static final String RES_PARTNER = &quot;res.partner&quot;;
+	
+	/**
+	 * String per l'header utile a specificare i campi di un model
+	 */
+	public static final String FIELDS = &quot;fields&quot;;
+	
+	/**
+	 * String che identifica l'operazione di lettura su model
+	 */
+	public static final String READ = &quot;read&quot;;
+	
+	/**
+	 * String che identifica l'operazione di scrittura su model
+	 */
+	public static final String WRITE = &quot;write&quot;;
+	
+	/**
+	 * String che identifica l'operazione di ricerca su model
+	 */
+	public static final String SEARCH = &quot;search&quot;;
+	
+	/**
+	 * String che identifica l'operazione di inserimento su model
+	 */
+	public static final String CREATE = &quot;create&quot;;
+	
+	/**
+	 * String con campo identificativo di un partner dal model
+	 */
+	public static final String PARTNER_ID_FIELD = &quot;partner_id&quot;;
+	/**
+	 * Riferimento alla risorsa online CRM.
+	 */
+	private final String url;// scade 4.10
+	/**
+	 * Riferimento alla risorsa online database del CRM.
+	 */
+	private final String db; // scade 4.10
+	/**
+	 * Dato per l'autenticazione.
+	 */
+	private final String username;
+	/**
+	 * Token di autenticazione alle API Odoo.
+	 */
+	private final String password;// scade 23.09
+	/**
+	 * Serve a gestire il protocollo XML-RPC.
+	 */
+	private final XmlRpcClient client;
+	/**
+	 * Oggetto di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
+	 */
+	private final XmlRpcClient models;
+	/**
+	 * Configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl commonConfig;
+	/**
+	 * Configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
+	private final XmlRpcClientConfigImpl objectConfig;
+	/**
+	 * Identificativo di sessione.
+	 */
+	private int uid;
+	/**
+	 * flag per segnalare stato della connessione.
+	 */
+<span class="fc" id="L112">	private boolean online = false;</span>
+	
+	
+	/**
+	 * Costruttore usato da Spring per costruire la configurazione Odoo.
+	 *
+	 * I parametri annotati con @Value sono prelevati dal contesto delle proprietà &quot;apiconfig.properties&quot;.
+	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
+	 */
+	@Autowired
+	public OdooApiConfig (@Value(&quot;${api.host:noconf}&quot;) String url, @Value(&quot;${api.db:noconf}&quot;) String db, 
+							@Value(&quot;${api.username:noconf}&quot;) String username, @Value(&quot;${api.key:noconf}&quot;) String password,
+							@Qualifier(&quot;xmlRpcClientCommon&quot;) XmlRpcClient client, @Qualifier(&quot;xmlRpcClientModels&quot;) XmlRpcClient models,
+<span class="fc" id="L125">							 @Qualifier(&quot;commonConfig&quot;) XmlRpcClientConfigImpl commonConfig, @Qualifier(&quot;objectConfig&quot;) XmlRpcClientConfigImpl objectConfig) {</span>
+<span class="fc" id="L126">		this.url = url;</span>
+<span class="fc" id="L127">		this.db = db;</span>
+<span class="fc" id="L128">		this.username = username;</span>
+<span class="fc" id="L129">		this.password = password;</span>
+<span class="fc" id="L130">		this.client = client;</span>
+<span class="fc" id="L131">		this.models = models;</span>
+<span class="fc" id="L132">		this.commonConfig = commonConfig;</span>
+<span class="fc" id="L133">		this.objectConfig = objectConfig;</span>
+<span class="fc" id="L134">	}</span>
+	
+	
+	/**
+	 * Inizializza le configurazioni, verifica la connessione ed effettua autenticazione verso il CRM Odoo.
+	 * @throws MalformedURLException
+	 * @throws FailedLoginException
+	 * @throws XmlRpcException
+	 * @throws URISyntaxException 
+	 */
+	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
+		
+		//informazioni sul server
+<span class="fc" id="L147">		commonConfig.setServerURL( (new URI(String.format(&quot;%s/xmlrpc/2/common&quot;, url))).toURL() );</span>
+<span class="fc" id="L148">		final Object ver = client.execute(commonConfig, &quot;version&quot;, Collections.emptyList());</span>
+		
+		//login
+		try {
+<span class="fc" id="L152">			uid = (int) client.execute(commonConfig, &quot;authenticate&quot;, Arrays.asList(db, username, password, Collections.emptyMap()));</span>
+
+<span class="fc" id="L154">			log.info(&quot;Versione server: {}&quot;, ver.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;) );</span>
+<span class="fc" id="L155">			log.info(&quot;Session uid: {}&quot;, uid);</span>
+			
+			//oggetto per interagire coi models di ODOO
+<span class="fc" id="L158">			objectConfig.setServerURL( new URI(String.format(&quot;%s/xmlrpc/2/object&quot;, url)).toURL() );</span>
+<span class="fc" id="L159">			models.setConfig(objectConfig);</span>
+			
+<span class="fc" id="L161">			online = true;</span>
+		
+<span class="fc" id="L163">		} catch ( ClassCastException e ) {</span>
+			
+<span class="fc" id="L165">			online = false;</span>
+			
+<span class="fc" id="L167">			final FailedLoginException ex = new FailedLoginException(&quot;Eccezione durante il recupero uid di sessione, verificare il login.&quot;);</span>
+<span class="fc" id="L168">			ex.initCause(e);</span>
+<span class="fc" id="L169">			throw ex;</span>
+<span class="fc" id="L170">		}</span>
+<span class="fc" id="L171">	}</span>
+	
+	
+	/**
+	 * 
+	 * @return &lt;i&gt;true&lt;/i&gt; se il servizio non ha riscontrato problemi di connessione con Odoo fino ad ora.
+	 */
+	public boolean isOnline() {
+<span class="fc" id="L179">		return online;</span>
+	}
+	
+	
+	/**
+	 * Esegue una ricerca (&quot;search&quot;) su un model Odoo tramite XML-RPC usando &quot;execute_kw&quot;.
+	 * Costruisce il payload con db/uid/password, il model, il metodo SEARCH e i parametri di ricerca.
+	 *
+	 * @param modelName  nome del model Odoo (es. &quot;res.partner&quot;)
+	 * @param details    kwargs opzionali (es. &quot;fields&quot;, &quot;limit&quot;, &quot;order&quot;); può essere null
+	 * @param searchParams varargs di condizioni di ricerca (es. List.of(List.of(&quot;field&quot;,&quot;ilike&quot;,&quot;val&quot;)))
+	 * @return           array di oggetti restituito dall'XML-RPC (castare in base al formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione/risposta dal server Odoo
+	 */
+	public Object[] searchFromModel(String modelName, Map&lt;String, Object&gt; details, List&lt;Object&gt;... searchParams) throws XmlRpcException {
+<span class="fc" id="L194">		return	remoteQueryOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);</span>
+	}
+	
+	/**
+	 * Esegue una lettura (&quot;read&quot;) su un model Odoo delegando a remoteExcecuteOnModel.
+	 *
+	 * Invoca la procedure {@code execute_kw} sul servizio &quot;models&quot; per richiedere i record
+	 * identificati da {@code ids}, applicando gli kwargs forniti in {@code details}.
+	 *
+	 * @param modelName nome del model Odoo (es. {@code &quot;purchase.request&quot;})
+	 * @param details   mappa di kwargs opzionali (es. {@code &quot;fields&quot;, &quot;limit&quot;}); può essere null
+	 * @param ids       identificativi dei record da leggere (varargs); singoli id diventano {@code [[id1,id2,...]]}
+	 * @return          array di oggetti restituito dall'XML-RPC (castare secondo il formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
+	 */
+	public Object[] readFromModel(String modelName, Map&lt;String, Object&gt; details, Object... ids) throws XmlRpcException {
+		
+<span class="fc" id="L211">		return remoteQueryOnModel(EXECUTE_KW,modelName,READ,details,ids);</span>
+	}
+	
+	/**
+	 * Esegue una scrittura (&quot;write&quot;) su un model Odoo delegando alla chiamata remota generica.
+	 *
+	 * Invoca la procedure {@code execute_kw} sul model specificato per aggiornare il record
+	 * identificato da {@code id} con i valori presenti in {@code details}.
+	 *
+	 * @param modelName nome del model Odoo (es. {@code &quot;purchase.request&quot;})
+	 * @param details   mappa contenente i campi e i valori da aggiornare (es. {@code &quot;field&quot;: value})
+	 * @param id        identificativo del record da modificare
+	 * @return          {@code true} se l'operazione ha avuto successo, altrimenti {@code false}
+	 * @throws XmlRpcException in caso di errori nella chiamata XML-RPC
+	 */
+	public boolean updateOnModel(String modelName, Map&lt;String, Object&gt; details, Object id) throws XmlRpcException {
+		
+<span class="fc" id="L228">		return (boolean) models.execute(EXECUTE_KW,</span>
+<span class="fc" id="L229">											Arrays.asList(</span>
+<span class="fc" id="L230">													db,uid,password,</span>
+													modelName,WRITE,
+<span class="fc" id="L232">													Arrays.asList(</span>
+<span class="fc" id="L233">															Arrays.asList(id),</span>
+															details
+														))
+											);
+	}
+	
+	/**
+	 * Inserisce un nuovo record su un model Odoo tramite XML-RPC e ritorna l'id creato.
+	 *
+	 * Invoca la procedure {@code execute_kw} (endpoint &quot;models&quot;) con il metodo {@code create}
+	 * per inserire i valori forniti in {@code details}. Nota: il model passato al payload
+	 * è hardcoded a &quot;mail.message&quot; nel body della chiamata; se si vuole usare
+	 * {@code modelName} sostituire opportunamente la stringa.
+	 *
+	 * @param modelName nome del model (non usato nell'attuale payload; attenzione al valore hardcoded)
+	 * @param details   mappa dei campi e valori da inserire (es. {@code &quot;subject&quot;: &quot;...&quot;, &quot;body&quot;: &quot;...&quot;})
+	 * @return          identificativo intero del record creato restituito dal server Odoo
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
+	 */
+	public int insertOnModel(String modelName, Map&lt;String, Object&gt; details) throws XmlRpcException {
+		
+<span class="fc" id="L254">		return (int) models.execute(EXECUTE_KW, </span>
+<span class="fc" id="L255">						Arrays.asList(</span>
+<span class="fc" id="L256">						    db,uid,password,</span>
+						    modelName, CREATE,
+<span class="fc" id="L258">						    Arrays.asList(details)</span>
+						    )
+					    );
+	}
+	
+	
+	/**
+	 * Esegue una chiamata XML-RPC in lettura su un model Odoo usando il procedure specificato.
+	 *
+	 * @param procedure nome della procedure XML-RPC (es. &quot;execute_kw&quot; o &quot;execute&quot;)
+	 * @param model     nome del model Odoo (es. &quot;res.partner&quot;)
+	 * @param operation metodo da invocare sul model (es. &quot;read&quot;, &quot;search&quot;, &quot;write&quot;)
+	 * @param details   mappa di kwargs opzionali per la chiamata (es. &quot;fields&quot;, &quot;limit&quot;); può essere null
+	 * @param params    parametri/argomenti varargs per l'operazione (es. condizioni di ricerca o id)
+	 * @return          array di oggetti restituito dall'esecuzione XML-RPC (castare secondo il formato atteso)
+	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
+	 */
+	private Object[] remoteQueryOnModel(String procedure, String model, String operation, Map&lt;String,Object&gt; details, Object... params) throws XmlRpcException {
+		
+<span class="fc" id="L277">		return (Object[]) models.execute(procedure,</span>
+<span class="fc" id="L278">				Arrays.asList(</span>
+<span class="fc" id="L279">						db,uid,password,</span>
+						model,	operation,
+<span class="fc" id="L281">						Arrays.asList(Arrays.asList(params)),</span>
+						details
+						)
+				);
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

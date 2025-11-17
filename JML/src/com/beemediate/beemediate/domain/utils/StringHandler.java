@@ -111,12 +111,12 @@ public class StringHandler {
 	
 	//@ public static ghost int numOfCommas = 0;
 	
-	/*Più scenari:
+	/*Piï¿½ scenari:
 	 * - scenario 1: stringa troppo corta --> false
 	 * - scenario 2: stringa minima ma '.' agli estremi --> false
-	 * - scenario 3: stringa minima, '.' nel mezzo ma c'è carattere sbagliato --> false
-	 * - scenario 4: stringa minima, '.' non agli estremi, caratteri corretti e '.' al secondo posto --> true sse c'è solo un dot
-	 * - scenario 5: stringa minima, '.' non agli estremi, caratteri corretti e '.' dopo il secondo posto --> true sse c'è solo un dot e primo carattere è non-nullo
+	 * - scenario 3: stringa minima, '.' nel mezzo ma c'ï¿½ carattere sbagliato --> false
+	 * - scenario 4: stringa minima, '.' non agli estremi, caratteri corretti e '.' al secondo posto --> true sse c'ï¿½ solo un dot
+	 * - scenario 5: stringa minima, '.' non agli estremi, caratteri corretti e '.' dopo il secondo posto --> true sse c'ï¿½ solo un dot e primo carattere ï¿½ non-nullo
 	 * */
 	/*@ public normal_behaviour
 	  @ requires str.length()<3;
@@ -159,7 +159,7 @@ public class StringHandler {
 		if(str == null || str.length()<3 || str.charAt(str.length()-1) == COMMA || str.charAt(0) == COMMA)
 			return false;
 		
-		// se il secondo carattere è COMMA, il primo carattere può essere zero.
+		// se il secondo carattere ï¿½ COMMA, il primo carattere puï¿½ essere zero.
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
 		if ( str.charAt(1) != '.' & !isDigit(str.charAt(0),true) )
 			return false;
@@ -259,6 +259,8 @@ public class StringHandler {
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 	
+		if (str == null) return false;
+
 		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
 			
 		final char MAIN_SEPARATOR = 'T';
@@ -296,11 +298,11 @@ public class StringHandler {
 		final int mm=14;//mm index:controllo mm, da "00" a "59"
 		final int ss=17;//ss index:controllo ss, da "00" a "59"
 
-		return has2DigitsBetween(str, MM, '0','0','1','9') && has2DigitsBetween(str, MM, '1','1','0','2') 
-					&& has2DigitsBetween(str, dd, '0','2','0','9') && has2DigitsBetween(str, dd, '3','3','0','1')
-					&& has2DigitsBetween(str, HH, '0','1','0','9') && has2DigitsBetween(str, HH, '2','2','0','3')
-					&& has2DigitsBetween(str, mm, '0','5','0','9') 
-					&& has2DigitsBetween(str, ss, '0','5','0','9');
+		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) 
+				&& (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))
+				&& (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))
+				&& has2DigitsBetween(str, mm, '0','5','0','9') 
+				&& has2DigitsBetween(str, ss, '0','5','0','9');
 		
 		}
 	

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlAddress.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.commons</a> &gt; <span class="el_source">XmlAddress.java</span></div><h1>XmlAddress.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * tag per i dettagli di domicilio
+ */
+@JacksonXmlRootElement(localName=&quot;ADDRESS&quot;)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class XmlAddress {
+	
+	/**
+	 * nome del luogo di domicilio
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:NAME&quot;)
+	private String name;
+	/**
+	 * nome della strada di domicilio e numero civico
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:STREET&quot;)
+	private String street;
+	/**
+	 * codice postale
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:ZIP&quot;)
+	private String zip;
+	/**
+	 * città
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:CITY&quot;)
+	private String city;
+	/**
+	 * paese
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:COUNTRY&quot;)
+	private String country;
+	/**
+	 * paese nel codice ISO 3166-1
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:COUNTRY_CODED&quot;)
+	private String countryCoded;
+	/**
+	 * nome del luogo di domicilio
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:NAME3&quot;)
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String name3;
+	
+	/**
+	 * empty constructor for Jackson deserializer
+	 */
+<span class="nc" id="L56">	public XmlAddress() {/*empty constructor for Jackson deserializer*/}</span>
+	
+	/**
+	 * Costruttore
+	 * @param name - String
+	 * @param street - String
+	 * @param zip - String
+	 * @param city - String
+	 * @param country - String
+	 * @param countryCoded - String
+	 */
+	public XmlAddress(String name, String street, String zip, String city, String country, String countryCoded) {
+<span class="nc" id="L68">		super();</span>
+<span class="nc" id="L69">		this.name = name;</span>
+<span class="nc" id="L70">		this.street = street;</span>
+<span class="nc" id="L71">		this.zip = zip;</span>
+<span class="nc" id="L72">		this.city = city;</span>
+<span class="nc" id="L73">		this.country = country;</span>
+<span class="nc" id="L74">		this.countryCoded = countryCoded;</span>
+<span class="nc" id="L75">	}</span>
+
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getName() {
+<span class="nc" id="L83">		return name;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getStreet() {
+<span class="nc" id="L91">		return street;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getZip() {
+<span class="nc" id="L99">		return zip;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getCity() {
+<span class="nc" id="L107">		return city;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getCountry() {
+<span class="nc" id="L115">		return country;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getCountryCoded() {
+<span class="nc" id="L123">		return countryCoded;</span>
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

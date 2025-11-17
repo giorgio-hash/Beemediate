@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OaFBatchManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.service</a> &gt; <span class="el_source">OaFBatchManager.java</span></div><h1>OaFBatchManager.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.service;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+//import org.jmlspecs.annotation.CodeBigintMath;
+
+
+import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
+import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.ports.controller.OaFManagerPort;
+import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
+import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
+import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
+
+/**
+ * Classe principale per la gestione della piattaforma. Implementa OaFManagerPort.
+ */
+@Service
+public final class OaFBatchManager implements OaFManagerPort{
+	
+	/***riferimento al gestore buffer ordini*/
+	private /*@ spec_public @*/ final OaFBuffer oaf;
+	/***riferimento al ricevitore di conferme*/
+	private /*@ spec_public @*/ final ConfirmationProviderPort confirmations;
+	/***riferimento al getore FTP*/
+	private /*@ spec_public @*/ final FTPHandlerPort ftp;
+	/***riferimento al notificatore verso CRM*/
+	private /*@ spec_public @*/ final DataSenderPort crm;
+	/***numero minimo di Order validi richiesti per l'invio al fornitore*/
+	private /*@ spec_public @*/ final int oafBatchThreshold;
+
+	/*@ public invariant oaf!=null; @*/
+	/*@ public invariant confirmations!=null; @*/
+	/*@ public invariant ftp!=null; @*/
+	/*@ public invariant crm!=null; @*/
+	/*@ public invariant 0 &lt; oafBatchThreshold &lt;= oaf.getBuffer().capacity() &lt;= Integer.MAX_VALUE; @*/
+	
+	/**
+	 * Costruttore
+	 * @param threshold - int
+	 * @param oafb - oggetto OaFBuffer
+	 * @param c - adattatore ConfirmationProviderPort
+	 * @param f - adattatore FTPHandlerPort
+	 * @param u - adattatore DataSenderPort
+	 * @throws UnreachableThresholdException se la differenza &lt;tt&gt;oafb.capacity()&lt;/tt&gt;-threshold&gt;0
+	 */
+	/*@ public normal_behaviour
+	  @ requires oafb!=null &amp; c!=null &amp; f!=null &amp; u!=null;
+	  @ requires threshold&gt;0 &amp; oafb.getBuffer().capacity()&gt;=threshold;
+	  @ ensures oaf!=null &amp; confirmations!=null &amp; ftp!=null &amp; crm!=null;
+	  @ ensures oafBatchThreshold &lt;= oaf.getBuffer().capacity();
+	  @ also public exceptional_behaviour
+	  @ requires oafb.getBuffer().capacity()&gt;0 &amp; oafb.getBuffer().capacity()&lt;threshold;
+	  @ signals_only UnreachableThresholdException; 
+	  @ pure
+	  @*/
+//	@CodeBigintMath
+	@Autowired
+<span class="fc" id="L63">	public OaFBatchManager( @Value(&quot;${app.manager.threshold:1}&quot;) final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, final DataSenderPort u) throws UnreachableThresholdException{</span>
+		
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">		if(oafb.getBuffer().capacity()&lt;threshold)</span>
+<span class="nc" id="L66">			throw new UnreachableThresholdException(&quot;Capacit� del buffer di caricamento ordini inferiore alla soglia minima di invio.&quot;);</span>
+		
+<span class="fc" id="L68">		oafBatchThreshold = threshold;</span>
+<span class="fc" id="L69">		oaf = oafb;</span>
+<span class="fc" id="L70">		confirmations = c;</span>
+<span class="fc" id="L71">		ftp = f;</span>
+<span class="fc" id="L72">		crm = u;</span>
+<span class="fc" id="L73">	}</span>
+	
+	/*@ public normal_behaviour
+	  @ assigns confirmations.newConfirmation, crm.positiveResponse;
+	  @ requires confirmations!=null;
+	  @ requires crm!=null;
+	  @ requires ftp!=null;
+	  @ ensures \result&gt;=0;
+	  @ diverges true;
+	  @*/
+//	@CodeBigintMath
+	@Override
+	public int handleConfirmations() {
+		
+		Confirmation c;
+<span class="nc" id="L88">		int confCount=0;</span>
+		
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		if(confirmations.fetchConfirmations()) { //almeno una conferma c'?</span>
+		
+		    //@ loop_writes c,confCount,confirmations.newConfirmation;
+			//@ maintaining confCount&gt;=0;
+			do {
+<span class="nc" id="L95">				c = confirmations.popConfirmation();</span>
+				
+<span class="nc bnc" id="L97" title="All 2 branches missed.">				if(ftp.archive(c))</span>
+<span class="nc" id="L98">					crm.signalConfirmation(c);</span>
+				
+<span class="nc" id="L100">				confCount++;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">			}while(confirmations.hasConfirmation());</span>
+			
+		}
+		
+<span class="nc" id="L105">		return confCount;</span>
+	}
+	
+	//@ public normal_behaviour
+	//@ requires oaf!=null &amp; crm!=null &amp; ftp!=null;
+	/*@ requires 0&lt;oaf.buffer.size ==&gt; (\forall int j; 0&lt;=j&lt;oaf.buffer.size; oaf.buffer.ordini[j] != null
+	  @																		&amp; oaf.buffer.ordini[j].data!=null 
+	  @																		&amp; oaf.buffer.ordini[j].quantity!=null
+	  @																		&amp; oaf.buffer.ordini[j].orderID!=null
+	  @																		&amp; \typeof(oaf.buffer.ordini[j]) == \type(Order));
+	  @*/
+	/*@ requires oaf.buffer.size&lt;oaf.buffer.ordini.length ==&gt; (\forall int j; oaf.buffer.size&lt;=j&lt;oaf.buffer.ordini.length; oaf.buffer.ordini[j]==null);
+	  @*/
+	//@ ensures \result&gt;=0;
+	//@ ensures \not_modified(oaf,oaf.buffer,oaf.buffer.ordini,oaf.buffer.ordini.length);
+//	@CodeBigintMath
+	@Override
+	public int handleOrders() {
+		
+		/*@ nullable @*/Order o;		
+<span class="nc" id="L125">		int toSend=0; //valuto se la threshold ? superata</span>
+		
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if(oaf.loadNewBuffer()&gt;0) {</span>
+			
+<span class="nc" id="L129">			toSend = oaf.validateBuffer();</span>
+			
+			
+			/*@ loop_invariant  o!=null ==&gt; o.data!=null 
+			  @							&amp; o.quantity!=null
+			  @							&amp; o.orderID!=null;
+			  @*/
+			/*@ maintaining 0&lt;oaf.buffer.size ==&gt; (\forall int j; 0&lt;=j&lt;oaf.buffer.size; oaf.buffer.ordini[j] != null
+			  @																		&amp; oaf.buffer.ordini[j].data!=null 
+			  @																		&amp; oaf.buffer.ordini[j].quantity!=null
+			  @																		&amp; oaf.buffer.ordini[j].orderID!=null
+			  @																		&amp; \typeof(oaf.buffer.ordini[j]) == \type(Order));
+			  @*/
+			/*@ maintaining oaf.buffer.size&lt;oaf.buffer.ordini.length ==&gt; (\forall int j; oaf.buffer.size&lt;=j&lt;oaf.buffer.ordini.length; oaf.buffer.ordini[j]==null);
+			  @*/
+<span class="nc bnc" id="L144" title="All 2 branches missed.">			while(!oaf.getBuffer().isEmpty()){</span>
+				
+<span class="nc" id="L146">				o = oaf.getBuffer().pop();</span>
+				
+				//segnala al crm errori openTrans (critici) e non manda
+<span class="nc bnc" id="L149" title="All 2 branches missed.">				if(o.hasOpenTransError()) {</span>
+<span class="nc" id="L150">					crm.signalOpenTransError(o);</span>
+				} 
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)</span>
+<span class="nc" id="L153">					crm.signalContentError(o);</span>
+				}
+<span class="nc bnc" id="L155" title="All 4 branches missed.">				else if(toSend&gt;=oafBatchThreshold &amp;&amp; ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm</span>
+<span class="nc" id="L156">						crm.signalShipped(o);</span>
+				}
+			}
+		}
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		return toSend&gt;=oafBatchThreshold? toSend : 0;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

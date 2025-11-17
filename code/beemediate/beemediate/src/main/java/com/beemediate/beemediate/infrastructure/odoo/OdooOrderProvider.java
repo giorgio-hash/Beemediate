@@ -117,12 +117,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//trova ed estrai GEALAN (e stampa su log)
 			f = FornitoreDTO.fromXMLRPC(odoo);
-			log.info(f.toString().toString().replaceAll("[\r\n]",""));
+			log.info(f.toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova ed estrai preventivo (e stampa su log)
 			prev = PreventivoDTO.fromXMLRPC(odoo, f);
-			log.info(prev.toString().toString().replaceAll("[\r\n]",""));
+			log.info(prev.toString().replaceAll("[\r\n]",""));
 			
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
@@ -133,16 +133,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 										ConsegnaDTO.fromXMLRPC(odoo, prev)
 									)
 							);
-			log.info(dest.toString().toString().replaceAll("[\r\n]",""));
+			log.info(dest.toString().replaceAll("[\r\n]",""));
 			
 			//trova informazioni sulla compagnia cliente (e stampa su log)
 			comp = CompagniaDTO.fromXMLRPC(odoo, prev);
-			log.info(comp.toString().toString().replaceAll("[\r\n]",""));
+			log.info(comp.toString().replaceAll("[\r\n]",""));
 			
 			//trova ed estrai parti del preventivo (e stampa su log)
 			artpr = ArticoloPreventivoDTO.fromXMLRPC(odoo, prev);
 			for(ArticoloPreventivoDTO p : artpr) {
-				log.info(p.toString().toString().replaceAll("[\r\n]",""));
+				log.info(p.toString().replaceAll("[\r\n]",""));
 			}
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
@@ -152,12 +152,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 								f
 							);
 			for(ProdottoFornitoreDTO p : prodf) {
-				log.info(p.toString().toString().replaceAll("[\r\n]",""));
+				log.info(p.toString().replaceAll("[\r\n]",""));
 			}
 			
 			//costruzione struct ordine
 			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);
-			log.info(ordstr.toString().toString().replaceAll("[\r\n]",""));
+			log.info(ordstr.toString().replaceAll("[\r\n]",""));
 			//costruzione ordine
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			

@@ -64,14 +64,7 @@ public class ArticoloPreventivoDTO{
 		//estrai parti del preventivo
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("order_id","product_id","product_qty"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order.line",odoo.READ,
-						Arrays.asList(Arrays.asList(ids)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("purchase.order.line", requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Il preventivo ha articoli, ma non li trovo. Preventivo: " + prv);
 		

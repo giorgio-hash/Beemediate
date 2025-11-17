@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ORDERRESPONSE xmlns:bmecat="http://www.bmecat.org/bmecat/2005" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opentrans.org/XMLSchema/2.1" version="2.1">
+  <ORDERRESPONSE_HEADER>
+    <CONTROL_INFO>
+        <GENERATOR_INFO>GEALAN Fenster-Systeme EDD VAT 901 NDROBNY</GENERATOR_INFO>
+        <GENERATION_DATE>2024-04-10T10:16:51</GENERATION_DATE>
+      </CONTROL_INFO>
+    <ORDERRESPONSE_INFO>
+        <ORDER_ID>B550458</ORDER_ID>
+        <ORDERRESPONSE_DATE>2024-01-19T11:05+01:00</ORDERRESPONSE_DATE>
+        <ORDER_DATE>2024-01-19</ORDER_DATE>
+        <ALT_CUSTOMER_ORDER_ID>E0CGealanB2B</ALT_CUSTOMER_ORDER_ID>
+        <SUPPLIER_ORDER_ID>730940155</SUPPLIER_ORDER_ID>
+      <DELIVERY_DATE type="fixed">
+          <DELIVERY_START_DATE>2024-02-16</DELIVERY_START_DATE>
+          <DELIVERY_END_DATE>2024-02-16</DELIVERY_END_DATE>
+        </DELIVERY_DATE>
+      <PARTIES>
+        <PARTY>
+            <bmecat:PARTY_ID type="supplier_specific">3099999999</bmecat:PARTY_ID>
+            <PARTY_ROLE>invoice_recipient</PARTY_ROLE>
+         <ADDRESS>
+               <bmecat:NAME>Cliente campione</bmecat:NAME>
+               <bmecat:STREET>Strada campione 99</bmecat:STREET>
+               <bmecat:ZIP>98765</bmecat:ZIP>
+               <bmecat:CITY>Città campione</bmecat:CITY>
+               <bmecat:COUNTRY>Italia</bmecat:COUNTRY>
+               <bmecat:COUNTRY_CODED>IT</bmecat:COUNTRY_CODED>
+           </ADDRESS>
+         </PARTY>
+      </PARTIES>
+    <ORDER_PARTIES_REFERENCE>
+      <bmecat:BUYER_IDREF type="supplier_specific">3099999999</bmecat:BUYER_IDREF>
+      <bmecat:SUPPLIER_IDREF type="supplier_specific">GEALAN Fenster-Systeme</bmecat:SUPPLIER_IDREF>
+    </ORDER_PARTIES_REFERENCE>
+    <bmecat:CURRENCY>EUR</bmecat:CURRENCY>
+    <REMARKS type="CollectiveNumber">JKH0567890</REMARKS>
+   </ORDERRESPONSE_INFO>
+  </ORDERRESPONSE_HEADER>
+<ORDERRESPONSE_ITEM_LIST>
+      <ORDERRESPONSE_ITEM>
+           <LINE_ITEM_ID>1</LINE_ITEM_ID>
+           <PRODUCT_ID>
+                <bmecat:SUPPLIER_PID type="supplier_specific">707223Q7M7M2Z</bmecat:SUPPLIER_PID>
+                <bmecat:BUYER_PID type="buyer_specific">001-001-0251, Schwarz Ulti BS</bmecat:BUYER_PID>
+                <bmecat:DESCRIPTION_SHORT>FL 72 / 74 MM</bmecat:DESCRIPTION_SHORT>
+            </PRODUCT_ID>
+            <PRODUCT_FEATURES>
+                 <FEATURE>
+                      <bmecat:FNAME>TotalQuantity</bmecat:FNAME>
+                      <bmecat:FVALUE>1.000</bmecat:FVALUE>
+                      <bmecat:FUNIT>C62</bmecat:FUNIT>
+                  </FEATURE>
+                  <FEATURE>
+                      <bmecat:FNAME>TotalQuantity</bmecat:FNAME>
+                      <bmecat:FVALUE>6.000</bmecat:FVALUE>
+                      <bmecat:FUNIT>MTR</bmecat:FUNIT>
+                   </FEATURE>
+                   <FEATURE>
+                       <bmecat:FNAME>NetWeight</bmecat:FNAME>
+                       <bmecat:FVALUE>8.358</bmecat:FVALUE>
+                       <bmecat:FUNIT>KG</bmecat:FUNIT>
+                    </FEATURE>
+                    <FEATURE>
+                        <bmecat:FNAME>ImportCode</bmecat:FNAME>
+                        <bmecat:FVALUE>39162000</bmecat:FVALUE>
+                    </FEATURE>
+                </PRODUCT_FEATURES>
+                <QUANTITY>6.000</QUANTITY>
+                <bmecat:ORDER_UNIT>MTR</bmecat:ORDER_UNIT>
+                <PRODUCT_PRICE_FIX>
+                     <bmecat:PRICE_AMOUNT>9.99</bmecat:PRICE_AMOUNT>
+                     <TAX_DETAILS_FIX>
+                         <bmecat:TAX>0.19</bmecat:TAX>
+                         <TAX_AMOUNT>11.89</TAX_AMOUNT>
+                     </TAX_DETAILS_FIX>
+                     <bmecat:PRICE_QUANTITY>1</bmecat:PRICE_QUANTITY>
+                     <PRICE_BASE_FIX>
+                         <PRICE_UNIT_VALUE>6.000</PRICE_UNIT_VALUE>
+                         <bmecat:PRICE_UNIT>MTR</bmecat:PRICE_UNIT>
+                     </PRICE_BASE_FIX>
+                     </PRODUCT_PRICE_FIX>
+                     <PRICE_LINE_AMOUNT>59.94</PRICE_LINE_AMOUNT>
+                     <DELIVERY_DATE type="fixed">
+                          <DELIVERY_START_DATE>2024-02-16</DELIVERY_START_DATE>
+                          <DELIVERY_END_DATE>2024-02-16</DELIVERY_END_DATE>
+                      </DELIVERY_DATE>
+                      <REMARKS type="supplierlineitemid">10</REMARKS>
+                 </ORDERRESPONSE_ITEM>
+            </ORDERRESPONSE_ITEM_LIST>
+            <ORDERRESPONSE_SUMMARY>
+                 <TOTAL_ITEM_NUM>1</TOTAL_ITEM_NUM>
+                 <TOTAL_AMOUNT>71.33 </TOTAL_AMOUNT>
+               <ALLOW_OR_CHARGES_FIX>
+                    <ALLOW_OR_CHARGE type="surcharge">
+                         <ALLOW_OR_CHARGE_NAME>ZGTZ</ALLOW_OR_CHARGE_NAME>
+                         <ALLOW_OR_CHARGE_DESCR>Supplemento</ALLOW_OR_CHARGE_DESCR>
+                         <ALLOW_OR_CHARGE_VALUE>
+                              <AOC_MONETARY_AMOUNT>11.99 </AOC_MONETARY_AMOUNT>
+                         </ALLOW_OR_CHARGE_VALUE>
+                    </ALLOW_OR_CHARGE>
+               </ALLOW_OR_CHARGES_FIX>
+            </ORDERRESPONSE_SUMMARY>
+        </ORDERRESPONSE>

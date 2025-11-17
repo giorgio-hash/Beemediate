@@ -1,13 +1,13 @@
 @startuml
 
-top to bottom direction
+left to right direction
 skinparam linetype ortho
 
 class EmptyArrayException {
-  + EmptyArrayException(String):
+  + EmptyArrayException(String): 
 }
 class UnreachableThresholdException {
-  + UnreachableThresholdException(String):
+  + UnreachableThresholdException(String): 
 }
 
 @enduml

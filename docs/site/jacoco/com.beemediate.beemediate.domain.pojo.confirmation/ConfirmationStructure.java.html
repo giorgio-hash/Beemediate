@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfirmationStructure.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.pojo.confirmation</a> &gt; <span class="el_source">ConfirmationStructure.java</span></div><h1>ConfirmationStructure.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.pojo.confirmation;
+
+/**
+ * Rappresenta la struttura dati di una conferma d'ordine.
+ * &lt;p&gt;
+ * Questa classe è un semplice POJO che contiene i campi tipici di una
+ * conferma d'ordine: date, identificativi, dati di indirizzo, numero totale
+ * di articoli, importo totale e valuta. Fornisce un costruttore vuoto, un
+ * costruttore di copia, metodi getter e setter per tutti i campi e una
+ * implementazione di toString() che restituisce una rappresentazione testuale
+ * dei principali campi.
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Nota: i campi data sono trattati come Stringhe (il formato non è imposto da
+ * questa classe). La gestione della validazione e del parsing delle date,
+ * così come la sincronizzazione/immutabilità, sono responsabilità del codice
+ * client che usa questa struttura.
+ * &lt;/p&gt;
+ */
+public class ConfirmationStructure {
+	
+	
+	/**
+	 * Data/ora di risposta dell'ordine (es. quando il sistema ha confermato l'ordine).
+	 */
+	private /*@ spec_public @*/ String orderResponseDate;
+	
+	/**
+	 * Data prevista di consegna dell'ordine.
+	 */
+	private /*@ spec_public @*/ String deliveryDate;
+	
+	/**
+	 * Identificativo dell'ordine (interno al sistema che invia/gestisce la conferma).
+	 */
+	private /*@ spec_public @*/ String orderId;
+	
+	/**
+	 * Identificativo dell'ordine usato da Gealan (o altro sistema esterno).
+	 */
+	private /*@ spec_public @*/ String orderIdGealan;
+	
+	/**
+	 * Nome del destinatario o ragione sociale associata all'indirizzo di consegna.
+	 */
+	private /*@ spec_public @*/ String addressName;
+
+	/**
+	 * Via/strada dell'indirizzo di consegna.
+	 */
+	private /*@ spec_public @*/ String addressStreet;
+
+	/**
+	 * CAP / codice postale dell'indirizzo di consegna.
+	 */
+	private /*@ spec_public @*/ String addressZip;
+
+	/**
+	 * Città dell'indirizzo di consegna.
+	 */
+	private /*@ spec_public @*/ String addressCity;
+
+	/**
+	 * Paese dell'indirizzo di consegna (nome completo).
+	 */
+	private /*@ spec_public @*/ String addressCountry;
+
+	/**
+	 * Paese dell'indirizzo di consegna in forma codificata (es. codice ISO).
+	 */
+	private /*@ spec_public @*/ String addressCountryCoded;
+
+	/**
+	 * Numero totale di articoli nell'ordine.
+	 */
+	private /*@ spec_public @*/ int totalItemNum;
+	
+	/**
+	 * Importo totale dell'ordine.
+	 */
+	private /*@ spec_public @*/ float totalAmount;
+	
+	/**
+	 * Valuta dell'importo totale (es. &quot;EUR&quot;, &quot;USD&quot;).
+	 */
+	private /*@ spec_public @*/ String currency;
+	
+	
+	/**
+	 * Costruttore vuoto.
+	 */
+	//@SkipEsc
+<span class="nc" id="L93">	public ConfirmationStructure() {/*empty constructor*/}</span>
+
+	/**
+	 * Costruttore di copia.
+	 * Crea una nuova istanza copiando tutti i valori dall'istanza fornita.
+	 * 
+	 * @param copy l'istanza da cui copiare i dati; se nullo, il comportamento dipende dall'utilizzo successivo
+	 */
+	/*@ 
+	  @ requires copy != null;
+	  @ ensures this.orderResponseDate == copy.orderResponseDate;
+	  @ ensures this.deliveryDate == copy.deliveryDate;
+	  @ ensures this.orderId == copy.orderId;
+	  @ ensures this.orderIdGealan == copy.orderIdGealan;
+	  @ ensures this.addressName == copy.addressName;
+	  @ ensures this.addressStreet == copy.addressStreet;
+	  @ ensures this.addressZip == copy.addressZip;
+	  @ ensures this.addressCity == copy.addressCity;
+	  @ ensures this.addressCountry == copy.addressCountry;
+	  @ ensures this.addressCountryCoded == copy.addressCountryCoded;
+	  @ ensures this.totalItemNum == copy.totalItemNum;
+	  @ ensures this.totalAmount == copy.totalAmount;
+	  @ ensures this.currency == copy.currency;
+	@*/
+	public ConfirmationStructure(ConfirmationStructure copy) {
+<span class="nc" id="L118">		super();</span>
+<span class="nc" id="L119">		this.orderResponseDate =  copy.orderResponseDate;</span>
+<span class="nc" id="L120">		this.deliveryDate = copy.deliveryDate;</span>
+<span class="nc" id="L121">		this.orderId = copy.orderId;</span>
+<span class="nc" id="L122">		this.orderIdGealan = copy.orderIdGealan;</span>
+<span class="nc" id="L123">		this.addressName = copy.addressName;</span>
+<span class="nc" id="L124">		this.addressStreet = copy.addressStreet;</span>
+<span class="nc" id="L125">		this.addressZip = copy.addressZip;</span>
+<span class="nc" id="L126">		this.addressCity = copy.addressCity;</span>
+<span class="nc" id="L127">		this.addressCountry = copy.addressCountry;</span>
+<span class="nc" id="L128">		this.addressCountryCoded = copy.addressCountryCoded;</span>
+<span class="nc" id="L129">		this.totalItemNum = copy.totalItemNum;</span>
+<span class="nc" id="L130">		this.totalAmount = copy.totalAmount;</span>
+<span class="nc" id="L131">		this.currency = copy.currency;</span>
+<span class="nc" id="L132">	}</span>
+	
+	/**
+	 * Imposta la data/ora di risposta dell'ordine.
+	 * 
+	 * @param orderResponseDate la data/ora di risposta (formato stringa)
+	 */
+	/*@ ensures this.orderResponseDate == orderResponseDate; @*/
+	public void setOrderResponseDate(String orderResponseDate) {
+<span class="nc" id="L141">		this.orderResponseDate =  orderResponseDate;</span>
+<span class="nc" id="L142">	}</span>
+
+	/**
+	 * Imposta la data di consegna prevista.
+	 * 
+	 * @param deliveryDate la data di consegna (formato stringa)
+	 */
+	/*@ ensures this.deliveryDate == deliveryDate; @*/
+	public void setDeliveryDate(String deliveryDate) {
+<span class="nc" id="L151">		this.deliveryDate = deliveryDate;</span>
+<span class="nc" id="L152">	}</span>
+
+	/**
+	 * Imposta l'identificativo dell'ordine.
+	 * 
+	 * @param orderId identificativo dell'ordine
+	 */
+	/*@ ensures this.orderId == orderId; @*/
+	public void setOrderId(String orderId) {
+<span class="nc" id="L161">		this.orderId = orderId;</span>
+<span class="nc" id="L162">	}</span>
+
+	/**
+	 * Imposta l'identificativo dell'ordine nel sistema Gealan.
+	 * 
+	 * @param orderIdGealan identificativo Gealan
+	 */
+	/*@ ensures this.orderIdGealan == orderIdGealan; @*/
+	public void setOrderIdGealan(String orderIdGealan) {
+<span class="nc" id="L171">		this.orderIdGealan = orderIdGealan;</span>
+<span class="nc" id="L172">	}</span>
+
+	/**
+	 * Imposta il nome associato all'indirizzo di consegna.
+	 * 
+	 * @param addressName nome o ragione sociale
+	 */
+	/*@ ensures this.addressName == addressName; @*/
+	public void setAddressName(String addressName) {
+<span class="nc" id="L181">		this.addressName = addressName;</span>
+<span class="nc" id="L182">	}</span>
+
+	/**
+	 * Imposta la via/strada dell'indirizzo di consegna.
+	 * 
+	 * @param addressStreet la via/strada
+	 */
+	/*@ ensures this.addressStreet == addressStreet; @*/
+	public void setAddressStreet(String addressStreet) {
+<span class="nc" id="L191">		this.addressStreet = addressStreet;</span>
+<span class="nc" id="L192">	}</span>
+
+	/**
+	 * Imposta il CAP / codice postale.
+	 * 
+	 * @param addressZip CAP / codice postale
+	 */
+	/*@ ensures this.addressZip == addressZip; @*/
+	public void setAddressZip(String addressZip) {
+<span class="nc" id="L201">		this.addressZip = addressZip;</span>
+<span class="nc" id="L202">	}</span>
+
+	/**
+	 * Imposta la città dell'indirizzo di consegna.
+	 * 
+	 * @param addressCity la città
+	 */
+	/*@ ensures this.addressCity == addressCity; @*/
+	public void setAddressCity(String addressCity) {
+<span class="nc" id="L211">		this.addressCity = addressCity;</span>
+<span class="nc" id="L212">	}</span>
+
+	/**
+	 * Imposta il paese dell'indirizzo di consegna (nome completo).
+	 * 
+	 * @param addressCountry nome del paese
+	 */
+	/*@ ensures this.addressCountry == addressCountry; @*/
+	public void setAddressCountry(String addressCountry) {
+<span class="nc" id="L221">		this.addressCountry = addressCountry;</span>
+<span class="nc" id="L222">	}</span>
+
+	/**
+	 * Imposta il codice del paese dell'indirizzo di consegna (es. ISO).
+	 * 
+	 * @param addressCountryCoded codice paese
+	 */
+	/*@ ensures this.addressCountryCoded == addressCountryCoded; @*/
+	public void setAddressCountryCoded(String addressCountryCoded) {
+<span class="nc" id="L231">		this.addressCountryCoded = addressCountryCoded;</span>
+<span class="nc" id="L232">	}</span>
+
+	/**
+	 * Imposta il numero totale di articoli nell'ordine.
+	 * 
+	 * @param totalItemNum numero totale di articoli
+	 */
+	/*@ ensures this.totalItemNum == totalItemNum; @*/
+	public void setTotalItemNum(int totalItemNum) {
+<span class="nc" id="L241">		this.totalItemNum = totalItemNum;</span>
+<span class="nc" id="L242">	}</span>
+
+	/**
+	 * Imposta l'importo totale dell'ordine.
+	 * 
+	 * @param totalAmount importo totale
+	 */
+	/*@ ensures this.totalAmount == totalAmount; @*/
+	public void setTotalAmount(float totalAmount) {
+<span class="nc" id="L251">		this.totalAmount = totalAmount;</span>
+<span class="nc" id="L252">	}</span>
+
+	/**
+	 * Imposta la valuta dell'importo totale.
+	 * 
+	 * @param currency codice valuta (es. &quot;EUR&quot;)
+	 */
+	/*@ ensures this.currency == currency; @*/
+	public void setCurrency(String currency) {
+<span class="nc" id="L261">		this.currency = currency;</span>
+<span class="nc" id="L262">	}</span>
+
+	/**
+	 * Restituisce la data/ora di risposta dell'ordine.
+	 * 
+	 * @return la data/ora di risposta come stringa
+	 */
+	/*@ ensures \result == this.orderResponseDate; @*/
+	public String getOrderResponseDate() {
+<span class="nc" id="L271">		return orderResponseDate;</span>
+	}
+	
+	/**
+	 * Restituisce la data di consegna prevista.
+	 * 
+	 * @return la data di consegna come stringa
+	 */
+	/*@ ensures \result == this.deliveryDate; @*/
+	public String getDeliveryDate() {
+<span class="nc" id="L281">		return deliveryDate;</span>
+	}
+
+	/**
+	 * Restituisce l'identificativo dell'ordine.
+	 * 
+	 * @return identificativo dell'ordine
+	 */
+	/*@ ensures \result == this.orderId; @*/
+	public String getOrderId() {
+<span class="nc" id="L291">		return orderId;</span>
+	}
+
+	/**
+	 * Restituisce l'identificativo dell'ordine nel sistema Gealan.
+	 * 
+	 * @return identificativo Gealan
+	 */
+	/*@ ensures \result == this.orderIdGealan; @*/
+	public String getOrderIdGealan() {
+<span class="nc" id="L301">		return orderIdGealan;</span>
+	}
+
+	/**
+	 * Restituisce il nome associato all'indirizzo di consegna.
+	 * 
+	 * @return nome o ragione sociale
+	 */
+	/*@ ensures \result == this.addressName; @*/
+	public String getAddressName() {
+<span class="nc" id="L311">		return addressName;</span>
+	}
+
+	/**
+	 * Restituisce la via/strada dell'indirizzo di consegna.
+	 * 
+	 * @return via/strada
+	 */
+	/*@ ensures \result == this.addressStreet; @*/
+	public String getAddressStreet() {
+<span class="nc" id="L321">		return addressStreet;</span>
+	}
+
+	/**
+	 * Restituisce il CAP / codice postale.
+	 * 
+	 * @return CAP / codice postale
+	 */
+	/*@ ensures \result == this.addressZip; @*/
+	public String getAddressZip() {
+<span class="nc" id="L331">		return addressZip;</span>
+	}
+
+	/**
+	 * Restituisce la città dell'indirizzo di consegna.
+	 * 
+	 * @return città
+	 */
+	/*@ ensures \result == this.addressCity; @*/
+	public String getAddressCity() {
+<span class="nc" id="L341">		return addressCity;</span>
+	}
+
+	/**
+	 * Restituisce il paese dell'indirizzo di consegna (nome completo).
+	 * 
+	 * @return nome del paese
+	 */
+	/*@ ensures \result == this.addressCountry; @*/
+	public String getAddressCountry() {
+<span class="nc" id="L351">		return addressCountry;</span>
+	}
+
+	/**
+	 * Restituisce il codice del paese dell'indirizzo di consegna (es. ISO).
+	 * 
+	 * @return codice paese
+	 */
+	/*@ ensures \result == this.addressCountryCoded; @*/
+	public String getAddressCountryCoded() {
+<span class="nc" id="L361">		return addressCountryCoded;</span>
+	}
+	
+	/**
+	 * Restituisce il numero totale di articoli nell'ordine.
+	 * 
+	 * @return numero totale di articoli
+	 */
+	/*@ ensures \result == this.totalItemNum; @*/
+	public int getTotalItemNum() {
+<span class="nc" id="L371">		return totalItemNum;</span>
+	}
+
+	/**
+	 * Restituisce l'importo totale dell'ordine.
+	 * 
+	 * @return importo totale
+	 */
+	/*@ ensures \result == this.totalAmount; @*/
+	public float getTotalAmount() {
+<span class="nc" id="L381">		return totalAmount;</span>
+	}
+	
+	/**
+	 * Restituisce la valuta dell'importo totale.
+	 * 
+	 * @return codice valuta
+	 */
+	/*@ ensures \result == this.currency; @*/
+	public String getCurrency() {
+<span class="nc" id="L391">		return currency;</span>
+	}
+
+
+	@Override
+	public String toString() {
+<span class="nc" id="L397">		return &quot;ConfirmationStructure [orderResponseDate=&quot;+orderResponseDate+&quot;deliveryDate=&quot; + deliveryDate + &quot;, orderId=&quot; + orderId + &quot;, orderIdGealan=&quot;</span>
+				+ orderIdGealan + &quot;, addressName=&quot; + addressName + &quot;, addressStreet=&quot; + addressStreet + &quot;, addressZip=&quot;
+				+ addressZip + &quot;, addressCity=&quot; + addressCity + &quot;, addressCountry=&quot; + addressCountry
+				+ &quot;, addressCountryCoded=&quot; + addressCountryCoded + &quot;, totalItemNum=&quot; + totalItemNum + &quot;, totalAmount=&quot;
+				+ totalAmount + &quot;, currency=&quot; + currency + &quot;]&quot;;
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

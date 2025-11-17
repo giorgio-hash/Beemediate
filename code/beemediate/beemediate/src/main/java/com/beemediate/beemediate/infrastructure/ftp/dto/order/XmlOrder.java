@@ -16,57 +16,62 @@ public class XmlOrder {
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	private final String xmlns = "http://www.opentrans.org/XMLSchema/2.1";
+	private String xmlns = "http://www.opentrans.org/XMLSchema/2.1";
 
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:xsi")
-	private final String xsi = "http://www.w3.org/2001/XMLSchema-instance";
+	private String xsi = "http://www.w3.org/2001/XMLSchema-instance";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xmlns:bmecat")
-	private final String bmecat = "http://www.bmecat.org/bmecat/2005";
+	private String bmecat = "http://www.bmecat.org/bmecat/2005";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	private final String version="2.1";
+	private String version="2.1";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-	private final String type="standard";
+	private String type="standard";
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName="xsi:schemaLocation")
-	private final String schemaLocation = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
+	private String schemaLocation = "http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd";
 	
 	/**
 	 * Riferimento a DTO XmlOrderHeader per ORDER_HEADER
 	 */
 	@JacksonXmlProperty(localName="ORDER_HEADER")
-	public final XmlOrderHeader oh;
+	public XmlOrderHeader oh;
 	
 	/**
 	 * Riferimento a lista di DTO XmlItem per ORDER_ITEM. Jackson crea un tag wrapper ORDER_ITEM_LIST attorno ai ORDER_ITEM
 	 */
     @JacksonXmlElementWrapper(localName = "ORDER_ITEM_LIST", useWrapping = true) 
     @JacksonXmlProperty(localName = "ORDER_ITEM")  
-	private final List<XmlItem> orderItem;
+	private List<XmlItem> orderItem;
 	
     /**
      * Riferimento a DTO XmlOrderSummary per ORDER_SUMMARY.
      */
 	@JacksonXmlProperty(localName="ORDER_SUMMARY")
-	public final XmlOrderSummary os;
+	public XmlOrderSummary os;
 
+	/**
+	 * Empty constructor for deserializer
+	 */
+	public XmlOrder() {/*empty constructor for deserializer*/}
+	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans dell'ordine. Crea la radice del documento contenente attributi relativi al namespace.
 	 * <br>La struttura dell'ordine è formata da tre elementi principali:
@@ -156,6 +161,42 @@ public class XmlOrder {
 	 */
 	public XmlOrderSummary getOs() {
 		return os;
+	}
+
+	public void setXmlns(String xmlns) {
+		this.xmlns = xmlns;
+	}
+
+	public void setXsi(String xsi) {
+		this.xsi = xsi;
+	}
+
+	public void setBmecat(String bmecat) {
+		this.bmecat = bmecat;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setSchemaLocation(String schemaLocation) {
+		this.schemaLocation = schemaLocation;
+	}
+
+	public void setOh(XmlOrderHeader oh) {
+		this.oh = oh;
+	}
+
+	public void setOrderItem(List<XmlItem> orderItem) {
+		this.orderItem = orderItem;
+	}
+
+	public void setOs(XmlOrderSummary os) {
+		this.os = os;
 	}
 
 

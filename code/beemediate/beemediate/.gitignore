@@ -34,8 +34,6 @@ build/
 
 
 ##### aggiunte #######
-
-**/main/resources/*
 **/*.properties
 !**/application.properties
 !**/datasources.properties

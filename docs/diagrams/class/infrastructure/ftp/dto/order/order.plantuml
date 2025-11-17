@@ -4,76 +4,76 @@ left to right direction
 skinparam linetype ortho
 
 class XmlAgreement {
-  + XmlAgreement(String):
+  + XmlAgreement(String): 
   - id: String
   + getId(): String
   + setId(String): void
 }
 class XmlItem {
-  + XmlItem(OrderItem):
-  - orderUnit: String
+  + XmlItem(OrderItem): 
   - prodId: XmlProductID
-  - quantity: float
   - lineItemId: int
-  + getProdId(): XmlProductID
+  - quantity: float
+  - orderUnit: String
   + getOrderUnit(): String
-  + getQuantity(): float
   + getLineItemId(): int
+  + getProdId(): XmlProductID
+  + getQuantity(): float
 }
 class XmlOrder {
-  + XmlOrder(XmlOrderHeader, List<XmlItem>, XmlOrderSummary):
-  - xsi: String
-  - orderItem: List<XmlItem>
-  + os: XmlOrderSummary
-  - xmlns: String
-  - version: String
+  + XmlOrder(XmlOrderHeader, List<XmlItem>, XmlOrderSummary): 
   - bmecat: String
-  + oh: XmlOrderHeader
   - schemaLocation: String
+  - xmlns: String
+  - xsi: String
+  - version: String
+  + oh: XmlOrderHeader
   - type: String
+  + os: XmlOrderSummary
+  - orderItem: List<XmlItem>
+  + getOh(): XmlOrderHeader
+  + getBmecat(): String
   + getType(): String
+  + getOrderItem(): List<XmlItem>
+  + getVersion(): String
   + getXsi(): String
   + getXmlns(): String
-  + getBmecat(): String
   + getSchemaLocation(): String
   + getOs(): XmlOrderSummary
-  + getOh(): XmlOrderHeader
-  + getVersion(): String
-  + getOrderItem(): List<XmlItem>
 }
 class XmlOrderHeader {
-  + XmlOrderHeader(OrderHeader):
-  - orderInfo: XmlOrderInfo
+  + XmlOrderHeader(OrderHeader): 
   - agreement: XmlAgreement
+  - orderInfo: XmlOrderInfo
   + getOrderInfo(): XmlOrderInfo
 }
 class XmlOrderInfo {
-  + XmlOrderInfo(OrderHeader):
+  + XmlOrderInfo(OrderHeader): 
+  - deliveryDate: XmlDeliveryDate
   - orderId: String
   - orderParties: List<XmlParty>
-  - deliveryDate: XmlDeliveryDate
-  - currency: String
-  - orderDate: String
-  - partialShipment: boolean
   - orderPartiesReference: XmlOrderPartiesReference
-  + getOrderDate(): String
-  + getOrderParties(): List<XmlParty>
-  + getDeliveryDate(): XmlDeliveryDate
-  + getOrderPartiesReference(): XmlOrderPartiesReference
+  - orderDate: String
+  - currency: String
+  - partialShipment: boolean
   + getOrderId(): String
+  + getOrderPartiesReference(): XmlOrderPartiesReference
+  + getOrderDate(): String
+  + getDeliveryDate(): XmlDeliveryDate
+  + getOrderParties(): List<XmlParty>
 }
 class XmlOrderSummary {
-  + XmlOrderSummary(OrderSummary):
+  + XmlOrderSummary(OrderSummary): 
   - totalItemNum: int
   + getTotalItemNum(): int
 }
 
-XmlAgreement     +-[#820000,plain]-  XmlOrderHeader
-XmlOrder        "1" *-[#595959,plain]-> "orderItem\n*" XmlItem
-XmlOrder        "1" *-[#595959,plain]-> "oh\n1" XmlOrderHeader
-XmlOrder        "1" *-[#595959,plain]-> "os\n1" XmlOrderSummary
-XmlOrderHeader  "1" *-[#595959,plain]-> "agreement\n1" XmlAgreement
+XmlAgreement     +-[#820000,plain]-  XmlOrderHeader  
+XmlOrder        "1" *-[#595959,plain]-> "orderItem\n*" XmlItem         
+XmlOrder        "1" *-[#595959,plain]-> "oh\n1" XmlOrderHeader  
+XmlOrder        "1" *-[#595959,plain]-> "os\n1" XmlOrderSummary 
 XmlOrderHeader   -[#595959,dashed]->  XmlAgreement    : "«create»"
+XmlOrderHeader  "1" *-[#595959,plain]-> "agreement\n1" XmlAgreement    
+XmlOrderHeader  "1" *-[#595959,plain]-> "orderInfo\n1" XmlOrderInfo    
 XmlOrderHeader   -[#595959,dashed]->  XmlOrderInfo    : "«create»"
-XmlOrderHeader  "1" *-[#595959,plain]-> "orderInfo\n1" XmlOrderInfo
 @enduml

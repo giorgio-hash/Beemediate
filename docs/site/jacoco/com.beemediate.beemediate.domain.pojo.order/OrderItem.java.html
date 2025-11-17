@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.pojo.order</a> &gt; <span class="el_source">OrderItem.java</span></div><h1>OrderItem.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.pojo.order;
+
+//import org.jmlspecs.annotation.SkipEsc;
+
+/***Parte di OrderStructure. Contiene le informazioni relative ad un singolo articolo nell'ordine a fornitore. Ogni informazione è in formato String.*/
+public class OrderItem {
+	
+	/***Numero di linea dell'articolo*/
+<span class="fc" id="L9">	private /*@ spec_public @*/ String lineItemID = &quot;&quot;;</span>
+	/***Numero con la quantità*/
+<span class="fc" id="L11">	private /*@ spec_public @*/ String quantity = &quot;&quot;;</span>
+	/***Unità di misura per la quantità*/
+<span class="fc" id="L13">	private /*@ spec_public @*/ String orderUnit = &quot;&quot;;</span>
+	
+	//order_item.product_id
+	/***identificativo del prodotto lato fornitore*/
+<span class="fc" id="L17">	private /*@ spec_public @*/ String supplierID = &quot;&quot;;</span>
+	/***identificativo del prodotto lato  cliente*/
+<span class="fc" id="L19">	private /*@ spec_public @*/ String buyerID = &quot;&quot;;</span>
+	/***descrizione aggiuntiva*/
+<span class="fc" id="L21">	private /*@ spec_public @*/ String descriptionShort = &quot;&quot;;</span>
+	
+	/**
+	 * Costruttore
+	 */
+	//@ public normal_behaviour
+	/*@ ensures lineItemID!=null &amp; quantity!=null &amp; orderUnit!=null
+	  @			&amp; supplierID!=null &amp; buyerID!=null &amp; descriptionShort!=null;
+	  @ pure
+	  @*/
+<span class="fc" id="L31">	public OrderItem() {/*empty constructor*/}</span>
+	
+	/**
+	 * 
+	 * @return String - numero di linea dell'articolo
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==lineItemID;
+	public /*@ pure @*/ String getLineItemID() {
+<span class="fc" id="L40">		return lineItemID;</span>
+	}
+	
+	/**
+	 * 
+	 * @param lineItemID - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.lineItemID!=null;
+	public void setLineItemID(/*@ non_null @*/ final String lineItemID) {
+<span class="fc" id="L50">		this.lineItemID = lineItemID;</span>
+<span class="fc" id="L51">	}</span>
+	
+	/**
+	 * 
+	 * @return String - quantità
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==quantity;
+	public /*@ pure @*/ String getQuantity() {
+<span class="fc" id="L60">		return quantity;</span>
+	}
+	
+	/**
+	 * 
+	 * @param quantity - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.quantity!=null;
+	public void setQuantity(/*@ non_null @*/final String quantity) {
+<span class="fc" id="L70">		this.quantity = quantity;</span>
+<span class="fc" id="L71">	}</span>
+	
+	/**
+	 * 
+	 * @return String - l'unità di misura usata per specificare la quantità
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==orderUnit;
+	public /*@ pure @*/ String getOrderUnit() {
+<span class="fc" id="L80">		return orderUnit;</span>
+	}
+	
+	/**
+	 * 
+	 * @param orderUnit - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.orderUnit!=null;
+	public void setOrderUnit(/*@ non_null @*/final String orderUnit) {
+<span class="fc" id="L90">		this.orderUnit = orderUnit;</span>
+<span class="fc" id="L91">	}</span>
+	
+	/**
+	 * 
+	 * @return String - identificativo prodotto lato fornitore 
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==supplierID;
+	public /*@ pure @*/ String getSupplierID() {
+<span class="fc" id="L100">		return supplierID;</span>
+	}
+	
+	/**
+	 * 
+	 * @return String - identificativo prodotto lato cliente
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==buyerID;
+	public String getBuyerID() {
+<span class="fc" id="L110">		return buyerID;</span>
+	}
+	
+	/**
+	 * 
+	 * @return String - descrizione
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==descriptionShort;
+	public /*@ pure @*/ String getDescriptionShort() {
+<span class="fc" id="L120">		return descriptionShort;</span>
+	}
+	
+	/**
+	 * 
+	 * @param supplierID - String 
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.supplierID!=null;
+	public void setSupplierID(/*@ non_null @*/final String supplierID) {
+<span class="fc" id="L130">		this.supplierID = supplierID;</span>
+<span class="fc" id="L131">	}</span>
+	
+	/**
+	 * 
+	 * @param buyerID - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.buyerID!=null;
+	public void setBuyerID(/*@ non_null @*/final String buyerID) {
+<span class="fc" id="L140">		this.buyerID = buyerID;</span>
+<span class="fc" id="L141">	}</span>
+	
+	/**
+	 * 
+	 * @param descriptionShort - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.descriptionShort!=null;
+	public void setDescriptionShort(/*@ non_null @*/final String descriptionShort) {
+<span class="fc" id="L150">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L151">	}</span>
+	
+//	@SkipEsc
+	@Override
+	public String toString() {
+<span class="fc" id="L156">		return &quot;OrderItem [lineItemID=&quot; + lineItemID + &quot;, quantity=&quot; + quantity + &quot;, orderUnit=&quot; + orderUnit</span>
+				+ &quot;, supplierID=&quot; + supplierID + &quot;, buyerID=&quot; + buyerID + &quot;, descriptionShort=&quot; + descriptionShort
+				+ &quot;]&quot;;
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

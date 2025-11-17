@@ -4,19 +4,19 @@ left to right direction
 skinparam linetype ortho
 
 class AttributeMapper {
-  - AttributeMapper():
+  - AttributeMapper(): 
   - LOG: Logger
   + stringify(Object): Optional<String>
   + intify(Object): Optional<Integer>
   + toLocalDateTime(Object): Optional<LocalDateTime>
   + booleanify(Object): Optional<Boolean>
-  + doublify(Object): Optional<Double>
   + toArray(Object): Optional<Object[]>
+  + doublify(Object): Optional<Double>
 }
 class OrderMapper {
-  - OrderMapper():
-  - mapOrderHeader(FornitoreDTO, PreventivoDTO, DestinazioneDTO, CompagniaDTO): OrderHeader
+  - OrderMapper(): 
   + map(FornitoreDTO, PreventivoDTO, ArticoloPreventivoDTO[], ProdottoFornitoreDTO[], DestinazioneDTO, CompagniaDTO): OrderStructure
+  - mapOrderHeader(FornitoreDTO, PreventivoDTO, DestinazioneDTO, CompagniaDTO): OrderHeader
   - mapOrderItemList(ArticoloPreventivoDTO[], ProdottoFornitoreDTO[]): OrderItem[]
 }
 

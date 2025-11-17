@@ -1,0 +1,35 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+annotation Component << annotation >> {
+  + value(): String
+}
+annotation PropertySource << annotation >> {
+  + value(): String[]
+  + name(): String
+  + ignoreResourceNotFound(): boolean
+  + encoding(): String
+  + factory(): Class<PropertySourceFactory>
+}
+interface SupplierCatalogReaderPort << interface >> {
+  + readArticleNumbers(): String[]
+}
+annotation SuppressWarnings << annotation >> {
+  + value(): String[]
+}
+class XlsxAdapter {
+  + XlsxAdapter(ResourceLoader, String): 
+  - RESOURCE_PATH: String
+  - log: Logger
+  - resourceLoader: ResourceLoader
+  + readArticleNumbers(): String[]
+  - extractArticleNumbers(): List<String>
+}
+
+SupplierCatalogReaderPort  -[#999900,dotted]-  SuppressWarnings          
+XlsxAdapter                -[#999900,dotted]-  Component                 
+XlsxAdapter                -[#999900,dotted]-  PropertySource            
+XlsxAdapter                -[#008200,dashed]-^  SupplierCatalogReaderPort 
+@enduml

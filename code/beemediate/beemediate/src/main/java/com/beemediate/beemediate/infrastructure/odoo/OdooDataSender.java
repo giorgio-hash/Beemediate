@@ -20,8 +20,9 @@ import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.NullSuppliedArgumentException;
+import com.beemediate.beemediate.infrastructure.odoo.config.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig.OafStatus;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /***Adattatore per comunicare con Odoo External API via protocollo XML-RPC. 
@@ -51,49 +52,29 @@ public class OdooDataSender implements DataSenderPort{
 	@Override
 	public boolean signalConfirmation(final Confirmation c) {
 		
-		try {
-			return signal(c);
-		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
-			log.error(ERROR_MSG_ODOODB,e);
-		}
+		return executeSignalSafely(c, OafStatus.CONFIRMED);
 		
-		return false;
 	}
 	
 	@Override
 	public boolean signalShipped(final Order o) {
 
-		try {
-			return signal(o, OafStatus.SHIPPED);
-		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
-			log.error(ERROR_MSG_ODOODB,e);
-		}
+		return executeSignalSafely(o, OafStatus.SHIPPED);
 		
-		return false;
 	}
 
 	@Override
 	public boolean signalOpenTransError(final Order o) {
 
-		try {
-			return signal(o, OafStatus.OPENTRANSERROR);
-		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
-			log.error(ERROR_MSG_ODOODB,e);
-		}
+		return executeSignalSafely(o, OafStatus.OPENTRANSERROR);
 		
-		return false;
 	}
 
 	@Override
 	public boolean signalContentError(final  Order o) {
-
-		try {
-			return signal(o, OafStatus.CONTENTERROR);
-		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException e) {
-			log.error(ERROR_MSG_ODOODB,e);
-		}
 		
-		return false;
+		return executeSignalSafely(o, OafStatus.CONTENTERROR);
+	
 	}
 	
 	
@@ -102,6 +83,32 @@ public class OdooDataSender implements DataSenderPort{
 	//******** metodi helper di servizio ********//
 	//*******************************************//
 
+	/**
+	 * Esegue in modo sicuro l'invio di uno stato verso Odoo invocando signal(...)
+	 * e catturando tutte le checked exception legate alla comunicazione/URL.
+	 * <ul>
+	 * <li> Se signal() completa correttamente ritorna il suo valore booleano.</li>
+	 * <li> Se viene sollevata una delle eccezioni previste viene loggato l'errore
+	 *   e viene restituito false (fallimento silenzioso gestito qui).</li>
+	 * </ul>
+	 */
+	private boolean executeSignalSafely(Object o, OafStatus status) {
+		
+		try {
+			// se non si è connessi, prova una connessione.
+			if(!odoo.isOnline())
+				odoo.connect();
+			
+			return status == OafStatus.CONFIRMED? signal((Confirmation) o ) : signal((Order) o, status);
+			
+		} catch (FailedLoginException | MalformedURLException | XmlRpcException | URISyntaxException | InconsistentDTOException | NullSuppliedArgumentException | EmptyFetchException e) {
+			log.error(ERROR_MSG_ODOODB,e);
+		}
+		
+		return false;
+	}
+	
+	
 	/**
 	 * Segnala (invia) un aggiornamento di stato per un ordine al servizio Odoo.
 	 *
@@ -122,20 +129,14 @@ public class OdooDataSender implements DataSenderPort{
 	 *         Nota: l'eventuale {@code XmlRpcException} generata da {@code updateTo(...)} è
 	 *         catturata all'interno del metodo e non viene propagata.
 	 * @throws URISyntaxException se l'URI usato per la connessione è invalido
+	 * @throws EmptyFetchException 
+	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Order o, OafStatus status) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
+	private boolean signal(Order o, OafStatus status) throws NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
-		// se non si è connessi, prova una connessione.
-		if(!odoo.isOnline())
-			odoo.connect();
+		boolean res = updateTo(o.getOrderID(), status.toString() );
+		log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status.toString());
 		
-		boolean res = false;
-		try {
-			res = updateTo(o.getOrderID(), status.toString() );
-			log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status.toString());
-		}catch(XmlRpcException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
-		}
 		return res;
 	}
 	
@@ -160,32 +161,26 @@ public class OdooDataSender implements DataSenderPort{
 	 * @return {@code true} se l'aggiornamento dello stato su Odoo è andato a buon fine,
 	 *         {@code false} in caso contrario (inclusi i casi in cui si verifica un'eccezione
 	 *         gestita internamente e loggata)
-	 * @throws FailedLoginException se il tentativo di connessione a Odoo fallisce a causa di credenziali non valide
-	 * @throws MalformedURLException se l'URL usato per connettersi a Odoo è malformato
 	 * @throws XmlRpcException se una chiamata di connessione/interazione con Odoo (es. {@code odoo.connect()})
 	 *         solleva questa eccezione prima che venga eseguito l'aggiornamento; le XmlRpcException
 	 *         sollevate da {@code updateTo(...)} o {@code createWorkflowAnnotation(...)} sono invece
 	 *         catturate e non propagate.
-	 * @throws URISyntaxException se l'URI usato per la connessione è invalido
+	 * @throws InconsistentDTOException 
+	 * @throws EmptyFetchException 
+	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Confirmation c) throws FailedLoginException, MalformedURLException, XmlRpcException, URISyntaxException {
-		
-		// se non si è connessi, prova una connessione.
-		if(!odoo.isOnline())
-			odoo.connect();
+	private boolean signal(Confirmation c) throws InconsistentDTOException, NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
 		final String stato = OafStatus.CONFIRMED.toString();
 		boolean res = false;
 		ConfirmationStructure data = c.getData();
 		String resourceID = c.getConfirmationId();
-		try {
-			res = updateTo(data.getOrderId(),  stato );
-			log.info("Inviato update OaF di {} a {}.",data.getOrderId(), stato);
-			createWorkflowAnnotation(resourceID, data);
-			log.info("Inviato a {} messaggio di conferma d'ordine sul workflow.",data.getOrderId());
-		}catch(XmlRpcException | InconsistentDTOException e) {
-			log.info("Problema nella scrittura del db Odoo.",e);
-		}
+		
+		res = updateTo(data.getOrderId(),  stato );
+		log.info("Inviato update OaF di {} a {}.",data.getOrderId(), stato);
+		createWorkflowAnnotation(resourceID, data);
+		log.info("Inviato a {} messaggio di conferma d'ordine sul workflow.",data.getOrderId());
+
 		return res;
 	}
 	
@@ -196,8 +191,10 @@ public class OdooDataSender implements DataSenderPort{
 	 * @param oafState - String
 	 * @return <i>true</i> se l'operazione è andata a buon fine
 	 * @throws XmlRpcException per problemi legati alla applicazione del protocollo XML-RPC
+	 * @throws EmptyFetchException per problemi legati alla ricerca dell'ordine obiettivo
+	 * @throws NullSuppliedArgumentException
 	 */
-	private boolean updateTo(final String orderId, final String oafState) throws XmlRpcException, NullSuppliedArgumentException {
+	private boolean updateTo(final String orderId, final String oafState) throws XmlRpcException, NullSuppliedArgumentException, EmptyFetchException {
 		
 		if(orderId==null || oafState==null)
 			throw new NullSuppliedArgumentException ("Non sono ammessi argomenti null");
@@ -207,29 +204,14 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList("name","=",orderId)
-								)),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",orderId));
+		
+		if(ids.length == 0) throw new EmptyFetchException("Ordine "+orderId+" da aggiornare non è stato trovato");
 		
 		requestInfo.clear();		
 		requestInfo.put("x_studio_oaf", oafState );
 		
-		return (boolean) odoo.models.execute("execute_kw", 
-						Arrays.asList(
-						    odoo.getDb(), odoo.getUid(), odoo.getPassword(),
-						    "purchase.order", "write",
-						    Arrays.asList(Arrays.asList(ids[0]),
-						    requestInfo
-						    )
-					    )
-					);
+		return odoo.updateOnModel("purchase.order", requestInfo, ids[0]);
 		
 	}
 	
@@ -269,19 +251,9 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute("execute_kw",
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList("name","=",cs.getOrderId())
-								)),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",cs.getOrderId()));
 		
-		if (ids.length>1) throw new InconsistentDTOException("name ambiguo");
-		if (ids.length==0) throw new InconsistentDTOException("name non trovato");
+		if (ids.length!=1) throw new InconsistentDTOException("name ambiguo o non trovato");
 		
 		//crea messaggio
 		requestInfo.clear();
@@ -290,13 +262,8 @@ public class OdooDataSender implements DataSenderPort{
 		requestInfo.put("message_type", "comment");
 		requestInfo.put("body", writeConfirmationMessage(filename, cs));
 		
-		odoo.models.execute("execute_kw", 
-				Arrays.asList(
-				    odoo.getDb(), odoo.getUid(), odoo.getPassword(),
-				    "mail.message", "create",
-				    Arrays.asList(requestInfo)
-				    )
-			    );
+		int msgId = odoo.insertOnModel("mail.message", requestInfo);
+		log.info("Risposta dal model: {}",msgId);
 	}
 	
 	/**

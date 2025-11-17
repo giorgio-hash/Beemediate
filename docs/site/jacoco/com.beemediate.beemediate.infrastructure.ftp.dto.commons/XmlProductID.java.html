@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlProductID.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.commons</a> &gt; <span class="el_source">XmlProductID.java</span></div><h1>XmlProductID.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+
+/**
+ * Mappatura XML-OpenTrans con identificativi del prodotto per ogni partner commerciale coinvolto nella transazione
+ */
+@JacksonXmlRootElement(localName = &quot;PRODUCT_ID&quot;)
+public class XmlProductID{	
+	
+	/**
+	 * tag per Numero di articolo del fornitore
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:SUPPLIER_PID&quot;)
+	private String supplierId;
+	
+	/**
+	 * Riferimento a BuyerID per tag numero di articolo del cliente (opzionale)
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:BUYER_PID&quot;)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private BuyerID buyerId;
+	
+	/**
+	 * Tag contenente descrizione prodotto 
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:DESCRIPTION_SHORT&quot;)
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String descriptionShort;
+
+	/**
+	 * empty costructor for Jackson deserializer
+	 */
+<span class="nc" id="L37">	public XmlProductID() {/*empty costructor for Jackson deserializer*/}</span>
+	
+	
+	/**
+	 * Costruttore
+	 * @param supplierId - identificativo dell'articolo sul sistema fornitore
+	 * @param buyerId - identificativo dell'articolo sul sistema cliente
+	 * @param descriptionShort - descrizione dell'articolo
+	 */
+	public XmlProductID(String supplierId, String buyerId, String descriptionShort) {
+<span class="nc" id="L47">		super();</span>
+<span class="nc" id="L48">		this.supplierId = supplierId;</span>
+		
+<span class="nc bnc" id="L50" title="All 6 branches missed.">		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())</span>
+<span class="nc" id="L51">			this.buyerId = null;</span>
+		else
+<span class="nc" id="L53">			this.buyerId = new BuyerID(buyerId, null);</span>
+		
+<span class="nc" id="L55">		this.descriptionShort = descriptionShort;</span>
+<span class="nc" id="L56">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getSupplierId() {
+<span class="nc" id="L63">		return supplierId;</span>
+	}
+
+	/**
+	 * 
+	 * @return BuyerID con identificativo ordine
+	 */
+	public void setSupplierId(String supplierId) {
+<span class="nc" id="L71">		this.supplierId = supplierId;</span>
+<span class="nc" id="L72">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public BuyerID getBuyerId() {
+<span class="nc" id="L79">		return buyerId;</span>
+	}
+
+	public void setBuyerId(BuyerID buyerId) {
+<span class="nc" id="L83">		this.buyerId = buyerId;</span>
+<span class="nc" id="L84">	}</span>
+
+	public String getDescriptionShort() {
+<span class="nc" id="L87">		return descriptionShort;</span>
+	}
+
+	public void setDescriptionShort(String descriptionShort) {
+<span class="nc" id="L91">		this.descriptionShort = descriptionShort;</span>
+<span class="nc" id="L92">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

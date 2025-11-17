@@ -4,207 +4,207 @@ left to right direction
 skinparam linetype ortho
 
 class XmlAOCValue {
-  + XmlAOCValue():
+  + XmlAOCValue(): 
   - amount: float
-  + setAmount(float): void
   + getAmount(): float
+  + setAmount(float): void
 }
 class XmlAllowOrCharge {
-  + XmlAllowOrCharge():
-  - descr: String
+  + XmlAllowOrCharge(): 
   - value: XmlAOCValue
   - type: String
   - name: String
+  - descr: String
+  + getName(): String
   + gettype(): String
+  + setValue(XmlAOCValue): void
+  + getDescr(): String
   + setType(String): void
   + getValue(): XmlAOCValue
-  + getDescr(): String
-  + getName(): String
-  + setValue(XmlAOCValue): void
 }
 class XmlControlInfo {
-  + XmlControlInfo():
+  + XmlControlInfo(): 
   - generatorInfo: String
   - generationDate: String
-  + getGeneratorInfo(): String
-  + setGeneratorInfo(String): void
   + getGenerationDate(): String
+  + setGeneratorInfo(String): void
+  + getGeneratorInfo(): String
   + setGenerationDate(String): void
 }
 class XmlOrderResponse {
-  + XmlOrderResponse():
-  - orderSummary: XmlOrderResponseSummary
-  - xmlns: String
-  - xsi: String
+  + XmlOrderResponse(): 
   - orderResponseItemList: List<XmlOrderResponseItem>
-  - version: String
-  - orderResponseHeader: XmlOrderResponseHeader
   - bmecat: String
-  + setXsi(String): void
-  + setVersion(String): void
-  + setBmecat(String): void
+  - xmlns: String
+  - orderResponseHeader: XmlOrderResponseHeader
+  - xsi: String
+  - version: String
+  - orderSummary: XmlOrderResponseSummary
+  + setOrderResponseHeader(XmlOrderResponseHeader): void
+  + getOrderSummary(): XmlOrderResponseSummary
   + getXmlns(): String
   + getXsi(): String
-  + getVersion(): String
-  + setXmlns(String): void
-  + setOrderResponseHeader(XmlOrderResponseHeader): void
-  + getOrderResponseItemList(): List<XmlOrderResponseItem>
-  + setOrderSummary(XmlOrderResponseSummary): void
-  + getBmecat(): String
-  + getOrderSummary(): XmlOrderResponseSummary
-  + getOrderResponseHeader(): XmlOrderResponseHeader
   + setOrderResponseItemList(List<XmlOrderResponseItem>): void
+  + setOrderSummary(XmlOrderResponseSummary): void
+  + setVersion(String): void
+  + setBmecat(String): void
+  + getVersion(): String
+  + setXsi(String): void
+  + setXmlns(String): void
+  + getBmecat(): String
+  + getOrderResponseHeader(): XmlOrderResponseHeader
+  + getOrderResponseItemList(): List<XmlOrderResponseItem>
 }
 class XmlOrderResponseHeader {
-  + XmlOrderResponseHeader():
-  - controlInfo: XmlControlInfo
+  + XmlOrderResponseHeader(): 
   - orderResponseInfo: XmlOrderResponseInfo
+  - controlInfo: XmlControlInfo
+  + getControlInfo(): XmlControlInfo
   + setControlInfo(XmlControlInfo): void
   + setOrderResponseInfo(XmlOrderResponseInfo): void
-  + getControlInfo(): XmlControlInfo
   + getOrderResponseInfo(): XmlOrderResponseInfo
 }
 class XmlOrderResponseInfo {
-  + XmlOrderResponseInfo():
-  - altCustomerOrderId: String
-  - parties: List<XmlParty>
+  + XmlOrderResponseInfo(): 
   - orderResponseDate: String
-  - supplierOrderId: String
-  - remarks: XmlRemarks
   - currency: String
-  - deliveryDate: XmlDeliveryDate
-  - orderId: String
   - orderPartiesReference: XmlOrderPartiesReference
+  - supplierOrderId: String
+  - orderId: String
   - orderDate: String
-  + setOrderResponseDate(String): void
-  + setRemarks(XmlRemarks): void
+  - deliveryDate: XmlDeliveryDate
+  - parties: List<XmlParty>
+  - remarks: XmlRemarks
+  - altCustomerOrderId: String
   + getCurrency(): String
-  + setAltCustomerOrderId(String): void
-  + getParties(): List<XmlParty>
-  + setOrderDate(String): void
-  + getOrderResponseDate(): String
-  + getSupplierOrderId(): String
-  + getAltCustomerOrderId(): String
   + getDeliveryDate(): XmlDeliveryDate
-  + setOrderPartiesReference(XmlOrderPartiesReference): void
-  + setCurrency(String): void
-  + getOrderDate(): String
+  + setOrderDate(String): void
+  + getOrderId(): String
   + setParties(List<XmlParty>): void
-  + setDeliveryDate(XmlDeliveryDate): void
+  + setSupplierOrderId(String): void
   + setOrderId(String): void
+  + setOrderPartiesReference(XmlOrderPartiesReference): void
+  + getOrderDate(): String
+  + setOrderResponseDate(String): void
+  + getAltCustomerOrderId(): String
+  + setAltCustomerOrderId(String): void
+  + setCurrency(String): void
+  + setRemarks(XmlRemarks): void
+  + getSupplierOrderId(): String
+  + getParties(): List<XmlParty>
+  + getOrderResponseDate(): String
+  + setDeliveryDate(XmlDeliveryDate): void
   + getRemarks(): XmlRemarks
   + getOrderPartiesReference(): XmlOrderPartiesReference
-  + setSupplierOrderId(String): void
-  + getOrderId(): String
 }
 class XmlOrderResponseItem {
-  + XmlOrderResponseItem():
+  + XmlOrderResponseItem(): 
+  - remarks: XmlRemarks
   - orderUnit: String
   - productFeatures: List<XmlProductFeature>
   - quantity: float
-  - productId: XmlProductID
-  - productPriceFix: XmlProductPriceFix
-  - remarks: XmlRemarks
-  - priceLineAmount: float
-  - lineItemId: int
   - deliveryDate: XmlDeliveryDate
-  + setOrderUnit(String): void
-  + getProductPriceFix(): XmlProductPriceFix
-  + getPriceLineAmount(): float
-  + setProductPriceFix(XmlProductPriceFix): void
-  + getProductId(): XmlProductID
-  + getRemarks(): XmlRemarks
-  + setRemarks(XmlRemarks): void
-  + getQuantity(): float
-  + setLineItemId(int): void
-  + setProductId(XmlProductID): void
-  + getProductFeatures(): List<XmlProductFeature>
-  + setQuantity(float): void
-  + getLineItemId(): int
-  + setPriceLineAmount(float): void
-  + setProductFeatures(List<XmlProductFeature>): void
-  + getDeliveryDate(): XmlDeliveryDate
-  + setDeliveryDate(XmlDeliveryDate): void
+  - productPriceFix: XmlProductPriceFix
+  - lineItemId: int
+  - productId: XmlProductID
+  - priceLineAmount: float
   + getOrderUnit(): String
+  + getPriceLineAmount(): float
+  + setPriceLineAmount(float): void
+  + getProductFeatures(): List<XmlProductFeature>
+  + setLineItemId(int): void
+  + setQuantity(float): void
+  + getProductPriceFix(): XmlProductPriceFix
+  + setProductFeatures(List<XmlProductFeature>): void
+  + setProductPriceFix(XmlProductPriceFix): void
+  + setProductId(XmlProductID): void
+  + setDeliveryDate(XmlDeliveryDate): void
+  + getProductId(): XmlProductID
+  + setRemarks(XmlRemarks): void
+  + getDeliveryDate(): XmlDeliveryDate
+  + setOrderUnit(String): void
+  + getLineItemId(): int
+  + getQuantity(): float
+  + getRemarks(): XmlRemarks
 }
 class XmlOrderResponseSummary {
-  + XmlOrderResponseSummary():
+  + XmlOrderResponseSummary(): 
   - allowOrChargesFix: List<XmlAllowOrCharge>
-  - totalItemNum: int
   - totalAmount: float
+  - totalItemNum: int
   + getTotalItemNum(): int
-  + setTotalAmount(float): void
-  + setAllowOrChargesFix(List<XmlAllowOrCharge>): void
   + setTotalItemNum(int): void
+  + setTotalAmount(float): void
   + getTotalAmount(): float
   + getAllowOrChargesFix(): List<XmlAllowOrCharge>
+  + setAllowOrChargesFix(List<XmlAllowOrCharge>): void
 }
 class XmlPriceBaseFix {
-  + XmlPriceBaseFix():
+  + XmlPriceBaseFix(): 
   - price: float
   - priceUnit: String
-  + setPriceUnit(String): void
   + getPrice(): float
   + setPrice(float): void
   + getPriceUnit(): String
+  + setPriceUnit(String): void
 }
 class XmlProductFeature {
-  + XmlProductFeature():
+  + XmlProductFeature(): 
   - fname: String
-  - fvalue: float
   - funit: String
-  + getFvalue(): float
+  - fvalue: float
   + setFvalue(float): void
-  + getFunit(): String
-  + setFunit(String): void
+  + getFvalue(): float
   + getFname(): String
+  + setFunit(String): void
   + setFname(String): void
+  + getFunit(): String
 }
 class XmlProductPriceFix {
-  + XmlProductPriceFix():
+  + XmlProductPriceFix(): 
   - priceAmount: float
   - priceQuantity: int
   - taxDetailsFix: XmlTaxDetailsFix
   - priceBaseFix: XmlPriceBaseFix
   + getPriceQuantity(): int
   + getPriceBaseFix(): XmlPriceBaseFix
-  + setPriceBaseFix(XmlPriceBaseFix): void
   + getPriceAmount(): float
+  + setPriceAmount(float): void
   + setPriceQuantity(int): void
   + setTaxDetailsFix(XmlTaxDetailsFix): void
-  + setPriceAmount(float): void
+  + setPriceBaseFix(XmlPriceBaseFix): void
   + getTaxDetailsFix(): XmlTaxDetailsFix
 }
 class XmlRemarks {
-  + XmlRemarks():
-  - type: String
+  + XmlRemarks(): 
   - remarks: String
+  - type: String
   + setType(String): void
-  + getRemarks(): String
-  + setRemarks(String): void
   + getType(): String
+  + setRemarks(String): void
+  + getRemarks(): String
 }
 class XmlTaxDetailsFix {
-  + XmlTaxDetailsFix():
+  + XmlTaxDetailsFix(): 
   - tax: float
   - taxAmount: float
-  + getTax(): float
-  + getTaxAmount(): float
   + setTaxAmount(float): void
   + setTax(float): void
+  + getTax(): float
+  + getTaxAmount(): float
 }
 
-XmlAllowOrCharge        "1" *-[#595959,plain]-> "value\n1" XmlAOCValue
-XmlOrderResponse        "1" *-[#595959,plain]-> "orderResponseHeader\n1" XmlOrderResponseHeader
-XmlOrderResponse        "1" *-[#595959,plain]-> "orderResponseItemList\n*" XmlOrderResponseItem
-XmlOrderResponse        "1" *-[#595959,plain]-> "orderSummary\n1" XmlOrderResponseSummary
-XmlOrderResponseHeader  "1" *-[#595959,plain]-> "controlInfo\n1" XmlControlInfo
-XmlOrderResponseHeader  "1" *-[#595959,plain]-> "orderResponseInfo\n1" XmlOrderResponseInfo
-XmlOrderResponseInfo    "1" *-[#595959,plain]-> "remarks\n1" XmlRemarks
-XmlOrderResponseItem    "1" *-[#595959,plain]-> "productFeatures\n*" XmlProductFeature
-XmlOrderResponseItem    "1" *-[#595959,plain]-> "productPriceFix\n1" XmlProductPriceFix
-XmlOrderResponseItem    "1" *-[#595959,plain]-> "remarks\n1" XmlRemarks
-XmlOrderResponseSummary "1" *-[#595959,plain]-> "allowOrChargesFix\n*" XmlAllowOrCharge
-XmlProductPriceFix      "1" *-[#595959,plain]-> "priceBaseFix\n1" XmlPriceBaseFix
-XmlProductPriceFix      "1" *-[#595959,plain]-> "taxDetailsFix\n1" XmlTaxDetailsFix
+XmlAllowOrCharge        "1" *-[#595959,plain]-> "value\n1" XmlAOCValue             
+XmlOrderResponse        "1" *-[#595959,plain]-> "orderResponseHeader\n1" XmlOrderResponseHeader  
+XmlOrderResponse        "1" *-[#595959,plain]-> "orderResponseItemList\n*" XmlOrderResponseItem    
+XmlOrderResponse        "1" *-[#595959,plain]-> "orderSummary\n1" XmlOrderResponseSummary 
+XmlOrderResponseHeader  "1" *-[#595959,plain]-> "controlInfo\n1" XmlControlInfo          
+XmlOrderResponseHeader  "1" *-[#595959,plain]-> "orderResponseInfo\n1" XmlOrderResponseInfo    
+XmlOrderResponseInfo    "1" *-[#595959,plain]-> "remarks\n1" XmlRemarks              
+XmlOrderResponseItem    "1" *-[#595959,plain]-> "productFeatures\n*" XmlProductFeature       
+XmlOrderResponseItem    "1" *-[#595959,plain]-> "productPriceFix\n1" XmlProductPriceFix      
+XmlOrderResponseItem    "1" *-[#595959,plain]-> "remarks\n1" XmlRemarks              
+XmlOrderResponseSummary "1" *-[#595959,plain]-> "allowOrChargesFix\n*" XmlAllowOrCharge        
+XmlProductPriceFix      "1" *-[#595959,plain]-> "priceBaseFix\n1" XmlPriceBaseFix         
+XmlProductPriceFix      "1" *-[#595959,plain]-> "taxDetailsFix\n1" XmlTaxDetailsFix        
 @enduml

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlOrderPartiesReference.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.commons</a> &gt; <span class="el_source">XmlOrderPartiesReference.java</span></div><h1>XmlOrderPartiesReference.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Mappatura XML-OpenTrans con dati di riferimento sintetici dei partner commerciali
+ */
+@JacksonXmlRootElement(localName = &quot;ORDER_PARTIES_REFERENCE&quot;)
+public class XmlOrderPartiesReference {
+
+	/**
+	 * Riferimentoa XmlPartyID con Informazioni sul cliente
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:BUYER_IDREF&quot;)
+	private XmlPartyID buyerIdRef;
+	/**
+	 * RIferimento a XmlPartyID con Informazioni sul fornitore
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:SUPPLIER_IDREF&quot;)
+	private XmlPartyID supplierIdRef;
+	/**
+	 * Riferimento a ShipmentPartiesReference con informazioni sul luogo di consegna
+	 */
+	@JacksonXmlProperty(localName=&quot;SHIPMENT_PARTIES_REFERENCE&quot;)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private XmlShipmentPartiesReference shipmentPartiesRef;
+	
+	
+	/**
+	 * Empty Constructor for Jackson deserializer
+	 */
+<span class="nc" id="L34">	public XmlOrderPartiesReference() {/*Empty Constructor for Jackson deserializer*/}</span>
+	
+	/**
+	 * Costruttore 
+	 * @param buyerIdRef - String con informazioni sul cliente
+	 * @param buyerIdType - ulteriori informazioni sul buyerIdRef
+	 * @param supplierIdRef - String con informazioni sul fornitore
+	 * @param supplierIdType - ulteriori informazioni sul supplierIdRef
+	 * @param shipmentPartiesRef - String con informazioni sul luogo di destinazione
+	 * @param shipmentPartyType - ulteriori informazioni sul tipo di spedizione
+	 */
+	public XmlOrderPartiesReference(String buyerIdRef, PartyType buyerIdType, String supplierIdRef, PartyType supplierIdType,
+			String shipmentPartiesRef, PartyType shipmentPartyType) {
+<span class="nc" id="L47">		super();</span>
+<span class="nc" id="L48">		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);</span>
+<span class="nc" id="L49">		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);</span>
+<span class="nc" id="L50">		this.shipmentPartiesRef = new XmlShipmentPartiesReference(</span>
+											new XmlPartyID( shipmentPartiesRef, shipmentPartyType)
+										);
+<span class="nc" id="L53">	}</span>
+
+	/**
+	 * 
+	 * @return XmlPartyID con informazioni sul cliente
+	 */
+	public XmlPartyID getBuyerIdRef() {
+<span class="nc" id="L60">		return buyerIdRef;</span>
+	}
+
+	/**
+	 * 
+	 * @return XmlPartyID con informazioni sul fornitore
+	 */
+	public XmlPartyID getSupplierIdRef() {
+<span class="nc" id="L68">		return supplierIdRef;</span>
+	}
+
+	/**
+	 * 
+	 * @return XmlPartyID con informazioni sul luogo di destinazione
+	 */
+	public XmlShipmentPartiesReference getShipmentPartiesRef() {
+<span class="nc" id="L76">		return shipmentPartiesRef;</span>
+	}
+
+	/**
+	 * 
+	 * @param buyerIdRef - XmlPartyID
+	 */
+	public void setBuyerIdRef(XmlPartyID buyerIdRef) {
+<span class="nc" id="L84">		this.buyerIdRef = buyerIdRef;</span>
+<span class="nc" id="L85">	}</span>
+
+	/**
+	 * 
+	 * @param supplierIdRef - XmlPartyID
+	 */
+	public void setSupplierIdRef(XmlPartyID supplierIdRef) {
+<span class="nc" id="L92">		this.supplierIdRef = supplierIdRef;</span>
+<span class="nc" id="L93">	}</span>
+
+	/**
+	 * 
+	 * @param buyerIdRef - ShipmentPartiesReference
+	 */
+	public void setShipmentPartiesRef(XmlShipmentPartiesReference shipmentPartiesRef) {
+<span class="nc" id="L100">		this.shipmentPartiesRef = shipmentPartiesRef;</span>
+<span class="nc" id="L101">	}</span>
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

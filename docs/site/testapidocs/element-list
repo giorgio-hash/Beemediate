@@ -1,0 +1,8 @@
+com.beemediate.beemediate
+com.beemediate.beemediate.infrastructure.ftp.config
+com.beemediate.beemediate.infrastructure.odoo.adapters
+com.beemediate.beemediate.infrastructure.odoo.config
+com.beemediate.beemediate.infrastructure.odoo.dto.paramtests
+com.beemediate.beemediate.infrastructure.odoo.dto.tostring
+com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest
+com.beemediate.beemediate.infrastructure.odoo.mapper

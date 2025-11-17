@@ -1,0 +1,11 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+interface OaFManagerPort << interface >> {
+  + handleOrders(): int
+  + handleConfirmations(): int
+}
+
+@enduml

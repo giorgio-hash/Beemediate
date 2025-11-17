@@ -1,135 +1,136 @@
 @startuml
-top to bottom direction
+
+left to right direction
 skinparam linetype ortho
 
 class Order {
-  + Order(OrderStructure, String):
-  - deliveryDateContent: boolean
-  - articleNumber: boolean
-  - orderID: String
-  - quantityMeasure: boolean
+  + Order(OrderStructure, String): 
   - data: OrderStructure
-  - deliveryDate: boolean
   - customerNumber: boolean
   - quantity: QuantityFieldValue
   - deliveryLocationNumber: boolean
-  + setDeliveryLocationNumber(boolean): void
-  + setArticleNumber(boolean): void
-  + hasOpenTransError(): boolean
-  + getOrderID(): String
-  + getData(): OrderStructure
-  + isQuantityMeasure(): boolean
-  + setCustomerNumber(boolean): void
+  - articleNumber: boolean
+  - orderID: String
+  - quantityMeasure: boolean
+  - deliveryDateContent: boolean
+  - deliveryDate: boolean
+  + isArticleNumber(): boolean
+  + setDeliveryDate(boolean): void
   + setDeliveryDateContent(boolean): void
+  + setQuantity(QuantityFieldValue): void
+  + isCustomerNumber(): boolean
+  + setCustomerNumber(boolean): void
   + hasContentError(): boolean
+  + getData(): OrderStructure
+  + setArticleNumber(boolean): void
   + setQuantityMeasure(boolean): void
   + isDeliveryDate(): boolean
-  + isArticleNumber(): boolean
-  + setQuantity(QuantityFieldValue): void
-  + getQuantity(): QuantityFieldValue
-  + setDeliveryDate(boolean): void
-  + isCustomerNumber(): boolean
-  + isDeliveryLocationNumber(): boolean
   + isDeliveryDateContent(): boolean
+  + isQuantityMeasure(): boolean
+  + getQuantity(): QuantityFieldValue
+  + hasOpenTransError(): boolean
+  + getOrderID(): String
+  + setDeliveryLocationNumber(boolean): void
+  + isDeliveryLocationNumber(): boolean
 }
 class OrderHeader {
-  + OrderHeader():
-  + OrderHeader(OrderHeader):
-  - orderDate: String
-  - supplierID: String
-  - currency: String
-  - deliveryID: String
+  + OrderHeader(OrderHeader): 
+  + OrderHeader(): 
   - buyerID: String
-  - endDate: String
-  - orderID: String
   - deliveryIDRef: String
-  - supplierIDRef: String
   - startDate: String
+  - orderID: String
+  - supplierID: String
+  - orderDate: String
+  - deliveryID: String
+  - currency: String
+  - endDate: String
   - buyerIDRef: String
-  + getOrderDate(): String
-  + setEndDate(String): void
-  + getSupplierID(): String
-  + setBuyerIDRef(String): void
-  + getDeliveryIDRef(): String
-  + setCurrency(String): void
-  + setDeliveryIDRef(String): void
-  + getSupplierIDRef(): String
-  + setSupplierID(String): void
-  + getBuyerIDRef(): String
-  + getEndDate(): String
-  + getBuyerID(): String
-  + getOrderID(): String
-  + setDeliveryID(String): void
-  + setOrderDate(String): void
+  - supplierIDRef: String
   + getCurrency(): String
   + setSupplierIDRef(String): void
-  + setOrderID(String): void
-  + setBuyerID(String): void
+  + setSupplierID(String): void
+  + setEndDate(String): void
+  + setBuyerIDRef(String): void
+  + getEndDate(): String
+  + setCurrency(String): void
   + getDeliveryID(): String
-  + toString(): String
   + setStartDate(String): void
+  + setDeliveryID(String): void
+  + setDeliveryIDRef(String): void
+  + setBuyerID(String): void
   + getStartDate(): String
+  + getSupplierID(): String
+  + getOrderID(): String
+  + getBuyerID(): String
+  + setOrderID(String): void
+  + toString(): String
+  + setOrderDate(String): void
+  + getBuyerIDRef(): String
+  + getDeliveryIDRef(): String
+  + getOrderDate(): String
+  + getSupplierIDRef(): String
 }
 class OrderItem {
-  + OrderItem():
-  - supplierID: String
-  - descriptionShort: String
-  - lineItemID: String
-  - quantity: String
-  - buyerID: String
+  + OrderItem(): 
   - orderUnit: String
-  + setOrderUnit(String): void
-  + setLineItemID(String): void
-  + getBuyerID(): String
-  + getQuantity(): String
+  - descriptionShort: String
+  - quantity: String
+  - supplierID: String
+  - lineItemID: String
+  - buyerID: String
   + setDescriptionShort(String): void
-  + setQuantity(String): void
-  + getDescriptionShort(): String
-  + setSupplierID(String): void
-  + getLineItemID(): String
-  + setBuyerID(String): void
-  + getOrderUnit(): String
-  + getSupplierID(): String
   + toString(): String
+  + getBuyerID(): String
+  + setSupplierID(String): void
+  + getDescriptionShort(): String
+  + getOrderUnit(): String
+  + setBuyerID(String): void
+  + setOrderUnit(String): void
+  + getSupplierID(): String
+  + setLineItemID(String): void
+  + getQuantity(): String
+  + setQuantity(String): void
+  + getLineItemID(): String
 }
 class OrderStructure {
-  + OrderStructure():
-  + OrderStructure(OrderStructure):
-  - header: OrderHeader
+  + OrderStructure(OrderStructure): 
+  + OrderStructure(): 
   - itemList: OrderItem[]
   - orderSummary: OrderSummary
-  + getOrderSummary(): OrderSummary
-  + setOrderSummary(OrderSummary): void
-  + setHeader(OrderHeader): void
-  + toString(): String
-  + getItemList(): OrderItem[]
-  + getHeader(): OrderHeader
+  - header: OrderHeader
   + setItemList(OrderItem[]): void
+  + toString(): String
+  + getOrderSummary(): OrderSummary
+  + setHeader(OrderHeader): void
+  + getHeader(): OrderHeader
+  + setOrderSummary(OrderSummary): void
+  + getItemList(): OrderItem[]
 }
 class OrderSummary {
-  + OrderSummary():
-  + OrderSummary(OrderSummary):
+  + OrderSummary(OrderSummary): 
+  + OrderSummary(): 
   - totalItemNum: int
-  + setTotalItemNum(int): void
   + getTotalItemNum(): int
+  + setTotalItemNum(int): void
   + toString(): String
 }
 enum QuantityFieldValue << enumeration >> {
-  + QuantityFieldValue():
-  + INTEGER:
-  + FLOAT_WITH_COMMA:
-  + NAN:
-  + FLOAT_WITH_DOT:
-  + valueOf(String): QuantityFieldValue
+  + QuantityFieldValue(): 
+  + INTEGER: 
+  + FLOAT_WITH_COMMA: 
+  + FLOAT_WITH_DOT: 
+  + NAN: 
   + values(): QuantityFieldValue[]
+  + valueOf(String): QuantityFieldValue
 }
 
-Order              "1" *-[#595959,plain]-> "data\n1" OrderStructure
+Order              "1" *-[#595959,plain]-> "data\n1" OrderStructure     
 Order               -[#595959,dashed]->  OrderStructure     : "«create»"
-Order              "1" *-[#595959,plain]-> "quantity\n1" QuantityFieldValue
+Order              "1" *-[#595959,plain]-> "quantity\n1" QuantityFieldValue 
 OrderStructure      -[#595959,dashed]->  OrderHeader        : "«create»"
-OrderStructure     "1" *-[#595959,plain]-> "header\n1" OrderHeader
-OrderStructure     "1" *-[#595959,plain]-> "itemList\n*" OrderItem
+OrderStructure     "1" *-[#595959,plain]-> "header\n1" OrderHeader        
+OrderStructure     "1" *-[#595959,plain]-> "itemList\n*" OrderItem          
 OrderStructure      -[#595959,dashed]->  OrderSummary       : "«create»"
-OrderStructure     "1" *-[#595959,plain]-> "orderSummary\n1" OrderSummary
+OrderStructure     "1" *-[#595959,plain]-> "orderSummary\n1" OrderSummary       
 @enduml

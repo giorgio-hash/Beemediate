@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlOrder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.order</a> &gt; <span class="el_source">XmlOrder.java</span></div><h1>XmlOrder.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.order;
+
+import java.util.List;
+
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Mappatura XML-OpenTrans dell'ordine.
+ */
+@JacksonXmlRootElement(localName = &quot;ORDER&quot;)
+public class XmlOrder {
+	
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L18">	@JacksonXmlProperty(isAttribute=true)</span>
+	private final String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;
+
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L24">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:xsi&quot;)</span>
+	private final String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;
+	
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L30">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:bmecat&quot;)</span>
+	private final String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;
+	
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L36">	@JacksonXmlProperty(isAttribute=true)</span>
+	private final String version=&quot;2.1&quot;;
+	
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L42">	@JacksonXmlProperty(isAttribute=true)</span>
+	private final String type=&quot;standard&quot;;
+	
+	/**
+	 * Attributo tag ROOT del file
+	 */
+<span class="nc" id="L48">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xsi:schemaLocation&quot;)</span>
+	private final String schemaLocation = &quot;http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd&quot;;
+	
+	/**
+	 * Riferimento a DTO XmlOrderHeader per ORDER_HEADER
+	 */
+	@JacksonXmlProperty(localName=&quot;ORDER_HEADER&quot;)
+	public final XmlOrderHeader oh;
+	
+	/**
+	 * Riferimento a lista di DTO XmlItem per ORDER_ITEM. Jackson crea un tag wrapper ORDER_ITEM_LIST attorno ai ORDER_ITEM
+	 */
+    @JacksonXmlElementWrapper(localName = &quot;ORDER_ITEM_LIST&quot;, useWrapping = true) 
+    @JacksonXmlProperty(localName = &quot;ORDER_ITEM&quot;)  
+	private final List&lt;XmlItem&gt; orderItem;
+	
+    /**
+     * Riferimento a DTO XmlOrderSummary per ORDER_SUMMARY.
+     */
+	@JacksonXmlProperty(localName=&quot;ORDER_SUMMARY&quot;)
+	public final XmlOrderSummary os;
+
+	/**
+	 * Costruttore per creare struttura XML-OpenTrans dell'ordine. Crea la radice del documento contenente attributi relativi al namespace.
+	 * &lt;br&gt;La struttura dell'ordine è formata da tre elementi principali:
+	 * &lt;ul&gt;
+	 * &lt;li&gt;Una struttura ORDER_HEADER&lt;/li&gt;
+	 * &lt;li&gt;Una struttura ORDER_ITEM_LIST contenente una collezione di strutture ORDER_ITEM&lt;/li&gt;
+	 * &lt;li&gt;Una struttura ORDER_SUMMARY&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * @param oh - {@code XmlOrderHeader} per creare struttura XML-OpenTrans ORDER_HEADER
+	 * @param orderItem - {@code List&lt;XmlItem&gt;} per creare le strutture XML-OpenTrans ORDER_ITEM nel tag ORDER_ITEM_LIST
+	 * @param os - {@code XmlOrderSummary} per creare struttura XML-OpenTrans ORDER_SUMMARY
+	 */
+	public XmlOrder(final XmlOrderHeader oh, final List&lt;XmlItem&gt; orderItem, final XmlOrderSummary os) {
+<span class="nc" id="L83">		super();</span>
+<span class="nc" id="L84">		this.oh = oh;</span>
+<span class="nc" id="L85">		this.orderItem = orderItem;</span>
+<span class="nc" id="L86">		this.os = os;</span>
+<span class="nc" id="L87">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getXmlns() {
+<span class="nc" id="L94">		return xmlns;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getXsi() {
+<span class="nc" id="L102">		return xsi;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getBmecat() {
+<span class="nc" id="L110">		return bmecat;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getVersion() {
+<span class="nc" id="L118">		return version;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getType() {
+<span class="nc" id="L126">		return type;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getSchemaLocation() {
+<span class="nc" id="L134">		return schemaLocation;</span>
+	}
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public XmlOrderHeader getOh() {
+<span class="nc" id="L142">		return oh;</span>
+	}
+
+	/**
+	 * 
+	 * @return {@code List&lt;XmlItem&gt;}
+	 */
+	public List&lt;XmlItem&gt; getOrderItem() {
+<span class="nc" id="L150">		return orderItem;</span>
+	}
+
+	/**
+	 * 
+	 * @return XmlOrderSummary
+	 */
+	public XmlOrderSummary getOs() {
+<span class="nc" id="L158">		return os;</span>
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
