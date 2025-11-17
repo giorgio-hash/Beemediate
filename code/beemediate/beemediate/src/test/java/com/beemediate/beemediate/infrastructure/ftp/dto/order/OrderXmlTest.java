@@ -5,7 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 
@@ -15,11 +18,16 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
+import com.beemediate.beemediate.domain.pojo.order.OrderHeader;
+import com.beemediate.beemediate.domain.pojo.order.OrderItem;
+import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
+import com.beemediate.beemediate.domain.pojo.order.OrderSummary;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlOrderPartiesReference;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlParty;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference;
+import com.beemediate.beemediate.infrastructure.ftp.mapper.DataMapper;
 import com.ctc.wstx.stax.WstxInputFactory;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -28,7 +36,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
- * Test sulla struttura dell'ORDER di esempio (ESEMPIO_CASO_REALE.xml) usando ResourceLoader.
+ * Test sulla struttura dell'ORDER di esempio (ESEMPIO_CASO_REALE.xml) usando ResourceLoader, xmlMapper e DataMapper.
  */
 public class OrderXmlTest {
 
@@ -60,7 +68,7 @@ public class OrderXmlTest {
 
         try (InputStream is = res.getInputStream()) {
             JsonNode root = mapper.readTree(is);
-            // map genericamente in un oggetto Java (LinkedHashMap / Lists)
+
             XmlOrder dto = mapper.treeToValue(root, XmlOrder.class);
             assertNotNull("DTO after treeToValue should not be null", dto);
             // guardo gli attributi di schema
@@ -144,6 +152,109 @@ public class OrderXmlTest {
             JsonNode summaryNode = root.path("ORDER_SUMMARY");
             XmlOrderSummary sum = mapper.treeToValue(summaryNode, XmlOrderSummary.class);
             assertEquals(summaryNode.path("TOTAL_ITEM_NUM").toString().replaceAll("\"", ""), String.valueOf(sum.getTotalItemNum()));
+        }
+    }
+    
+    @Test
+    public void roundTripOrderStructuralEquality_usingDataMapper() throws IOException {
+        Resource res = resourceLoader.getResource("classpath:xml/order/ESEMPIO_CASO_REALE.xml");
+        assertTrue("resource must exist in classpath: xml/order/ESEMPIO_CASO_REALE.xml", res.exists());
+
+        try (InputStream is = res.getInputStream()) {
+        	
+            JsonNode root = mapper.readTree(is);
+            
+            //root
+            XmlOrder dto = mapper.treeToValue(root, XmlOrder.class);
+            
+            //HEADER
+            XmlOrderHeader xoh = new XmlOrderHeader();
+            JsonNode infoNode = root.path("ORDER_HEADER").path("ORDER_INFO");
+            XmlOrderInfo xoi = mapper.treeToValue(infoNode, XmlOrderInfo.class);
+            xoh.setOrderInfo(xoi);//aggiungo xoi a xoh
+            JsonNode partyNodeList = infoNode.path("PARTIES").path("PARTY");
+            List<XmlParty> parties = new ArrayList<>();
+            for(JsonNode party : partyNodeList) {
+                parties.add(mapper.treeToValue(party, XmlParty.class));
+            }
+            xoi.setOrderParties(parties);//aggiungo parties a xoi
+            
+            
+            //ITEM
+            JsonNode itemNodeList = root.path("ORDER_ITEM_LIST").path("ORDER_ITEM");
+            List<XmlItem> items = new ArrayList<>();
+            for(JsonNode itemNode : itemNodeList) {
+            	items.add(mapper.treeToValue(itemNode, XmlItem.class));
+            }
+            
+            
+            //SUMMARY
+            JsonNode summaryNode = root.path("ORDER_SUMMARY");
+            XmlOrderSummary sum = mapper.treeToValue(summaryNode, XmlOrderSummary.class);
+            
+            
+            //unisco tutti i pezzi
+            dto.setOh(xoh);
+            dto.setOrderItem(items);
+            dto.setOs(sum);
+            
+            //serializzo dto
+            String expected = DataMapper.serializeXmlOrder(dto);
+            
+            //ricreo OrderStructure
+            OrderStructure ostr = new OrderStructure();
+            
+            //header
+            OrderHeader oh = new OrderHeader();
+            oh.setOrderID(dto.getOh().getOrderInfo().getOrderId());
+            for(XmlParty xp : dto.getOh().getOrderInfo().getOrderParties()) {
+            	switch(xp.getPartyRole()) {
+            		case "buyer":
+            			oh.setBuyerID(xp.getPartyId().getPartyId());
+            			break;
+            		case "supplier":
+            			oh.setSupplierID(xp.getPartyId().getPartyId());
+            			break;
+            		case "delivery":
+	            		oh.setDeliveryID(xp.getPartyId().getPartyId());
+	            		break;
+            	}
+            }
+            oh.setBuyerIDRef(dto.getOh().getOrderInfo().getOrderPartiesReference().getBuyerIdRef().getPartyId());
+            oh.setSupplierIDRef(dto.getOh().getOrderInfo().getOrderPartiesReference().getSupplierIdRef().getPartyId());
+            oh.setDeliveryIDRef(dto.getOh().getOrderInfo().getOrderPartiesReference().getShipmentPartiesRef().getDeliveryIdRef().getPartyId());
+            oh.setCurrency(dto.getOh().getOrderInfo().getCurrency());
+            oh.setStartDate(dto.getOh().getOrderInfo().getDeliveryDate().getDeliveryStartDate());
+            oh.setEndDate(dto.getOh().getOrderInfo().getDeliveryDate().getDeliveryEndDate());
+            oh.setOrderDate(dto.getOh().getOrderInfo().getOrderDate());
+            ostr.setHeader(oh);
+            //items
+            OrderItem[] itmsArray = new OrderItem[dto.getOrderItem().size()];
+            OrderItem it = null;
+            int i = 0;
+            for(XmlItem xi : dto.getOrderItem()) {
+            	it = new OrderItem();
+            	it.setBuyerID(xi.getProdId().getBuyerId().getPartyId());
+            	it.setSupplierID(xi.getProdId().getSupplierId().getPartyId());
+            	it.setDescriptionShort(xi.getProdId().getDescriptionShort());
+            	it.setLineItemID(String.valueOf(xi.getLineItemId()));
+            	it.setOrderUnit(xi.getOrderUnit());
+            	it.setQuantity(String.valueOf(xi.getQuantity()));
+            	itmsArray[i++] = it;
+            }
+            ostr.setItemList(itmsArray);
+            //summary
+            OrderSummary os = new OrderSummary();
+            os.setTotalItemNum(dto.getOs().getTotalItemNum());
+            ostr.setOrderSummary(os);
+            
+            //serializzo OrderStructure
+            String actual = DataMapper.serializeXmlOrder(
+            			DataMapper.mapOrderToXml(ostr)
+            		);
+            
+            //comparo le serializzazioni
+            assertEquals(expected, actual);
         }
     }
 }
