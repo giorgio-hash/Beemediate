@@ -15,27 +15,31 @@ public final class XmlItem {
 	 * tag per ordinare l'articolo
 	 */
 	@JacksonXmlProperty(localName="LINE_ITEM_ID")
-	private final int lineItemId;
+	private int lineItemId;
 	
 	/**
 	 * riferimento a DTO XmlProductId per PRODUCT_ID
 	 */
 	@JacksonXmlProperty(localName="PRODUCT_ID")
-	private final XmlProductID prodId;
+	private XmlProductID prodId;
 	
 	/**
 	 * tag per specificare quantità (con o senza cifre decimali; il separatore deve essere “.”)
 	 */
 	@JacksonXmlProperty(localName="QUANTITY")
-	private final float quantity;
+	private float quantity;
 	
 	/**
 	 * tag per Unità di misura (unità ISO, ma è possibile una mappatura personalizzata)
 	 */
 	@JacksonXmlProperty(localName="bmecat:ORDER_UNIT")
-	private final String orderUnit;
+	private String orderUnit;
 
 	
+	/**
+	 * empty constructor for deserializer
+	 */
+	public XmlItem() {/*empty constructor*/}
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans articolo ordine partendo dal POJO {@code OrderItem}
@@ -93,5 +97,30 @@ public final class XmlItem {
 		return orderUnit;
 	}
 
+
+
+	public void setLineItemId(int lineItemId) {
+		this.lineItemId = lineItemId;
+	}
+
+
+
+	public void setProdId(XmlProductID prodId) {
+		this.prodId = prodId;
+	}
+
+
+
+	public void setQuantity(float quantity) {
+		this.quantity = quantity;
+	}
+
+
+
+	public void setOrderUnit(String orderUnit) {
+		this.orderUnit = orderUnit;
+	}
+
+	
 
 }
