@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.infrastructure.ftp.exceptions;
+package com.beemediate.beemediate.infrastructure.odoo.exceptions;
 
 /**
  * Segnala che è stato fornito un input object con riferimento a <i>null</i> in un contesto dove non è consentito

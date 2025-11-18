@@ -1,5 +1,9 @@
 com.beemediate.beemediate
+com.beemediate.beemediate.domain.utils
+com.beemediate.beemediate.infrastructure.ftp
 com.beemediate.beemediate.infrastructure.ftp.config
+com.beemediate.beemediate.infrastructure.ftp.dto.confirmation
+com.beemediate.beemediate.infrastructure.ftp.dto.order
 com.beemediate.beemediate.infrastructure.odoo.adapters
 com.beemediate.beemediate.infrastructure.odoo.config
 com.beemediate.beemediate.infrastructure.odoo.dto.paramtests

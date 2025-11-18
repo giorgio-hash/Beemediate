@@ -1,5 +1,6 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
 
+import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlAddress;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlOrderPartiesReference;
@@ -194,6 +195,45 @@ public class ConfirmationXmlTest {
             XmlAOCValue xaocv = xaoc.getValue(); 
             assertEquals(allowOrChargeNode.path("ALLOW_OR_CHARGE_VALUE").path("AOC_MONETARY_AMOUNT").toString().replaceAll("\"", "").substring(0, 5), String.valueOf(xaocv.getAmount()));
         }
+    }
+    
+    
+    @Test
+    public void deserializeAndConvertToPOJO_validateFields() throws IOException {
+    	
+        Resource res = resourceLoader.getResource("classpath:xml/confirmation/Confirmation.xml");
+        assertTrue("resource must exist in classpath: xml/confirmation/Confirmation.xml", res.exists());   	
+    	XmlOrderResponse xo = DataMapper.deserializeXmlOrderResponse(res.getContentAsString( StandardCharsets.UTF_8));
+ 
+    	try (InputStream is = res.getInputStream()) {
+
+    		ConfirmationStructure actual = DataMapper.mapConfirmationFromXml(xo);
+
+    		
+    		JsonNode root = mapper.readTree(is);
+    		JsonNode headerNode = root.path("ORDERRESPONSE_HEADER");
+    		JsonNode infoNode = headerNode.path("ORDERRESPONSE_INFO");
+    		JsonNode parties = infoNode.path("PARTIES");
+    		JsonNode partyNode = parties.path("PARTY");
+        	JsonNode addressNode = partyNode.path("ADDRESS");
+        	JsonNode deliveryDateNode = infoNode.path("DELIVERY_DATE");
+        	JsonNode summaryNode = root.path("ORDERRESPONSE_SUMMARY");
+    		
+	    	assertEquals(actual.getAddressCity(), addressNode.path("bmecat:CITY").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getAddressCountry(), addressNode.path("bmecat:COUNTRY").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getAddressCountryCoded(), addressNode.path("bmecat:COUNTRY_CODED").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getAddressName(), addressNode.path("bmecat:NAME").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getAddressStreet(), addressNode.path("bmecat:STREET").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getAddressZip(), addressNode.path("bmecat:ZIP").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getCurrency(), infoNode.path("bmecat:CURRENCY").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getDeliveryDate(), deliveryDateNode.path("DELIVERY_START_DATE").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getOrderId(), infoNode.path("ORDER_ID").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getOrderIdGealan(), infoNode.path("SUPPLIER_ORDER_ID").toString().replaceAll("\"", "") );
+	    	assertEquals(actual.getOrderResponseDate(), infoNode.path("ORDERRESPONSE_DATE").toString().replaceAll("\"", "") );
+	    	assertEquals(String.valueOf(actual.getTotalAmount()), summaryNode.path("TOTAL_AMOUNT").toString().replaceAll("\"", "").substring(0, 5) );
+	    	assertEquals(String.valueOf(actual.getTotalItemNum()), summaryNode.path("TOTAL_ITEM_NUM").toString().replaceAll("\"", "") );
+	    	
+    	}
     }
     
 }
