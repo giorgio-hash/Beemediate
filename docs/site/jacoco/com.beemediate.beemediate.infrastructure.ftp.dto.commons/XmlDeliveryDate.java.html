@@ -34,7 +34,7 @@ public class XmlDeliveryDate{
 	/**
 	 * Empty Constructor for Jackson deserializer 
 	 */
-<span class="nc" id="L37">	public XmlDeliveryDate() {/**Empty Constructor for Jackson deserializer*/}</span>
+<span class="fc" id="L37">	public XmlDeliveryDate() {/**Empty Constructor for Jackson deserializer*/}</span>
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans data di consegna
@@ -43,18 +43,18 @@ public class XmlDeliveryDate{
 	 * @param type - DeliveryDateType
 	 */
 	public XmlDeliveryDate(String deliveryStartDate, String deliveryEndDate, DeliveryDateType type) {
-<span class="nc" id="L46">		super();</span>
-<span class="nc" id="L47">		this.deliveryStartDate = deliveryStartDate;</span>
-<span class="nc" id="L48">		this.deliveryEndDate = deliveryEndDate;</span>
-<span class="nc" id="L49">		this.type = type.toString();</span>
-<span class="nc" id="L50">	}</span>
+<span class="fc" id="L46">		super();</span>
+<span class="fc" id="L47">		this.deliveryStartDate = deliveryStartDate;</span>
+<span class="fc" id="L48">		this.deliveryEndDate = deliveryEndDate;</span>
+<span class="fc" id="L49">		this.type = type.toString();</span>
+<span class="fc" id="L50">	}</span>
 
 	/**
 	 * 
 	 * @return String specificante data
 	 */
 	public String getDeliveryStartDate() {
-<span class="nc" id="L57">		return deliveryStartDate;</span>
+<span class="fc" id="L57">		return deliveryStartDate;</span>
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class XmlDeliveryDate{
 	 * @return String specificante data
 	 */
 	public String getDeliveryEndDate() {
-<span class="nc" id="L65">		return deliveryEndDate;</span>
+<span class="fc" id="L65">		return deliveryEndDate;</span>
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class XmlDeliveryDate{
 	 * @return formato String del valore specificato in DeliveryDateType
 	 */
 	public String getType() {
-<span class="nc" id="L73">		return type;</span>
+<span class="fc" id="L73">		return type;</span>
 	}
 
 	/**
@@ -78,24 +78,24 @@ public class XmlDeliveryDate{
 	 * @param deliveryStartDate - data di consegna (uguale a deliveryEndDate)
 	 */
 	public void setDeliveryStartDate(String deliveryStartDate) {
-<span class="nc" id="L81">		this.deliveryStartDate = deliveryStartDate;</span>
-<span class="nc" id="L82">	}</span>
+<span class="fc" id="L81">		this.deliveryStartDate = deliveryStartDate;</span>
+<span class="fc" id="L82">	}</span>
 
 	/**
 	 * 
 	 * @param deliveryStartDate - data di consegna (uguale a deliveryStartDate)
 	 */
 	public void setDeliveryEndDate(String deliveryEndDate) {
-<span class="nc" id="L89">		this.deliveryEndDate = deliveryEndDate;</span>
-<span class="nc" id="L90">	}</span>
+<span class="fc" id="L89">		this.deliveryEndDate = deliveryEndDate;</span>
+<span class="fc" id="L90">	}</span>
 	
 	/**
 	 * 
 	 * @param type - valore String di DeliveryDateType
 	 */
 	public void setType(String type) {
-<span class="nc" id="L97">		this.type = type;</span>
-<span class="nc" id="L98">	}</span>
+<span class="fc" id="L97">		this.type = type;</span>
+<span class="fc" id="L98">	}</span>
 	
 }
 

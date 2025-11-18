@@ -6,7 +6,7 @@
 /**
  * Classe utility per le operazioni su oggetti String.
  */
-<span class="nc" id="L9">public class StringHandler {</span>
+<span class="fc" id="L9">public class StringHandler {</span>
 	
 	/**
 	 * Determina se due oggetti String sono uguali.
@@ -39,35 +39,35 @@
 //	@CodeBigintMath
 	public /*@ pure @*/ static boolean equals(final String s1, final String s2) {
 		
-<span class="nc bnc" id="L42" title="All 4 branches missed.">		if (s1==null || s2==null)</span>
-<span class="nc" id="L43">			return false;</span>
+<span class="fc bfc" id="L42" title="All 4 branches covered.">		if (s1==null || s2==null)</span>
+<span class="fc" id="L43">			return false;</span>
 		
-<span class="nc bnc" id="L45" title="All 2 branches missed.">		boolean sameSize = s1.length() == s2.length();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		boolean sameSize = s1.length() == s2.length();</span>
 		
-<span class="nc bnc" id="L47" title="All 2 branches missed.">		if(!sameSize) return false;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		if(!sameSize) return false;</span>
 		
-<span class="nc bnc" id="L49" title="All 2 branches missed.">		if(s1.length() == 0)</span>
-<span class="nc" id="L50">			return true;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		if(s1.length() == 0)</span>
+<span class="fc" id="L50">			return true;</span>
 		
-<span class="nc" id="L52">		boolean sameValue = true;</span>
+<span class="fc" id="L52">		boolean sameValue = true;</span>
 		
-<span class="nc" id="L54">		int i=0;</span>
+<span class="fc" id="L54">		int i=0;</span>
 		//@ loop_writes sameValue;
 		//@ loop_invariant 0&lt;=i&lt;=s1.length();
 		//@ loop_invariant !sameValue &lt;==&gt; (\exists int j; 0&lt;=j&lt;i; s1.charAt(j) != s2.charAt(j) );
 		//@ decreases s1.length() - i;
-<span class="nc bnc" id="L59" title="All 2 branches missed.">		for(i=0; i&lt;s1.length(); i++) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		for(i=0; i&lt;s1.length(); i++) {</span>
 		
-<span class="nc bnc" id="L61" title="All 2 branches missed.">			if(s1.charAt(i) != s2.charAt(i)) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">			if(s1.charAt(i) != s2.charAt(i)) {</span>
 				//@ assert s1.charAt(i) != s2.charAt(i);
-<span class="nc" id="L63">				sameValue = false;</span>
+<span class="fc" id="L63">				sameValue = false;</span>
 				//@ assert !sameValue;
-<span class="nc" id="L65">				break;</span>
+<span class="fc" id="L65">				break;</span>
 			}
 			//@ assert s1.charAt(i) == s2.charAt(i);
 		}
 		
-<span class="nc" id="L70">		return sameValue;</span>
+<span class="fc" id="L70">		return sameValue;</span>
 		
 	}
 	
@@ -97,29 +97,29 @@
 //	@CodeBigintMath
 	public static /*@ helper pure @*/ boolean isInteger(/*@ non_null @*/final String str) {
 		
-<span class="nc bnc" id="L100" title="All 4 branches missed.">		if(str == null || str.length()==0)</span>
-<span class="nc" id="L101">			return false;</span>
+<span class="fc bfc" id="L100" title="All 4 branches covered.">		if(str == null || str.length()==0)</span>
+<span class="fc" id="L101">			return false;</span>
 		
-<span class="nc bnc" id="L103" title="All 2 branches missed.">		if(str.length() == 1) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">		if(str.length() == 1) {</span>
 		
-<span class="nc" id="L105">			return isDigit(str.charAt(0),false);</span>
+<span class="fc" id="L105">			return isDigit(str.charAt(0),false);</span>
 		
 		}else {
-<span class="nc" id="L108">			int i=0;</span>
+<span class="fc" id="L108">			int i=0;</span>
 			//@ loop_writes \nothing;
 			//@ maintaining 0&lt;=i&lt;=str.length();
 			//@ maintaining i&gt;0 ==&gt; isDigit(str.charAt(0),true);
 			//@ maintaining i&gt;0 ==&gt; (\forall int j; 1&lt;=j&lt;i; isDigit(str.charAt(j),false) );
 			//@ decreases str.length()-i;
-<span class="nc bnc" id="L114" title="All 2 branches missed.">			for(; i&lt;str.length(); i++) {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">			for(; i&lt;str.length(); i++) {</span>
 				
-<span class="nc bnc" id="L116" title="All 4 branches missed.">				if ( !isDigit( str.charAt(i), i==0 ) )</span>
-<span class="nc" id="L117">					return false;</span>
+<span class="fc bfc" id="L116" title="All 4 branches covered.">				if ( !isDigit( str.charAt(i), i==0 ) )</span>
+<span class="fc" id="L117">					return false;</span>
 				
 			}
 		}
 		
-<span class="nc" id="L122">		return true;</span>
+<span class="fc" id="L122">		return true;</span>
 	}
 	
 	
@@ -169,38 +169,38 @@
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/final String str) {
 		
-<span class="nc" id="L172">		final char comma = '.';</span>
-<span class="nc" id="L173">		int numOfCommas = 0;</span>
+<span class="fc" id="L172">		final char comma = '.';</span>
+<span class="fc" id="L173">		int numOfCommas = 0;</span>
 		
 		//@ set numOfCommas = 0;
 		
 		// voglio str: non null, forma minima '0.0', non forma troncata '0.', non forma troncata '.0' 
-<span class="nc bnc" id="L178" title="All 8 branches missed.">		if(str == null || str.length()&lt;3 || str.charAt(str.length()-1) == comma || str.charAt(0) == comma)</span>
-<span class="nc" id="L179">			return false;</span>
+<span class="fc bfc" id="L178" title="All 8 branches covered.">		if(str == null || str.length()&lt;3 || str.charAt(str.length()-1) == comma || str.charAt(0) == comma)</span>
+<span class="fc" id="L179">			return false;</span>
 		
 		// se il secondo carattere � COMMA, il primo carattere pu� essere zero.
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
-<span class="nc bnc" id="L183" title="All 4 branches missed.">		if ( str.charAt(1) != '.' &amp;&amp; !isDigit(str.charAt(0),true) )</span>
-<span class="nc" id="L184">			return false;</span>
+<span class="fc bfc" id="L183" title="All 4 branches covered.">		if ( str.charAt(1) != '.' &amp;&amp; !isDigit(str.charAt(0),true) )</span>
+<span class="fc" id="L184">			return false;</span>
 		
-<span class="nc" id="L186">		int i=0;</span>
+<span class="fc" id="L186">		int i=0;</span>
 		//@ loop_writes numOfCommas;
 		//@ maintaining 0&lt;=numOfCommas&lt;=str.length();
 		//@ maintaining 0&lt;=i&lt;=str.length();
 		//@ maintaining i&gt;0 ==&gt; (\forall int j; 0&lt;=j&lt;i; 48&lt;=str.charAt(j)&lt;=57 | str.charAt(j)=='.');
 		//@ decreases str.length()-i;
-<span class="nc bnc" id="L192" title="All 2 branches missed.">		for(; i&lt;str.length(); i++) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">		for(; i&lt;str.length(); i++) {</span>
 				
-<span class="nc bnc" id="L194" title="All 2 branches missed.">			if( !isDigit(str.charAt(i),false) )</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">				if (str.charAt(i) == comma) {</span>
-<span class="nc" id="L196">					numOfCommas++;</span>
+<span class="fc bfc" id="L194" title="All 2 branches covered.">			if( !isDigit(str.charAt(i),false) )</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">				if (str.charAt(i) == comma) {</span>
+<span class="fc" id="L196">					numOfCommas++;</span>
 					//@ set numOfCommas=numOfCommas+1;
-<span class="nc" id="L198">				}else</span>
-<span class="nc" id="L199">					return false;</span>
+				}else
+<span class="fc" id="L199">					return false;</span>
 			
 			}		
 		
-<span class="nc bnc" id="L203" title="All 2 branches missed.">		return numOfCommas==1; // voglio solo un dot.</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">		return numOfCommas==1; // voglio solo un dot.</span>
 	}
 	
 	
@@ -226,10 +226,10 @@
 	  @*/
 	public static /*@ pure @*/ boolean isDigit(final char c, final boolean nonNull) {
 		
-<span class="nc bnc" id="L229" title="All 2 branches missed.">		if(nonNull)</span>
-<span class="nc bnc" id="L230" title="All 4 branches missed.">			return 49&lt;=c &amp;&amp; c&lt;=57;</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">		if(nonNull)</span>
+<span class="fc bfc" id="L230" title="All 4 branches covered.">			return 49&lt;=c &amp;&amp; c&lt;=57;</span>
 		
-<span class="nc bnc" id="L232" title="All 4 branches missed.">		return 48&lt;=c &amp;&amp; c&lt;=57;</span>
+<span class="fc bfc" id="L232" title="All 4 branches covered.">		return 48&lt;=c &amp;&amp; c&lt;=57;</span>
 	}
 	
 	/**
@@ -252,20 +252,20 @@
 	  @*/
 	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ final String str, final char elem) {
 	
-<span class="nc bnc" id="L255" title="All 4 branches missed.">		if(str==null || str.length()==0)</span>
-<span class="nc" id="L256">			return false;</span>
+<span class="fc bfc" id="L255" title="All 4 branches covered.">		if(str==null || str.length()==0)</span>
+<span class="fc" id="L256">			return false;</span>
 		
 		/*@ loop_writes \nothing;
 		  @ loop_invariant 0&lt;=i&lt;=str.length();
 		  @ loop_invariant i&gt;0 ==&gt; (\forall int j; 0&lt;=j&lt;i; str.charAt(j)!=elem);
 		  @ decreases str.length()-i;
 		  @*/
-<span class="nc bnc" id="L263" title="All 2 branches missed.">		for(int i=0; i&lt;str.length(); i++) {</span>
-<span class="nc bnc" id="L264" title="All 2 branches missed.">			if(str.charAt(i)==elem)</span>
-<span class="nc" id="L265">				return true;</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">		for(int i=0; i&lt;str.length(); i++) {</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">			if(str.charAt(i)==elem)</span>
+<span class="fc" id="L265">				return true;</span>
 		}
 		
-<span class="nc" id="L268">		return false;</span>
+<span class="fc" id="L268">		return false;</span>
 	}
 	
 	/**
@@ -294,48 +294,52 @@
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 		
+<span class="fc bfc" id="L297" title="All 2 branches covered.">		if (str == null) return false;</span>
+		
+		
 		// Guardo nello specifico il pattern &quot;yyyy-MM-dd HH:mm:ss&quot;
 			
-<span class="nc" id="L299">		final char MAIN_SEPARATOR = 'T';</span>
-<span class="nc" id="L300">		final char DATE_SEPARATOR = '-';</span>
-<span class="nc" id="L301">		final char TIME_SEPARATOR = ':';</span>
-<span class="nc" id="L302">		final int YSize = 4; </span>
-<span class="nc" id="L303">		final int MSize = 2; </span>
-<span class="nc" id="L304">		final int GSize = 2;</span>
-<span class="nc" id="L305">		final int hSize = 2; </span>
-<span class="nc" id="L306">		final int mSize = 2; </span>
-<span class="nc" id="L307">		final int sSize = 2;</span>
+<span class="fc" id="L302">		final char MAIN_SEPARATOR = 'T';</span>
+<span class="fc" id="L303">		final char DATE_SEPARATOR = '-';</span>
+<span class="fc" id="L304">		final char TIME_SEPARATOR = ':';</span>
+<span class="fc" id="L305">		final int YSize = 4; </span>
+<span class="fc" id="L306">		final int MSize = 2; </span>
+<span class="fc" id="L307">		final int GSize = 2;</span>
+<span class="fc" id="L308">		final int hSize = 2; </span>
+<span class="fc" id="L309">		final int mSize = 2; </span>
+<span class="fc" id="L310">		final int sSize = 2;</span>
+		
 		
 		//mi aspetto una certa forma
-<span class="nc bnc" id="L310" title="All 2 branches missed.">		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )</span>
-<span class="nc" id="L311">			return false;</span>
+<span class="fc bfc" id="L314" title="All 2 branches covered.">		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )</span>
+<span class="fc" id="L315">			return false;</span>
 		
 		//mi aspetto i separatori in determinate posizioni
-<span class="nc bnc" id="L314" title="All 2 branches missed.">		if(str.charAt(4)!=DATE_SEPARATOR</span>
-<span class="nc bnc" id="L315" title="All 2 branches missed.">				|| str.charAt(7)!=DATE_SEPARATOR</span>
-<span class="nc bnc" id="L316" title="All 2 branches missed.">				|| str.charAt(10)!=MAIN_SEPARATOR</span>
-<span class="nc bnc" id="L317" title="All 2 branches missed.">				|| str.charAt(13)!=TIME_SEPARATOR</span>
-<span class="nc bnc" id="L318" title="All 2 branches missed.">				|| str.charAt(16)!=TIME_SEPARATOR)</span>
-<span class="nc" id="L319">			return false;</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">		if(str.charAt(4)!=DATE_SEPARATOR</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">				|| str.charAt(7)!=DATE_SEPARATOR</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">				|| str.charAt(10)!=MAIN_SEPARATOR</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">				|| str.charAt(13)!=TIME_SEPARATOR</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">				|| str.charAt(16)!=TIME_SEPARATOR)</span>
+<span class="fc" id="L323">			return false;</span>
 		
 		//controllo yyyy
-<span class="nc bnc" id="L322" title="All 2 branches missed.">		if( !isDigit(str.charAt(0), true) </span>
-<span class="nc bnc" id="L323" title="All 2 branches missed.">				|| !isDigit(str.charAt(1), false)  </span>
-<span class="nc bnc" id="L324" title="All 2 branches missed.">				|| !isDigit(str.charAt(2), false)  </span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">				|| !isDigit(str.charAt(3), false) )</span>
-<span class="nc" id="L326">			return false;</span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">		if( !isDigit(str.charAt(0), true) </span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">				|| !isDigit(str.charAt(1), false)  </span>
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">				|| !isDigit(str.charAt(2), false)  </span>
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">				|| !isDigit(str.charAt(3), false) )</span>
+<span class="fc" id="L330">			return false;</span>
 		
-<span class="nc" id="L328">		final int MM=5;//MM index:controllo MM, da &quot;01&quot; a &quot;12&quot;</span>
-<span class="nc" id="L329">		final int dd=8;//dd index:controllo gg, da &quot;01&quot; a &quot;31&quot;</span>
-<span class="nc" id="L330">		final int HH=11;//HH index:controllo HH, da &quot;00&quot; a &quot;23&quot; </span>
-<span class="nc" id="L331">		final int mm=14;//mm index:controllo mm, da &quot;00&quot; a &quot;59&quot;</span>
-<span class="nc" id="L332">		final int ss=17;//ss index:controllo ss, da &quot;00&quot; a &quot;59&quot;</span>
+<span class="fc" id="L332">		final int MM=5;//MM index:controllo MM, da &quot;01&quot; a &quot;12&quot;</span>
+<span class="fc" id="L333">		final int dd=8;//dd index:controllo gg, da &quot;01&quot; a &quot;31&quot;</span>
+<span class="fc" id="L334">		final int HH=11;//HH index:controllo HH, da &quot;00&quot; a &quot;23&quot; </span>
+<span class="fc" id="L335">		final int mm=14;//mm index:controllo mm, da &quot;00&quot; a &quot;59&quot;</span>
+<span class="fc" id="L336">		final int ss=17;//ss index:controllo ss, da &quot;00&quot; a &quot;59&quot;</span>
 
-<span class="nc bnc" id="L334" title="All 4 branches missed.">		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) </span>
-<span class="nc bnc" id="L335" title="All 6 branches missed.">					&amp;&amp; (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))</span>
-<span class="nc bnc" id="L336" title="All 4 branches missed.">					&amp;&amp; (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))</span>
-<span class="nc bnc" id="L337" title="All 2 branches missed.">					&amp;&amp; has2DigitsBetween(str, mm, '0','5','0','9') </span>
-<span class="nc bnc" id="L338" title="All 2 branches missed.">					&amp;&amp; has2DigitsBetween(str, ss, '0','5','0','9');</span>
+<span class="fc bfc" id="L338" title="All 4 branches covered.">		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) </span>
+<span class="fc bfc" id="L339" title="All 6 branches covered.">					&amp;&amp; (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))</span>
+<span class="fc bfc" id="L340" title="All 4 branches covered.">					&amp;&amp; (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))</span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, mm, '0','5','0','9') </span>
+<span class="fc bfc" id="L342" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, ss, '0','5','0','9');</span>
 		
 		}
 	
@@ -394,17 +398,17 @@
     public static /*@ pure @*/ boolean has2DigitsBetween(String s, int index, 
     											char startRangeFirstDigit, char endRangeFirstDigit,
     											char startRangeSecondDigit, char endRangeSecondDigit) {
-<span class="nc bnc" id="L397" title="All 2 branches missed.">        if (s == null) return false;</span>
-<span class="nc bnc" id="L398" title="All 4 branches missed.">        if (index &lt; 0 || index + 1 &gt;= s.length()) return false;</span>
-<span class="nc bnc" id="L399" title="All 4 branches missed.">        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)</span>
-<span class="nc bnc" id="L400" title="All 4 branches missed.">        		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )</span>
-<span class="nc" id="L401">        				return false;</span>
+<span class="fc bfc" id="L401" title="All 2 branches covered.">        if (s == null) return false;</span>
+<span class="fc bfc" id="L402" title="All 4 branches covered.">        if (index &lt; 0 || index + 1 &gt;= s.length()) return false;</span>
+<span class="fc bfc" id="L403" title="All 4 branches covered.">        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)</span>
+<span class="pc bpc" id="L404" title="1 of 4 branches missed.">        		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )</span>
+<span class="fc" id="L405">        				return false;</span>
         
-<span class="nc" id="L403">        char c1 = s.charAt(index);</span>
-<span class="nc" id="L404">        char c2 = s.charAt(index + 1);</span>
+<span class="fc" id="L407">        char c1 = s.charAt(index);</span>
+<span class="fc" id="L408">        char c2 = s.charAt(index + 1);</span>
 
-<span class="nc bnc" id="L406" title="All 6 branches missed.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
-<span class="nc bnc" id="L407" title="All 2 branches missed.">        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;</span>
+<span class="fc bfc" id="L410" title="All 8 branches covered.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
+        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;
     }
 	
 	/**
@@ -433,22 +437,22 @@
 //	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
 		
-<span class="nc bnc" id="L436" title="All 4 branches missed.">		if(!isDateTime(date1) || !isDateTime(date2))</span>
-<span class="nc" id="L437">			return false;</span>
+<span class="fc bfc" id="L440" title="All 4 branches covered.">		if(!isDateTime(date1) || !isDateTime(date2))</span>
+<span class="fc" id="L441">			return false;</span>
 		
-<span class="nc" id="L439">		final int yyyy=0;//yyyy index</span>
-<span class="nc" id="L440">		final int MM=5;//MM index</span>
-<span class="nc" id="L441">		final int dd=8;//dd index</span>
-<span class="nc" id="L442">		final int HH=11;//HH index</span>
-<span class="nc" id="L443">		final int mm=14;//mm index</span>
-<span class="nc" id="L444">		final int ss=17;//ss index</span>
+<span class="fc" id="L443">		final int yyyy=0;//yyyy index</span>
+<span class="fc" id="L444">		final int MM=5;//MM index</span>
+<span class="fc" id="L445">		final int dd=8;//dd index</span>
+<span class="fc" id="L446">		final int HH=11;//HH index</span>
+<span class="fc" id="L447">		final int mm=14;//mm index</span>
+<span class="fc" id="L448">		final int ss=17;//ss index</span>
 		
-<span class="nc bnc" id="L446" title="All 2 branches missed.">		return (isSubstr1LessOrEqualThanSubstr2(date1,date2,yyyy,4)) &amp;&amp;</span>
-<span class="nc bnc" id="L447" title="All 2 branches missed.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,MM,2)) &amp;&amp;</span>
-<span class="nc bnc" id="L448" title="All 2 branches missed.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,dd,2)) &amp;&amp;</span>
-<span class="nc bnc" id="L449" title="All 2 branches missed.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,HH,2)) &amp;&amp;</span>
-<span class="nc bnc" id="L450" title="All 2 branches missed.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,mm,2)) &amp;&amp;</span>
-<span class="nc bnc" id="L451" title="All 2 branches missed.">					(isSubstr1LessOrEqualThanSubstr2(date1,date2,ss,2));</span>
+<span class="fc bfc" id="L450" title="All 2 branches covered.">		return (isSubstr1LessOrEqualThanSubstr2(date1,date2,yyyy,4)) &amp;&amp;</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,MM,2)) &amp;&amp;</span>
+<span class="fc bfc" id="L452" title="All 2 branches covered.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,dd,2)) &amp;&amp;</span>
+<span class="fc bfc" id="L453" title="All 2 branches covered.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,HH,2)) &amp;&amp;</span>
+<span class="fc bfc" id="L454" title="All 2 branches covered.">				(isSubstr1LessOrEqualThanSubstr2(date1,date2,mm,2)) &amp;&amp;</span>
+<span class="fc bfc" id="L455" title="All 2 branches covered.">					(isSubstr1LessOrEqualThanSubstr2(date1,date2,ss,2));</span>
 	}
 
 	
@@ -496,19 +500,22 @@
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(String s1, String s2, int pos, int substrSize) {
 
-<span class="nc bnc" id="L499" title="All 8 branches missed.">		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;</span>
-<span class="nc bnc" id="L500" title="All 4 branches missed.">		if(pos&lt;0 || substrSize&lt;=0) return false;</span>
-<span class="nc bnc" id="L501" title="All 4 branches missed.">		if(pos+substrSize&gt;s1.length() || pos+substrSize&gt;s2.length()) return false;</span>
+<span class="fc bfc" id="L503" title="All 8 branches covered.">		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;</span>
+<span class="fc bfc" id="L504" title="All 4 branches covered.">		if(pos&lt;0 || substrSize&lt;=0) return false;</span>
+<span class="pc bpc" id="L505" title="1 of 4 branches missed.">		if(pos+substrSize&gt;s1.length() || pos+substrSize&gt;s2.length()) return false;</span>
 		
 		//@ loop_writes i;
 		//@ loop_invariant 0&lt;=i&lt;=substrSize;
 		//@ loop_invariant (\forall int j; pos&lt;=j&lt;pos+i; s1.charAt(j)&lt;=s2.charAt(j) );
 		//@ decreases substrSize-i;
-<span class="nc bnc" id="L507" title="All 2 branches missed.">		for(int i=0; i&lt;substrSize; i++)</span>
-<span class="nc bnc" id="L508" title="All 2 branches missed.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
-<span class="nc" id="L509">				return false;</span>
-		
-<span class="nc" id="L511">		return true;</span>
+<span class="fc bfc" id="L511" title="All 2 branches covered.">		for(int i=0; i&lt;substrSize; i++) {</span>
+<span class="fc bfc" id="L512" title="All 2 branches covered.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
+<span class="fc" id="L513">				return false;</span>
+<span class="fc bfc" id="L514" title="All 2 branches covered.">			if(s1.charAt(pos+i)&lt;s2.charAt(pos+i))</span>
+<span class="fc" id="L515">				return true;</span>
+		}
+	
+<span class="fc" id="L518">		return true;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

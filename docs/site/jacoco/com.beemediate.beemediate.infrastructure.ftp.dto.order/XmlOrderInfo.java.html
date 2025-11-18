@@ -26,75 +26,80 @@ public class XmlOrderInfo {
 	 * tag per numero d'ordine del cliente (35 cifre; (alfanumerico / numerico))
 	 */
 	@JacksonXmlProperty(localName=&quot;ORDER_ID&quot;)
-	private final String orderId;
+	private String orderId;
 	
 	/**
 	 * tag per data dell'ordine
 	 */
 	@JacksonXmlProperty(localName=&quot;ORDER_DATE&quot;)
-	private final String orderDate;
+	private String orderDate;
 	
 	/**
 	 * riferimento a DTO XmlDeliveryDate per DELIVERY_DATE
 	 */
 	@JacksonXmlProperty(localName=&quot;DELIVERY_DATE&quot;)
-	private final XmlDeliveryDate deliveryDate;
+	private XmlDeliveryDate deliveryDate;
 	
 	/**
 	 * Riferimento a lista di DTO XmlParty per PARTY. Jackson crea un tag wrapper PARTIES attorno ai PARTY
 	 */
     @JacksonXmlElementWrapper(localName = &quot;PARTIES&quot;, useWrapping = true) 
     @JacksonXmlProperty(localName = &quot;PARTY&quot;)  
-	private final List&lt;XmlParty&gt; orderParties;
+	private List&lt;XmlParty&gt; orderParties;
     
     /**
      * Riferimento a DTO XmlOrderPartiesReference per ORDER_PARTIES_REFERENCE
      */
     @JacksonXmlProperty(localName = &quot;ORDER_PARTIES_REFERENCE&quot;)
-    private final XmlOrderPartiesReference orderPartiesReference;
+    private XmlOrderPartiesReference orderPartiesReference;
 
     /**
      * tag per valuta
      */
     @JacksonXmlProperty(localName= &quot;bmecat:CURRENCY&quot;)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private final String currency;
+    private String currency;
     
     @JacksonXmlProperty(localName= &quot;PARTIAL_SHIPMENT_ALLOWED&quot;)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private boolean partialShipment;
     
     /**
+     * Empty constructor
+     */
+<span class="fc" id="L70">    public XmlOrderInfo() {/*Empty constructor for deserialization*/}</span>
+    
+    /**
      * Costruttore per creare struttura XML-OpenTrans informazioni del header ordine partendo dal POJO {@code OrderHeader}
      * @param head - OrderHeader
      */
 	public XmlOrderInfo(final OrderHeader head) {
-<span class="nc" id="L72">		super();</span>
-<span class="nc" id="L73">		this.orderId = head.getOrderID();</span>
-<span class="nc" id="L74">		this.orderDate = head.getOrderDate();</span>
-<span class="nc" id="L75">		this.deliveryDate = new XmlDeliveryDate(head.getStartDate(), head.getEndDate(), DeliveryDateType.OPTIONAL);</span>
-<span class="nc" id="L76">		this.orderParties = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L77">		this.orderParties</span>
-<span class="nc" id="L78">				.addAll(</span>
-<span class="nc" id="L79">						Arrays.asList(</span>
+<span class="fc" id="L77">		super();</span>
+<span class="fc" id="L78">		this.orderId = head.getOrderID();</span>
+<span class="fc" id="L79">		this.orderDate = head.getOrderDate();</span>
+<span class="fc" id="L80">		this.deliveryDate = new XmlDeliveryDate(head.getStartDate(), head.getEndDate(), DeliveryDateType.OPTIONAL);</span>
+<span class="fc" id="L81">		this.orderParties = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L82">		this.orderParties</span>
+<span class="fc" id="L83">				.addAll(</span>
+<span class="fc" id="L84">						Arrays.asList(</span>
 								new XmlParty(
-<span class="nc" id="L81">										new XmlPartyID( head.getBuyerID(), PartyType.SUPPLIER_SPECIFIC)</span>
+<span class="fc" id="L86">										new XmlPartyID( head.getBuyerID(), PartyType.SUPPLIER_SPECIFIC)</span>
 										,&quot;buyer&quot;),
 								new XmlParty(
-<span class="nc" id="L84">										new XmlPartyID( head.getSupplierID(), PartyType.BUYER_SPECIFIC)</span>
+<span class="fc" id="L89">										new XmlPartyID( head.getSupplierID(), PartyType.BUYER_SPECIFIC)</span>
 										,&quot;supplier&quot;),
 								new XmlParty(
-<span class="nc" id="L87">										new XmlPartyID( head.getDeliveryID(), PartyType.SUPPLIER_SPECIFIC)</span>
+<span class="fc" id="L92">										new XmlPartyID( head.getDeliveryID(), PartyType.SUPPLIER_SPECIFIC)</span>
 										,&quot;delivery&quot;)
 								)
 						);
-<span class="nc" id="L91">		this.orderPartiesReference = new XmlOrderPartiesReference(</span>
-<span class="nc" id="L92">												head.getBuyerIDRef(), PartyType.SUPPLIER_SPECIFIC,</span>
-<span class="nc" id="L93">												head.getSupplierIDRef(), PartyType.BUYER_SPECIFIC,</span>
-<span class="nc" id="L94">												head.getDeliveryIDRef(), PartyType.SUPPLIER_SPECIFIC</span>
+<span class="fc" id="L96">		this.orderPartiesReference = new XmlOrderPartiesReference(</span>
+<span class="fc" id="L97">												head.getBuyerIDRef(), PartyType.SUPPLIER_SPECIFIC,</span>
+<span class="fc" id="L98">												head.getSupplierIDRef(), PartyType.BUYER_SPECIFIC,</span>
+<span class="fc" id="L99">												head.getDeliveryIDRef(), PartyType.SUPPLIER_SPECIFIC</span>
 											);
-<span class="nc" id="L96">		this.currency = head.getCurrency();</span>
-<span class="nc" id="L97">	}</span>
+<span class="fc" id="L101">		this.currency = head.getCurrency();</span>
+<span class="fc" id="L102">	}</span>
 
 	
 	/**
@@ -102,7 +107,7 @@ public class XmlOrderInfo {
 	 * @return String
 	 */
 	public String getOrderId() {
-<span class="nc" id="L105">		return orderId;</span>
+<span class="fc" id="L110">		return orderId;</span>
 	}
 
 	/**
@@ -110,7 +115,7 @@ public class XmlOrderInfo {
 	 * @return String indicante una data
 	 */
 	public String getOrderDate() {
-<span class="nc" id="L113">		return orderDate;</span>
+<span class="fc" id="L118">		return orderDate;</span>
 	}
 
 	/**
@@ -118,7 +123,7 @@ public class XmlOrderInfo {
 	 * @return XmlDeliveryDate indicante una data
 	 */
 	public XmlDeliveryDate getDeliveryDate() {
-<span class="nc" id="L121">		return deliveryDate;</span>
+<span class="fc" id="L126">		return deliveryDate;</span>
 	}
 
 	/**
@@ -126,7 +131,7 @@ public class XmlOrderInfo {
 	 * @return List&amp;lt;XmlParty&amp;gt;
 	 */
 	public List&lt;XmlParty&gt; getOrderParties() {
-<span class="nc" id="L129">		return orderParties;</span>
+<span class="fc" id="L134">		return orderParties;</span>
 	}
 
 	/**
@@ -134,8 +139,52 @@ public class XmlOrderInfo {
 	 * @return XmlOrderPartiesReference
 	 */
 	public XmlOrderPartiesReference getOrderPartiesReference() {
-<span class="nc" id="L137">		return orderPartiesReference;</span>
+<span class="fc" id="L142">		return orderPartiesReference;</span>
 	}
+	
+	public String getCurrency() {
+<span class="fc" id="L146">		return currency;</span>
+	}
+
+
+	public boolean isPartialShipment() {
+<span class="fc" id="L151">		return partialShipment;</span>
+	}
+
+
+	public void setPartialShipment(boolean partialShipment) {
+<span class="nc" id="L156">		this.partialShipment = partialShipment;</span>
+<span class="nc" id="L157">	}</span>
+
+
+	public void setOrderId(String orderId) {
+<span class="fc" id="L161">		this.orderId = orderId;</span>
+<span class="fc" id="L162">	}</span>
+
+
+	public void setOrderDate(String orderDate) {
+<span class="fc" id="L166">		this.orderDate = orderDate;</span>
+<span class="fc" id="L167">	}</span>
+
+
+	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+<span class="fc" id="L171">		this.deliveryDate = deliveryDate;</span>
+<span class="fc" id="L172">	}</span>
+
+
+	public void setOrderParties(List&lt;XmlParty&gt; orderParties) {
+<span class="fc" id="L176">		this.orderParties = orderParties;</span>
+<span class="fc" id="L177">	}</span>
+
+
+	public void setOrderPartiesReference(XmlOrderPartiesReference orderPartiesReference) {
+<span class="fc" id="L181">		this.orderPartiesReference = orderPartiesReference;</span>
+<span class="fc" id="L182">	}</span>
+
+
+	public void setCurrency(String currency) {
+<span class="fc" id="L186">		this.currency = currency;</span>
+<span class="fc" id="L187">	}</span>
 	
 	
 }

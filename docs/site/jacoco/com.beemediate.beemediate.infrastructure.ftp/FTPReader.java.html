@@ -59,51 +59,50 @@ public class FTPReader implements ConfirmationProviderPort{
 	
     @Override
     public Confirmation popConfirmation() {
-<span class="nc" id="L62">    	return  buffer.pop();</span>
+<span class="fc" id="L62">    	return  buffer.pop();</span>
     }
     
     
     @Override
     public boolean hasConfirmation() {
-<span class="nc bnc" id="L68" title="All 2 branches missed.">    	return !buffer.isEmpty();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    	return !buffer.isEmpty();</span>
     }
     
     
     @Override
 	public boolean fetchConfirmations() {
 		
-<span class="nc" id="L75">		final Path outboundPath = Path.of(ftp.getOutboundFolder());</span>
+<span class="fc" id="L75">		final Path outboundPath = Path.of(ftp.getOutboundFolder());</span>
 		
 		try {
-<span class="nc bnc" id="L78" title="All 2 branches missed.">			if(!containsXmlFiles(outboundPath))</span>
-<span class="nc" id="L79">				return false;</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">			if(!containsXmlFiles(outboundPath))</span>
+<span class="fc" id="L79">				return false;</span>
 			
-<span class="nc" id="L81">			buffer.clear();</span>
+<span class="fc" id="L81">			buffer.clear();</span>
 			
 			String or;
 			Confirmation c;
 			
-<span class="nc bnc" id="L86" title="All 2 branches missed.">			for(Path p : collectXmlFiles(outboundPath)) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">			for(Path p : collectXmlFiles(outboundPath)) {</span>
 				
-<span class="nc" id="L88">				or = Files.readString(p, StandardCharsets.UTF_8);</span>
-<span class="nc" id="L89">				log.info(or);</span>
+<span class="fc" id="L88">				or = Files.readString(p, StandardCharsets.UTF_8);</span>
 				
-<span class="nc" id="L91">				c = new Confirmation( </span>
-<span class="nc" id="L92">							p.getFileName().toString(),</span>
-<span class="nc" id="L93">							DataMapper.mapConfirmationFromXml(</span>
-<span class="nc" id="L94">									DataMapper.deserializeXmlOrderResponse(or)</span>
+<span class="fc" id="L90">				c = new Confirmation( </span>
+<span class="fc" id="L91">							p.getFileName().toString(),</span>
+<span class="fc" id="L92">							DataMapper.mapConfirmationFromXml(</span>
+<span class="fc" id="L93">									DataMapper.deserializeXmlOrderResponse(or)</span>
 									)
 						);
 				
-<span class="nc" id="L98">				buffer.add(c);</span>
-<span class="nc" id="L99">			}</span>
+<span class="fc" id="L97">				buffer.add(c);</span>
+<span class="fc" id="L98">			}</span>
 			
-<span class="nc" id="L101">			return hasConfirmation();</span>
-<span class="nc" id="L102">		} catch (IOException | WrongPathException e) {</span>
-<span class="nc" id="L103">			log.error(&quot;Errore durante l'estrazione delle conferme.&quot;,e);</span>
+<span class="fc" id="L100">			return hasConfirmation();</span>
+<span class="nc" id="L101">		} catch (IOException | WrongPathException e) {</span>
+<span class="nc" id="L102">			log.error(&quot;Errore durante l'estrazione delle conferme.&quot;,e);</span>
 		}
 		
-<span class="nc" id="L106">		return false;</span>
+<span class="nc" id="L105">		return false;</span>
 	}
 	
 	
@@ -117,15 +116,15 @@ public class FTPReader implements ConfirmationProviderPort{
      */
     private List&lt;Path&gt; collectXmlFiles(Path directoryPath) throws IOException, WrongPathException {
         // Verifica che il percorso esista ed sia una directory
-<span class="nc bnc" id="L120" title="All 4 branches missed.">        if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {</span>
-<span class="nc" id="L121">            throw new WrongPathException(&quot;Il percorso specificato non è una directory valida: &quot; + directoryPath);</span>
+<span class="pc bpc" id="L119" title="2 of 4 branches missed.">        if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {</span>
+<span class="nc" id="L120">            throw new WrongPathException(&quot;Il percorso specificato non è una directory valida: &quot; + directoryPath);</span>
         }
 
-<span class="nc" id="L124">        try (Stream&lt;Path&gt; walk = Files.walk(directoryPath)) {</span>
-<span class="nc" id="L125">            return walk</span>
-<span class="nc" id="L126">                    .filter(Files::isRegularFile)          // solo file &quot;normali&quot;</span>
-<span class="nc" id="L127">                    .filter(path -&gt; path.toString().toLowerCase().endsWith(&quot;.xml&quot;))  // estensione .xml</span>
-<span class="nc" id="L128">                    .collect(Collectors.toList());</span>
+<span class="fc" id="L123">        try (Stream&lt;Path&gt; walk = Files.walk(directoryPath)) {</span>
+<span class="fc" id="L124">            return walk</span>
+<span class="fc" id="L125">                    .filter(Files::isRegularFile)          // solo file &quot;normali&quot;</span>
+<span class="fc" id="L126">                    .filter(path -&gt; path.toString().toLowerCase().endsWith(&quot;.xml&quot;))  // estensione .xml</span>
+<span class="fc" id="L127">                    .collect(Collectors.toList());</span>
         }
     }
     
@@ -140,15 +139,15 @@ public class FTPReader implements ConfirmationProviderPort{
      */
     private boolean containsXmlFiles(Path directoryPath) throws IOException, WrongPathException {
         // Verifica che il percorso esista e sia una directory
-<span class="nc bnc" id="L143" title="All 4 branches missed.">        if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {</span>
-<span class="nc" id="L144">            throw new WrongPathException(&quot;Il percorso specificato non è una directory valida: &quot; + directoryPath);</span>
+<span class="pc bpc" id="L142" title="2 of 4 branches missed.">        if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {</span>
+<span class="nc" id="L143">            throw new WrongPathException(&quot;Il percorso specificato non è una directory valida: &quot; + directoryPath);</span>
         }
 
         // Usa uno stream per cercare file .xml
-<span class="nc" id="L148">        try (Stream&lt;Path&gt; files = Files.list(directoryPath)) {</span>
-<span class="nc" id="L149">            return files</span>
-<span class="nc" id="L150">                    .filter(Files::isRegularFile)</span>
-<span class="nc" id="L151">                    .anyMatch(path -&gt; path.toString().toLowerCase().endsWith(&quot;.xml&quot;));</span>
+<span class="fc" id="L147">        try (Stream&lt;Path&gt; files = Files.list(directoryPath)) {</span>
+<span class="fc" id="L148">            return files</span>
+<span class="fc" id="L149">                    .filter(Files::isRegularFile)</span>
+<span class="fc" id="L150">                    .anyMatch(path -&gt; path.toString().toLowerCase().endsWith(&quot;.xml&quot;));</span>
         }
     }
 }

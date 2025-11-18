@@ -15,58 +15,63 @@ public class XmlOrder {
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L18">	@JacksonXmlProperty(isAttribute=true)</span>
-	private final String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;
+<span class="fc" id="L18">	@JacksonXmlProperty(isAttribute=true)</span>
+	private String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;
 
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L24">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:xsi&quot;)</span>
-	private final String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;
+<span class="fc" id="L24">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:xsi&quot;)</span>
+	private String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L30">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:bmecat&quot;)</span>
-	private final String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;
+<span class="fc" id="L30">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:bmecat&quot;)</span>
+	private String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L36">	@JacksonXmlProperty(isAttribute=true)</span>
-	private final String version=&quot;2.1&quot;;
+<span class="fc" id="L36">	@JacksonXmlProperty(isAttribute=true)</span>
+	private String version=&quot;2.1&quot;;
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L42">	@JacksonXmlProperty(isAttribute=true)</span>
-	private final String type=&quot;standard&quot;;
+<span class="fc" id="L42">	@JacksonXmlProperty(isAttribute=true)</span>
+	private String type=&quot;standard&quot;;
 	
 	/**
 	 * Attributo tag ROOT del file
 	 */
-<span class="nc" id="L48">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xsi:schemaLocation&quot;)</span>
-	private final String schemaLocation = &quot;http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd&quot;;
+<span class="fc" id="L48">	@JacksonXmlProperty(isAttribute=true, localName=&quot;xsi:schemaLocation&quot;)</span>
+	private String schemaLocation = &quot;http://www.opentrans.org/XMLSchema/2.1/opentrans_2_1.xsd&quot;;
 	
 	/**
 	 * Riferimento a DTO XmlOrderHeader per ORDER_HEADER
 	 */
 	@JacksonXmlProperty(localName=&quot;ORDER_HEADER&quot;)
-	public final XmlOrderHeader oh;
+	public XmlOrderHeader oh;
 	
 	/**
 	 * Riferimento a lista di DTO XmlItem per ORDER_ITEM. Jackson crea un tag wrapper ORDER_ITEM_LIST attorno ai ORDER_ITEM
 	 */
     @JacksonXmlElementWrapper(localName = &quot;ORDER_ITEM_LIST&quot;, useWrapping = true) 
     @JacksonXmlProperty(localName = &quot;ORDER_ITEM&quot;)  
-	private final List&lt;XmlItem&gt; orderItem;
+	private List&lt;XmlItem&gt; orderItem;
 	
     /**
      * Riferimento a DTO XmlOrderSummary per ORDER_SUMMARY.
      */
 	@JacksonXmlProperty(localName=&quot;ORDER_SUMMARY&quot;)
-	public final XmlOrderSummary os;
+	public XmlOrderSummary os;
 
+	/**
+	 * Empty constructor for deserializer
+	 */
+<span class="fc" id="L73">	public XmlOrder() {/*empty constructor for deserializer*/}</span>
+	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans dell'ordine. Crea la radice del documento contenente attributi relativi al namespace.
 	 * &lt;br&gt;La struttura dell'ordine è formata da tre elementi principali:
@@ -80,18 +85,18 @@ public class XmlOrder {
 	 * @param os - {@code XmlOrderSummary} per creare struttura XML-OpenTrans ORDER_SUMMARY
 	 */
 	public XmlOrder(final XmlOrderHeader oh, final List&lt;XmlItem&gt; orderItem, final XmlOrderSummary os) {
-<span class="nc" id="L83">		super();</span>
-<span class="nc" id="L84">		this.oh = oh;</span>
-<span class="nc" id="L85">		this.orderItem = orderItem;</span>
-<span class="nc" id="L86">		this.os = os;</span>
-<span class="nc" id="L87">	}</span>
+<span class="fc" id="L88">		super();</span>
+<span class="fc" id="L89">		this.oh = oh;</span>
+<span class="fc" id="L90">		this.orderItem = orderItem;</span>
+<span class="fc" id="L91">		this.os = os;</span>
+<span class="fc" id="L92">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getXmlns() {
-<span class="nc" id="L94">		return xmlns;</span>
+<span class="fc" id="L99">		return xmlns;</span>
 	}
 
 	/**
@@ -99,7 +104,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getXsi() {
-<span class="nc" id="L102">		return xsi;</span>
+<span class="fc" id="L107">		return xsi;</span>
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getBmecat() {
-<span class="nc" id="L110">		return bmecat;</span>
+<span class="fc" id="L115">		return bmecat;</span>
 	}
 
 	/**
@@ -115,7 +120,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getVersion() {
-<span class="nc" id="L118">		return version;</span>
+<span class="fc" id="L123">		return version;</span>
 	}
 
 	/**
@@ -123,7 +128,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getType() {
-<span class="nc" id="L126">		return type;</span>
+<span class="fc" id="L131">		return type;</span>
 	}
 
 	/**
@@ -131,7 +136,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public String getSchemaLocation() {
-<span class="nc" id="L134">		return schemaLocation;</span>
+<span class="fc" id="L139">		return schemaLocation;</span>
 	}
 
 	/**
@@ -139,7 +144,7 @@ public class XmlOrder {
 	 * @return String
 	 */
 	public XmlOrderHeader getOh() {
-<span class="nc" id="L142">		return oh;</span>
+<span class="fc" id="L147">		return oh;</span>
 	}
 
 	/**
@@ -147,7 +152,7 @@ public class XmlOrder {
 	 * @return {@code List&lt;XmlItem&gt;}
 	 */
 	public List&lt;XmlItem&gt; getOrderItem() {
-<span class="nc" id="L150">		return orderItem;</span>
+<span class="fc" id="L155">		return orderItem;</span>
 	}
 
 	/**
@@ -155,8 +160,44 @@ public class XmlOrder {
 	 * @return XmlOrderSummary
 	 */
 	public XmlOrderSummary getOs() {
-<span class="nc" id="L158">		return os;</span>
+<span class="fc" id="L163">		return os;</span>
 	}
+
+	public void setXmlns(String xmlns) {
+<span class="fc" id="L167">		this.xmlns = xmlns;</span>
+<span class="fc" id="L168">	}</span>
+
+	public void setXsi(String xsi) {
+<span class="fc" id="L171">		this.xsi = xsi;</span>
+<span class="fc" id="L172">	}</span>
+
+	public void setBmecat(String bmecat) {
+<span class="fc" id="L175">		this.bmecat = bmecat;</span>
+<span class="fc" id="L176">	}</span>
+
+	public void setVersion(String version) {
+<span class="fc" id="L179">		this.version = version;</span>
+<span class="fc" id="L180">	}</span>
+
+	public void setType(String type) {
+<span class="fc" id="L183">		this.type = type;</span>
+<span class="fc" id="L184">	}</span>
+
+	public void setSchemaLocation(String schemaLocation) {
+<span class="fc" id="L187">		this.schemaLocation = schemaLocation;</span>
+<span class="fc" id="L188">	}</span>
+
+	public void setOh(XmlOrderHeader oh) {
+<span class="fc" id="L191">		this.oh = oh;</span>
+<span class="fc" id="L192">	}</span>
+
+	public void setOrderItem(List&lt;XmlItem&gt; orderItem) {
+<span class="fc" id="L195">		this.orderItem = orderItem;</span>
+<span class="fc" id="L196">	}</span>
+
+	public void setOs(XmlOrderSummary os) {
+<span class="fc" id="L199">		this.os = os;</span>
+<span class="fc" id="L200">	}</span>
 
 
 }
