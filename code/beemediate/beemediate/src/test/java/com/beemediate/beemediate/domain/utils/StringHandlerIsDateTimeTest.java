@@ -5,6 +5,11 @@ import static org.junit.Assert.*;
 
 
 public class StringHandlerIsDateTimeTest {
+	
+	
+	//branch+statement coverage
+	
+	
     @Test
     public void t1_null_returnsFalse() {
 
@@ -48,9 +53,17 @@ public class StringHandlerIsDateTimeTest {
     }
 
     @Test
-    public void t8_yearStartsZero_returnsFalse() {
+    public void t8a_yearStartsZero_returnsFalse() {
 
         assertFalse(StringHandler.isDateTime("0200-01-01T00:00:00"));
+    }
+    
+    @Test
+    public void t8b_yearNonLeadingZero_hasNonDigitChar() {
+
+        assertFalse(StringHandler.isDateTime("2a00-01-01T00:00:00"));
+        assertFalse(StringHandler.isDateTime("20a0-01-01T00:00:00"));
+        assertFalse(StringHandler.isDateTime("200a-01-01T00:00:00"));
     }
 
     @Test
