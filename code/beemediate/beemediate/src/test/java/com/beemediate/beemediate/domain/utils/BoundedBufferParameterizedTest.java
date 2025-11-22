@@ -37,7 +37,7 @@ public class BoundedBufferParameterizedTest {
 
     @Before
     public void setUp() {
-    	if(capacity>=0)
+    	if(capacity>0)
     		buffer = new BoundedBuffer(capacity);
     	else {
     		buffer = null;
@@ -50,16 +50,11 @@ public class BoundedBufferParameterizedTest {
     @Test
     public void testInitialState() {
     	
-    	if(capacity>=0) {
+    	if(capacity>0) {
             assertEquals("capacity()", capacity, buffer.capacity());
             assertEquals("getSize() initial", 0, buffer.getSize());
-            if(capacity==0) {
-            	assertTrue("isEmpty() initial", buffer.isEmpty());
-            	assertTrue("isFull() initial", buffer.isFull());
-            }else {
-            	assertTrue("isEmpty() initial", buffer.isEmpty());
-            	assertFalse("isFull() initial", buffer.isFull());
-            }
+            assertTrue("isEmpty() initial", buffer.isEmpty());
+            assertFalse("isFull() initial", buffer.isFull());
     	}
     }
 
@@ -67,7 +62,7 @@ public class BoundedBufferParameterizedTest {
     public void testFillToCapacityAndOverflow() {
     	
         // push exactly capacity elements
-    	if(capacity>=0) {
+    	if(capacity>0) {
     		
 	        for (int i = 0; i < capacity; i++) {
 	            buffer.push(new Order(new OrderStructure(), "o" + i));
@@ -75,7 +70,7 @@ public class BoundedBufferParameterizedTest {
 	        assertEquals("size after fill", capacity, buffer.getSize());
 	        assertTrue("isFull() after fill", buffer.isFull());
 	        
-	        assertTrue("isEmpty() after fill", capacity>0?	!buffer.isEmpty() : buffer.isEmpty() );
+	        assertFalse("isEmpty() after fill", buffer.isEmpty());
 	
 	        // pushing one more element should not increase size (push is no-op when full)
 	        Order extra = new Order(new OrderStructure(), "extra");
@@ -84,12 +79,9 @@ public class BoundedBufferParameterizedTest {
 	
 	        // ensure top element is the last one that fit (LIFO): ordini[capacity-1] should be "o{capacity-1}"
 	        Order top = buffer.get(capacity - 1);
-	        if(capacity>0) {
-		        assertNotNull("top element exists", top);
-		        assertEquals("top id remains the last pushed within capacity", "o" + (capacity - 1), top.getOrderID());	
-	        }else {
-	        	assertNull("empty buffer returns null", top);
-	        }
+	        
+		    assertNotNull("top element exists", top);
+		    assertEquals("top id remains the last pushed within capacity", "o" + (capacity - 1), top.getOrderID());	
 	        
 	        Order underflow = buffer.get(-1);
 	        assertNull("buffer.get(-1) returns null", underflow);
@@ -116,18 +108,11 @@ public class BoundedBufferParameterizedTest {
 	        assertEquals("size after pops", 0, buffer.getSize());
 	        assertTrue("isEmpty after pops", buffer.isEmpty());
     	}else {
-    		if(capacity>=0) {
+    		if(capacity>0) {
         		buffer.push(new Order(new OrderStructure(), "p" + 0));
-        		if(capacity>0) {
-        			assertEquals("size after pushes", 1, buffer.getSize());
-        			Order popped = buffer.pop();
-        			assertNotNull("popped not null", popped);
-        		}else {
-        			assertEquals("size after pushes", 0, buffer.getSize());
-        			Order popped = buffer.pop();
-        			assertNull("popped null", popped);
-        		}
-        		
+        		assertEquals("size after pushes", 1, buffer.getSize());
+        		Order popped = buffer.pop();
+        		assertNotNull("popped not null", popped);
         		assertEquals("size after pops", 0, buffer.getSize());
         		assertTrue("isEmpty after pops", buffer.isEmpty());
     		}
@@ -136,7 +121,7 @@ public class BoundedBufferParameterizedTest {
     
     @Test
     public void testEmptyFunction() {
-    	if(capacity>=0) {
+    	if(capacity>0) {
 	    	buffer.push(new Order(new OrderStructure(), "p" + 0));
 	    	buffer.push(new Order(new OrderStructure(), "p" + 1));
 	    	buffer.empty();
