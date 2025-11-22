@@ -28,6 +28,7 @@ public class BoundedBuffer {
 	/**
 	 * Costruttore
 	 * @param n - capacità dell'array <tt>ordini</tt>
+	 * @throws IllegalArgumentException Se il buffer viene creato con capacity<=0
 	 */
 	//@ public normal_behaviour
 	//@ requires n>0;
@@ -38,6 +39,10 @@ public class BoundedBuffer {
 	//@ pure
 //	@CodeBigintMath
 	public BoundedBuffer (final int n) {
+		
+		if(n<=0)
+			throw new IllegalArgumentException("capacity should be >=1");
+		
 		ordini = new Order[n];
 		size = 0;
 	}
