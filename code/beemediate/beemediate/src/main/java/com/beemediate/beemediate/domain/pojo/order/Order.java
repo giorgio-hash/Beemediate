@@ -74,7 +74,7 @@ public class Order {
 	//@ public normal_behaviour
 	//@ ensures \result == (!articleNumber | !quantityMeasure | (deliveryDate & !deliveryDateContent) );
 	public /*@ pure @*/ boolean hasContentError() {
-		return !(articleNumber && quantityMeasure && (!deliveryDate || deliveryDateContent));
+		return !articleNumber || !quantityMeasure || (!deliveryDate || !deliveryDateContent);
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class Order {
 	//@ requires quantity != null;
 	//@ ensures \result == (!customerNumber | !deliveryLocationNumber | !deliveryDate | quantity != QuantityFieldValue.FLOAT_WITH_DOT);
 	public /*@ pure @*/ boolean hasOpenTransError() {
-		return !(customerNumber && deliveryLocationNumber && deliveryDate && quantity == QuantityFieldValue.FLOAT_WITH_DOT);
+		return !(customerNumber && deliveryLocationNumber && deliveryDate && (quantity == QuantityFieldValue.FLOAT_WITH_DOT || quantity == QuantityFieldValue.INTEGER));
 	}
 
 	/**
