@@ -121,6 +121,8 @@ public class OaFManagerHandlerOrdersTest {
 	public void test_noOrder_state0() {
 	
 		buffer.empty();
+		when(oafMock.loadNewBuffer()).thenReturn(buffer.getSize());
+		when(oafMock.getBuffer()).thenReturn(buffer);
 		
 		int result = oafb.handleOrders();
 		
@@ -486,7 +488,7 @@ public class OaFManagerHandlerOrdersTest {
 		
 		int result = oafb.handleOrders();
 		
-		//controlled da state0, state2, state7 del modello
+		//somma dei controlled da state0, state2, state7 del modello
 		assertEquals("ordine caricato a inbound",2,sendToInbound);
 		assertEquals("content error signal",1, sendContentError);
 		assertEquals("OpenTrans error signal",1, sendOpenTransError);
