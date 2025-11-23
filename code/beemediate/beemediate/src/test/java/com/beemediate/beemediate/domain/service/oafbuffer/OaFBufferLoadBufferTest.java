@@ -152,7 +152,7 @@ public class OaFBufferLoadBufferTest {
 						new Stack<>() {{ push(new Order(null, "o1Old")); }}
 				},
 				new Object[] {//expected output
-						new Stack<>() {{ }},
+						new Stack<>() {{ push(new Order(null, "o1")); }},
 						new Stack<>() {{ push(new Order(null, "o2")); }},
 						1
 				},
@@ -182,9 +182,9 @@ public class OaFBufferLoadBufferTest {
 		
 		String[] expectedBbIds = bbStackMock.stream().map(o -> o.getOrderID()).toArray(String[]::new);
 		String[] bBIds = expectedBbStackMock.stream().map(o -> o.getOrderID()).toArray(String[]::new);
-		assertTrue("gli elementi precedenti vengono eliminati e, se esistono, nuovi elementi in arrivo vengono aggiunti", Arrays.deepEquals(expectedBbIds, bBIds));
+		assertTrue("Gli elementi precedenti vengono eliminati e, se esistono, nuovi elementi in arrivo vengono aggiunti", Arrays.deepEquals(expectedBbIds, bBIds));
 
-		assertEquals("il buffer degli ordini in arrivo si svuota",expectedNewOrdersStackMock.isEmpty(),newOrdersStackMock.isEmpty());
+		assertEquals("Rimangono ordini in arrivo solo se il buffer è pieno",expectedNewOrdersStackMock.isEmpty(),newOrdersStackMock.isEmpty());
 		
 	}
 }
