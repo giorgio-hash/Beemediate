@@ -35,14 +35,7 @@ public class OaFBuffer {
 	/*@ public invariant or!=null; @*/
 
 	//per testing
-	@SuppressWarnings("unused")
-	private OaFBuffer(final BoundedBuffer bb, final OaFValidatorIF v, final OrderProviderPort orderRetriever) {
-		buffer = bb;
-		validator = v;
-		or = orderRetriever;
-	};
-	
-	public OaFBuffer() {};
+	private OaFBuffer() {/*empty constructor for mockito testing*/};
 	
 	/**
 	 * Costruttore
@@ -103,15 +96,12 @@ public class OaFBuffer {
 			/*@ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
 			  @*/
 			//@ loop_invariant t!=null & t.data!=null & t.quantity!=null & t.orderID!=null & \typeof(t) == \type(Order);
-			while(or.hasNewOrder()) {
+			while(or.hasNewOrder() && !buffer.isFull()) {
+				
 				t = or.popNewOrder();
-				if(buffer.isFull()) {
-					continue;
-				}else{
-					buffer.push(t);
-					//@ assert ordersLoaded+1 == buffer.size;
-					//@ set ordersLoaded = buffer.size;
-				}
+				buffer.push(t);
+				//@ assert ordersLoaded+1 == buffer.size;
+				//@ set ordersLoaded = buffer.size;
 			}
 		}
 		
