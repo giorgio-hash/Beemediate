@@ -37,7 +37,7 @@ public class OaFBufferGetTest {
 	private OrderProviderPort or;
 	
 	@Mock
-	private  BoundedBuffer expectedBuffer;
+	private  BoundedBuffer buffer;
 	
 	@Mock
 	private OaFValidatorIF validator;
@@ -55,7 +55,9 @@ public class OaFBufferGetTest {
 	
 	@Test
 	public void test() {
+		
+		BoundedBuffer expected = buffer;
 		BoundedBuffer actual = ob.getBuffer();
-		assertEquals("Struttura in output uguale a quella in input (stesso pointer)",actual,expectedBuffer);
+		assertEquals("Struttura in output uguale a quella in input (stesso pointer)",actual,buffer);
 	}
 }
