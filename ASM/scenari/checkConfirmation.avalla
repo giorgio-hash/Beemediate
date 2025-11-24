@@ -2,6 +2,30 @@
 scenario checkConfirmation
 load ../integrazione.asm
 
+/**
+ * ** Coverage Info: **
+** covered rules: **
+integrazione::r_resetSignals()
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: 100.0%
+integrazione::r_mainWorkflow()
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: - (no update rules to be covered)
+integrazione::r_resetSignalsExcept(Signal)
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: 100.0%
+integrazione::r_checkConfirmation()
+-> branch coverage: 100.0%
+-> update rule coverage: 100.0%
+integrazione::r_ftpInteraction()
+-> branch coverage: - (no conditional rules to be covered)
+-> update rule coverage: 50.0%
+** NOT covered rules: **
+integrazione::r_calculateErrors()
+integrazione::r_sendOrder()
+ 
+ */
+
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
@@ -28,14 +52,4 @@ check raisedSignal(ODA_CONFIRMATION) = true;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
 check raisedSignal(OPENTRANS_ERROR) = false;
-set state := NO_ORDER;
-set ftpGEALAN := WITHDRAW_ORDER;
-step
-check archivedOutboundMessages = 1;
-check raisedSignal(ODA_CONFIRMATION) = false;
-check outboundMessages = 0;
-check raisedSignal(CONTENT_ERROR) = false;
-check raisedSignal(OPENTRANS_ERROR) = false;
-check inboundMessages = 0;
-set state := NO_ORDER;
 step

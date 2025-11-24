@@ -1,9 +1,9 @@
 asm integrazione
 
 
-import ../STDL/StandardLibrary
-import ../STDL/CTLLibrary
-import ../STDL/LTLLibrary
+import ./STDL/StandardLibrary
+import ./STDL/CTLLibrary
+import ./STDL/LTLLibrary
 
 signature:
 
@@ -55,9 +55,9 @@ signature:
 	//	\__se diverso da FLOAT_WITH_DOT, causa OpenTrans error
 	static delivery_location_number : ConstrainedField
 	//	\__se lasciato vuoto o errato, causa OpenTrans error
-	static delivery_date : NonemptyField
+	static delivery_date_content : NonemptyField
 	//	\__se lasciato vuoto, causa OpenTrans error 
-	static delivery_date_content : ConstrainedField
+	static delivery_date : ConstrainedField
 	// sarebbe il contenuto nel caso delivery_date fosse True
 	//	\__se errato (ad es. data nel passato), causa Content error
 
@@ -82,7 +82,7 @@ definitions:
 	function checkOpenTransError = 
 							not hasRightValue(customer_number)
 							or not hasRightValue(delivery_location_number)
-							or not hasContent(delivery_date)
+							or not hasContent(delivery_date_content)
 							or hasQuantity(quantity) = FLOAT_WITH_COMMA
 							or hasQuantity(quantity) = NAN
 							
@@ -90,7 +90,7 @@ definitions:
 	function checkContentError = 
 							not hasRightValue(article_number)
 							or not hasRightValue(quantity_measure)
-							or implies(hasContent(delivery_date), not hasRightValue(delivery_date_content))
+							or implies(hasContent(delivery_date_content), not hasRightValue(delivery_date))
 							
 	//-------------------------------------------------
 	

@@ -1,7 +1,8 @@
 //// starting scenario
 scenario sendOrder
 
-load ../integrazione.asm
+
+load ..\integrazione.asm
 
 /**
  * ** Coverage Info: **
@@ -20,164 +21,178 @@ integrazione::r_resetSignals()
 integrazione::r_resetSignalsExcept(Signal)
 integrazione::r_checkConfirmation()
 integrazione::r_ftpInteraction()
-
-validation terminated without errors
-validating (w coverage) finished
- 
+ * 
+ * 
  */
 
 
+check inboundMessages = 0;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := INTEGER;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 0 -> 1
+check inboundMessages = 1;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 1;
 check raisedSignal(OPENTRANS_ERROR) = false;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 1 -> 2
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = false;
 set state := ORDER;
 set hasRightValue(customer_number) := false;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 2 -> 3
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = true;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := false;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 3 -> 4
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = true;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := false;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := false;
+step // step 4 -> 5
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = true;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = true;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_COMMA;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 5 -> 6
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = true;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := NAN;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 6 -> 7
+check inboundMessages = 2;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = false;
-check inboundMessages = 2;
 check raisedSignal(OPENTRANS_ERROR) = true;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := false;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 7 -> 8
+check inboundMessages = 3;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = true;
-check inboundMessages = 3;
 check raisedSignal(OPENTRANS_ERROR) = false;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := true;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := false;
-set hasRightValue(delivery_date_content) := true;
-step
+set hasContent(delivery_date_content) := true;
+step // step 8 -> 9
+check inboundMessages = 4;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = true;
-check inboundMessages = 4;
 check raisedSignal(OPENTRANS_ERROR) = false;
 set state := ORDER;
 set hasRightValue(customer_number) := true;
 set hasRightValue(delivery_location_number) := true;
-set hasContent(delivery_date) := true;
+set hasRightValue(delivery_date) := false;
 set hasQuantity(quantity) := FLOAT_WITH_DOT;
 set hasRightValue(article_number) := true;
 set hasRightValue(quantity_measure) := true;
-set hasRightValue(delivery_date_content) := false;
-step
+set hasContent(delivery_date_content) := true;
+step // step 9 -> 10
+check inboundMessages = 5;
 check archivedOutboundMessages = 0;
 check raisedSignal(ODA_CONFIRMATION) = false;
 check outboundMessages = 0;
 check raisedSignal(CONTENT_ERROR) = true;
-check inboundMessages = 5;
+check raisedSignal(OPENTRANS_ERROR) = false;
+set state := ORDER;
+set hasRightValue(customer_number) := true;
+set hasRightValue(delivery_location_number) := true;
+set hasRightValue(delivery_date) := true;
+set hasQuantity(quantity) := FLOAT_WITH_DOT;
+set hasRightValue(article_number) := true;
+set hasRightValue(quantity_measure) := true;
+set hasContent(delivery_date_content) := true;
+step // step 10 -> 11
+check inboundMessages = 6;
+check archivedOutboundMessages = 0;
+check raisedSignal(ODA_CONFIRMATION) = false;
+check outboundMessages = 0;
+check raisedSignal(CONTENT_ERROR) = false;
 check raisedSignal(OPENTRANS_ERROR) = false;
 step
