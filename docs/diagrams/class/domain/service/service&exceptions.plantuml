@@ -1,0 +1,67 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class OaFBatchManager {
+  + OaFBatchManager(int, OaFBuffer, ConfirmationProviderPort, FTPHandlerPort, DataSenderPort): 
+  - crm: DataSenderPort
+  - oafBatchThreshold: int
+  - oaf: OaFBuffer
+  - confirmations: ConfirmationProviderPort
+  - ftp: FTPHandlerPort
+  + handleConfirmations(): int
+  + handleOrders(): int
+}
+class OaFBuffer {
+  + OaFBuffer(int, OaFValidatorIF, OrderProviderPort): 
+  - buffer: BoundedBuffer
+  - validator: OaFValidatorIF
+  - or: OrderProviderPort
+  + getBuffer(): BoundedBuffer
+  + validateBuffer(): int
+  + loadNewBuffer(): int
+}
+
+package validator{
+
+    package impl {
+        class OaFValidator {
+          + OaFValidator(SupplierCatalogReaderPort):
+          - CUSTOMER_NUMBER: String
+          - articleNumbers: String[]
+          - DELIVERY_LOCATION_NUMBER: String[]
+          - QUANTITY_MEASURE: char
+          + validate(Order): void
+          - validateDeliveryLocationNumber(OrderStructure): boolean
+          - isInCatalog(String): boolean
+          - validateCustomerNumber(OrderStructure): boolean
+          - validateQuantityMeasure(OrderStructure): boolean
+          - validateArticleNumber(OrderStructure): boolean
+          - validateQuantity(OrderStructure): QuantityFieldValue
+          - validateDeliveryDateContent(OrderStructure): boolean
+          - validateDeliveryDate(OrderStructure): boolean
+        }
+    }
+
+    interface OaFValidatorIF << interface >> {
+      + validate(Order): void
+    }
+}
+
+package exceptions {
+    class EmptyArrayException {
+      + EmptyArrayException(String):
+    }
+
+    class UnreachableThresholdException {
+      + UnreachableThresholdException(String):
+    }
+}
+
+OaFBatchManager               "1" *-[#595959,plain]-> "oaf\n1" OaFBuffer                     
+OaFBatchManager                -[#595959,dashed]->  UnreachableThresholdException : "«create»"
+OaFBuffer                     "1" *-[#595959,plain]-> "validator\n1" OaFValidatorIF                
+OaFValidator                   -[#595959,dashed]->  EmptyArrayException           : "«create»"
+OaFValidator                   -[#008200,dashed]-^  OaFValidatorIF                
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+
+left to right direction
+skinparam linetype ortho
+
+class BoundedBuffer {
+  + BoundedBuffer(int): 
+  - ordini: Order[]
+  - size: int
+  + get(int): Order
+  + pop(): Order
+  + empty(): void
+  + isFull(): boolean
+  + isEmpty(): boolean
+  + push(Order): void
+  + capacity(): int
+  + getSize(): int
+}
+class StringHandler {
+  + StringHandler(): 
+  + isDouble(String): boolean
+  + containsChar(String, char): boolean
+  + beforeOrEqualDateTime(String, String): boolean
+  + has2DigitsBetween(String, int, char, char, char, char): boolean
+  + equals(String, String): boolean
+  + isDateTime(String): boolean
+  + isInteger(String): boolean
+  + isSubstr1LessOrEqualThanSubstr2(String, String, int, int): boolean
+  + isDigit(char, boolean): boolean
+}
+
+@enduml

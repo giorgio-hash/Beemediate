@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlProductID.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.commons</a> &gt; <span class="el_source">XmlProductID.java</span></div><h1>XmlProductID.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+
+/**
+ * Mappatura XML-OpenTrans con identificativi del prodotto per ogni partner commerciale coinvolto nella transazione
+ */
+@JacksonXmlRootElement(localName = &quot;PRODUCT_ID&quot;)
+public class XmlProductID{	
+	
+	/**
+	 * tag per Numero di articolo del fornitore
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:SUPPLIER_PID&quot;)
+	private XmlPartyID supplierId;
+	
+	/**
+	 * Riferimento a BuyerID per tag numero di articolo del cliente (opzionale)
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:BUYER_PID&quot;)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private XmlPartyID buyerId;
+	
+	/**
+	 * Tag contenente descrizione prodotto 
+	 */
+	@JacksonXmlProperty(localName=&quot;bmecat:DESCRIPTION_SHORT&quot;)
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	private String descriptionShort;
+
+	/**
+	 * empty costructor for Jackson deserializer
+	 */
+<span class="fc" id="L37">	public XmlProductID() {/*empty costructor for Jackson deserializer*/}</span>
+	
+	
+	/**
+	 * Costruttore
+	 * @param supplierId - identificativo dell'articolo sul sistema fornitore
+	 * @param buyerId - identificativo dell'articolo sul sistema cliente
+	 * @param descriptionShort - descrizione dell'articolo
+	 */
+	public XmlProductID(String supplierId, String buyerId, String descriptionShort) {
+<span class="fc" id="L47">		super();</span>
+<span class="pc bpc" id="L48" title="3 of 6 branches missed.">		if(supplierId==null || supplierId.isEmpty() || supplierId.isBlank())</span>
+<span class="nc" id="L49">			this.supplierId = null;</span>
+		else
+<span class="fc" id="L51">			this.supplierId = new XmlPartyID(supplierId);</span>
+			
+<span class="pc bpc" id="L53" title="3 of 6 branches missed.">		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())</span>
+<span class="nc" id="L54">			this.buyerId = null;</span>
+		else {
+<span class="fc" id="L56">			this.buyerId = new XmlPartyID(buyerId);</span>
+<span class="fc" id="L57">			this.buyerId.setType(&quot;CODE&quot;);</span>
+		}
+		
+<span class="fc" id="L60">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L61">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public XmlPartyID getSupplierId() {
+<span class="fc" id="L68">		return supplierId;</span>
+	}
+
+	/**
+	 * 
+	 * @return BuyerID con identificativo ordine
+	 */
+	public void setSupplierId(XmlPartyID supplierId) {
+<span class="fc" id="L76">		this.supplierId = supplierId;</span>
+<span class="fc" id="L77">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public XmlPartyID getBuyerId() {
+<span class="fc" id="L84">		return buyerId;</span>
+	}
+
+	public void setBuyerId(XmlPartyID buyerId) {
+<span class="fc" id="L88">		this.buyerId = buyerId;</span>
+<span class="fc" id="L89">	}</span>
+
+	public String getDescriptionShort() {
+<span class="fc" id="L92">		return descriptionShort;</span>
+	}
+
+	public void setDescriptionShort(String descriptionShort) {
+<span class="fc" id="L96">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L97">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

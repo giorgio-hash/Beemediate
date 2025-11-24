@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderHeader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.pojo.order</a> &gt; <span class="el_source">OrderHeader.java</span></div><h1>OrderHeader.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.pojo.order;
+
+//import org.jmlspecs.annotation.SkipEsc;
+
+/**
+ * Parte di OrderStructure. Contiene le informazioni principali dell'ordine. Tutte le informazioni sono in formato String.
+ */
+public class OrderHeader {
+	
+	//order_info
+	/***Identificativo dell'ordine*/
+<span class="fc" id="L12">	private /*@ spec_public @*/ String orderID = &quot;&quot;;</span>
+	/***Data di creazione ordine*/
+<span class="fc" id="L14">	private /*@ spec_public @*/ String orderDate = &quot;&quot;;</span>
+	/***Valuta*/
+<span class="fc" id="L16">	private /*@ spec_public @*/ String currency = &quot;&quot;;</span>
+	
+	//order_info.parties.party[party_role=&quot;buyer&quot;]
+	/***Identificativo del cliente sul sistema fornitore*/
+<span class="fc" id="L20">	private /*@ spec_public @*/ String buyerID = &quot;&quot;;</span>
+	//order_info.parties.party[party_role=&quot;supplier&quot;]
+	/***Identificativo del fornitore*/
+<span class="fc" id="L23">	private /*@ spec_public @*/ String supplierID = &quot;&quot;;</span>
+	//order_info.parties.party[party_role=&quot;delivery&quot;]
+	/***Identificativo del luogo di consegna*/
+<span class="fc" id="L26">	private /*@ spec_public @*/ String deliveryID = &quot;&quot;;</span>
+	
+	//order_info.delivery_date
+	/***data di evacuazione ordine*/
+<span class="fc" id="L30">	private /*@ spec_public @*/ String startDate = &quot;&quot;;</span>
+	/***data di consegna*/
+<span class="fc" id="L32">	private /*@ spec_public @*/ String endDate = &quot;&quot;;</span>
+	
+	//order_info.order_parties_reference
+	/***Identificativo di riferimento al cliente*/
+<span class="fc" id="L36">	private /*@ spec_public @*/ String buyerIDRef = &quot;&quot;;</span>
+	/***Identificativo di riferimento al fornitore*/
+<span class="fc" id="L38">	private /*@ spec_public @*/ String supplierIDRef = &quot;&quot;;</span>
+	
+	//order_info.parties_reference.shipment_parties_reference
+	/***Identificativo di riferimento alla consegna*/
+<span class="fc" id="L42">	private /*@ spec_public @*/ String deliveryIDRef = &quot;&quot;;</span>
+	
+	/**
+	 * Costruttore
+	 */
+	/*@ ensures buyerID!=null &amp; supplierID!=null &amp; deliveryID!=null
+	  @			&amp; startDate!=null &amp; endDate!=null
+	  @			&amp; buyerIDRef!=null &amp; supplierIDRef!=null
+	  @			&amp; deliveryIDRef!=null;
+	  @*/
+	//@ pure
+<span class="fc" id="L53">	public OrderHeader() {/*empty constructor*/}</span>
+	
+	/**
+	 * Copy Constructor
+	 */
+	/*@
+	  @ public normal_behaviour
+	  @ requires copy!=null;
+	  @ ensures this.buyerID == copy.buyerID &amp;
+		this.buyerIDRef == copy.buyerIDRef &amp;
+		this.currency == copy.currency &amp;
+		this.deliveryID == copy.deliveryID &amp;
+		this.deliveryIDRef == copy.deliveryIDRef &amp;
+		this.endDate == copy.endDate &amp;
+		this.orderDate == copy.orderDate &amp;
+		this.orderID == copy.orderID &amp;
+		this.startDate == copy.startDate &amp;
+		this.supplierID == copy.supplierID &amp;
+		this.supplierIDRef == copy.supplierIDRef;
+	  @ ensures this != copy;
+	  @ ensures \not_modified(copy);
+	  @*/
+<span class="fc" id="L75">	public OrderHeader(OrderHeader copy) {</span>
+<span class="fc" id="L76">		this.buyerID = copy.buyerID;</span>
+<span class="fc" id="L77">		this.buyerIDRef = copy.buyerIDRef ;</span>
+<span class="fc" id="L78">		this.currency = copy.currency;</span>
+<span class="fc" id="L79">		this.deliveryID = copy.deliveryID;</span>
+<span class="fc" id="L80">		this.deliveryIDRef = copy.deliveryIDRef;</span>
+<span class="fc" id="L81">		this.endDate = copy.endDate;</span>
+<span class="fc" id="L82">		this.orderDate = copy.orderDate;</span>
+<span class="fc" id="L83">		this.orderID = copy.orderID;</span>
+<span class="fc" id="L84">		this.startDate = copy.startDate;</span>
+<span class="fc" id="L85">		this.supplierID = copy.supplierID;</span>
+<span class="fc" id="L86">		this.supplierIDRef = copy.supplierIDRef;</span>
+<span class="fc" id="L87">	}</span>
+	
+	/**
+	 * 
+	 * @return String - identificativo ordine
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == orderID;
+	public /*@ pure @*/ String getOrderID() {
+<span class="fc" id="L96">		return orderID;</span>
+	}
+
+	/**
+	 * Imposta identificativo ordine
+	 * @param orderID - oggetto String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.orderID!=null;
+	public void setOrderID( /*@ non_null @*/final String orderID) {
+<span class="fc" id="L106">		this.orderID = orderID;</span>
+<span class="fc" id="L107">	}</span>
+
+	/**
+	 * 
+	 * @return String - data creazione ordine
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==orderDate;
+	public /*@ pure @*/  String getOrderDate() {
+<span class="fc" id="L116">		return orderDate;</span>
+	}
+
+	/**
+	 * Imposta data creazione ordine
+	 * @param orderDate - data ordine
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.orderDate!=null;
+	public void setOrderDate( /*@ non_null @*/final String orderDate) {
+<span class="fc" id="L126">		this.orderDate = orderDate;</span>
+<span class="fc" id="L127">	}</span>
+
+	/**
+	 * 
+	 * @return String - Valuta
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==currency;
+	public /*@ pure @*/  String getCurrency() {
+<span class="fc" id="L136">		return currency;</span>
+	}
+
+	/**
+	 * Imposta la valuta
+	 * @param currency - String valuta
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.currency!=null;
+	public void setCurrency( /*@ non_null @*/final String currency) {
+<span class="fc" id="L146">		this.currency = currency;</span>
+<span class="fc" id="L147">	}</span>
+
+	/**
+	 * 
+	 * @return String - identificativo cliente (sul sistema fornitore)
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==buyerID;
+	public /*@ pure @*/  String getBuyerID() {
+<span class="fc" id="L156">		return buyerID;</span>
+	}
+
+	/**
+	 * 
+	 * @param buyerID - identificativo String cliente (sul sistema fornitore)
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.buyerID!=null;
+	public void setBuyerID( /*@ non_null @*/final String buyerID) {
+<span class="fc" id="L166">		this.buyerID = buyerID;</span>
+<span class="fc" id="L167">	}</span>
+
+	/**
+	 * 
+	 * @return String - identificativo cliente
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==supplierID;
+	public /*@ pure @*/ String getSupplierID() {
+<span class="fc" id="L176">		return supplierID;</span>
+	}
+
+	/**
+	 * 
+	 * @param supplierID - identificativo String fornitore
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.supplierID!=null;
+	public void setSupplierID( /*@ non_null @*/final String supplierID) {
+<span class="fc" id="L186">		this.supplierID = supplierID;</span>
+<span class="fc" id="L187">	}</span>
+
+	/**
+	 * 
+	 * @return String - identificativo del luogo di consegna
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==deliveryID;
+	public /*@ pure @*/ String getDeliveryID() {
+<span class="fc" id="L196">		return deliveryID;</span>
+	}
+
+	/**
+	 * 
+	 * @param deliveryID - identificativo String del luogo di consegna
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.deliveryID==deliveryID;
+	public void setDeliveryID( /*@ non_null @*/final String deliveryID) {
+<span class="fc" id="L206">		this.deliveryID = deliveryID;</span>
+<span class="fc" id="L207">	}</span>
+
+	/**
+	 * 
+	 * @return String - data di inizio spedizione
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==startDate;
+	public /*@ pure @*/ String getStartDate() {
+<span class="fc" id="L216">		return startDate;</span>
+	}
+
+	/**
+	 * 
+	 * @param startDate - data String di inizio spedizione
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.startDate!=null;
+	public void setStartDate( /*@ non_null @*/final String startDate) {
+<span class="fc" id="L226">		this.startDate = startDate;</span>
+<span class="fc" id="L227">	}</span>
+
+	/**
+	 * 
+	 * @return String - data di consegna
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == endDate;
+	public /*@ pure @*/ String getEndDate() {
+<span class="fc" id="L236">		return endDate;</span>
+	}
+
+	/**
+	 * 
+	 * @param endDate - data String di consegna
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.endDate!=null;
+	public void setEndDate(/*@ non_null @*/final String endDate) {
+<span class="fc" id="L246">		this.endDate = endDate;</span>
+<span class="fc" id="L247">	}</span>
+
+	/**
+	 * 
+	 * @return String - riferimento identificativo cliente sul sistema fornitore
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==buyerIDRef;
+	public /*@ pure @*/ String getBuyerIDRef() {
+<span class="fc" id="L256">		return buyerIDRef;</span>
+	}
+
+	/**
+	 * 
+	 * @param buyerIDRef - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.buyerIDRef!=null; 
+	public void setBuyerIDRef(/*@ non_null @*/final String buyerIDRef) {
+<span class="fc" id="L266">		this.buyerIDRef = buyerIDRef;</span>
+<span class="fc" id="L267">	}</span>
+
+	/**
+	 * 
+	 * @return String - riferimento all'identificativo fornitore
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==supplierIDRef;
+	public /*@ pure @*/ String getSupplierIDRef() {
+<span class="fc" id="L276">		return supplierIDRef;</span>
+	}
+
+	/**
+	 * 
+	 * @param supplierIDRef - riferimento String all'identificativo fornitore
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.supplierIDRef!=null;
+	public void setSupplierIDRef(/*@ non_null @*/final String supplierIDRef) {
+<span class="fc" id="L286">		this.supplierIDRef = supplierIDRef;</span>
+<span class="fc" id="L287">	}</span>
+
+	/**
+	 * 
+	 * @return String - riferimento all'identificativo del luogo di consegna
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result==deliveryIDRef;
+	public /*@ pure @*/ String getDeliveryIDRef() {
+<span class="fc" id="L296">		return deliveryIDRef;</span>
+	}
+
+	/**
+	 * 
+	 * @param deliveryIDRef - String
+	 */
+	//@ public normal_behaviour
+	//@ ensures this.deliveryIDRef!=null;
+	public void setDeliveryIDRef(/*@ non_null @*/final String deliveryIDRef) {
+<span class="fc" id="L306">		this.deliveryIDRef = deliveryIDRef;</span>
+<span class="fc" id="L307">	}</span>
+
+//	@SkipEsc
+	@Override
+	public String toString() {
+<span class="fc" id="L312">		return &quot;OrderHeader [orderID=&quot; + orderID + &quot;, orderDate=&quot; + orderDate + &quot;, currency=&quot; + currency + &quot;, buyerID=&quot;</span>
+<span class="fc" id="L313">				+ buyerID + &quot;, supplierID=&quot; + supplierID + &quot;, deliveryID=&quot; + deliveryID + &quot;, startDate=&quot; + startDate</span>
+<span class="fc" id="L314">				+ &quot;, endDate=&quot; + endDate + &quot;, buyerIDRef=&quot; + buyerIDRef + &quot;, supplierIDRef=&quot; + supplierIDRef</span>
+<span class="fc" id="L315">				+ &quot;, deliveryIDRef=&quot; + deliveryIDRef + &quot;]&quot;;</span>
+	}
+
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

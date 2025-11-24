@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoundedBuffer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.utils</a> &gt; <span class="el_source">BoundedBuffer.java</span></div><h1>BoundedBuffer.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.utils;
+
+//import org.jmlspecs.annotation.CodeBigintMath;
+
+import com.beemediate.beemediate.domain.pojo.order.Order;
+
+/**
+ * Struttura dati per gestire un Array di Order utilizzando politica LIFO.
+ */
+public class BoundedBuffer {
+	
+	/***Array di elementi Order*/
+	private final /*@ spec_public non_null @*/ Order[] ordini;
+	/***numero di elementi Order attualmente inseriti in &lt;tt&gt;ordini&lt;/tt&gt;*/
+	private /*@ spec_public @*/ int size;
+	
+	
+	/*@ public invariant 0 &lt; ordini.length &lt;= Integer.MAX_VALUE; @*/
+	/*@ public invariant 0 &lt;= size &lt;= ordini.length; @*/
+	/*@ public invariant size&gt;0 ==&gt; (\forall int i; 0&lt;=i&lt;size; ordini[i]!=null); @*/
+	/*@ public invariant size&gt;0 ==&gt; (\forall int i; 0&lt;=i&lt;size; ordini[i].data!=null); @*/
+	/*@ public invariant size&gt;0 ==&gt; (\forall int i; 0&lt;=i&lt;size; ordini[i].quantity!=null); @*/
+	/*@ public invariant size&gt;0 ==&gt; (\forall int i; 0&lt;=i&lt;size; ordini[i].orderID!=null); @*/
+	/*@ public invariant size&lt;ordini.length ==&gt; (\forall int i; size&lt;=i&lt;ordini.length; ordini[i]==null); @*/
+	/*@ public invariant size&gt;0 ==&gt; (\forall int i; 0&lt;=i&lt;size; \typeof(ordini[i])==\type(Order)); @*/
+	/*@ public invariant \elemtype(\typeof(ordini)) == \type(Order); @*/
+	
+	/**
+	 * Costruttore
+	 * @param n - capacità dell'array &lt;tt&gt;ordini&lt;/tt&gt;
+	 * @throws IllegalArgumentException Se il buffer viene creato con capacity&lt;=0
+	 */
+	//@ public normal_behaviour
+	//@ requires n&gt;0;
+	//@ ensures ordini != null;
+	//@ ensures ordini.length == n;
+	//@ ensures size == 0;
+	//@ ensures (\forall int i; size&lt;=i&lt;ordini.length; ordini[i]==null);
+	//@ pure
+//	@CodeBigintMath
+<span class="fc" id="L41">	public BoundedBuffer (final int n) {</span>
+		
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		if(n&lt;=0)</span>
+<span class="fc" id="L44">			throw new IllegalArgumentException(&quot;capacity should be &gt;=1&quot;);</span>
+		
+<span class="fc" id="L46">		ordini = new Order[n];</span>
+<span class="fc" id="L47">		size = 0;</span>
+<span class="fc" id="L48">	}</span>
+	
+	/**
+	 * Restituisce elemento alla posizione &lt;tt&gt;i&lt;/tt&gt;.
+	 * @param i - int
+	 * @return Order se &lt;tt&gt;i&lt;/tt&gt; è un indice compreso tra 0 ed ordini.length-1 e ordini[i] esiste, altrimenti &lt;i&gt;null&lt;/i&gt;;
+	 */
+	/*@ public normal_behaviour
+	  @ assigns \nothing;
+	  @ requires i&gt;=0 &amp; i&lt;size;
+	  @ ensures \result != null &lt;==&gt; (ordini[i]!=null &amp; \result==ordini[i] &amp; \typeof(\result) == \type(Order));
+	  @ ensures \result == null &lt;==&gt; (i&lt;0 | i&gt;=size);
+	  @ ensures size&lt;ordini.length ==&gt; (\forall int j; size&lt;=j&lt;ordini.length; ordini[j]==null);
+	  @*/
+//	@CodeBigintMath
+	public /*@ pure nullable */ Order get(final int i) {
+<span class="fc bfc" id="L64" title="All 4 branches covered.">		if(0&lt;=i &amp;&amp; i&lt;size)</span>
+<span class="fc" id="L65">			return ordini[i];</span>
+<span class="fc" id="L66">		return null;</span>
+	}
+
+	/**
+	 * Se il buffer non è pieno, inserisce un elemento nuovo.
+	 * @param x - Order
+	 */
+	/*@ public normal_behaviour
+	  @ assigns ordini[*], size;
+	  @ requires x != null;
+	  @ requires x.quantity!=null;
+	  @ requires x.data!=null;
+	  @ requires x.orderID!=null;
+	  @ requires \typeof(x) == \type(Order);
+	  @ ensures size == \old(size)+1 | size == \old(size);
+	  @ ensures \old(size)&lt;ordini.length &lt;==&gt; (size == \old(size)+1);
+	  @ ensures size == \old(size)+1 ==&gt; ordini[\old(size)] == x;
+	  @ ensures size == \old(size)+1 ==&gt; \typeof(ordini[\old(size)]) == \type(Order);
+	  @*/
+	public void push(final Order x) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		if(size&lt;ordini.length) {</span>
+<span class="fc" id="L87">			ordini[size] = x;</span>
+<span class="fc" id="L88">			size++;</span>
+		}
+<span class="fc" id="L90">	}</span>
+	
+	/**
+	 * Se il buffer non è vuoto, restituisce un elemento Order.
+	 * @return oggetto Order se buffer non vuoto, altrimenti &lt;i&gt;null&lt;/i&gt;
+	 */
+	/*@ public normal_behaviour
+	  @ assigns size, ordini[*];
+	  @ requires ordini!=null &amp; ordini.length&gt;0 &amp; size &gt; 0;
+	  @ requires \typeof(ordini[size-1]) == \type(Order);
+	  @ ensures size == \old(size)-1;
+	  @ ensures \result!=null &amp; \typeof(\result) == \type(Order);
+	  @ ensures size &gt; 0 ==&gt; \typeof(ordini[size-1]) == \type(Order);
+	  @ also public normal_behaviour
+	  @ assigns \nothing;
+	  @ requires size==0;
+	  @ ensures (size == \old(size));
+	  @ ensures \result==null;
+	  @*/
+
+//	@CodeBigintMath
+	public /*@ nullable */ Order pop() {
+<span class="fc" id="L112">		/*@ nullable */ Order res=null;</span>
+		
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">		if(size&gt;0) {</span>
+<span class="fc" id="L115">			size--;</span>
+<span class="fc" id="L116">			res = ordini[size]; </span>
+<span class="fc" id="L117">			ordini[size] = null;</span>
+		} 
+<span class="fc" id="L119">		return res;</span>
+	}
+	
+	/**
+	 * Svuota il buffer.
+	 */
+	/*@ public normal_behaviour
+	  @ assigns size, ordini[*];
+	  @ ensures size == 0;
+	  @ ensures (\forall int i; 0&lt;=i&lt;ordini.length; ordini[i]==null);
+	  @*/
+//	@CodeBigintMath
+	public void empty() {
+
+		//@ loop_invariant 0&lt;=size&lt;=ordini.length;
+		//@ loop_invariant (\forall int i; size&lt;=i&lt;ordini.length; ordini[i]==null);
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		while(size&gt;0)</span>
+		{
+<span class="fc" id="L137">			size--;</span>
+<span class="fc" id="L138">			ordini[size] = null;</span>
+		}
+<span class="fc" id="L140">	}</span>
+	
+	/**
+	 * 
+	 * @return int - numero di elementi attualmente nel buffer.
+	 */
+	/*@ public normal_behaviour
+	  @ ensures \result == size;
+	  @ ensures \not_modified(size);
+	  @*/
+	public /*@ pure @*/ int getSize() {
+<span class="fc" id="L151">		return size;</span>
+	}
+	
+	/**
+	 * 
+	 * @return dimensione massima (capacità) del buffer.
+	 */
+	/*@ public normal_behaviour
+	  @ ensures \result == ordini.length;
+	  @*/
+	public /*@ pure @*/ int capacity() {
+<span class="fc" id="L162">		return ordini.length;</span>
+	}
+	
+	/**
+	 * 
+	 * @return &lt;i&gt;true&lt;/i&gt; se il buffer è pieno.
+	 */
+	/*@ public normal_behaviour
+	  @ ensures \result | size&lt;ordini.length;
+	  @*/
+	public /*@ pure @*/ boolean isFull() {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">		return ordini.length == size;</span>
+	}
+	
+	/**
+	 * 
+	 * @return &lt;i&gt;true&lt;/i&gt; se il buffer è vuoto.
+	 */
+	/*@ public normal_behaviour
+	  @ ensures \result | size&gt;0;
+	  @*/
+	public /*@ pure @*/ boolean isEmpty() {
+<span class="fc bfc" id="L184" title="All 2 branches covered.">		return size==0;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

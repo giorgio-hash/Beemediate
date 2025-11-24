@@ -1,6 +1,6 @@
 # Beemediate
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
-Documentation is hosted on Github Pages.
-- [javadoc API documentation](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
-- [Apache Maven reports](https://giorgio-hash.github.io/Beemediate/site/cpd.html) from CPD, PMD and Spotbugs.
+Technical Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
+- See [javadoc API documentation](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
+- See [Projct Reports](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) from PMD, CPD, SpotBugs and JaCoCo.

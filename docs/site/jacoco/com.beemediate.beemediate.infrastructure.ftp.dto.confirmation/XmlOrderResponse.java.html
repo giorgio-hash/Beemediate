@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XmlOrderResponse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.ftp.dto.confirmation</a> &gt; <span class="el_source">XmlOrderResponse.java</span></div><h1>XmlOrderResponse.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+/**
+ * Conferma d'ordine
+ */
+@JacksonXmlRootElement(localName = &quot;ORDERRESPONSE&quot;)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="fc" id="L17">public class XmlOrderResponse {</span>
+	
+	/**
+	 * namespace
+	 */
+	@JacksonXmlProperty(isAttribute=true)
+<span class="fc" id="L23">	private String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;</span>
+	
+	/**
+	 * namespace
+	 */
+	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:xsi&quot;)
+<span class="fc" id="L29">	private String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;</span>
+	
+	/**
+	 * namespace
+	 */
+	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:bmecat&quot;)
+<span class="fc" id="L35">	private String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;</span>
+	
+	/**
+	 * versione
+	 */
+	@JacksonXmlProperty(isAttribute=true)
+<span class="fc" id="L41">	private String version=&quot;2.1&quot;;</span>
+	
+	/**
+	 * Intestazione della conferma d'ordine XML
+	 */
+	@JacksonXmlProperty(localName=&quot;ORDERRESPONSE_HEADER&quot;)
+	private XmlOrderResponseHeader orderResponseHeader;
+	
+	/**
+	 * Elenco di conferma degli articoli dell'ordine
+	 */
+    @JacksonXmlElementWrapper(localName = &quot;ORDERRESPONSE_ITEM_LIST&quot;, useWrapping = true) 
+	@JacksonXmlProperty(localName=&quot;ORDERRESPONSE_ITEM&quot;)
+	private List&lt;XmlOrderResponseItem&gt; orderResponseItemList;
+	
+    /**
+     * Riepilogo dell'ordine
+     */
+	@JacksonXmlProperty(localName=&quot;ORDERRESPONSE_SUMMARY&quot;)
+	private XmlOrderResponseSummary orderSummary;
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getXmlns() {
+<span class="fc" id="L67">		return xmlns;</span>
+	}
+
+	/**
+	 * 
+	 * @param xmlns String
+	 */
+	public void setXmlns(String xmlns) {
+<span class="fc" id="L75">		this.xmlns = xmlns;</span>
+<span class="fc" id="L76">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getXsi() {
+<span class="fc" id="L83">		return xsi;</span>
+	}
+
+	/**
+	 * 
+	 * @param xsi - String
+	 */
+	public void setXsi(String xsi) {
+<span class="fc" id="L91">		this.xsi = xsi;</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * 
+	 * @return - String
+	 */
+	public String getBmecat() {
+<span class="fc" id="L99">		return bmecat;</span>
+	}
+
+	/**
+	 * 
+	 * @param bmecat - String
+	 */
+	public void setBmecat(String bmecat) {
+<span class="fc" id="L107">		this.bmecat = bmecat;</span>
+<span class="fc" id="L108">	}</span>
+
+	/**
+	 * 
+	 * @return String
+	 */
+	public String getVersion() {
+<span class="fc" id="L115">		return version;</span>
+	}
+
+	/**
+	 * 
+	 * @param version - String
+	 */
+	public void setVersion(String version) {
+<span class="fc" id="L123">		this.version = version;</span>
+<span class="fc" id="L124">	}</span>
+
+	/**
+	 * 
+	 * @return XmlOrderResponseHeader 
+	 */
+	public XmlOrderResponseHeader getOrderResponseHeader() {
+<span class="fc" id="L131">		return orderResponseHeader;</span>
+	}
+
+	/**
+	 * 
+	 * @param orderResponseHeader - XmlOrderResponseHeader
+	 */
+	public void setOrderResponseHeader(XmlOrderResponseHeader orderResponseHeader) {
+<span class="fc" id="L139">		this.orderResponseHeader = orderResponseHeader;</span>
+<span class="fc" id="L140">	}</span>
+
+	/**
+	 * 
+	 * @return List di XmlOrderResponseItem
+	 */
+	public List&lt;XmlOrderResponseItem&gt; getOrderResponseItemList() {
+<span class="fc" id="L147">		return orderResponseItemList;</span>
+	}
+
+	/**
+	 * 
+	 * @param orderResponseItem - List List di XmlOrderResponseItem
+	 */
+	public void setOrderResponseItemList(List&lt;XmlOrderResponseItem&gt; orderResponseItemList) {
+<span class="fc" id="L155">		this.orderResponseItemList = orderResponseItemList;</span>
+<span class="fc" id="L156">	}</span>
+
+	/**
+	 * 
+	 * @return XmlOrderResponseSummary
+	 */
+	public XmlOrderResponseSummary getOrderSummary() {
+<span class="fc" id="L163">		return orderSummary;</span>
+	}
+
+	/**
+	 * 
+	 * @param orderSummary - XmlOrderResponseSummary 
+	 */
+	public void setOrderSummary(XmlOrderResponseSummary orderSummary) {
+<span class="fc" id="L171">		this.orderSummary = orderSummary;</span>
+<span class="fc" id="L172">	}</span>
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

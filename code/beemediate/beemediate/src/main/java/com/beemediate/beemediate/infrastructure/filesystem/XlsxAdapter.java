@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import org.slf4j.Logger;
  * Adattatore di SupplierCatalogReaderPort per recuperare informazioni da sorgenti {@code .xlsx}.
  */
 @Component
+@PropertySource("classpath:datasources.properties")
 public class XlsxAdapter implements SupplierCatalogReaderPort{
 
 	/**
@@ -36,15 +39,17 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
     /**
      * Percorso al file {@code .xlsx}
      */
-    private static final String RESOURCE_PATH = "classpath:data/MasterData_IT.XLSX";
+    private final String RESOURCE_PATH;
 
     /**
      * Costruttore
      * @param resourceLoader - oggetto ResourceLoader
+     * @param path - String
      */
-    @Autowired
-    public XlsxAdapter(final ResourceLoader resourceLoader) {
+    public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,
+    					@Value("${datasource.path}") String path) {
         this.resourceLoader = resourceLoader;
+        this.RESOURCE_PATH = path;
     }
 
     @Override
@@ -63,7 +68,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * Estrae la prima colonna del file {@code .xlsx}, contenente i numeri articolo
      * @return List di elementi String
      * @throws IOException se ci sono problemi nel recupero del file
-     * @throws IllegalArgumentException se il file è vuoto
+     * @throws IllegalArgumentException se il file è vuoto o presenta celle vuote
      */
     private List<String> extractArticleNumbers() throws IOException {
         final List<String> numeriArticolo = new ArrayList<>();
@@ -76,11 +81,31 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
             final int headerRowNum = sheet.getFirstRowNum();
 
             if (headerRowNum == -1) {
-                throw new IllegalArgumentException ("File cannot be null or empty");
+                throw new IllegalArgumentException ("File non deve essere null o vuoto");
             }
+            
+            
+            //Per le conversioni del formato cella
+            final DataFormatter formatter = new DataFormatter();
 
             for (int i=sheet.getFirstRowNum()+1; i<=sheet.getLastRowNum(); i++) {
-            	numeriArticolo.add(sheet.getRow(i).getCell(0).getStringCellValue());
+            	
+            	// Controllo Null sulla Riga (POI ritorna null se la riga è visivamente vuota)
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                	throw new IllegalArgumentException ("cella "+i+" vuota o nulla");
+                }
+
+                Cell cell = row.getCell(0);
+                
+                // Restituisce "" se la cella è vuota.
+                String val = formatter.formatCellValue(cell);
+
+                // Validazione e Pulizia
+                if (val != null && !val.trim().isBlank()) {
+                    numeriArticolo.add(val.trim());
+                }else
+                	throw new IllegalArgumentException ("cella "+i+" vuota o nulla");
             }
         }
 

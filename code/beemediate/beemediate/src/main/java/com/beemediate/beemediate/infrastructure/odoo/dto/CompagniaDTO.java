@@ -47,14 +47,7 @@ public class CompagniaDTO{
 		
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("ref"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						odoo.RES_PARTNER,odoo.READ,
-						Arrays.asList(Arrays.asList(id)),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni della compagnia ");
 		

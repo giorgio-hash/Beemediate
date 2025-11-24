@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FornitoreDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">FornitoreDTO.java</span></div><h1>FornitoreDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa informazioni di contatto fornitore. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;res.partner&lt;/i&gt; di Odoo.
+ */
+public class FornitoreDTO{
+	
+	/**
+	 * Mapping di name
+	 */
+	private final Optional&lt;String&gt; name;
+	/**
+	 * Mapping di ref
+	 */
+	private final Optional&lt;String&gt; codiceAzienda;
+	/**
+	 * Mapping di id
+	 */
+	private final Optional&lt;Integer&gt; id;
+	
+	
+	/**
+	 * Static factory method che interagisce col model res.partner di Odoo per recuperare le informazioni di contatto fornitore.
+	 * @return FornitoreDTO
+	 * @throws EmptyFetchException
+	 * @throws XmlRpcException
+	 */
+	public static FornitoreDTO fromXMLRPC(final OdooApiConfig odoo) throws EmptyFetchException, XmlRpcException {
+		Object[] ids;
+		Object[] res;
+<span class="fc" id="L44">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+		//cerca GEALAN
+<span class="fc" id="L47">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="fc" id="L48">		ids = odoo.searchFromModel(odoo.RES_PARTNER, requestInfo, Arrays.asList(&quot;name&quot;,&quot;=&quot;,&quot;GEALAN&quot;));</span>
+		
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Non trovo GEALAN&quot;);</span>
+		
+		//estrai GEALAN
+<span class="fc" id="L53">		requestInfo.clear();</span>
+<span class="fc" id="L54">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;name&quot;,&quot;ref&quot;));</span>
+<span class="fc" id="L55">		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, ids);</span>
+		
+<span class="fc bfc" id="L57" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato GEALAN, ma non riesco ad estrarlo.&quot;);</span>
+		
+		
+<span class="fc" id="L60">		return new FornitoreDTO( (HashMap&lt;String, Object&gt;) res[0] );</span>
+	}
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;res.partner&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L67">	public FornitoreDTO(final Map&lt;String, Object&gt; map) {</span>
+<span class="fc" id="L68">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
+<span class="fc" id="L69">		codiceAzienda = AttributeMapper.stringify(map.get(&quot;ref&quot;));</span>
+<span class="fc" id="L70">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+<span class="fc" id="L71">	}</span>
+	
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional&lt;String&gt; getName() {
+<span class="fc" id="L78">		return name;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L86">		return id;</span>
+	}
+	
+	/**
+	 * 
+	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
+	 */
+	public Optional&lt;String&gt;  getCodiceAzienda() {
+<span class="fc" id="L94">		return codiceAzienda;</span>
+	}
+	
+	@Override
+	public String toString() {
+<span class="fc" id="L99">		return &quot;FornitoreDTO [name=&quot; + name + &quot;, codiceAzienda=&quot; + codiceAzienda + &quot;, id=&quot; + id</span>
+				+ &quot;]&quot;;
+	}
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

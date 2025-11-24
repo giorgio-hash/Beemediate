@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>XlsxAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.filesystem</a> &gt; <span class="el_source">XlsxAdapter.java</span></div><h1>XlsxAdapter.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.filesystem;
+
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
+
+import com.beemediate.beemediate.domain.ports.infrastructure.filesystem.SupplierCatalogReaderPort;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+
+/**
+ * Adattatore di SupplierCatalogReaderPort per recuperare informazioni da sorgenti {@code .xlsx}.
+ */
+@Component
+@PropertySource(&quot;classpath:datasources.properties&quot;)
+public class XlsxAdapter implements SupplierCatalogReaderPort{
+
+	/**
+	 * Logger
+	 */
+<span class="fc" id="L32">	private final Logger log = LoggerFactory.getLogger(XlsxAdapter.class);</span>
+	
+	/**
+	 * ResourceLoader
+	 */
+    private final ResourceLoader resourceLoader;
+    
+    /**
+     * Percorso al file {@code .xlsx}
+     */
+    private final String RESOURCE_PATH;
+
+    /**
+     * Costruttore
+     * @param resourceLoader - oggetto ResourceLoader
+     * @param path - String
+     */
+<span class="fc" id="L49">    public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,</span>
+    					@Value(&quot;${datasource.path}&quot;) String path) {
+<span class="fc" id="L51">        this.resourceLoader = resourceLoader;</span>
+<span class="fc" id="L52">        this.RESOURCE_PATH = path;</span>
+<span class="fc" id="L53">    }</span>
+
+    @Override
+    public String[] readArticleNumbers() {
+        try {
+<span class="fc" id="L58">            final List&lt;String&gt; numbers = extractArticleNumbers();</span>
+<span class="fc" id="L59">            log.info(&quot;Catalogo caricato con successo ({} elementi)&quot;,numbers.size());</span>
+<span class="fc" id="L60">            return numbers.toArray(new String[0]);</span>
+<span class="fc" id="L61">        } catch (IOException | IllegalArgumentException e) {</span>
+<span class="fc" id="L62">            log.error(&quot;Errore durante la lettura del file XLSX&quot;, e);</span>
+<span class="fc" id="L63">            return new String[0];</span>
+        }
+    }
+
+    /**
+     * Estrae la prima colonna del file {@code .xlsx}, contenente i numeri articolo
+     * @return List di elementi String
+     * @throws IOException se ci sono problemi nel recupero del file
+     * @throws IllegalArgumentException se il file è vuoto o presenta celle vuote
+     */
+    private List&lt;String&gt; extractArticleNumbers() throws IOException {
+<span class="fc" id="L74">        final List&lt;String&gt; numeriArticolo = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L76">        final Resource resource = resourceLoader.getResource(RESOURCE_PATH);</span>
+<span class="fc" id="L77">        try (InputStream is = resource.getInputStream();</span>
+<span class="fc" id="L78">             Workbook workbook = new XSSFWorkbook(is)) {</span>
+
+<span class="fc" id="L80">            final Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="fc" id="L81">            final int headerRowNum = sheet.getFirstRowNum();</span>
+
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (headerRowNum == -1) {</span>
+<span class="fc" id="L84">                throw new IllegalArgumentException (&quot;File non deve essere null o vuoto&quot;);</span>
+            }
+            
+            
+            //Per le conversioni del formato cella
+<span class="fc" id="L89">            final DataFormatter formatter = new DataFormatter();</span>
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            for (int i=sheet.getFirstRowNum()+1; i&lt;=sheet.getLastRowNum(); i++) {</span>
+            	
+            	// Controllo Null sulla Riga (POI ritorna null se la riga è visivamente vuota)
+<span class="fc" id="L94">                Row row = sheet.getRow(i);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                if (row == null) {</span>
+<span class="nc" id="L96">                	throw new IllegalArgumentException (&quot;cella &quot;+i+&quot; vuota o nulla&quot;);</span>
+                }
+
+<span class="fc" id="L99">                Cell cell = row.getCell(0);</span>
+                
+                // Restituisce &quot;&quot; se la cella è vuota.
+<span class="fc" id="L102">                String val = formatter.formatCellValue(cell);</span>
+
+                // Validazione e Pulizia
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">                if (val != null &amp;&amp; !val.trim().isBlank()) {</span>
+<span class="fc" id="L106">                    numeriArticolo.add(val.trim());</span>
+<span class="fc" id="L107">                }else</span>
+<span class="fc" id="L108">                	throw new IllegalArgumentException (&quot;cella &quot;+i+&quot; vuota o nulla&quot;);</span>
+            }
+        }
+
+<span class="fc" id="L112">        return numeriArticolo;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProdottoDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">ProdottoDTO.java</span></div><h1>ProdottoDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa i dettagli di un prodotto. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;product.product&lt;/i&gt; di Odoo.
+ */
+public class ProdottoDTO{
+	
+	/**
+	 * Mapping di id
+	 */
+	private final Optional&lt;Integer&gt; id;
+	/**
+	 * Mapping di seller_ids
+	 */
+	private final Optional&lt;Object[]&gt; sellerIds;
+	
+	
+	/**
+	 * Static factory method che interagisce col model product.product di Odoo per estrarre i dettagli prodotto di ogni articolo contenuto nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param ap - Array di ArticoloPreventivoDTO
+	 * @return Array di elementi ProdottoDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ProdottoDTO[] fromXMLRPC(final OdooApiConfig odoo, final ArticoloPreventivoDTO[] ap) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		if ( ap == null ) throw new InconsistentDTOException(&quot;Lista ArticoloPreventivoDTO null&quot;);</span>
+		
+<span class="fc" id="L44">		final Object[] ids = new Object[ap.length];</span>
+		Object[] res;
+<span class="fc" id="L46">		final ProdottoDTO[] prd = new ProdottoDTO[ap.length];</span>
+<span class="fc" id="L47">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+		//estrai prodotti (per arricchire le info sulle parti del preventivo)
+		
+		//prima bisogna cercare gli id del prodotto
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		for(int i=0; i&lt;ap.length; i++) {</span>
+			
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if(ap[i].getProductId().getNum().isEmpty()) </span>
+<span class="fc" id="L55">				throw new InconsistentDTOException(&quot;id prodotto non presente. articolo: &quot; + ap[i]);</span>
+			else
+<span class="fc" id="L57">				ids[i] = ap[i].getProductId().getNum().get();</span>
+		}
+		
+		//estrazione
+<span class="fc" id="L61">		requestInfo.clear();</span>
+<span class="fc" id="L62">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;seller_ids&quot;));</span>
+<span class="fc" id="L63">		res = odoo.readFromModel(&quot;product.product&quot;, requestInfo, ids);</span>
+		
+<span class="fc bfc" id="L65" title="All 2 branches covered.">		if(res.length==0) {</span>
+<span class="fc" id="L66">			StringBuilder sb = new StringBuilder();</span>
+			
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			for( ArticoloPreventivoDTO p : ap)</span>
+<span class="fc" id="L69">				sb.append(p.toString()).append('\n');</span>
+			
+<span class="fc" id="L71">			throw new EmptyFetchException(&quot;Non è stato possibile trovare alcun prodotto associato agli articoli: &quot; + sb.toString());</span>
+		}
+		
+		//collezione di POJO
+<span class="fc bfc" id="L75" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
+<span class="fc" id="L76">			prd[i] = new ProdottoDTO( (HashMap&lt;String,Object&gt;) res[i]);</span>
+		}
+		
+<span class="fc" id="L79">		return prd;</span>
+	}
+	
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;product.product&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L87">	public ProdottoDTO( final Map&lt;String, Object&gt; map) {</span>
+		
+<span class="fc" id="L89">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+		
+<span class="fc" id="L91">		sellerIds = AttributeMapper.toArray(map.get(&quot;seller_ids&quot;));</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L99">		return id;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
+	 */
+	public Optional&lt;Object[]&gt; getSellerIds() {
+<span class="fc" id="L107">		return sellerIds;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L112">		return &quot;ProdottoDTO [id=&quot; + id + &quot;, seller_ids=&quot; + sellerIds + &quot;]&quot;;</span>
+	}
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -32,14 +32,14 @@ public class FTPConfig {
 
 	/**
 	 * Crea il bean di configurazione del fileystem del FTP utilizzando i dati presenti in {@code resources/ftpconfig.properties}. In assenza di valori personalizzati, vengono applicati dei valori di default.
-	 * @param inbound - valore della chiave {@code file.inbound}, se presente (default: <i>"ftp/INBOUND"</i>)
-	 * @param outbound - valore della chiave {@code file.outbound}, se presente (default <i>"ftp/OUTBOUND"</i>)
-	 * @param archived - valore della chiave {@code file.archived}, se presente (default: <i>"ftp/OUTBOUND/ARCHIV"</i>)
+	 * @param inbound - valore della chiave {@code ftp.inbound}
+	 * @param outbound - valore della chiave {@code ftp.outbound}
+	 * @param archived - valore della chiave {@code ftp.archived}
 	 */
     public FTPConfig(
-            @Value("${file.inbound:ftp/INBOUND}") String inbound,
-            @Value("${file.outbound:ftp/OUTBOUND}") String outbound,
-            @Value("${file.archived:ftp/OUTBOUND/ARCHIV}") String archived) {
+            @Value("${ftp.inbound}") String inbound,
+            @Value("${ftp.outbound}") String outbound,
+            @Value("${ftp.archived}") String archived) {
         this.inboundFolder = inbound;
         this.outboundFolder = outbound;
         this.archivedFolder = archived;

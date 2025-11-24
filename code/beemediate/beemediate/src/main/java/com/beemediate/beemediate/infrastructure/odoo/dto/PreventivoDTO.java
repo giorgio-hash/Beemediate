@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
 import java.time.LocalDateTime;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
 
+import com.beemediate.beemediate.infrastructure.odoo.config.OafStatus;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
@@ -89,33 +91,16 @@ public class PreventivoDTO{
 		//cerca un preventivo di GEALAN
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order","search",
-						Arrays.asList(Arrays.asList(
-								Arrays.asList(odoo.PARTNER_ID_FIELD,"=",f.getName().get()),
-								Arrays.asList("x_studio_oaf","=",OdooApiConfig
-																	.OafStatus
-																	.NEW.toString() )
-								)),
-						requestInfo
-						)
-				);
+		ids = odoo.searchFromModel("purchase.order", requestInfo, 
+									Arrays.asList(odoo.PARTNER_ID_FIELD,"=",f.getName().get()),
+									Arrays.asList("x_studio_oaf","=",OafStatus.NEW.toString() ));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Nessun preventivo \"new\" per GEALAN");
 		
 		//estrai preventivo
 		requestInfo.clear();
 		requestInfo.put(odoo.FIELDS, Arrays.asList("name",odoo.PARTNER_ID_FIELD,"product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
-		res = (Object[]) odoo.models.execute(odoo.EXECUTE_KW,
-				Arrays.asList(
-						odoo.getDb(),odoo.getUid(),odoo.getPassword(),
-						"purchase.order",odoo.READ,
-						Arrays.asList(ids),
-						requestInfo
-						)
-				);
+		res = odoo.readFromModel("purchase.order", requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Trovato preventivi per GEALAN, ma nessuno estratto.");
 		

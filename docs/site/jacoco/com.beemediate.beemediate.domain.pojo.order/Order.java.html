@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Order.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.domain.pojo.order</a> &gt; <span class="el_source">Order.java</span></div><h1>Order.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.domain.pojo.order;
+
+/***Classe per gestire l'ordine*/
+public class Order {
+	
+	/***struttura dati dell'ordine*/
+	private /*@ spec_public @*/ final OrderStructure data;
+	
+	/***identificativo dell' ordine*/
+	private /*@ spec_public @*/ final String orderID;
+	
+	//campi pi� importanti per controllo errori
+	/***Controllo errori nei campi che fanno riferimento al numero cliente*/
+	private /*@ spec_public @*/ boolean customerNumber;
+	/***Controllo errori nei campi che fanno riferimento al numero articolo*/
+	private /*@ spec_public @*/ boolean articleNumber;
+	/***Controllo errori nei campi che fanno riferimento all'unità di misura per la quantità articolo*/
+	private /*@ spec_public @*/ boolean quantityMeasure;
+	/***Controllo errori nei campi che fanno riferimento alla quantità articolo*/
+	private /*@ spec_public @*/ QuantityFieldValue quantity;
+	/***Controllo errori nei campi che fanno riferimento all'identificativo del luogo di consegna*/
+	private /*@ spec_public @*/ boolean deliveryLocationNumber;
+	/***Controllo errori nei campi che fanno riferimento alla data di consegna*/
+	private /*@ spec_public @*/ boolean deliveryDate;
+	/***Controllo errori nei campi che fanno riferimento al contenut della data di consegna*/
+	private /*@ spec_public @*/ boolean deliveryDateContent;
+	
+	/*@ public invariant data != null; @*/
+	/*@ public invariant quantity != null; @*/
+	/*@ public invariant orderID != null; @*/
+	
+	/**
+	 * Costruttore
+	 * @param d - oggetto OrderStructure per struttura dati ordine
+	 * @param oID - identificativo String dell'ordine
+	 */
+	/*@ public normal_behaviour
+	  @ requires d != null &amp; oID!=null;
+	  @ ensures data == d &amp;&amp; orderID == oID 
+	  @						&amp;&amp; quantity == QuantityFieldValue.NAN
+	  @						&amp;&amp; !customerNumber &amp;&amp; !articleNumber &amp;&amp; !quantityMeasure 
+	  @						&amp;&amp; !deliveryLocationNumber &amp;&amp; !deliveryDate &amp;&amp; !deliveryDateContent;						
+	  @ pure
+	  @*/
+<span class="fc" id="L45">	public Order(/*@ non_null*/final OrderStructure d,final String oID) {</span>
+<span class="fc" id="L46">		data = d;</span>
+<span class="fc" id="L47">		orderID = oID;</span>
+<span class="fc" id="L48">		quantity = QuantityFieldValue.NAN;</span>
+<span class="fc" id="L49">		customerNumber = articleNumber = quantityMeasure = deliveryLocationNumber = deliveryDate = deliveryDateContent = false;</span>
+<span class="fc" id="L50">	}</span>
+
+	/**
+	 * Restituisce una copia difensiva (CWE-374) della struttura dati dell'ordine.
+	 * @return oggetto OrderStructure
+	 */
+	/*@ public normal_behaviour
+	  @ requires data!=null &amp; data.header!=null &amp; data.itemList!=null &amp; data.orderSummary!=null;
+	  @ requires data.itemList.length&gt;0 
+	  				&amp; (\forall int i; 0 &lt;= i &amp; i &lt; data.itemList.length; data.itemList[i] != null)
+	  				&amp; (\forall int i; 0&lt;=i &amp; i&lt;data.itemList.length; \typeof(data.itemList[i]) == \type(OrderItem) )
+	  				&amp; \elemtype(\typeof(data.itemList)) == \type(OrderItem)
+	  				&amp; data.orderSummary.totalItemNum == data.itemList.length; 
+	  @ ensures \result != null;
+	  @ ensures \result != data; 
+	  @*/
+	public /*@ pure @*/ OrderStructure getData() {
+<span class="fc" id="L67">		return new OrderStructure(data);</span>
+	}
+
+	/**
+	 *  
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se la combinazione di errori identifica un errore XMLOpenTrans non bloccante di tipo &quot;ContentError&quot;
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == (!articleNumber | !quantityMeasure | (deliveryDate &amp; !deliveryDateContent) );
+	public /*@ pure @*/ boolean hasContentError() {
+<span class="fc bfc" id="L77" title="All 8 branches covered.">		return !articleNumber || !quantityMeasure || (!deliveryDateContent || !deliveryDate);</span>
+	}
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se la combinazione di errori identifica un errore XMLOpenTrans bloccante di tipo &quot;OpenTransError&quot;
+	 */
+	//@ public normal_behaviour
+	//@ requires quantity != null;
+	//@ ensures \result == (!customerNumber | !deliveryLocationNumber | !deliveryDate | quantity != QuantityFieldValue.FLOAT_WITH_DOT);
+	public /*@ pure @*/ boolean hasOpenTransError() {
+<span class="fc bfc" id="L88" title="All 10 branches covered.">		return !customerNumber || !deliveryLocationNumber || !deliveryDateContent || quantity == QuantityFieldValue.FLOAT_WITH_COMMA || quantity == QuantityFieldValue.NAN;</span>
+	}
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se il numero cliente risulta errato
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == customerNumber;
+	public /*@ pure @*/ boolean isCustomerNumber() {
+<span class="fc" id="L98">		return customerNumber;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori nel numero cliente
+	 * @param cn - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable customerNumber;
+	//@ ensures customerNumber == cn;
+	public void setCustomerNumber(final boolean cn) {
+<span class="fc" id="L109">		customerNumber = cn;</span>
+<span class="fc" id="L110">	}</span>
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se esiste numero articolo errato
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == articleNumber;
+	public /*@ pure @*/ boolean isArticleNumber() {
+<span class="fc" id="L119">		return articleNumber;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori nel numero articolo
+	 * @param an - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable articleNumber;
+	//@ ensures articleNumber == an;
+	public void setArticleNumber(final boolean an) {
+<span class="fc" id="L130">		articleNumber = an;</span>
+<span class="fc" id="L131">	}</span>
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se esiste unità di misura della quantità errato
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == quantityMeasure;
+	public /*@ pure @*/ boolean isQuantityMeasure() {
+<span class="fc" id="L140">		return quantityMeasure;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori  nell'unità di misura per la quantità articolo
+	 * @param qm - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable quantityMeasure;
+	//@ensures quantityMeasure == qm;
+	public void setQuantityMeasure(final boolean qm) {
+<span class="fc" id="L151">		quantityMeasure = qm;</span>
+<span class="fc" id="L152">	}</span>
+
+	/**
+	 * 
+	 * @return valore enum QuantityFieldValue
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == quantity;
+	public /*@ pure @*/ QuantityFieldValue getQuantity() {
+<span class="fc" id="L161">		return quantity;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori  nella quantità articolo
+	 * @param q - valore QuantityFieldValue
+	 */
+	//@ public normal_behaviour
+	//@ assignable quantity;
+	//@ requires q != null;
+	//@ ensures quantity == q;
+	public void setQuantity(final QuantityFieldValue q) {
+<span class="fc" id="L173">		quantity = q;</span>
+<span class="fc" id="L174">	}</span>
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se il numero del luogo di consegna risulta errato
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == deliveryLocationNumber;
+	public /*@ pure @*/ boolean isDeliveryLocationNumber() {
+<span class="fc" id="L183">		return deliveryLocationNumber;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori  nell'identificativo del luogo di consegna
+	 * @param dln - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable deliveryLocationNumber;
+	//@ ensures deliveryLocationNumber == dln;
+	public void setDeliveryLocationNumber(final boolean dln) {
+<span class="fc" id="L194">		deliveryLocationNumber = dln;</span>
+<span class="fc" id="L195">	}</span>
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se la data di consegna risulta errata
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == deliveryDate;
+	public /*@ pure @*/ boolean isDeliveryDate() {
+<span class="fc" id="L204">		return deliveryDate;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori  nella data di consegna
+	 * @param dd - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable deliveryDate;
+	//@ ensures deliveryDate == dd;
+	public void setDeliveryDate(final boolean dd) {
+<span class="fc" id="L215">		deliveryDate = dd;</span>
+<span class="fc" id="L216">	}</span>
+
+	/**
+	 * 
+	 * @return &lt;tt&gt;true&lt;/tt&gt; se il contenuto della data di consegna risulta errata
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == deliveryDateContent;
+	public /*@ pure @*/ boolean isDeliveryDateContent() {
+<span class="fc" id="L225">		return deliveryDateContent;</span>
+	}
+
+	/**
+	 * Imposta la flag riguardo la presenza di errori nel contenuto della data di consegna
+	 * @param ddc - imposta a &lt;tt&gt;true&lt;/tt&gt; se c'è errore
+	 */
+	//@ public normal_behaviour
+	//@ assignable deliveryDateContent;
+	//@ ensures deliveryDateContent == ddc;
+	public void setDeliveryDateContent(final boolean ddc) {
+<span class="fc" id="L236">		deliveryDateContent = ddc;</span>
+<span class="fc" id="L237">	}</span>
+	
+	/**
+	 * 
+	 * @return identificativo dell'ordine
+	 */
+	//@ public normal_behaviour
+	//@ ensures \result == orderID; 
+	public /*@ pure @*/ String getOrderID() {
+<span class="fc" id="L246">		return orderID;</span>
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

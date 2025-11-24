@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConsegnaDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo.dto</a> &gt; <span class="el_source">ConsegnaDTO.java</span></div><h1>ConsegnaDTO.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo.dto;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.xmlrpc.XmlRpcException;
+
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.AttributeMapper;
+
+/**
+ * DTO che mappa i dati del luogo di consegna definito nel preventivo. I campi rimappano alcuni attributi richiesti al model &lt;i&gt;stock.picking.type&lt;/i&gt; di Odoo.
+ */
+public class ConsegnaDTO{
+	
+	/**
+	 * Mapping di id.
+	 */
+	private final Optional&lt;Integer&gt; id;
+	/**
+	 * Mapping di warehouse_id.
+	 */
+	private final IdentifierDTO warehouseId;
+	
+	
+	/**
+	 * Static factory method che interagisce col model stock.picking.type di Odoo per estrarre il luogo di consegna definito nel preventivo.
+	 * @param odoo - OdooApiConfig
+	 * @param prv - PreventivoDTO
+	 * @return ConsegnaDTO
+	 * @throws InconsistentDTOException
+	 * @throws EmptyFetchException
+	 * @throws ClassCastException
+	 * @throws XmlRpcException
+	 */
+	public static ConsegnaDTO fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
+		
+<span class="fc bfc" id="L42" title="All 4 branches covered.">		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
+		
+<span class="fc" id="L44">		final Object id = prv.getPickingTypeId().getNum().get();</span>
+		Object[] res;
+<span class="fc" id="L46">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		
+<span class="fc" id="L48">		requestInfo.clear();</span>
+<span class="fc" id="L49">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;warehouse_id&quot;));</span>
+<span class="fc" id="L50">		res = odoo.readFromModel(&quot;stock.picking.type&quot;, requestInfo, id);</span>
+		
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni sulla consegna.&quot;);</span>
+		
+<span class="fc" id="L54">		return new ConsegnaDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
+	}
+	
+	/**
+	 * Costruttore
+	 * @param map - Map contente una tupla del model &lt;i&gt;stock.picking.type&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
+	 */
+<span class="fc" id="L61">	public ConsegnaDTO ( final Map&lt;String, Object&gt; map ) {</span>
+		
+<span class="fc" id="L63">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+		
+<span class="fc" id="L65">		warehouseId = new IdentifierDTO( (Object[]) map.get(&quot;warehouse_id&quot;) );</span>
+<span class="fc" id="L66">	}</span>
+
+	/**
+	 * 
+	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
+	 */
+	public Optional&lt;Integer&gt; getId() {
+<span class="fc" id="L73">		return id;</span>
+	}
+
+	/**
+	 * 
+	 * @return oggetto IdentifierDTO con identificativo del magazzino o luogo.
+	 */
+	public IdentifierDTO getWarehouseId() {
+<span class="fc" id="L81">		return warehouseId;</span>
+	}
+	
+	@Override
+	public String toString() {
+<span class="fc" id="L86">		return &quot;ConsegnaDTO [id=&quot; + id + &quot;, warehouse_id=&quot; + warehouseId + &quot;]&quot;;</span>
+	}	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
