@@ -58,6 +58,6 @@ public class OaFBufferGetTest {
 		
 		BoundedBuffer expected = buffer;
 		BoundedBuffer actual = ob.getBuffer();
-		assertEquals("Struttura in output uguale a quella in input (stesso pointer)",actual,buffer);
+		assertEquals("Struttura in output uguale a quella in input (stesso pointer)",actual,expected);
 	}
 }
