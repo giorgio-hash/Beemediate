@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="it"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OdooOrderProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo</a> &gt; <span class="el_source">OdooOrderProvider.java</span></div><h1>OdooOrderProvider.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OdooOrderProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo</a> &gt; <span class="el_source">OdooOrderProvider.java</span></div><h1>OdooOrderProvider.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo;
 
 import com.beemediate.beemediate.domain.pojo.order.*;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
@@ -127,9 +127,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
 <span class="fc" id="L129">			dest = DestinazioneDTO.fromXMLRPC(</span>
-							odoo,
+<span class="fc" id="L130">							odoo,</span>
 <span class="fc" id="L131">							ContattoConsegnaDTO.fromXMLRPC(</span>
-										odoo,
+<span class="fc" id="L132">										odoo,</span>
 <span class="fc" id="L133">										ConsegnaDTO.fromXMLRPC(odoo, prev)</span>
 									)
 							);
@@ -147,9 +147,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
 <span class="fc" id="L149">			prodf = ProdottoFornitoreDTO.fromXMLRPC(</span>
-								odoo,
+<span class="fc" id="L150">								odoo,</span>
 <span class="fc" id="L151">								ProdottoDTO.fromXMLRPC(odoo, artpr),</span>
-								f
+<span class="fc" id="L152">								f</span>
 							);
 <span class="fc bfc" id="L154" title="All 2 branches covered.">			for(ProdottoFornitoreDTO p : prodf) {</span>
 <span class="fc" id="L155">				log.info(p.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
@@ -166,7 +166,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 <span class="fc" id="L166">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e1);</span>
 <span class="fc" id="L167">		} catch(EmptyFetchException e) {</span>
 <span class="fc" id="L168">			log.info(&quot;Problema nel recupero degli ordini: {}&quot;,e.getMessage());</span>
-<span class="fc" id="L169">		}</span>
+		}
 		
 <span class="fc" id="L171">		return hasNewOrder();</span>
 		
