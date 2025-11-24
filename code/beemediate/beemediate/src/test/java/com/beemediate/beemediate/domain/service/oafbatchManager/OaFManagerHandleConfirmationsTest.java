@@ -1,12 +1,10 @@
-package com.beemediate.beemediate.domain.service;
+package com.beemediate.beemediate.domain.service.oafbatchManager;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import org.junit.Before;
@@ -16,10 +14,11 @@ import org.mockito.stubbing.Answer;
 
 import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException;
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
-import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
+import com.beemediate.beemediate.domain.service.OaFBatchManager;
+import com.beemediate.beemediate.domain.service.OaFBuffer;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
 /**

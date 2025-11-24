@@ -1,5 +1,9 @@
 com.beemediate.beemediate
+com.beemediate.beemediate.domain.service.oafbatchManager
+com.beemediate.beemediate.domain.service.oafbuffer
+com.beemediate.beemediate.domain.service.OaFValidator
 com.beemediate.beemediate.domain.utils
+com.beemediate.beemediate.filesystem
 com.beemediate.beemediate.infrastructure.ftp
 com.beemediate.beemediate.infrastructure.ftp.config
 com.beemediate.beemediate.infrastructure.ftp.dto.confirmation

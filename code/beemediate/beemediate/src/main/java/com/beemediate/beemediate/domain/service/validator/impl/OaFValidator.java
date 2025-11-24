@@ -62,7 +62,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	@Autowired
 	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {
 		final String[] rows = catalog.readArticleNumbers(); 
-		if(rows.length == 0)
+		if(rows == null || rows.length == 0)
 			throw new EmptyArrayException("ID articoli non trovati.");
 		articleNumbers = rows;
 	}
@@ -248,7 +248,7 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ decreases ost.itemList.length - \count;
 		  @*/
 		for(OrderItem il : ost.getItemList()) {
-			if( il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {
+			if( il.getOrderUnit()==null || il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {
 				rightMeasureUnit = false;
 				break;
 			}
@@ -317,7 +317,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	}
 	
 	/**
-	 * Verifica che startDate, orderDate ed endDate siano delle stringhe rappresentanti un timestamp nel formato "yyyy-MM-dd HH:mm:ss".
+	 * Verifica che startDate, orderDate ed endDate siano delle stringhe rappresentanti un timestamp nel formato "yyyy-MM-ddTHH:mm:ss".
 	 * @param ost - OrderStructure
 	 * @return <i>true</i> se condizione rispettata
 	 */
@@ -341,8 +341,8 @@ public final class OaFValidator implements OaFValidatorIF{
 	 * Verifica che siano rispettate tutte le seguenti condizioni:
 	 * <ul>
 	 * <li>startDate, orderDate ed endDate sono delle stringhe rappresentanti un timestamp nel formato "yyyy-MM-dd HH:mm:ss";</li>
-	 * <li>startDate precede temporalmente endDate;</li>
-	 * <li>orderDate e endDate coincidono;</li>
+	 * <li>orderDate precede temporalmente endDate;</li>
+	 * <li>startDate e endDate coincidono;</li>
 	 * </ul>
 	 * @param ost - OrderStructure
 	 * @return <i>true</i> se condizione rispettata

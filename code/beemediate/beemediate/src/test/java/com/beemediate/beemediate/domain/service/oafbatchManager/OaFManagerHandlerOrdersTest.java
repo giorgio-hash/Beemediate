@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.domain.service;
+package com.beemediate.beemediate.domain.service.oafbatchManager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -18,6 +18,8 @@ import com.beemediate.beemediate.domain.pojo.order.QuantityFieldValue;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
+import com.beemediate.beemediate.domain.service.OaFBatchManager;
+import com.beemediate.beemediate.domain.service.OaFBuffer;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
 /**
@@ -248,11 +250,11 @@ public class OaFManagerHandlerOrdersTest {
 		//monitored input da state4 del modello
 		o.setCustomerNumber(true);
 		o.setDeliveryLocationNumber(true);
-		o.setDeliveryDate(false);
+		o.setDeliveryDate(true);
 		o.setQuantity(QuantityFieldValue.FLOAT_WITH_DOT);
 		o.setArticleNumber(true);
 		o.setQuantityMeasure(true);
-		o.setDeliveryDateContent(true);
+		o.setDeliveryDateContent(false);
 		
 		assertTrue("Order ha Content Error",o.hasContentError());
 		assertTrue("Order ha OpenTrans Error",o.hasOpenTransError());
@@ -385,11 +387,11 @@ public class OaFManagerHandlerOrdersTest {
 		//monitored input da state9 del modello
 		o.setCustomerNumber(true);
 		o.setDeliveryLocationNumber(true);
-		o.setDeliveryDate(true);
+		o.setDeliveryDate(false);
 		o.setQuantity(QuantityFieldValue.FLOAT_WITH_DOT);
 		o.setArticleNumber(true);
 		o.setQuantityMeasure(true);
-		o.setDeliveryDateContent(false);
+		o.setDeliveryDateContent(true);
 		
 		assertTrue("Order ha Content Error",o.hasContentError());
 		assertFalse("Order ha OpenTrans Error",o.hasOpenTransError());

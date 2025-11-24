@@ -1,4 +1,4 @@
-package com.beemediate.beemediate.domain.service;
+package com.beemediate.beemediate.domain.service.oafbatchManager;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
@@ -12,6 +12,8 @@ import com.beemediate.beemediate.domain.exceptions.UnreachableThresholdException
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.ConfirmationProviderPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.ftp.FTPHandlerPort;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.DataSenderPort;
+import com.beemediate.beemediate.domain.service.OaFBatchManager;
+import com.beemediate.beemediate.domain.service.OaFBuffer;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
 public class OaFBatchManagerConstructorTest {

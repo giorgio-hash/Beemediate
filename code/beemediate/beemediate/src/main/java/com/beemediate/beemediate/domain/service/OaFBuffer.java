@@ -24,16 +24,19 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 public class OaFBuffer {
 	
 	/***Riferimento alla struttura dati che gestisce gli Order con politica LIFO*/
-	private /*@ spec_public @*/ final BoundedBuffer buffer;
+	private /*@ spec_public @*/  BoundedBuffer buffer;
 	/***Riferimento all'interfaccia del validatore*/
-	private /*@ spec_public @*/ final OaFValidatorIF validator;
+	private /*@ spec_public @*/ OaFValidatorIF validator;
 	/***Riferimento all'adattatore di OrderProviderPort*/
-	private /*@ spec_public @*/ final OrderProviderPort or;
+	private /*@ spec_public @*/ OrderProviderPort or;
 	
 	/*@ public invariant buffer!=null; @*/
 	/*@ public invariant validator!=null; @*/
 	/*@ public invariant or!=null; @*/
 
+	//per testing
+	private OaFBuffer() {/*empty constructor for mockito testing*/};
+	
 	/**
 	 * Costruttore
 	 * @param bufferCapacity - capacità con la quale si istanzia BoundedBuffer
@@ -79,7 +82,7 @@ public class OaFBuffer {
 		//@ ghost int ordersLoaded = 0;
 		
 		if(or.fetchOrders()) { //c'? almeno un ordine
-			Order t = or.popNewOrder();
+			Order t = null;
 			//@ loop_writes buffer.ordini[*], t, ordersLoaded;
 			//@ loop_invariant 0<=buffer.size<=buffer.ordini.length;
 			/*@ loop_invariant 0<=ordersLoaded<=buffer.size;
@@ -93,15 +96,13 @@ public class OaFBuffer {
 			/*@ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
 			  @*/
 			//@ loop_invariant t!=null & t.data!=null & t.quantity!=null & t.orderID!=null & \typeof(t) == \type(Order);
-			do {
-				if(buffer.isFull())
-					break;
-				else{
-					buffer.push(t);
-					//@ assert ordersLoaded+1 == buffer.size;
-					//@ set ordersLoaded = buffer.size;
-				}
-			}while(or.hasNewOrder());
+			while(or.hasNewOrder() && !buffer.isFull()) {
+				
+				t = or.popNewOrder();
+				buffer.push(t);
+				//@ assert ordersLoaded+1 == buffer.size;
+				//@ set ordersLoaded = buffer.size;
+			}
 		}
 		
 		//@ assert ordersLoaded == buffer.size;
