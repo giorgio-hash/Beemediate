@@ -119,10 +119,10 @@ public class OdooApiConfig {
 	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
 	 */
 	@Autowired
-	public OdooApiConfig (@Value(&quot;${api.host:noconf}&quot;) String url, @Value(&quot;${api.db:noconf}&quot;) String db, 
+<span class="fc" id="L122">	public OdooApiConfig (@Value(&quot;${api.host:noconf}&quot;) String url, @Value(&quot;${api.db:noconf}&quot;) String db, </span>
 							@Value(&quot;${api.username:noconf}&quot;) String username, @Value(&quot;${api.key:noconf}&quot;) String password,
 							@Qualifier(&quot;xmlRpcClientCommon&quot;) XmlRpcClient client, @Qualifier(&quot;xmlRpcClientModels&quot;) XmlRpcClient models,
-<span class="fc" id="L125">							 @Qualifier(&quot;commonConfig&quot;) XmlRpcClientConfigImpl commonConfig, @Qualifier(&quot;objectConfig&quot;) XmlRpcClientConfigImpl objectConfig) {</span>
+							 @Qualifier(&quot;commonConfig&quot;) XmlRpcClientConfigImpl commonConfig, @Qualifier(&quot;objectConfig&quot;) XmlRpcClientConfigImpl objectConfig) {
 <span class="fc" id="L126">		this.url = url;</span>
 <span class="fc" id="L127">		this.db = db;</span>
 <span class="fc" id="L128">		this.username = username;</span>
@@ -167,7 +167,7 @@ public class OdooApiConfig {
 <span class="fc" id="L167">			final FailedLoginException ex = new FailedLoginException(&quot;Eccezione durante il recupero uid di sessione, verificare il login.&quot;);</span>
 <span class="fc" id="L168">			ex.initCause(e);</span>
 <span class="fc" id="L169">			throw ex;</span>
-<span class="fc" id="L170">		}</span>
+		}
 <span class="fc" id="L171">	}</span>
 	
 	
@@ -228,10 +228,10 @@ public class OdooApiConfig {
 <span class="fc" id="L228">		return (boolean) models.execute(EXECUTE_KW,</span>
 <span class="fc" id="L229">											Arrays.asList(</span>
 <span class="fc" id="L230">													db,uid,password,</span>
-													modelName,WRITE,
+<span class="fc" id="L231">													modelName,WRITE,</span>
 <span class="fc" id="L232">													Arrays.asList(</span>
 <span class="fc" id="L233">															Arrays.asList(id),</span>
-															details
+<span class="fc" id="L234">															details</span>
 														))
 											);
 	}
@@ -254,7 +254,7 @@ public class OdooApiConfig {
 <span class="fc" id="L254">		return (int) models.execute(EXECUTE_KW, </span>
 <span class="fc" id="L255">						Arrays.asList(</span>
 <span class="fc" id="L256">						    db,uid,password,</span>
-						    modelName, CREATE,
+<span class="fc" id="L257">						    modelName, CREATE,</span>
 <span class="fc" id="L258">						    Arrays.asList(details)</span>
 						    )
 					    );
@@ -277,9 +277,9 @@ public class OdooApiConfig {
 <span class="fc" id="L277">		return (Object[]) models.execute(procedure,</span>
 <span class="fc" id="L278">				Arrays.asList(</span>
 <span class="fc" id="L279">						db,uid,password,</span>
-						model,	operation,
+<span class="fc" id="L280">						model,	operation,</span>
 <span class="fc" id="L281">						Arrays.asList(Arrays.asList(params)),</span>
-						details
+<span class="fc" id="L282">						details</span>
 						)
 				);
 	}

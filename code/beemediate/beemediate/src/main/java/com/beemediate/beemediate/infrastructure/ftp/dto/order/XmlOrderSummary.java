@@ -14,7 +14,12 @@ public class XmlOrderSummary {
 	 * tag con numero di articoli dell'ordine
 	 */
 	@JacksonXmlProperty(localName="TOTAL_ITEM_NUM")
-	private final int totalItemNum;
+	private int totalItemNum;
+	
+	/**
+	 * Empty constructor for deserializer
+	 */
+	public XmlOrderSummary() {/*empty constructor*/}
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans sintesi dell'ordine partendo dal POJO {@code OrderSummary}
@@ -31,6 +36,11 @@ public class XmlOrderSummary {
 	public int getTotalItemNum() {
 		return totalItemNum;
 	}
+
+	public void setTotalItemNum(int totalItemNum) {
+		this.totalItemNum = totalItemNum;
+	}
+	
 	
 	
 }

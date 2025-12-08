@@ -68,7 +68,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * Estrae la prima colonna del file {@code .xlsx}, contenente i numeri articolo
      * @return List di elementi String
      * @throws IOException se ci sono problemi nel recupero del file
-     * @throws IllegalArgumentException se il file è vuoto
+     * @throws IllegalArgumentException se il file è vuoto o presenta celle vuote
      */
     private List<String> extractArticleNumbers() throws IOException {
         final List<String> numeriArticolo = new ArrayList<>();
@@ -81,11 +81,31 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
             final int headerRowNum = sheet.getFirstRowNum();
 
             if (headerRowNum == -1) {
-                throw new IllegalArgumentException ("File cannot be null or empty");
+                throw new IllegalArgumentException ("File non deve essere null o vuoto");
             }
+            
+            
+            //Per le conversioni del formato cella
+            final DataFormatter formatter = new DataFormatter();
 
             for (int i=sheet.getFirstRowNum()+1; i<=sheet.getLastRowNum(); i++) {
-            	numeriArticolo.add(sheet.getRow(i).getCell(0).getStringCellValue());
+            	
+            	// Controllo Null sulla Riga (POI ritorna null se la riga è visivamente vuota)
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                	throw new IllegalArgumentException ("cella "+i+" vuota o nulla");
+                }
+
+                Cell cell = row.getCell(0);
+                
+                // Restituisce "" se la cella è vuota.
+                String val = formatter.formatCellValue(cell);
+
+                // Validazione e Pulizia
+                if (val != null && !val.trim().isBlank()) {
+                    numeriArticolo.add(val.trim());
+                }else
+                	throw new IllegalArgumentException ("cella "+i+" vuota o nulla");
             }
         }
 

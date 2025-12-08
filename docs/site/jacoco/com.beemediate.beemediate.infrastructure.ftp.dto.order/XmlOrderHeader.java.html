@@ -15,66 +15,48 @@ public class XmlOrderHeader {
 	 * Riferimento a DTO XmlOrderInfo per ORDER_INFO.
 	 */
 	@JacksonXmlProperty(localName=&quot;ORDER_INFO&quot;)
-	private final XmlOrderInfo orderInfo;
+	private XmlOrderInfo orderInfo;
 
 	/**
 	 * Rifeirmento a DTO XmlAgreement per AGREEMENT
 	 */
 	@JacksonXmlProperty(localName=&quot;AGREEMENT&quot;)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private XmlAgreement agreement;
 	
 	/**
-	 * Ordini di contratto
+	 * empty constructor for deserializer
 	 */
-	public class XmlAgreement {
-		/**
-		 * Numero di contratto
-		 */
-		@JacksonXmlProperty(localName=&quot;bmecat:AGREEMENT_ID&quot;)
-		@JsonInclude(JsonInclude.Include.ALWAYS)
-		private String id;
-
-		/**
-		 * Costruttore
-		 * @param id
-		 */
-<span class="nc" id="L41">		public XmlAgreement(String id) {</span>
-<span class="nc" id="L42">			this.id=id;</span>
-<span class="nc" id="L43">		}</span>
-		/**
-		 * 
-		 * @return
-		 */
-		public String getId() {
-<span class="nc" id="L49">			return id;</span>
-		}
-
-		/**
-		 * 
-		 * @param id
-		 */
-		public void setId(String id) {
-<span class="nc" id="L57">			this.id = id;</span>
-<span class="nc" id="L58">		}	</span>
-	}
+<span class="fc" id="L30">	public XmlOrderHeader() {/*empty constructor*/}</span>
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans header ordine partendo dal POJO {@code OrderHeader}
 	 * @param head - OrderHeader
 	 */
 	public XmlOrderHeader(final OrderHeader head) {
-<span class="nc" id="L66">		super();</span>
-<span class="nc" id="L67">		this.orderInfo = new XmlOrderInfo( head );</span>
-<span class="nc" id="L68">		this.agreement = new XmlAgreement(null);</span>
-<span class="nc" id="L69">	}</span>
+<span class="fc" id="L37">		super();</span>
+<span class="fc" id="L38">		this.orderInfo = new XmlOrderInfo( head );</span>
+<span class="fc" id="L39">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderInfo
 	 */
 	public XmlOrderInfo getOrderInfo() {
-<span class="nc" id="L76">		return orderInfo;</span>
+<span class="fc" id="L46">		return orderInfo;</span>
 	}
+
+	public XmlAgreement getAgreement() {
+<span class="fc" id="L50">		return agreement;</span>
+	}
+
+	public void setAgreement(XmlAgreement agreement) {
+<span class="nc" id="L54">		this.agreement = agreement;</span>
+<span class="nc" id="L55">	}</span>
+
+	public void setOrderInfo(XmlOrderInfo orderInfo) {
+<span class="fc" id="L58">		this.orderInfo = orderInfo;</span>
+<span class="fc" id="L59">	}</span>
 
 	
 }

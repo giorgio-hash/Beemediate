@@ -3,8 +3,17 @@ package com.beemediate.beemediate.domain.utils;
 import org.jmlspecs.annotation.CodeBigintMath;
 import org.jmlspecs.annotation.SkipEsc;
 
+/**
+ * Classe utility per le operazioni su oggetti String.
+ */
 public class StringHandler {
 	
+	/**
+	 * Determina se due oggetti String sono uguali.
+	 * @param s1 - String
+	 * @param s2 - String
+	 * @return <i>true</i> se sono uguali
+	 */
 	/*@ public normal_behaviour
 	  @ requires s1==null || s2==null;
 	  @ ensures !\result;
@@ -28,14 +37,11 @@ public class StringHandler {
 	  @ ensures \result <==> (\forall int i; 0<=i<s1.length(); s1.charAt(i) == s2.charAt(i));
 	  @*/
 	@CodeBigintMath
-	public /*@ pure @*/ static boolean equals(String s1, String s2) {
+	public /*@ pure @*/ static boolean equals(final String s1, final String s2) {
 		
-		if (s1==null || s2==null)
+		if (s1==null || s2==null
+				||	s1.length() != s2.length())
 			return false;
-		
-		boolean sameSize = (s1.length() == s2.length());
-		
-		if(!sameSize) return false;
 		
 		if(s1.length() == 0)
 			return true;
@@ -62,6 +68,11 @@ public class StringHandler {
 		
 	}
 	
+	/**
+	 * Determina se String rappresenta un <i>int</i>.
+	 * @param str - String
+	 * @return <i>true</i> se rappresenta un <i>int</i>
+	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()==0;
 	  @ ensures !\result;
@@ -81,7 +92,7 @@ public class StringHandler {
 	  @ ensures \result <==> isDigit(str.charAt(0),true);
 	  @*/
 	@CodeBigintMath
-	public static /*@ helper pure @*/ boolean isInteger(/*@ non_null @*/ String str) {
+	public static /*@ pure @*/ boolean isInteger(/*@ non_null @*/final String str) {
 		
 		if(str == null || str.length()==0)
 			return false;
@@ -99,7 +110,7 @@ public class StringHandler {
 			//@ decreases str.length()-i;
 			for(; i<str.length(); i++) {
 				
-				if ( !isDigit( str.charAt(i), (i==0) ) )
+				if ( !isDigit( str.charAt(i), i==0 ) )
 					return false;
 				
 			}
@@ -111,6 +122,11 @@ public class StringHandler {
 	
 	//@ public static ghost int numOfCommas = 0;
 	
+	/**
+	 * Determina se String rappresenta un <i>double</i>.
+	 * @param str - String
+	 * @return <i>true</i> se rappresenta un <i>double</i>
+	 */
 	/*Pi� scenari:
 	 * - scenario 1: stringa troppo corta --> false
 	 * - scenario 2: stringa minima ma '.' agli estremi --> false
@@ -148,20 +164,20 @@ public class StringHandler {
 	  @ ensures \result <==> (numOfCommas==1 & str.charAt(0)!='0');
 	  @*/
 	@CodeBigintMath
-	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/  String str) {
+	public static /*@ pure @*/ boolean isDouble(/*@ non_null @*/final String str) {
 		
-		final char COMMA = '.';
+		final char comma = '.';
 		int numOfCommas = 0;
 		
 		//@ set numOfCommas = 0;
 		
 		// voglio str: non null, forma minima '0.0', non forma troncata '0.', non forma troncata '.0' 
-		if(str == null || str.length()<3 || str.charAt(str.length()-1) == COMMA || str.charAt(0) == COMMA)
+		if(str == null || str.length()<3 || str.charAt(str.length()-1) == comma || str.charAt(0) == comma)
 			return false;
 		
 		// se il secondo carattere � COMMA, il primo carattere pu� essere zero.
 		// in caso contrario, il primo carattere dev'essere diverso da zero.
-		if ( str.charAt(1) != '.' & !isDigit(str.charAt(0),true) )
+		if ( str.charAt(1) != '.' && !isDigit(str.charAt(0),true) )
 			return false;
 		
 		int i=0;
@@ -172,19 +188,25 @@ public class StringHandler {
 		//@ decreases str.length()-i;
 		for(; i<str.length(); i++) {
 				
-			if( !isDigit(str.charAt(i),false) )
-				if (str.charAt(i) == COMMA) {
+			if( !isDigit(str.charAt(i),false) ) {
+				if (str.charAt(i) == comma) {
 					numOfCommas++;
 					//@ set numOfCommas=numOfCommas+1;
 				}else
 					return false;
-			
-			}		
+			}
+		}		
 		
 		return numOfCommas==1; // voglio solo un dot.
 	}
 	
 	
+	/**
+	 * Determina se il carattere sia una cifra. Se nonNull è true, la funzione determina se il carattere sia una cifra diversa da '0'.
+	 * @param c - char
+	 * @param nonNull - boolean per determinare se c è una cifra non-nulla
+	 * @return <i>true</i> se condizione verificata
+	 */
 	/*@ public normal_behaviour
 	  @ requires c>=48 & c<=57;
 	  @ requires nonNull == false;
@@ -199,7 +221,7 @@ public class StringHandler {
 	  @ requires c<48 | c>57;
 	  @ ensures !\result;
 	  @*/
-	public static /*@ pure @*/ boolean isDigit(char c, boolean nonNull) {
+	public static /*@ pure @*/ boolean isDigit(final char c, final boolean nonNull) {
 		
 		if(nonNull)
 			return 49<=c && c<=57;
@@ -207,6 +229,12 @@ public class StringHandler {
 		return 48<=c && c<=57;
 	}
 	
+	/**
+	 * Determina se la String str contiene il char elem.
+	 * @param str - String
+	 * @param elem - char
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
 	  @ requires str.length()==0;
 	  @ ensures \result == false;
@@ -219,7 +247,8 @@ public class StringHandler {
 	  @ requires str.length()>1;
 	  @ ensures \result <==> (\exists int i; 0<=i<str.length(); str.charAt(i)==elem);
 	  @*/
-	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ String str, char elem) {
+	@CodeBigintMath
+	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ final String str, final char elem) {
 	
 		if(str==null || str.length()==0)
 			return false;
@@ -237,29 +266,39 @@ public class StringHandler {
 		return false;
 	}
 	
-	
+	/**
+	 * Determina se str sia un oggetto String rappresentante una data in formato "yyyy-MM-dd HH:mm:ss".
+	 * @param str - String
+	 * @return <i>true</i> se condizione rispettata
+	 */
 	/*@ public normal_behaviour
-	  @ requires str.length()!=19;
+	  @ requires str.length() > 19 | str.length() < 19;
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\exists int i; i==4 | i==7; str.charAt(i) != '-')
-      @	  			| str.charAt(10) != 'T'
-      @				| (\exists int i; i==13 | i==16; str.charAt(i) != ':');
-      @ ensures !\result;
-      @
-      @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\forall int i; i==4 | i==7; str.charAt(i) == '-')
-      @	  			& str.charAt(10) == 'T'
-      @				& (\forall int i; i==13 | i==16; str.charAt(i) == ':');
-      @ ensures \result ==> isDigit(str.charAt(0),true);
-      @ ensures \result ==> (\forall int i; 1<=i<str.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; isDigit(str.charAt(i),false) );
+	  @ requires str.length() == 19;
+	  @ ensures \result ==> ((\forall int i; i==4 | i==7; str.charAt(i)=='-')
+	  @						& str.charAt(10)=='T'
+	  @						&(\forall int j; j==13 | j==16; str.charAt(j)==':'));
+	  @ ensures \result ==> (	'1'<=str.charAt(0)<='9'
+	  @						&	(\forall int i; 1<=i<=3; '0'<=str.charAt(i)<='9') );
+	  @ ensures \result ==> ( (str.charAt(5)=='0' & '1'<=str.charAt(6)<='9')
+	  @							|	(str.charAt(5)=='1' & '0'<=str.charAt(6)<='2') );
+	  @ ensures \result ==> ( (str.charAt(8)=='0' & '1'<=str.charAt(9)<='9')
+	  @							|	('1'<=str.charAt(8)<='2' & '0'<=str.charAt(9)<='9')
+	  @							|	( str.charAt(8)=='3' & '0'<=str.charAt(9)<='1') );
+	  @ ensures \result ==> ( ('0'<=str.charAt(11)<='1' & '0'<=str.charAt(12)<='9')
+	  @							|	(str.charAt(11)=='2' & '0'<=str.charAt(12)<='3') );
+	  @ ensures \result ==> ( ('0'<=str.charAt(14)<='5' & '0'<=str.charAt(15)<='9'));
+	  @ ensures \result ==> ( ('0'<=str.charAt(17)<='5' & '0'<=str.charAt(18)<='9'));	  
 	  @*/
+	@CodeBigintMath
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
-	
-		// Guardo nello specifico il pattern "yyyy-MM-dd HH:mm:ss"
+		
+		if (str == null) return false;
+		
+		
+		// Guardo nello specifico il pattern "yyyy-MM-ddTHH:mm:ss"
 			
 		final char MAIN_SEPARATOR = 'T';
 		final char DATE_SEPARATOR = '-';
@@ -270,6 +309,7 @@ public class StringHandler {
 		final int hSize = 2; 
 		final int mSize = 2; 
 		final int sSize = 2;
+		
 		
 		//mi aspetto una certa forma
 		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )
@@ -297,13 +337,46 @@ public class StringHandler {
 		final int ss=17;//ss index:controllo ss, da "00" a "59"
 
 		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) 
-				&& (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))
-				&& (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))
-				&& has2DigitsBetween(str, mm, '0','5','0','9') 
-				&& has2DigitsBetween(str, ss, '0','5','0','9');
+					&& (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))
+					&& (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))
+					&& has2DigitsBetween(str, mm, '0','5','0','9') 
+					&& has2DigitsBetween(str, ss, '0','5','0','9');
 		
 		}
 	
+	
+	
+    /**
+     * Controlla se nella stringa {@code s} a partire da {@code index} ci sono
+     * due caratteri consecutivi che rientrano rispettivamente negli intervalli
+     * di caratteri [startRangeFirstDigit, endRangeFirstDigit] e
+     * [startRangeSecondDigit, endRangeSecondDigit].
+     * 
+     * <p>
+     * La funzione esegue i seguenti controlli preliminari e ritorna {@code false}
+     * se uno di essi fallisce:
+     * <ul>
+     *   <li>{@code s} è {@code null}</li>
+     *   <li>{@code index} è negativo oppure {@code index + 1} è fuori dai limiti di {@code s}</li>
+     *   <li>uno qualsiasi dei quattro caratteri di range non è considerato cifra
+     *       secondo {@code isDigit(..., false)}</li>
+     * </ul>
+     * Se tutti i controlli passano, restituisce {@code true} esattamente quando
+     * i due caratteri in posizione {@code index} e {@code index+1} rispettano i
+     * vincoli sugli intervalli (confronto sul valore char).
+     * </p>
+     *
+     * @param s la stringa nella quale cercare (può essere {@code null})
+     * @param index indice di inizio (0-based) della coppia di caratteri da verificare
+     * @param startRangeFirstDigit limite inferiore (inclusivo) per il primo carattere
+     * @param endRangeFirstDigit limite superiore (inclusivo) per il primo carattere
+     * @param startRangeSecondDigit limite inferiore (inclusivo) per il secondo carattere
+     * @param endRangeSecondDigit limite superiore (inclusivo) per il secondo carattere
+     * @return {@code true} se e solo se esistono due caratteri consecutivi in {@code s}
+     *         a partire da {@code index} che rispettano i rispettivi intervalli; {@code false}
+     *         in caso di input non valido o se i caratteri non rientrano negli intervalli
+     */
+    /*@
 	/*@
 	  @ public normal_behaviour
 	  @ requires s == null || s.length()==0;
@@ -339,22 +412,27 @@ public class StringHandler {
         		c2 >= startRangeSecondDigit && c2 <= endRangeSecondDigit;
     }
 	
+	/**
+	 * Determina se date1 e date2 rappresentano una data in formato "yyyy-MM-dd HH:mm:ss" e date1 precede temporalmente date2
+	 * @param date1 - String
+	 * @param date2 - String
+	 * @return <i>true</i> se condizione rispettata.
+	 */
 	/*@ public normal_behaviour
-	  @ requires date1!=null & date1.length()==19;
-	  @ requires date2!=null & date2.length()==19;
-	  @ requires !isDateTime(date1) | !isDateTime(date2);
+	  @ requires !isDateTime(date1);
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires date1!=null & date1.length()==19;
-	  @ requires date2!=null & date2.length()==19;
+	  @ requires !isDateTime(date2);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
 	  @ requires isDateTime(date1) & isDateTime(date2);
-	  @ ensures !\result<==> ((\exists int i; 0<=i<4; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 5<=i<7; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 8<=i<10; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 11<=i<13; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 14<=i<16; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 17<=i<19; date1.charAt(i)>date2.charAt(i)));
+	  @ ensures \result <==>	(	date1.charAt(0)<date2.charAt(0)
+	  @								|(\exists int i; 0<i<19; date1.charAt(i)<date2.charAt(i)
+	  @									& (\forall int j; 0<=j<i; date1.charAt(j)==date2.charAt(j)))
+	  @								|(\forall int k; 0<=k<19; date1.charAt(k)==date2.charAt(k))
+	  @						);
 	  @*/
 	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
@@ -369,14 +447,48 @@ public class StringHandler {
 		final int mm=14;//mm index
 		final int ss=17;//ss index
 		
-		return (isSubstr1LessOrEqualThanSubstr2(date1,date2,yyyy,4)) &&
-				(isSubstr1LessOrEqualThanSubstr2(date1,date2,MM,2)) &&
-				(isSubstr1LessOrEqualThanSubstr2(date1,date2,dd,2)) &&
-				(isSubstr1LessOrEqualThanSubstr2(date1,date2,HH,2)) &&
-				(isSubstr1LessOrEqualThanSubstr2(date1,date2,mm,2)) &&
-					(isSubstr1LessOrEqualThanSubstr2(date1,date2,ss,2));
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,yyyy,4)) return false;
+		if(substrCompare(date1,date2,yyyy,4) == -1) return true;
+		
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,MM,2)) return false;
+		if(substrCompare(date1,date2,MM,2) == -1) return true;
+		
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,dd,2)) return false;
+		if(substrCompare(date1,date2,dd,2) == -1) return true;
+		
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,HH,2)) return false;
+		if(substrCompare(date1,date2,HH,2) == -1) return true;
+		
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,mm,2)) return false;
+		if(substrCompare(date1,date2,mm,2) == -1) return true;
+		
+		if (!isSubstr1LessOrEqualThanSubstr2(date1,date2,ss,2)) return false;
+		
+		return true;
 	}
 
+	
+	/**
+	 * Verifica se la sottostringa di lunghezza {@code substrSize} di {@code s1}
+	 * a partire dalla posizione {@code pos} è "minore o uguale" alla corrispondente
+	 * sottostringa di {@code s2}, confrontando i caratteri uno a uno (per ogni
+	 * indice i: s1.charAt(pos+i) <= s2.charAt(pos+i)).
+	 * <p>
+	 * La funzione restituisce {@code false} quando gli input non sono validi:
+	 * {@code s1} o {@code s2} sono {@code null} o vuote, {@code pos} è negativo,
+	 * {@code substrSize} è non positivo, oppure la sottostringa richiesta
+	 * eccede la lunghezza di una delle due stringhe.
+	 * </p>
+	 *
+	 * @param s1 prima stringa (può essere {@code null})
+	 * @param s2 seconda stringa (può essere {@code null})
+	 * @param pos indice di inizio della sottostringa (0-based)
+	 * @param substrSize lunghezza della sottostringa da confrontare
+	 * @return {@code true} se per ogni i in [0, substrSize) vale
+	 *         {@code s1.charAt(pos+i) <= s2.charAt(pos+i)}; {@code false} se
+	 *         esiste un i con {@code s1.charAt(pos+i) > s2.charAt(pos+i)} oppure
+	 *         se uno degli input è considerato non valido
+	 */
 	/*@
 	  @ public normal_behaviour
 	  @ requires s1==null || s2==null || s1.length()==0 || s2.length()==0;
@@ -392,10 +504,18 @@ public class StringHandler {
 	  @ requires s1!=null & s1.length()>0;
 	  @ requires s2!=null & s2.length()>0;
 	  @ requires pos>=0 & substrSize>0;
-	  @ ensures !\result <==> ((\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) )
-	  							| pos+substrSize>s1.length() 
-	  							| pos+substrSize>s2.length());
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures !\result;
 	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()>0;
+	  @ requires pos>=0 & substrSize>0;
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)<s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ))
+	  				|	(\forall int j; pos<=j<pos+substrSize; s1.charAt(j)==s2.charAt(j) );
+	  @ ensures \result <==> (pos+substrSize<=s1.length() & pos+substrSize<=s2.length());
 	  @*/
 	@CodeBigintMath
 	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(String s1, String s2, int pos, int substrSize) {
@@ -406,12 +526,55 @@ public class StringHandler {
 		
 		//@ loop_writes i;
 		//@ loop_invariant 0<=i<=substrSize;
-		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)<=s2.charAt(j) );
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)==s2.charAt(j) );
 		//@ decreases substrSize-i;
-		for(int i=0; i<substrSize; i++)
+		for(int i=0; i<substrSize; i++) {
 			if(s1.charAt(pos+i)>s2.charAt(pos+i))
 				return false;
-		
+			if(s1.charAt(pos+i)<s2.charAt(pos+i))
+				return true;
+		}
+	
 		return true;
+	}
+	
+	/*@	public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)<s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==-1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\forall int i; pos<=i<pos+substrSize; s1.charAt(i)==s2.charAt(i) );
+	  @ ensures \result==0;
+	  @*/
+	@CodeBigintMath
+	public static /*@ pure @*/ int substrCompare(String s1, String s2, int pos, int substrSize) {
+		
+		//@ loop_writes i;
+		//@ loop_invariant 0<=i<=substrSize;
+		//@ loop_invariant (\forall int j; pos<=j<pos+i; s1.charAt(j)==s2.charAt(j) );
+		//@ decreases substrSize-i;
+		for(int i=0; i<substrSize; i++) {
+			if(s1.charAt(pos+i)>s2.charAt(pos+i))
+				return 1;
+			if(s1.charAt(pos+i)<s2.charAt(pos+i))
+				return -1;
+		}
+	
+		return 0;
 	}
 }

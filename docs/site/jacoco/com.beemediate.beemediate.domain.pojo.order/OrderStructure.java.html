@@ -20,13 +20,13 @@ public class OrderStructure {
 	
 	//order.order_header
 	/***Struttura OrderHeader con le informazioni rilevanti per la transazione*/
-<span class="pc" id="L23">	private /*@ spec_public nullable @*/ OrderHeader header = null;</span>
+<span class="fc" id="L23">	private /*@ spec_public nullable @*/ OrderHeader header = null;</span>
 	//order.order_item_list
 	/***Array di elementi OrderItem contenenti le informazioni riguardo gli articoli richiesti*/
-<span class="pc" id="L26">	private /*@ spec_public nullable @*/ OrderItem[] itemList = null;</span>
+<span class="fc" id="L26">	private /*@ spec_public nullable @*/ OrderItem[] itemList = null;</span>
 	//order.order_summary
 	/***Struttura OrderSummary con informazioni sintetiche per l'ordine.*/
-<span class="pc" id="L29">	private /*@ spec_public nullable @*/ OrderSummary orderSummary = null;</span>
+<span class="fc" id="L29">	private /*@ spec_public nullable @*/ OrderSummary orderSummary = null;</span>
 	
 	/*@ public invariant itemList!=null ==&gt; 0&lt;itemList.length&lt;=Integer.MAX_VALUE; @*/
 	/*@ public invariant itemList!=null ==&gt; (\forall int i; 0&lt;=i &amp; i&lt;itemList.length; itemList[i] != null); @*/
@@ -46,11 +46,11 @@ public class OrderStructure {
 	 * Copy Constructor
 	 */
 	//@SkipEsc
-<span class="nc" id="L49">	public OrderStructure(OrderStructure copy) {</span>
-<span class="nc" id="L50">		this.header = new OrderHeader(copy.getHeader());</span>
-<span class="nc" id="L51">		this.itemList = copy.getItemList().clone();</span>
-<span class="nc" id="L52">		this.orderSummary = new OrderSummary(copy.getOrderSummary());</span>
-<span class="nc" id="L53">	}</span>
+<span class="fc" id="L49">	public OrderStructure(OrderStructure copy) {</span>
+<span class="fc" id="L50">		this.header = new OrderHeader(copy.getHeader());</span>
+<span class="fc" id="L51">		this.itemList = copy.getItemList().clone();</span>
+<span class="fc" id="L52">		this.orderSummary = new OrderSummary(copy.getOrderSummary());</span>
+<span class="fc" id="L53">	}</span>
 	
 	/**
 	 * 
@@ -149,7 +149,7 @@ public class OrderStructure {
 	@Override
 	public String toString() {
 <span class="fc" id="L151">		return &quot;OrderStructure [header=&quot; + header + &quot;, itemList=&quot; + Arrays.toString(itemList) + &quot;, orderSummary=&quot;</span>
-				+ orderSummary + &quot;]&quot;;
+<span class="fc" id="L152">				+ orderSummary + &quot;]&quot;;</span>
 	}
 	
 	

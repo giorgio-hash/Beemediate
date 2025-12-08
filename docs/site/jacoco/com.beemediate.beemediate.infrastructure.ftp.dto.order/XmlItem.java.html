@@ -15,43 +15,47 @@ public final class XmlItem {
 	 * tag per ordinare l'articolo
 	 */
 	@JacksonXmlProperty(localName=&quot;LINE_ITEM_ID&quot;)
-	private final int lineItemId;
+	private int lineItemId;
 	
 	/**
 	 * riferimento a DTO XmlProductId per PRODUCT_ID
 	 */
 	@JacksonXmlProperty(localName=&quot;PRODUCT_ID&quot;)
-	private final XmlProductID prodId;
+	private XmlProductID prodId;
 	
 	/**
 	 * tag per specificare quantità (con o senza cifre decimali; il separatore deve essere “.”)
 	 */
 	@JacksonXmlProperty(localName=&quot;QUANTITY&quot;)
-	private final float quantity;
+	private float quantity;
 	
 	/**
 	 * tag per Unità di misura (unità ISO, ma è possibile una mappatura personalizzata)
 	 */
 	@JacksonXmlProperty(localName=&quot;bmecat:ORDER_UNIT&quot;)
-	private final String orderUnit;
+	private String orderUnit;
 
 	
+	/**
+	 * empty constructor for deserializer
+	 */
+<span class="fc" id="L42">	public XmlItem() {/*empty constructor*/}</span>
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans articolo ordine partendo dal POJO {@code OrderItem}
 	 * @param item - OrderItem
 	 */
 	public XmlItem(final OrderItem item) {
-<span class="nc" id="L45">		super();</span>
-<span class="nc" id="L46">		this.lineItemId = Integer.parseInt(item.getLineItemID());</span>
-<span class="nc" id="L47">		this.prodId = new XmlProductID(</span>
-<span class="nc" id="L48">								item.getSupplierID(),</span>
-<span class="nc" id="L49">								item.getBuyerID(),</span>
-<span class="nc" id="L50">								item.getDescriptionShort()</span>
+<span class="fc" id="L49">		super();</span>
+<span class="fc" id="L50">		this.lineItemId = Integer.parseInt(item.getLineItemID());</span>
+<span class="fc" id="L51">		this.prodId = new XmlProductID(</span>
+<span class="fc" id="L52">								item.getSupplierID(),</span>
+<span class="fc" id="L53">								item.getBuyerID(),</span>
+<span class="fc" id="L54">								item.getDescriptionShort()</span>
 							);
-<span class="nc" id="L52">		this.quantity = Float.parseFloat(item.getQuantity());</span>
-<span class="nc" id="L53">		this.orderUnit = item.getOrderUnit();</span>
-<span class="nc" id="L54">	}</span>
+<span class="fc" id="L56">		this.quantity = Float.parseFloat(item.getQuantity());</span>
+<span class="fc" id="L57">		this.orderUnit = item.getOrderUnit();</span>
+<span class="fc" id="L58">	}</span>
 
 
 
@@ -60,7 +64,7 @@ public final class XmlItem {
 	 * @return int 
 	 */
 	public int getLineItemId() {
-<span class="nc" id="L63">		return lineItemId;</span>
+<span class="fc" id="L67">		return lineItemId;</span>
 	}
 
 
@@ -70,7 +74,7 @@ public final class XmlItem {
 	 * @return XmlProductId - DTO con numero articolo del sistema cliente e del sistema fornitore.
 	 */
 	public XmlProductID getProdId() {
-<span class="nc" id="L73">		return prodId;</span>
+<span class="fc" id="L77">		return prodId;</span>
 	}
 
 
@@ -80,7 +84,7 @@ public final class XmlItem {
 	 * @return float - quantità
 	 */
 	public float getQuantity() {
-<span class="nc" id="L83">		return quantity;</span>
+<span class="fc" id="L87">		return quantity;</span>
 	}
 
 
@@ -90,9 +94,34 @@ public final class XmlItem {
 	 * @return String - unità di misura (ISO) della quantità
 	 */
 	public String getOrderUnit() {
-<span class="nc" id="L93">		return orderUnit;</span>
+<span class="fc" id="L97">		return orderUnit;</span>
 	}
 
+
+
+	public void setLineItemId(int lineItemId) {
+<span class="fc" id="L103">		this.lineItemId = lineItemId;</span>
+<span class="fc" id="L104">	}</span>
+
+
+
+	public void setProdId(XmlProductID prodId) {
+<span class="fc" id="L109">		this.prodId = prodId;</span>
+<span class="fc" id="L110">	}</span>
+
+
+
+	public void setQuantity(float quantity) {
+<span class="fc" id="L115">		this.quantity = quantity;</span>
+<span class="fc" id="L116">	}</span>
+
+
+
+	public void setOrderUnit(String orderUnit) {
+<span class="fc" id="L121">		this.orderUnit = orderUnit;</span>
+<span class="fc" id="L122">	}</span>
+
+	
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

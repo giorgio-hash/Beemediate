@@ -1,0 +1,89 @@
+@startuml
+start
+:buffer vuoto;
+:costruisci FornitoreDTO;
+if (errore in costruzione) then (si)
+    end
+else (no)
+    fork
+    #red : FornitoreDTO>
+    fork again
+    : FornitoreDTO<
+    :costruisci PreventivoDTO;
+    if (errore in costruzione) then (si)
+        stop
+    else (no)
+        split
+        fork
+        #red :PreventivoDTO>
+        fork again
+            :PreventivoDTO<
+            :costruisci ConsegnaDTO;
+            if (errore in costruzione) then (si)
+                end
+            endif
+            :costruisci ContattoConsegnaDTO;
+            if (errore in costruzione) then (si)
+                end
+            endif
+            :costruisci DestinazioneDTO;
+            if (errore in costruzione) then (si)
+                end
+            endif
+            #red :DestinazioneDTO>
+        fork again
+        :PreventivoDTO<
+        :costruisci CompagniaDTO;
+        if (errore in costruzione) then (si)
+            end
+         endif
+         #red :CompagniaDTO>
+         end fork
+         :mappa OrderHeader;
+         #lightgreen :OrderHeader>
+         split again
+         :PreventivoDTO<
+         :crea array di ArticoloPreventivoDTO;
+         if (array vuoto di ArticoloPreventivoDTO) then (si)
+            end
+         else (no)
+             fork
+             #red :array di ArticoloPreventivoDTO>
+             fork again
+             :array di ArticoloPreventivoDTO<
+             :crea array di ProdottoDTO;
+             if (array vuoto di ProdottoDTO) then (si)
+                end
+             endif
+             :crea array di ProdottoFornitoreDTO;
+             if (array vuoto di ProdottoFornitoreDTO) then (si)
+                end
+             endif
+             #red :array di ProdottoFornitoreDTO>
+            end fork
+            :mappa array di OrderItem;
+            #lightgreen :array di OrderItem>
+         endif
+        end split
+        end if
+end fork
+fork
+:array di OrderItem>
+fork again
+:OrderHeader<
+:FornitoreDTO<
+:integra info fornitore in OrderHeader;
+:OrderHeader>
+fork again
+:OrderHeader<
+:array di OrderItem<
+:costruisci OrderSummary;
+#lightgreen :OrderSummary>
+end fork
+:costruisci OrderStructure;
+#lightblue :OrderStructure>
+:costruisci Order;
+#lightblue :Order>
+:aggiungi Order a buffer;
+stop
+@enduml

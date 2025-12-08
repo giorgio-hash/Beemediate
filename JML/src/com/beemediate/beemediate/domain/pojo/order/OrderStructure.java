@@ -2,16 +2,32 @@ package com.beemediate.beemediate.domain.pojo.order;
 
 import java.util.Arrays;
 
+import org.jmlspecs.annotation.SkipEsc;
+
 import org.jmlspecs.annotation.CodeBigintMath;
 import org.jmlspecs.annotation.SkipEsc;
 
+/***
+ * Struttura POJO per validare le informazioni dell'Ordine di Acquisto.
+ * Funge da pre-computazione per il DTO da mandare al fornitore.
+ * Si basa sulla specifica XML-OpenTrans compatibile coi sistemi del fornitore. 
+ * E' costituito da:
+ * <ul>
+ * <li>una struttura OrderHeader, contenente le informazioni rilevanti per la transazione;</li>
+ * <li>un array di elementi OrderItem, ognuna delle quali contiene le informazioni riguardo un l'articolo da rifornire; </li>
+ * <li>una struttura OrderSummary con informazioni sommarie relative all'ordine.</li>
+ * </ul>
+ * */
 public class OrderStructure {
 	
 	//order.order_header
+	/***Struttura OrderHeader con le informazioni rilevanti per la transazione*/
 	private /*@ spec_public nullable @*/ OrderHeader header = null;
 	//order.order_item_list
+	/***Array di elementi OrderItem contenenti le informazioni riguardo gli articoli richiesti*/
 	private /*@ spec_public nullable @*/ OrderItem[] itemList = null;
 	//order.order_summary
+	/***Struttura OrderSummary con informazioni sintetiche per l'ordine.*/
 	private /*@ spec_public nullable @*/ OrderSummary orderSummary = null;
 	
 	/*@ public invariant itemList!=null ==> 0<itemList.length<=Integer.MAX_VALUE; @*/
@@ -20,64 +36,62 @@ public class OrderStructure {
 	/*@ public invariant itemList!=null ==> \elemtype(\typeof(itemList)) == \type(OrderItem); @*/
 	/*@ public invariant (itemList!=null & orderSummary!=null) ==> orderSummary.totalItemNum == itemList.length; @*/
 	
+	/**
+	 * Costruttore
+	 */
 	//@ public normal_behaviour
 	//@ ensures header == null & itemList == null & orderSummary == null;
 	//@ pure
-	private OrderStructure() {};
-	
+	public OrderStructure() {/*empty constructor*/}
+
 	/**
-	 * Copy Constructor
+	 * 
+	 * @return struttura OrderHeader
 	 */
-	/*@
-	  @ public normal_behaviour
-	  @ requires copy!=null & copy.header!=null & copy.itemList!=null & copy.orderSummary!=null;
-	  @ requires copy.itemList.length>0 
-	  				& (\forall int i; 0 <= i & i < copy.itemList.length; copy.itemList[i] != null)
-	  				& (\forall int i; 0<=i & i<copy.itemList.length; \typeof(copy.itemList[i]) == \type(OrderItem) )
-	  				& \elemtype(\typeof(copy.itemList)) == \type(OrderItem)
-	  				& copy.orderSummary.totalItemNum == copy.itemList.length;
-	  @ ensures this.header!=null & this.itemList!=null & this.orderSummary!=null;
-	  @ ensures itemList.length>0 
-	  				& (\forall int i; 0 <= i & i < itemList.length; itemList[i] != null)
-	  				& (\forall int i; 0<=i & i<itemList.length; \typeof(itemList[i]) == \type(OrderItem) )
-	  				& \elemtype(\typeof(itemList)) == \type(OrderItem)
-	  				& orderSummary.totalItemNum == itemList.length;
-	  @ ensures this != copy;
-	  @ ensures \not_modified(copy);
-	  @*/
-	@CodeBigintMath
-	public /*@ pure @*/ OrderStructure(OrderStructure copy) {
-		this.header = new OrderHeader(copy.getHeader());
-		this.itemList = copy.getItemList().clone();
-		//@ assume itemList.length>0;
-		//@ assume (\forall int i; 0 <= i & i < itemList.length; itemList[i] != null);
-		//@ assume (\forall int i; 0<=i & i<itemList.length; \typeof(itemList[i]) == \type(OrderItem) );
-		//@ assume \elemtype(\typeof(itemList)) == \type(OrderItem);
-		//@ assume copy.orderSummary.totalItemNum == itemList.length;
-		this.orderSummary = new OrderSummary(copy.getOrderSummary());
-	}
-	
 	//@ public normal_behaviour
 	//@ requires header!=null;
 	//@ ensures \result==header;
 	//@ ensures \old(header)==header;
+	//@ ensures \result != null;
 	public /*@ pure @*/ OrderHeader getHeader() {
 		return header;
 	}
 	
+	/**
+	 * 
+	 * @param header - struttura OrderHeader
+	 */
 	//@ public normal_behaviour
 	//@ ensures this.header!=null;
-	public void setHeader(/*@ non_null @*/ OrderHeader header) {
+	public void setHeader(/*@ non_null @*/final OrderHeader header) {
 		this.header = header;
 	}
 	
+	/**
+	 * 
+	 * @return Array di elementi OrderItem, specificanti gli articoli
+	 */
 	//@ public normal_behaviour
 	//@ requires itemList!=null;
+	//@ requires 0<itemList.length<=Integer.MAX_VALUE;
+	//@	requires (\forall int i; 0<=i & i<itemList.length; itemList[i] != null);
+	//@ requires (\forall int i; 0<=i & i<itemList.length; \typeof(itemList[i]) == \type(OrderItem) );
+	//@ requires \elemtype(\typeof(itemList)) == \type(OrderItem);
 	//@ ensures \result==itemList;
+	//@ ensures \result != null;
+	//@ ensures \result!=null;
+	//@ ensures 0<\result.length<=Integer.MAX_VALUE;
+	//@	ensures (\forall int i; 0<=i & i<\result.length; \result[i] != null);
+	//@ ensures (\forall int i; 0<=i & i<\result.length; \typeof(\result[i]) == \type(OrderItem) );
+	//@ ensures \elemtype(\typeof(\result)) == \type(OrderItem);
 	public /*@ pure @*/ OrderItem[] getItemList() {
 		return itemList;
 	}
 
+	/**
+	 * 
+	 * @param itemList - Array di elementi OrderItem
+	 */
 	//@ public normal_behaviour
 	//@ assigns this.itemList;
 	//@ requires itemList.length>0;
@@ -98,17 +112,26 @@ public class OrderStructure {
 	//@ requires orderSummary == null;
 	//@ ensures this.itemList!=null;
 	//@ ensures this.itemList == itemList;
-	public void setItemList(/*@ non_null @*/ OrderItem[] itemList) {
+	public void setItemList(/*@ non_null @*/final OrderItem[] itemList) {
 		this.itemList = itemList;
 	}
 	
+	/**
+	 * 
+	 * @return OrderSummary - sommario dell'ordine
+	 */
 	//@ public normal_behaviour
 	//@ requires orderSummary != null;
 	//@ ensures \result == orderSummary;
+	//@ ensures \result != null;
 	public /*@ pure @*/ OrderSummary getOrderSummary() {
 		return orderSummary;
 	}
 
+	/**
+	 * 
+	 * @param orderSummary - sommario dell'ordine
+	 */
 	//@ public normal_behaviour
 	//@ assigns this.orderSummary;
 	//@ requires itemList!=null;
@@ -122,7 +145,7 @@ public class OrderStructure {
 	//@ ensures this.orderSummary!=null;
 	//@ ensures this.orderSummary == orderSummary;
 	@CodeBigintMath
-	public void setOrderSummary(/*@ non_null @*/ OrderSummary orderSummary) {
+	public void setOrderSummary(/*@ non_null @*/final OrderSummary orderSummary) {
 		this.orderSummary = orderSummary;
 	}
 	

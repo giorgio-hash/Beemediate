@@ -36,10 +36,10 @@ public class FTPConfig {
 	 * @param outbound - valore della chiave {@code ftp.outbound}
 	 * @param archived - valore della chiave {@code ftp.archived}
 	 */
-    public FTPConfig(
+<span class="fc" id="L39">    public FTPConfig(</span>
             @Value(&quot;${ftp.inbound}&quot;) String inbound,
             @Value(&quot;${ftp.outbound}&quot;) String outbound,
-<span class="fc" id="L42">            @Value(&quot;${ftp.archived}&quot;) String archived) {</span>
+            @Value(&quot;${ftp.archived}&quot;) String archived) {
 <span class="fc" id="L43">        this.inboundFolder = inbound;</span>
 <span class="fc" id="L44">        this.outboundFolder = outbound;</span>
 <span class="fc" id="L45">        this.archivedFolder = archived;</span>

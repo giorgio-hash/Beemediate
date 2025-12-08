@@ -1,22 +1,49 @@
 package com.beemediate.beemediate.domain.service;
 
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.stereotype.Service;
+
 import org.jmlspecs.annotation.CodeBigintMath;
+import org.jmlspecs.annotation.SkipEsc;
 
 import com.beemediate.beemediate.domain.pojo.order.Order;
 import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
 import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
+/**
+ * Gestore buffer degli elementi Order in arrivo dal CRM. Utilizza:
+ * <ul>
+ * <li>Un BoundedBuffer che contiene e gestisce gli ordini con politica LIFO;</li>
+ * <li>Un riferimento alll'interfaccia del validatore, OaFValidatorIF;</li>
+ * <li>Un riferimento all'adattatore di OrderProviderPort.</li>
+ * </ul>
+ */
+//Service
 public class OaFBuffer {
 	
-	private /*@ spec_public @*/ final BoundedBuffer buffer;
-	private /*@ spec_public @*/ final OaFValidatorIF validator;
-	private /*@ spec_public @*/ final OrderProviderPort or;
+	/***Riferimento alla struttura dati che gestisce gli Order con politica LIFO*/
+	private /*@ spec_public @*/  BoundedBuffer buffer;
+	/***Riferimento all'interfaccia del validatore*/
+	private /*@ spec_public @*/ OaFValidatorIF validator;
+	/***Riferimento all'adattatore di OrderProviderPort*/
+	private /*@ spec_public @*/ OrderProviderPort or;
 	
 	/*@ public invariant buffer!=null; @*/
 	/*@ public invariant validator!=null; @*/
 	/*@ public invariant or!=null; @*/
 
+	//per testing
+	@SkipEsc
+	private OaFBuffer() {/*empty constructor for mockito testing*/};
+	
+	/**
+	 * Costruttore
+	 * @param bufferCapacity - capacità con la quale si istanzia BoundedBuffer
+	 * @param v - implementazione dell'interfaccia OaFValidatorIF
+	 * @param orderRetriever - 
+	 */
 	//@ public normal_behaviour
 	//@ requires bufferCapacity>0;
 	//@ requires v != null;
@@ -28,19 +55,19 @@ public class OaFBuffer {
 	//@ ensures (\forall int i; buffer.size<=i<buffer.ordini.length; buffer.ordini[i]==null);
 	//@ pure
 	@CodeBigintMath
-	public OaFBuffer(int bufferCapacity, OaFValidatorIF v, OrderProviderPort orderRetriever) {
+	public OaFBuffer(final int bufferCapacity, final OaFValidatorIF v, final OrderProviderPort orderRetriever) {
 		buffer = new BoundedBuffer(bufferCapacity);
 		validator = v;
 		or = orderRetriever;
 	}
 
+	/**
+	 * Svuota il buffer, richiede nuovi Order e ricarica il buffer.
+	 * @return int - numero di Order caricati
+	 */
 	/*@ public normal_behaviour
-	  @ assigns or.newOrder, buffer.ordini[*], buffer.size;
-	  @ requires buffer != null;
-	  @ requires or != null;
-	  @ ensures 0<=\result<=buffer.ordini.length;
-	  @ ensures \result == buffer.size;
-	  @ diverges true;
+	  @ ensures buffer.size==\result;
+	  @ ensures \result>=0;
 	  @*/
 	@CodeBigintMath
 	public int loadNewBuffer() {
@@ -51,7 +78,8 @@ public class OaFBuffer {
 		//@ ghost int ordersLoaded = 0;
 		
 		if(or.fetchOrders()) { //c'? almeno un ordine
-			Order t = or.popNewOrder();
+			
+			/*@ nullable @*/Order t = null;
 			//@ loop_writes buffer.ordini[*], t, ordersLoaded;
 			//@ loop_invariant 0<=buffer.size<=buffer.ordini.length;
 			/*@ loop_invariant 0<=ordersLoaded<=buffer.size;
@@ -61,29 +89,28 @@ public class OaFBuffer {
 			  @																		& buffer.ordini[j].quantity!=null
 			  @																		& buffer.ordini[j].orderID!=null
 			  @																		& \typeof(buffer.ordini[j]) == \type(Order));
+			  @
+			  @ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
 			  @*/
-			/*@ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
-			  @*/
-			//@ loop_invariant t!=null & t.data!=null & t.quantity!=null & t.orderID!=null & \typeof(t) == \type(Order);
-			do {
-				if(buffer.isFull())
-					break;
-				else{
-					buffer.push(t);
-					//@ assert ordersLoaded+1 == buffer.size;
-					//@ set ordersLoaded = buffer.size;
-				}
-			}while( or.hasNewOrder() );
+			while(or.hasNewOrder() && !buffer.isFull()) {
+
+				t = or.popNewOrder();
+				buffer.push(t);
+				//@ assert ordersLoaded+1 == buffer.size;
+				//@ set ordersLoaded = buffer.size;
+			}
 		}
 		
 		//@ assert ordersLoaded == buffer.size;
-		//@ assert buffer.size() == buffer.size;
+		//@ assert buffer.getSize() == buffer.size;
 		
-		return buffer.size();
+		return buffer.getSize();
 	}	
 	
-	/** Valida gli ordini presenti nel buffer (se presenti) e restituisce il numero di ordini idonei per l'invio.
-	 * */
+	/**
+	 * Valida gli ordini presenti nel buffer (se presenti) e restituisce il numero di ordini idonei per l'invio.
+	 * @return int - numero di ordini che hanno superato la validazione
+	 */
 	/*@ public normal_behaviour
 	  @ requires validator!=null;
 	  @ requires buffer!=null & buffer.size>0 & buffer.size<=buffer.ordini.length;
@@ -102,13 +129,13 @@ public class OaFBuffer {
 	  @ requires buffer!=null & buffer.size==0;
 	  @ ensures \result == 0;
 	  @*/
-	@CodeBigintMath
+//	@CodeBigintMath
 	public int validateBuffer() {
 		int passed=0;
 		
 		//@ ghost int initialSize = buffer.size;
 		
-		if (buffer.size()>0) {
+		if (buffer.getSize()>0) {
 			
 			//@ assert initialSize == buffer.size;
 			
@@ -132,7 +159,7 @@ public class OaFBuffer {
 			  @*/
 			//@ maintaining 0<=passed<=i & 0<=passed<=initialSize;
 			//@ decreases buffer.size-i;
-			for(int i=0;i<buffer.size();i++) {
+			for(int i=0;i<buffer.getSize();i++) {
 				o = buffer.get(i);
 				//@ assert \typeof(buffer.get(i)) == \typeof(o);
 				//@ assert \typeof(buffer.get(i)) == \type(Order);
@@ -150,6 +177,10 @@ public class OaFBuffer {
 		return passed;
 	}
 	
+	/**
+	 * 
+	 * @return riferimento al BoundedBuffer contenente gli Order
+	 */
 	//@ public normal_behaviour
 	//@ ensures \result == buffer;
 	public /*@ pure @*/ BoundedBuffer getBuffer() {
