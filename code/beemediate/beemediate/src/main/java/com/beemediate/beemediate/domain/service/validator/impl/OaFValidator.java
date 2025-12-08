@@ -279,7 +279,10 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
 	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
 	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i].quantity!=null & ost.itemList[i].quantity.length()>=0);
-	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT <==> (\forall int i; 0<=i<ost.itemList.length; StringHandler.isDouble(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.INTEGER ==> (\exists int i; 0<=i<ost.itemList.length; StringHandler.isInteger(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.NAN ==> (\exists int i; 0<=i<ost.itemList.length; (!StringHandler.isDouble(ost.itemList[i].quantity) & !StringHandler.isInteger(ost.itemList[i].quantity) & !StringHandler.containsChar(ost.itemList[i].quantity,',') ));
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_COMMA ==> (\exists int i; 0<=i<ost.itemList.length; StringHandler.containsChar(ost.itemList[i].quantity,',') );
 	  @*/
 //	@CodeBigintMath
 	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
@@ -293,7 +296,7 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant (qfv==QuantityFieldValue.FLOAT_WITH_DOT & \count>0) ==> (\forall int i; 0<=i<\count; StringHandler.isDouble(ost.itemList[i].quantity) );
 		  @ loop_invariant (qfv==QuantityFieldValue.INTEGER & \count>0) ==> (\exists int i; 0<=i<\count; StringHandler.isInteger(ost.itemList[i].quantity));
 		  @ loop_invariant qfv==QuantityFieldValue.FLOAT_WITH_COMMA ==> (!StringHandler.isDouble(il.quantity) & StringHandler.containsChar(il.quantity,',') );
-		  @ loop_invariant qfv==QuantityFieldValue.NAN ==> (!StringHandler.isDouble(il.quantity) & !StringHandler.containsChar(il.quantity,',') );
+		  @ loop_invariant qfv==QuantityFieldValue.NAN ==> (!StringHandler.isDouble(il.quantity) & !StringHandler.isInteger(il.quantity) & !StringHandler.containsChar(il.quantity,',') );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
 		for(OrderItem il : ost.getItemList()) {
@@ -355,9 +358,46 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
 	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
 	  @ requires ost.header!=null;
-	  @ ensures \result ==> (StringHandler.isDateTime(ost.header.orderDate) & StringHandler.isDateTime(ost.header.startDate) & StringHandler.isDateTime(ost.header.endDate));
-	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.orderDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.orderDate.charAt(i)<=ost.header.endDate.charAt(i) );
-	  @ ensures \result ==> (\forall int i; 1<=i<ost.header.orderDate.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; ost.header.startDate.charAt(i)==ost.header.endDate.charAt(i) );
+	  @ requires !validateDeliveryDateContent(ost);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires !StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ ensures !\result;
+	  @	  
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ requires !StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length>0;
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ requires StringHandler.equals(ost.header.startDate, ost.header.endDate);
+	  @ ensures \result;
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
 		return validateDeliveryDateContent(ost) 

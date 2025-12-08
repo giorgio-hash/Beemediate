@@ -271,23 +271,25 @@ public class StringHandler {
 	 * @return <i>true</i> se condizione rispettata
 	 */
 	/*@ public normal_behaviour
-	  @ requires str.length()!=19;
+	  @ requires str.length() > 19 | str.length() < 19;
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\exists int i; i==4 | i==7; str.charAt(i) != '-')
-      @	  			| str.charAt(10) != ' '
-      @				| (\exists int i; i==13 | i==16; str.charAt(i) != ':');
-      @ ensures !\result;
-      @
-      @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\forall int i; i==4 | i==7; str.charAt(i) == '-')
-      @	  			& str.charAt(10) == ' '
-      @				& (\forall int i; i==13 | i==16; str.charAt(i) == ':');
-      @ ensures \result ==> isDigit(str.charAt(0),true);
-      @ ensures \result ==> (\forall int i; 1<=i<str.length() & i!=4 & i!=7 & i!=10 & i!=13 & i!=16; isDigit(str.charAt(i),false) );
+	  @ requires str.length() == 19;
+	  @ ensures \result ==> ((\forall int i; i==4 | i==7; str.charAt(i)=='-')
+	  @						& str.charAt(10)=='T'
+	  @						&(\forall int j; j==13 | j==16; str.charAt(j)==':'));
+	  @ ensures \result ==> (	'1'<=str.charAt(0)<='9'
+	  @						&	(\forall int i; 1<=i<=3; '0'<=str.charAt(i)<='9') );
+	  @ ensures \result ==> ( (str.charAt(5)=='0' & '1'<=str.charAt(6)<='9')
+	  @							|	(str.charAt(5)=='1' & '0'<=str.charAt(6)<='2') );
+	  @ ensures \result ==> ( (str.charAt(8)=='0' & '1'<=str.charAt(9)<='9')
+	  @							|	('1'<=str.charAt(8)<='2' & '0'<=str.charAt(9)<='9')
+	  @							|	( str.charAt(8)=='3' & '0'<=str.charAt(9)<='1') );
+	  @ ensures \result ==> ( ('0'<=str.charAt(11)<='1' & '0'<=str.charAt(12)<='9')
+	  @							|	(str.charAt(11)=='2' & '0'<=str.charAt(12)<='3') );
+	  @ ensures \result ==> ( ('0'<=str.charAt(14)<='5' & '0'<=str.charAt(15)<='9'));
+	  @ ensures \result ==> ( ('0'<=str.charAt(17)<='5' & '0'<=str.charAt(18)<='9'));	  
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 		
@@ -372,7 +374,6 @@ public class StringHandler {
      *         a partire da {@code index} che rispettano i rispettivi intervalli; {@code false}
      *         in caso di input non valido o se i caratteri non rientrano negli intervalli
      */
-    /*@
 	/*@
 	  @ public normal_behaviour
 	  @ requires s == null || s.length()==0;
@@ -387,9 +388,9 @@ public class StringHandler {
 	  @ requires s!=null & s.length()>0;
 	  @ requires index>=0 & s.length()>index+1;
 	  @ ensures \result ==> (isDigit(startRangeFirstDigit, false) & isDigit(endRangeFirstDigit, false)
-        		& isDigit(startRangeSecondDigit, false) & isDigit(endRangeSecondDigit, false));
+      		& isDigit(startRangeSecondDigit, false) & isDigit(endRangeSecondDigit, false));
       @ ensures \result ==> (s.charAt(index) >= startRangeFirstDigit & s.charAt(index) <= endRangeFirstDigit &
-        		s.charAt(index+1) >= startRangeSecondDigit & s.charAt(index+1) <= endRangeSecondDigit);
+      		s.charAt(index+1) >= startRangeSecondDigit & s.charAt(index+1) <= endRangeSecondDigit);
 	  @*/
 //	@CodeBigintMath
     public static /*@ pure @*/ boolean has2DigitsBetween(String s, int index, 
@@ -415,21 +416,20 @@ public class StringHandler {
 	 * @return <i>true</i> se condizione rispettata.
 	 */
 	/*@ public normal_behaviour
-	  @ requires date1!=null & date1.length()==19;
-	  @ requires date2!=null & date2.length()==19;
-	  @ requires !isDateTime(date1) | !isDateTime(date2);
+	  @ requires !isDateTime(date1);
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires date1!=null & date1.length()==19;
-	  @ requires date2!=null & date2.length()==19;
+	  @ requires !isDateTime(date2);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
 	  @ requires isDateTime(date1) & isDateTime(date2);
-	  @ ensures !\result<==> ((\exists int i; 0<=i<4; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 5<=i<7; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 8<=i<10; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 11<=i<13; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 14<=i<16; date1.charAt(i)>date2.charAt(i))
-	  @							| (\exists int i; 17<=i<19; date1.charAt(i)>date2.charAt(i)));
+	  @ ensures \result <==>	(	date1.charAt(0)<date2.charAt(0)
+	  @								|(\exists int i; 0<i<19; date1.charAt(i)<date2.charAt(i)
+	  @									& (\forall int j; 0<=j<i; date1.charAt(j)==date2.charAt(j)))
+	  @								|(\forall int k; 0<=k<19; date1.charAt(k)==date2.charAt(k))
+	  @						);
 	  @*/
 //	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
@@ -501,10 +501,18 @@ public class StringHandler {
 	  @ requires s1!=null & s1.length()>0;
 	  @ requires s2!=null & s2.length()>0;
 	  @ requires pos>=0 & substrSize>0;
-	  @ ensures !\result <==> ((\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) )
-	  							| pos+substrSize>s1.length() 
-	  							| pos+substrSize>s2.length());
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures !\result;
 	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()>0;
+	  @ requires pos>=0 & substrSize>0;
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)<s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ))
+	  				|	(\forall int j; pos<=j<pos+substrSize; s1.charAt(j)==s2.charAt(j) );
+	  @ ensures \result <==> (pos+substrSize<=s1.length() & pos+substrSize<=s2.length());
 	  @*/
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(String s1, String s2, int pos, int substrSize) {
@@ -528,6 +536,38 @@ public class StringHandler {
 	}
 	
 	
+	/**
+	 * Confronta una porzione di due stringhe iniziando da una posizione specifica.
+	 *
+	 * @param pos L'indice di partenza per il confronto in entrambe le stringhe.
+	 * @param substrSize Il numero di caratteri da confrontare.
+	 * @return  1 se la sottostringa di s1 è lessicograficamente successiva (maggiore) a quella di s2;
+	 * -1 se la sottostringa di s1 è lessicograficamente precedente (minore) a quella di s2;
+	 * 0 se le due sottostringhe sono perfettamente identiche.
+	 */
+	/*@	public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)>s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\exists int j; pos<=j<pos+substrSize; s1.charAt(j)<s2.charAt(j) 
+	  								&	(\forall int i; pos<=i<j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==-1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null & s1.length()>0;
+	  @ requires s2!=null & s2.length()==s1.length();
+	  @ requires pos>=0 & substrSize>0 & pos+substrSize<=s1.length();
+	  @ requires (\forall int i; pos<=i<pos+substrSize; s1.charAt(i)==s2.charAt(i) );
+	  @ ensures \result==0;
+	  @*/
 	public static int substrCompare(String s1, String s2, int pos, int substrSize) {
 		
 		//@ loop_writes i;
