@@ -281,9 +281,12 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
 	  @ requires (ost.orderSummary!=null) ==> ost.orderSummary.totalItemNum == ost.itemList.length;
 	  @ requires (\forall int i; 0<=i & i<ost.itemList.length; ost.itemList[i].quantity!=null & ost.itemList[i].quantity.length()>=0);
-	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT <==> (\forall int i; 0<=i<ost.itemList.length; StringHandler.isDouble(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.INTEGER ==> (\exists int i; 0<=i<ost.itemList.length; StringHandler.isInteger(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.NAN ==> (\exists int i; 0<=i<ost.itemList.length; (!StringHandler.isDouble(ost.itemList[i].quantity) & !StringHandler.isInteger(ost.itemList[i].quantity) & !StringHandler.containsChar(ost.itemList[i].quantity,',') ));
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_COMMA ==> (\exists int i; 0<=i<ost.itemList.length; StringHandler.containsChar(ost.itemList[i].quantity,',') );
 	  @*/
-//	@CodeBigintMath
+	@CodeBigintMath
 	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
 		
 		
@@ -295,7 +298,7 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant (qfv==QuantityFieldValue.FLOAT_WITH_DOT & \count>0) ==> (\forall int i; 0<=i<\count; StringHandler.isDouble(ost.itemList[i].quantity) );
 		  @ loop_invariant (qfv==QuantityFieldValue.INTEGER & \count>0) ==> (\exists int i; 0<=i<\count; StringHandler.isInteger(ost.itemList[i].quantity));
 		  @ loop_invariant qfv==QuantityFieldValue.FLOAT_WITH_COMMA ==> (!StringHandler.isDouble(il.quantity) & StringHandler.containsChar(il.quantity,',') );
-		  @ loop_invariant qfv==QuantityFieldValue.NAN ==> (!StringHandler.isDouble(il.quantity) & !StringHandler.containsChar(il.quantity,',') );
+		  @ loop_invariant qfv==QuantityFieldValue.NAN ==> (!StringHandler.isDouble(il.quantity) & !StringHandler.isInteger(il.quantity) & !StringHandler.containsChar(il.quantity,',') );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
 		for(OrderItem il : ost.getItemList()) {
