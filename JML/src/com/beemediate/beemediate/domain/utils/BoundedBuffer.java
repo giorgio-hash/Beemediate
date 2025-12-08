@@ -81,6 +81,7 @@ public class BoundedBuffer {
 	  @ ensures \old(size)<ordini.length <==> (size == \old(size)+1);
 	  @ ensures size == \old(size)+1 ==> ordini[\old(size)] == x;
 	  @ ensures size == \old(size)+1 ==> \typeof(ordini[\old(size)]) == \type(Order);
+	  @ ensures (\forall int i; 0<=i<size; ordini[i]!=null);
 	  @*/
 	public void push(final Order x) {
 		if(size<ordini.length) {

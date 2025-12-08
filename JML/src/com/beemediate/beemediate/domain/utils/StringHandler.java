@@ -247,6 +247,7 @@ public class StringHandler {
 	  @ requires str.length()>1;
 	  @ ensures \result <==> (\exists int i; 0<=i<str.length(); str.charAt(i)==elem);
 	  @*/
+	@CodeBigintMath
 	public static /*@ pure @*/ boolean containsChar( /*@ non_null @*/ final String str, final char elem) {
 	
 		if(str==null || str.length()==0)

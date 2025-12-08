@@ -11,11 +11,11 @@ public interface DataSenderPort {
 	/*@ public normal_behaviour
 	  @ assigns positiveResponse;
 	  @ requires c!=null;
-	  @ requires !c.getOrderID().isEmpty();
+	  @ requires !c.confirmationId.isEmpty();
 	  @ ensures \result==positiveResponse;
 	  @ also public normal_behaviour
 	  @ assigns positiveResponse;
-	  @ requires (c!=null & c.getOrderID().isEmpty()) | c==null;
+	  @ requires (c!=null & c.confirmationId.isEmpty()) | c==null;
 	  @ ensures !\result;
 	  @*/
 	public boolean signalConfirmation(Confirmation c);
