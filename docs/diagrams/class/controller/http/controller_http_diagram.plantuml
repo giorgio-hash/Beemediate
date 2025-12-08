@@ -1,0 +1,34 @@
+@startuml
+
+top to bottom direction
+skinparam linetype ortho
+
+package impl {
+class ManagerRestController {
+  + ManagerRestController(OaFManagerPort): 
+  - log: Logger
+  - oafManager: OaFManagerPort
+  + manageOrders(): ResponseEntity
+  + checkHealth(): ResponseEntity<String>
+  + manageConfirmations(): ResponseEntity
+}
+
+class UIController {
+  + UIController():
+  + getUI(Model): String
+}
+}
+
+interface ManagerRestControllerIF << interface >> {
+  + checkHealth(): ResponseEntity<String>
+  + manageConfirmations(): ResponseEntity
+  + manageOrders(): ResponseEntity
+}
+
+interface UIControllerIF << interface >> {
+  + getUI(Model): String
+}
+
+ManagerRestController    -[#008200,dashed]-^  ManagerRestControllerIF 
+UIController             -[#008200,dashed]-^  UIControllerIF          
+@enduml
