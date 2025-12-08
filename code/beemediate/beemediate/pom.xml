@@ -109,6 +109,21 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!--Selenium-->
+		<dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>4.31.0</version> 
+        </dependency>
+
+		<!--WireMock-->
+	    <dependency>
+	        <groupId>org.wiremock</groupId>
+	        <artifactId>wiremock-standalone</artifactId>
+	        <version>3.3.1</version>
+	        <scope>test</scope>
+	    </dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
