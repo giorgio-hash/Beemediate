@@ -5,7 +5,7 @@ import org.jmlspecs.annotation.SkipEsc;
 /**
  * Rappresenta la struttura dati di una conferma d'ordine.
  * <p>
- * Questa classe Ë un semplice POJO che contiene i campi tipici di una
+ * Questa classe √® un semplice POJO che contiene i campi tipici di una
  * conferma d'ordine: date, identificativi, dati di indirizzo, numero totale
  * di articoli, importo totale e valuta. Fornisce un costruttore vuoto, un
  * costruttore di copia, metodi getter e setter per tutti i campi e una
@@ -13,9 +13,9 @@ import org.jmlspecs.annotation.SkipEsc;
  * dei principali campi.
  * </p>
  * <p>
- * Nota: i campi data sono trattati come Stringhe (il formato non Ë imposto da
+ * Nota: i campi data sono trattati come Stringhe (il formato non √® imposto da
  * questa classe). La gestione della validazione e del parsing delle date,
- * cosÏ come la sincronizzazione/immutabilit‡, sono responsabilit‡ del codice
+ * cos√¨ come la sincronizzazione/immutabilit√†, sono responsabilit√† del codice
  * client che usa questa struttura.
  * </p>
  */
@@ -58,7 +58,7 @@ public class ConfirmationStructure {
 	private /*@ spec_public @*/ String addressZip;
 
 	/**
-	 * Citt‡ dell'indirizzo di consegna.
+	 * Citt√† dell'indirizzo di consegna.
 	 */
 	private /*@ spec_public @*/ String addressCity;
 
@@ -100,9 +100,9 @@ public class ConfirmationStructure {
 	 * 
 	 * @param copy l'istanza da cui copiare i dati; se nullo, il comportamento dipende dall'utilizzo successivo
 	 */
-	/*@ 
-	  @ public normal_behaviour
+	/*@ public normal_behaviour
 	  @ requires copy != null;
+	  @ ensures this!=copy;
 	  @ ensures this.orderResponseDate == copy.orderResponseDate;
 	  @ ensures this.deliveryDate == copy.deliveryDate;
 	  @ ensures this.orderId == copy.orderId;
@@ -116,8 +116,6 @@ public class ConfirmationStructure {
 	  @ ensures this.totalItemNum == copy.totalItemNum;
 	  @ ensures this.totalAmount == copy.totalAmount;
 	  @ ensures this.currency == copy.currency;
-	  @ ensures this != copy;
-	  @ ensures \not_modified(copy);
 	@*/
 	public ConfirmationStructure(ConfirmationStructure copy) {
 		super();
@@ -207,9 +205,9 @@ public class ConfirmationStructure {
 	}
 
 	/**
-	 * Imposta la citt‡ dell'indirizzo di consegna.
+	 * Imposta la citt√† dell'indirizzo di consegna.
 	 * 
-	 * @param addressCity la citt‡
+	 * @param addressCity la citt√†
 	 */
 	/*@ ensures this.addressCity == addressCity; @*/
 	public void setAddressCity(String addressCity) {
@@ -337,9 +335,9 @@ public class ConfirmationStructure {
 	}
 
 	/**
-	 * Restituisce la citt‡ dell'indirizzo di consegna.
+	 * Restituisce la citt√† dell'indirizzo di consegna.
 	 * 
-	 * @return citt‡
+	 * @return citt√†
 	 */
 	/*@ ensures \result == this.addressCity; @*/
 	public String getAddressCity() {
@@ -395,7 +393,6 @@ public class ConfirmationStructure {
 	public String getCurrency() {
 		return currency;
 	}
-
 
 	@SkipEsc
 	@Override

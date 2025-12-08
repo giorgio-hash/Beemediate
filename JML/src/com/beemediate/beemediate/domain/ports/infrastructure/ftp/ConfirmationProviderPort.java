@@ -9,7 +9,7 @@ public interface ConfirmationProviderPort {
 	/*@ public normal_behaviour
 	  @ ensures \result!=null;
 	  @ ensures \result.data!=null;
-	  @ ensures \result.orderID!=null & !\result.orderID.isEmpty();
+	  @ ensures \result.confirmationId!=null & !\result.confirmationId.isEmpty();
 	  @ ensures \typeof(\result) == \type(Confirmation);
 	  @*/
 	public /*@ pure @*/ Confirmation popConfirmation();

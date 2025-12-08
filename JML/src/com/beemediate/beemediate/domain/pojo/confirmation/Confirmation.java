@@ -10,7 +10,6 @@ public class Confirmation {
 	private /*@ spec_public @*/ final String confirmationId;
 	
 	/*@ public invariant data != null; @*/
-	/*@ public invariant confirmationId != null; @*/
 	
 	/**
 	 * Costruttore
@@ -26,13 +25,13 @@ public class Confirmation {
 	}
 
 	/**
-	 * Restituisce copia della struttura dati della conferma d'ordine
+	 * Restituisce la copia della struttura dati della conferma d'ordine
 	 * @return oggetto ConfirmationStructure
 	 */
 	/*@ public normal_behaviour
-	  @ requires data != null; 
-	  @ ensures \result != null;
+	  @ requires data != null;
 	  @ ensures \result != data; 
+	  @ ensures \not_modified(data);
 	  @*/
 	public ConfirmationStructure getData() {
 		return new ConfirmationStructure(data);
