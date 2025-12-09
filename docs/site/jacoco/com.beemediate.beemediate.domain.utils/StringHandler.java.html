@@ -271,72 +271,74 @@
 	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata
 	 */
 	/*@ public normal_behaviour
-	  @ requires str.length()!=19;
+	  @ requires str.length() &gt; 19 | str.length() &lt; 19;
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\exists int i; i==4 | i==7; str.charAt(i) != '-')
-      @	  			| str.charAt(10) != ' '
-      @				| (\exists int i; i==13 | i==16; str.charAt(i) != ':');
-      @ ensures !\result;
-      @
-      @ also public normal_behaviour
-	  @ requires str.length()==19;
-	  @ requires (\forall int i; i==4 | i==7; str.charAt(i) == '-')
-      @	  			&amp; str.charAt(10) == ' '
-      @				&amp; (\forall int i; i==13 | i==16; str.charAt(i) == ':');
-      @ ensures \result ==&gt; isDigit(str.charAt(0),true);
-      @ ensures \result ==&gt; (\forall int i; 1&lt;=i&lt;str.length() &amp; i!=4 &amp; i!=7 &amp; i!=10 &amp; i!=13 &amp; i!=16; isDigit(str.charAt(i),false) );
+	  @ requires str.length() == 19;
+	  @ ensures \result ==&gt; ((\forall int i; i==4 | i==7; str.charAt(i)=='-')
+	  @						&amp; str.charAt(10)=='T'
+	  @						&amp;(\forall int j; j==13 | j==16; str.charAt(j)==':'));
+	  @ ensures \result ==&gt; (	'1'&lt;=str.charAt(0)&lt;='9'
+	  @						&amp;	(\forall int i; 1&lt;=i&lt;=3; '0'&lt;=str.charAt(i)&lt;='9') );
+	  @ ensures \result ==&gt; ( (str.charAt(5)=='0' &amp; '1'&lt;=str.charAt(6)&lt;='9')
+	  @							|	(str.charAt(5)=='1' &amp; '0'&lt;=str.charAt(6)&lt;='2') );
+	  @ ensures \result ==&gt; ( (str.charAt(8)=='0' &amp; '1'&lt;=str.charAt(9)&lt;='9')
+	  @							|	('1'&lt;=str.charAt(8)&lt;='2' &amp; '0'&lt;=str.charAt(9)&lt;='9')
+	  @							|	( str.charAt(8)=='3' &amp; '0'&lt;=str.charAt(9)&lt;='1') );
+	  @ ensures \result ==&gt; ( ('0'&lt;=str.charAt(11)&lt;='1' &amp; '0'&lt;=str.charAt(12)&lt;='9')
+	  @							|	(str.charAt(11)=='2' &amp; '0'&lt;=str.charAt(12)&lt;='3') );
+	  @ ensures \result ==&gt; ( ('0'&lt;=str.charAt(14)&lt;='5' &amp; '0'&lt;=str.charAt(15)&lt;='9'));
+	  @ ensures \result ==&gt; ( ('0'&lt;=str.charAt(17)&lt;='5' &amp; '0'&lt;=str.charAt(18)&lt;='9'));	  
 	  @*/
 	public static /*@ pure @*/ boolean isDateTime(/*@ non_null @*/ String str) {
 		
-<span class="fc bfc" id="L294" title="All 2 branches covered.">		if (str == null) return false;</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">		if (str == null) return false;</span>
 		
 		
 		// Guardo nello specifico il pattern &quot;yyyy-MM-dd HH:mm:ss&quot;
 			
-<span class="fc" id="L299">		final char MAIN_SEPARATOR = 'T';</span>
-<span class="fc" id="L300">		final char DATE_SEPARATOR = '-';</span>
-<span class="fc" id="L301">		final char TIME_SEPARATOR = ':';</span>
-<span class="fc" id="L302">		final int YSize = 4; </span>
-<span class="fc" id="L303">		final int MSize = 2; </span>
-<span class="fc" id="L304">		final int GSize = 2;</span>
-<span class="fc" id="L305">		final int hSize = 2; </span>
-<span class="fc" id="L306">		final int mSize = 2; </span>
-<span class="fc" id="L307">		final int sSize = 2;</span>
+<span class="fc" id="L301">		final char MAIN_SEPARATOR = 'T';</span>
+<span class="fc" id="L302">		final char DATE_SEPARATOR = '-';</span>
+<span class="fc" id="L303">		final char TIME_SEPARATOR = ':';</span>
+<span class="fc" id="L304">		final int YSize = 4; </span>
+<span class="fc" id="L305">		final int MSize = 2; </span>
+<span class="fc" id="L306">		final int GSize = 2;</span>
+<span class="fc" id="L307">		final int hSize = 2; </span>
+<span class="fc" id="L308">		final int mSize = 2; </span>
+<span class="fc" id="L309">		final int sSize = 2;</span>
 		
 		
 		//mi aspetto una certa forma
-<span class="fc bfc" id="L311" title="All 2 branches covered.">		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )</span>
-<span class="fc" id="L312">			return false;</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">		if( str.length() != YSize+MSize+GSize+hSize+mSize+sSize+5  )</span>
+<span class="fc" id="L314">			return false;</span>
 		
 		//mi aspetto i separatori in determinate posizioni
-<span class="fc bfc" id="L315" title="All 2 branches covered.">		if(str.charAt(4)!=DATE_SEPARATOR</span>
-<span class="fc bfc" id="L316" title="All 2 branches covered.">				|| str.charAt(7)!=DATE_SEPARATOR</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">				|| str.charAt(10)!=MAIN_SEPARATOR</span>
-<span class="fc bfc" id="L318" title="All 2 branches covered.">				|| str.charAt(13)!=TIME_SEPARATOR</span>
-<span class="fc bfc" id="L319" title="All 2 branches covered.">				|| str.charAt(16)!=TIME_SEPARATOR)</span>
-<span class="fc" id="L320">			return false;</span>
+<span class="fc bfc" id="L317" title="All 2 branches covered.">		if(str.charAt(4)!=DATE_SEPARATOR</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">				|| str.charAt(7)!=DATE_SEPARATOR</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">				|| str.charAt(10)!=MAIN_SEPARATOR</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">				|| str.charAt(13)!=TIME_SEPARATOR</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">				|| str.charAt(16)!=TIME_SEPARATOR)</span>
+<span class="fc" id="L322">			return false;</span>
 		
 		//controllo yyyy
-<span class="fc bfc" id="L323" title="All 2 branches covered.">		if( !isDigit(str.charAt(0), true) </span>
-<span class="fc bfc" id="L324" title="All 2 branches covered.">				|| !isDigit(str.charAt(1), false)  </span>
-<span class="fc bfc" id="L325" title="All 2 branches covered.">				|| !isDigit(str.charAt(2), false)  </span>
-<span class="fc bfc" id="L326" title="All 2 branches covered.">				|| !isDigit(str.charAt(3), false) )</span>
-<span class="fc" id="L327">			return false;</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">		if( !isDigit(str.charAt(0), true) </span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">				|| !isDigit(str.charAt(1), false)  </span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">				|| !isDigit(str.charAt(2), false)  </span>
+<span class="fc bfc" id="L328" title="All 2 branches covered.">				|| !isDigit(str.charAt(3), false) )</span>
+<span class="fc" id="L329">			return false;</span>
 		
-<span class="fc" id="L329">		final int MM=5;//MM index:controllo MM, da &quot;01&quot; a &quot;12&quot;</span>
-<span class="fc" id="L330">		final int dd=8;//dd index:controllo gg, da &quot;01&quot; a &quot;31&quot;</span>
-<span class="fc" id="L331">		final int HH=11;//HH index:controllo HH, da &quot;00&quot; a &quot;23&quot; </span>
-<span class="fc" id="L332">		final int mm=14;//mm index:controllo mm, da &quot;00&quot; a &quot;59&quot;</span>
-<span class="fc" id="L333">		final int ss=17;//ss index:controllo ss, da &quot;00&quot; a &quot;59&quot;</span>
+<span class="fc" id="L331">		final int MM=5;//MM index:controllo MM, da &quot;01&quot; a &quot;12&quot;</span>
+<span class="fc" id="L332">		final int dd=8;//dd index:controllo gg, da &quot;01&quot; a &quot;31&quot;</span>
+<span class="fc" id="L333">		final int HH=11;//HH index:controllo HH, da &quot;00&quot; a &quot;23&quot; </span>
+<span class="fc" id="L334">		final int mm=14;//mm index:controllo mm, da &quot;00&quot; a &quot;59&quot;</span>
+<span class="fc" id="L335">		final int ss=17;//ss index:controllo ss, da &quot;00&quot; a &quot;59&quot;</span>
 
-<span class="fc bfc" id="L335" title="All 4 branches covered.">		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) </span>
-<span class="fc bfc" id="L336" title="All 6 branches covered.">					&amp;&amp; (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))</span>
-<span class="fc bfc" id="L337" title="All 4 branches covered.">					&amp;&amp; (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))</span>
-<span class="fc bfc" id="L338" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, mm, '0','5','0','9') </span>
-<span class="fc bfc" id="L339" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, ss, '0','5','0','9');</span>
+<span class="fc bfc" id="L337" title="All 4 branches covered.">		return (has2DigitsBetween(str, MM, '0','0','1','9') || has2DigitsBetween(str, MM, '1','1','0','2')) </span>
+<span class="fc bfc" id="L338" title="All 6 branches covered.">					&amp;&amp; (has2DigitsBetween(str, dd, '0','0','1','9') || has2DigitsBetween(str, dd, '1','2','0','9') || has2DigitsBetween(str, dd, '3','3','0','1'))</span>
+<span class="fc bfc" id="L339" title="All 4 branches covered.">					&amp;&amp; (has2DigitsBetween(str, HH, '0','1','0','9') || has2DigitsBetween(str, HH, '2','2','0','3'))</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, mm, '0','5','0','9') </span>
+<span class="fc bfc" id="L341" title="All 2 branches covered.">					&amp;&amp; has2DigitsBetween(str, ss, '0','5','0','9');</span>
 		
 		}
 	
@@ -372,7 +374,6 @@
      *         a partire da {@code index} che rispettano i rispettivi intervalli; {@code false}
      *         in caso di input non valido o se i caratteri non rientrano negli intervalli
      */
-    /*@
 	/*@
 	  @ public normal_behaviour
 	  @ requires s == null || s.length()==0;
@@ -387,25 +388,25 @@
 	  @ requires s!=null &amp; s.length()&gt;0;
 	  @ requires index&gt;=0 &amp; s.length()&gt;index+1;
 	  @ ensures \result ==&gt; (isDigit(startRangeFirstDigit, false) &amp; isDigit(endRangeFirstDigit, false)
-        		&amp; isDigit(startRangeSecondDigit, false) &amp; isDigit(endRangeSecondDigit, false));
+      		&amp; isDigit(startRangeSecondDigit, false) &amp; isDigit(endRangeSecondDigit, false));
       @ ensures \result ==&gt; (s.charAt(index) &gt;= startRangeFirstDigit &amp; s.charAt(index) &lt;= endRangeFirstDigit &amp;
-        		s.charAt(index+1) &gt;= startRangeSecondDigit &amp; s.charAt(index+1) &lt;= endRangeSecondDigit);
+      		s.charAt(index+1) &gt;= startRangeSecondDigit &amp; s.charAt(index+1) &lt;= endRangeSecondDigit);
 	  @*/
 //	@CodeBigintMath
     public static /*@ pure @*/ boolean has2DigitsBetween(String s, int index, 
     											char startRangeFirstDigit, char endRangeFirstDigit,
     											char startRangeSecondDigit, char endRangeSecondDigit) {
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        if (s == null) return false;</span>
-<span class="pc bpc" id="L399" title="2 of 4 branches missed.">        if (index &lt; 0 || index + 1 &gt;= s.length()) return false;</span>
-<span class="pc bpc" id="L400" title="2 of 4 branches missed.">        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)</span>
-<span class="pc bpc" id="L401" title="2 of 4 branches missed.">        		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )</span>
-<span class="nc" id="L402">        				return false;</span>
+<span class="pc bpc" id="L399" title="1 of 2 branches missed.">        if (s == null) return false;</span>
+<span class="pc bpc" id="L400" title="2 of 4 branches missed.">        if (index &lt; 0 || index + 1 &gt;= s.length()) return false;</span>
+<span class="pc bpc" id="L401" title="2 of 4 branches missed.">        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)</span>
+<span class="pc bpc" id="L402" title="2 of 4 branches missed.">        		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )</span>
+<span class="nc" id="L403">        				return false;</span>
         
-<span class="fc" id="L404">        char c1 = s.charAt(index);</span>
-<span class="fc" id="L405">        char c2 = s.charAt(index + 1);</span>
+<span class="fc" id="L405">        char c1 = s.charAt(index);</span>
+<span class="fc" id="L406">        char c2 = s.charAt(index + 1);</span>
 
-<span class="fc bfc" id="L407" title="All 6 branches covered.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
-<span class="fc bfc" id="L408" title="All 2 branches covered.">        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;</span>
+<span class="fc bfc" id="L408" title="All 6 branches covered.">        return c1 &gt;= startRangeFirstDigit &amp;&amp; c1 &lt;= endRangeFirstDigit &amp;&amp; </span>
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        		c2 &gt;= startRangeSecondDigit &amp;&amp; c2 &lt;= endRangeSecondDigit;</span>
     }
 	
 	/**
@@ -415,21 +416,20 @@
 	 * @return &lt;i&gt;true&lt;/i&gt; se condizione rispettata.
 	 */
 	/*@ public normal_behaviour
-	  @ requires date1!=null &amp; date1.length()==19;
-	  @ requires date2!=null &amp; date2.length()==19;
-	  @ requires !isDateTime(date1) | !isDateTime(date2);
+	  @ requires !isDateTime(date1);
 	  @ ensures !\result;
 	  @
 	  @ also public normal_behaviour
-	  @ requires date1!=null &amp; date1.length()==19;
-	  @ requires date2!=null &amp; date2.length()==19;
+	  @ requires !isDateTime(date2);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
 	  @ requires isDateTime(date1) &amp; isDateTime(date2);
-	  @ ensures !\result&lt;==&gt; ((\exists int i; 0&lt;=i&lt;4; date1.charAt(i)&gt;date2.charAt(i))
-	  @							| (\exists int i; 5&lt;=i&lt;7; date1.charAt(i)&gt;date2.charAt(i))
-	  @							| (\exists int i; 8&lt;=i&lt;10; date1.charAt(i)&gt;date2.charAt(i))
-	  @							| (\exists int i; 11&lt;=i&lt;13; date1.charAt(i)&gt;date2.charAt(i))
-	  @							| (\exists int i; 14&lt;=i&lt;16; date1.charAt(i)&gt;date2.charAt(i))
-	  @							| (\exists int i; 17&lt;=i&lt;19; date1.charAt(i)&gt;date2.charAt(i)));
+	  @ ensures \result &lt;==&gt;	(	date1.charAt(0)&lt;date2.charAt(0)
+	  @								|(\exists int i; 0&lt;i&lt;19; date1.charAt(i)&lt;date2.charAt(i)
+	  @									&amp; (\forall int j; 0&lt;=j&lt;i; date1.charAt(j)==date2.charAt(j)))
+	  @								|(\forall int k; 0&lt;=k&lt;19; date1.charAt(k)==date2.charAt(k))
+	  @						);
 	  @*/
 //	@CodeBigintMath
 	public /*@ pure @*/ static boolean beforeOrEqualDateTime(/*@ non_null @*/String date1, /*@ non_null @*/String date2) {
@@ -501,47 +501,87 @@
 	  @ requires s1!=null &amp; s1.length()&gt;0;
 	  @ requires s2!=null &amp; s2.length()&gt;0;
 	  @ requires pos&gt;=0 &amp; substrSize&gt;0;
-	  @ ensures !\result &lt;==&gt; ((\exists int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)&gt;s2.charAt(j) )
-	  							| pos+substrSize&gt;s1.length() 
-	  							| pos+substrSize&gt;s2.length());
+	  @ requires (\exists int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)&gt;s2.charAt(j) 
+	  								&amp;	(\forall int i; pos&lt;=i&lt;j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures !\result;
 	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null &amp; s1.length()&gt;0;
+	  @ requires s2!=null &amp; s2.length()&gt;0;
+	  @ requires pos&gt;=0 &amp; substrSize&gt;0;
+	  @ requires (\exists int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)&lt;s2.charAt(j) 
+	  								&amp;	(\forall int i; pos&lt;=i&lt;j; s1.charAt(i)==s2.charAt(i) ))
+	  				|	(\forall int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)==s2.charAt(j) );
+	  @ ensures \result &lt;==&gt; (pos+substrSize&lt;=s1.length() &amp; pos+substrSize&lt;=s2.length());
 	  @*/
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(String s1, String s2, int pos, int substrSize) {
 
-<span class="fc bfc" id="L512" title="All 8 branches covered.">		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;</span>
-<span class="pc bpc" id="L513" title="2 of 4 branches missed.">		if(pos&lt;0 || substrSize&lt;=0) return false;</span>
-<span class="fc bfc" id="L514" title="All 4 branches covered.">		if(pos+substrSize&gt;s1.length() || pos+substrSize&gt;s2.length()) return false;</span>
+<span class="fc bfc" id="L520" title="All 8 branches covered.">		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;</span>
+<span class="pc bpc" id="L521" title="2 of 4 branches missed.">		if(pos&lt;0 || substrSize&lt;=0) return false;</span>
+<span class="fc bfc" id="L522" title="All 4 branches covered.">		if(pos+substrSize&gt;s1.length() || pos+substrSize&gt;s2.length()) return false;</span>
 		
 		//@ loop_writes i;
 		//@ loop_invariant 0&lt;=i&lt;=substrSize;
 		//@ loop_invariant (\forall int j; pos&lt;=j&lt;pos+i; s1.charAt(j)&lt;=s2.charAt(j) );
 		//@ decreases substrSize-i;
-<span class="fc bfc" id="L520" title="All 2 branches covered.">		for(int i=0; i&lt;substrSize; i++) {</span>
-<span class="fc bfc" id="L521" title="All 2 branches covered.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
-<span class="fc" id="L522">				return false;</span>
-<span class="fc bfc" id="L523" title="All 2 branches covered.">			if(s1.charAt(pos+i)&lt;s2.charAt(pos+i))</span>
-<span class="fc" id="L524">				return true;</span>
+<span class="fc bfc" id="L528" title="All 2 branches covered.">		for(int i=0; i&lt;substrSize; i++) {</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
+<span class="fc" id="L530">				return false;</span>
+<span class="fc bfc" id="L531" title="All 2 branches covered.">			if(s1.charAt(pos+i)&lt;s2.charAt(pos+i))</span>
+<span class="fc" id="L532">				return true;</span>
 		}
 	
-<span class="fc" id="L527">		return true;</span>
+<span class="fc" id="L535">		return true;</span>
 	}
 	
 	
+	/**
+	 * Confronta una porzione di due stringhe iniziando da una posizione specifica.
+	 *
+	 * @param pos L'indice di partenza per il confronto in entrambe le stringhe.
+	 * @param substrSize Il numero di caratteri da confrontare.
+	 * @return  1 se la sottostringa di s1 è lessicograficamente successiva (maggiore) a quella di s2;
+	 * -1 se la sottostringa di s1 è lessicograficamente precedente (minore) a quella di s2;
+	 * 0 se le due sottostringhe sono perfettamente identiche.
+	 */
+	/*@	public normal_behaviour
+	  @ requires s1!=null &amp; s1.length()&gt;0;
+	  @ requires s2!=null &amp; s2.length()==s1.length();
+	  @ requires pos&gt;=0 &amp; substrSize&gt;0 &amp; pos+substrSize&lt;=s1.length();
+	  @ requires (\exists int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)&gt;s2.charAt(j) 
+	  								&amp;	(\forall int i; pos&lt;=i&lt;j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null &amp; s1.length()&gt;0;
+	  @ requires s2!=null &amp; s2.length()==s1.length();
+	  @ requires pos&gt;=0 &amp; substrSize&gt;0 &amp; pos+substrSize&lt;=s1.length();
+	  @ requires (\exists int j; pos&lt;=j&lt;pos+substrSize; s1.charAt(j)&lt;s2.charAt(j) 
+	  								&amp;	(\forall int i; pos&lt;=i&lt;j; s1.charAt(i)==s2.charAt(i) ));
+	  @ ensures \result==-1;
+	  @
+	  @ also public normal_behaviour
+	  @ requires s1!=null &amp; s1.length()&gt;0;
+	  @ requires s2!=null &amp; s2.length()==s1.length();
+	  @ requires pos&gt;=0 &amp; substrSize&gt;0 &amp; pos+substrSize&lt;=s1.length();
+	  @ requires (\forall int i; pos&lt;=i&lt;pos+substrSize; s1.charAt(i)==s2.charAt(i) );
+	  @ ensures \result==0;
+	  @*/
 	public static int substrCompare(String s1, String s2, int pos, int substrSize) {
 		
 		//@ loop_writes i;
 		//@ loop_invariant 0&lt;=i&lt;=substrSize;
 		//@ loop_invariant (\forall int j; pos&lt;=j&lt;pos+i; s1.charAt(j)&lt;=s2.charAt(j) );
 		//@ decreases substrSize-i;
-<span class="fc bfc" id="L537" title="All 2 branches covered.">		for(int i=0; i&lt;substrSize; i++) {</span>
-<span class="fc bfc" id="L538" title="All 2 branches covered.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
-<span class="fc" id="L539">				return 1;</span>
-<span class="fc bfc" id="L540" title="All 2 branches covered.">			if(s1.charAt(pos+i)&lt;s2.charAt(pos+i))</span>
-<span class="fc" id="L541">				return -1;</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">		for(int i=0; i&lt;substrSize; i++) {</span>
+<span class="fc bfc" id="L578" title="All 2 branches covered.">			if(s1.charAt(pos+i)&gt;s2.charAt(pos+i))</span>
+<span class="fc" id="L579">				return 1;</span>
+<span class="fc bfc" id="L580" title="All 2 branches covered.">			if(s1.charAt(pos+i)&lt;s2.charAt(pos+i))</span>
+<span class="fc" id="L581">				return -1;</span>
 		}
 	
-<span class="fc" id="L544">		return 0;</span>
+<span class="fc" id="L584">		return 0;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

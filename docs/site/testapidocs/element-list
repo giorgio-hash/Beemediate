@@ -1,4 +1,6 @@
 com.beemediate.beemediate
+com.beemediate.beemediate.controller.http
+com.beemediate.beemediate.domain.pojo
 com.beemediate.beemediate.domain.service.oafbatchManager
 com.beemediate.beemediate.domain.service.oafbuffer
 com.beemediate.beemediate.domain.service.OaFValidator

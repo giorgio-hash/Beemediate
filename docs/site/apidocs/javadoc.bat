@@ -1,1 +1,1 @@
-cmd.exe /X /D /C "C:\Users\gchir\OneDrive\Desktop\uni\testing\tools_x_tvsw_2025\eclipse_latest\eclipse\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.6.v20250130-0529\jre\bin\javadoc.exe -J-Duser.language= -J-Duser.country= @options @packages"
+cmd.exe /X /D /C ""C:\Program Files\Java\jdk-23\bin\javadoc.exe" -J-Duser.language= -J-Duser.country= @options @packages"

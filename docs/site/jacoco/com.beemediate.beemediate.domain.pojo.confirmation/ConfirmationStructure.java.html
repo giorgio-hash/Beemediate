@@ -115,21 +115,21 @@ public class ConfirmationStructure {
 	  @ ensures this.currency == copy.currency;
 	@*/
 	public ConfirmationStructure(ConfirmationStructure copy) {
-<span class="nc" id="L118">		super();</span>
-<span class="nc" id="L119">		this.orderResponseDate =  copy.orderResponseDate;</span>
-<span class="nc" id="L120">		this.deliveryDate = copy.deliveryDate;</span>
-<span class="nc" id="L121">		this.orderId = copy.orderId;</span>
-<span class="nc" id="L122">		this.orderIdGealan = copy.orderIdGealan;</span>
-<span class="nc" id="L123">		this.addressName = copy.addressName;</span>
-<span class="nc" id="L124">		this.addressStreet = copy.addressStreet;</span>
-<span class="nc" id="L125">		this.addressZip = copy.addressZip;</span>
-<span class="nc" id="L126">		this.addressCity = copy.addressCity;</span>
-<span class="nc" id="L127">		this.addressCountry = copy.addressCountry;</span>
-<span class="nc" id="L128">		this.addressCountryCoded = copy.addressCountryCoded;</span>
-<span class="nc" id="L129">		this.totalItemNum = copy.totalItemNum;</span>
-<span class="nc" id="L130">		this.totalAmount = copy.totalAmount;</span>
-<span class="nc" id="L131">		this.currency = copy.currency;</span>
-<span class="nc" id="L132">	}</span>
+<span class="fc" id="L118">		super();</span>
+<span class="fc" id="L119">		this.orderResponseDate =  copy.orderResponseDate;</span>
+<span class="fc" id="L120">		this.deliveryDate = copy.deliveryDate;</span>
+<span class="fc" id="L121">		this.orderId = copy.orderId;</span>
+<span class="fc" id="L122">		this.orderIdGealan = copy.orderIdGealan;</span>
+<span class="fc" id="L123">		this.addressName = copy.addressName;</span>
+<span class="fc" id="L124">		this.addressStreet = copy.addressStreet;</span>
+<span class="fc" id="L125">		this.addressZip = copy.addressZip;</span>
+<span class="fc" id="L126">		this.addressCity = copy.addressCity;</span>
+<span class="fc" id="L127">		this.addressCountry = copy.addressCountry;</span>
+<span class="fc" id="L128">		this.addressCountryCoded = copy.addressCountryCoded;</span>
+<span class="fc" id="L129">		this.totalItemNum = copy.totalItemNum;</span>
+<span class="fc" id="L130">		this.totalAmount = copy.totalAmount;</span>
+<span class="fc" id="L131">		this.currency = copy.currency;</span>
+<span class="fc" id="L132">	}</span>
 	
 	/**
 	 * Imposta la data/ora di risposta dell'ordine.
@@ -394,11 +394,11 @@ public class ConfirmationStructure {
 
 	@Override
 	public String toString() {
-<span class="nc" id="L397">		return &quot;ConfirmationStructure [orderResponseDate=&quot;+orderResponseDate+&quot;deliveryDate=&quot; + deliveryDate + &quot;, orderId=&quot; + orderId + &quot;, orderIdGealan=&quot;</span>
-<span class="nc" id="L398">				+ orderIdGealan + &quot;, addressName=&quot; + addressName + &quot;, addressStreet=&quot; + addressStreet + &quot;, addressZip=&quot;</span>
-<span class="nc" id="L399">				+ addressZip + &quot;, addressCity=&quot; + addressCity + &quot;, addressCountry=&quot; + addressCountry</span>
-<span class="nc" id="L400">				+ &quot;, addressCountryCoded=&quot; + addressCountryCoded + &quot;, totalItemNum=&quot; + totalItemNum + &quot;, totalAmount=&quot;</span>
-<span class="nc" id="L401">				+ totalAmount + &quot;, currency=&quot; + currency + &quot;]&quot;;</span>
+<span class="fc" id="L397">		return &quot;ConfirmationStructure [orderResponseDate=&quot;+orderResponseDate+&quot;deliveryDate=&quot; + deliveryDate + &quot;, orderId=&quot; + orderId + &quot;, orderIdGealan=&quot;</span>
+<span class="fc" id="L398">				+ orderIdGealan + &quot;, addressName=&quot; + addressName + &quot;, addressStreet=&quot; + addressStreet + &quot;, addressZip=&quot;</span>
+<span class="fc" id="L399">				+ addressZip + &quot;, addressCity=&quot; + addressCity + &quot;, addressCountry=&quot; + addressCountry</span>
+<span class="fc" id="L400">				+ &quot;, addressCountryCoded=&quot; + addressCountryCoded + &quot;, totalItemNum=&quot; + totalItemNum + &quot;, totalAmount=&quot;</span>
+<span class="fc" id="L401">				+ totalAmount + &quot;, currency=&quot; + currency + &quot;]&quot;;</span>
 	}
 	
 	

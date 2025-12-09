@@ -66,23 +66,19 @@ public class OaFBuffer {
 	 * @return int - numero di Order caricati
 	 */
 	/*@ public normal_behaviour
-	  @ assigns or.newOrder, buffer.ordini[*], buffer.size;
-	  @ requires buffer != null;
-	  @ requires or != null;
-	  @ ensures 0&lt;=\result&lt;=buffer.ordini.length;
-	  @ ensures \result == buffer.size;
-	  @ diverges true;
+	  @ ensures buffer.size==\result;
+	  @ ensures \result&gt;=0;
 	  @*/
 //	@CodeBigintMath
 	public int loadNewBuffer() {
 		
-<span class="fc" id="L79">		buffer.empty();</span>
+<span class="fc" id="L75">		buffer.empty();</span>
 		//@ assert buffer.isEmpty();
 		
 		//@ ghost int ordersLoaded = 0;
 		
-<span class="fc bfc" id="L84" title="All 2 branches covered.">		if(or.fetchOrders()) { //c'? almeno un ordine</span>
-<span class="fc" id="L85">			Order t = null;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">		if(or.fetchOrders()) { //c'? almeno un ordine</span>
+<span class="fc" id="L81">			/*@ nullable @*/Order t = null;</span>
 			//@ loop_writes buffer.ordini[*], t, ordersLoaded;
 			//@ loop_invariant 0&lt;=buffer.size&lt;=buffer.ordini.length;
 			/*@ loop_invariant 0&lt;=ordersLoaded&lt;=buffer.size;
@@ -92,14 +88,13 @@ public class OaFBuffer {
 			  @																		&amp; buffer.ordini[j].quantity!=null
 			  @																		&amp; buffer.ordini[j].orderID!=null
 			  @																		&amp; \typeof(buffer.ordini[j]) == \type(Order));
+			  @
+			  @ maintaining buffer.size&lt;buffer.ordini.length ==&gt; (\forall int j; buffer.size&lt;=j&lt;buffer.ordini.length; buffer.ordini[j]==null);
 			  @*/
-			/*@ maintaining buffer.size&lt;buffer.ordini.length ==&gt; (\forall int j; buffer.size&lt;=j&lt;buffer.ordini.length; buffer.ordini[j]==null);
-			  @*/
-			//@ loop_invariant t!=null &amp; t.data!=null &amp; t.quantity!=null &amp; t.orderID!=null &amp; \typeof(t) == \type(Order);
-<span class="fc bfc" id="L99" title="All 4 branches covered.">			while(or.hasNewOrder() &amp;&amp; !buffer.isFull()) {</span>
+<span class="fc bfc" id="L94" title="All 4 branches covered.">			while(or.hasNewOrder() &amp;&amp; !buffer.isFull()) {</span>
 				
-<span class="fc" id="L101">				t = or.popNewOrder();</span>
-<span class="fc" id="L102">				buffer.push(t);</span>
+<span class="fc" id="L96">				t = or.popNewOrder();</span>
+<span class="fc" id="L97">				buffer.push(t);</span>
 				//@ assert ordersLoaded+1 == buffer.size;
 				//@ set ordersLoaded = buffer.size;
 			}
@@ -108,7 +103,7 @@ public class OaFBuffer {
 		//@ assert ordersLoaded == buffer.size;
 		//@ assert buffer.size() == buffer.size;
 		
-<span class="fc" id="L111">		return buffer.getSize();</span>
+<span class="fc" id="L106">		return buffer.getSize();</span>
 	}	
 	
 	/**
@@ -135,15 +130,15 @@ public class OaFBuffer {
 	  @*/
 //	@CodeBigintMath
 	public int validateBuffer() {
-<span class="fc" id="L138">		int passed=0;</span>
+<span class="fc" id="L133">		int passed=0;</span>
 		
 		//@ ghost int initialSize = buffer.size;
 		
-<span class="fc bfc" id="L142" title="All 2 branches covered.">		if (buffer.getSize()&gt;0) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		if (buffer.getSize()&gt;0) {</span>
 			
 			//@ assert initialSize == buffer.size;
 			
-<span class="fc" id="L146">			/*@ nullable @*/Order o = null;</span>
+<span class="fc" id="L141">			/*@ nullable @*/Order o = null;</span>
 			
 			//@ loop_writes buffer.ordini[*];
 			//@ maintaining buffer.size == initialSize;
@@ -163,22 +158,22 @@ public class OaFBuffer {
 			  @*/
 			//@ maintaining 0&lt;=passed&lt;=i &amp; 0&lt;=passed&lt;=initialSize;
 			//@ decreases buffer.size-i;
-<span class="fc bfc" id="L166" title="All 2 branches covered.">			for(int i=0;i&lt;buffer.getSize();i++) {</span>
-<span class="fc" id="L167">				o = buffer.get(i);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">			for(int i=0;i&lt;buffer.getSize();i++) {</span>
+<span class="fc" id="L162">				o = buffer.get(i);</span>
 				//@ assert \typeof(buffer.get(i)) == \typeof(o);
 				//@ assert \typeof(buffer.get(i)) == \type(Order);
 				//@ assert \typeof(o) == \type(Order);
 				//@ assert initialSize == buffer.size;
-<span class="fc" id="L172">				validator.validate(o);</span>
+<span class="fc" id="L167">				validator.validate(o);</span>
 				//@ assert o!=null;
 				//@ assert initialSize == buffer.size;
-<span class="fc bfc" id="L175" title="All 2 branches covered.">				if (!o.hasOpenTransError())</span>
-<span class="fc" id="L176">					passed++;</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">				if (!o.hasOpenTransError())</span>
+<span class="fc" id="L171">					passed++;</span>
 			}
 		}
 		//@ assert passed&lt;=buffer.size;
 		//@ assert buffer.size == \old(buffer).size;
-<span class="fc" id="L181">		return passed;</span>
+<span class="fc" id="L176">		return passed;</span>
 	}
 	
 	/**
@@ -188,7 +183,7 @@ public class OaFBuffer {
 	//@ public normal_behaviour
 	//@ ensures \result == buffer;
 	public /*@ pure @*/ BoundedBuffer getBuffer() {
-<span class="fc" id="L191">		return buffer;</span>
+<span class="fc" id="L186">		return buffer;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
