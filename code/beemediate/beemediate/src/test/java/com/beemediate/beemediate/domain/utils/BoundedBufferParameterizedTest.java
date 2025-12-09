@@ -21,9 +21,39 @@ import static org.junit.Assert.*;
 public class BoundedBufferParameterizedTest {
 
 
+	/**
+ * Capacità del buffer utilizzata per la parametrizzazione del test.
+ *
+ * <p>
+ * Può assumere valori negativi (caso non valido), zero (buffer senza capienza),
+ * o valori positivi (dimensioni effettive del buffer). Il valore è fornito
+ * dal metodo parametrizzato {@code parameters()} e passato al costruttore del test.
+ * </p>
+ */
     private int capacity;
+/**
+ * Istanza del BoundedBuffer sotto test.
+ *
+ * <p>
+ * Viene inizializzata nel metodo {@code setUp()} prima di ogni test. Per capacità
+ * non valide (es. negative) il campo rimane {@code null} e il test verifica che la
+ * creazione del buffer sollevi un'eccezione.
+ * </p>
+ */
     private BoundedBuffer buffer;
 	
+
+/**
+ * Fornisce i parametri usati dal runner Parameterized.
+ *
+ * <p>
+ * Restituisce una collezione di array di oggetti, ciascuno contenente un singolo
+ * parametro intero che rappresenta la capacità del buffer da testare.
+ * I parametri inclusi sono: -1, 0 e 5.
+ * </p>
+ *
+ * @return una Collection di Object[] contenente i valori di capacità per i test
+ */
 	@Parameters
 	public static Collection<Object[]> parameters() {
         return Arrays.asList(new Object[][]{
@@ -31,10 +61,35 @@ public class BoundedBufferParameterizedTest {
         });
     }
 
+/**
+ * Costruttore del test parametrizzato.
+ *
+ * <p>
+ * Il parametro {@code capacity} viene memorizzato per essere utilizzato nella
+ * fase di setup e nelle asserzioni dei singoli test. Viene passato automaticamente
+ * dal runner Parameterized per ogni istanza del test.
+ * </p>
+ *
+ * @param capacity la capacità del buffer per questa istanza di test
+ */
     public BoundedBufferParameterizedTest(int capacity) {
         this.capacity = capacity;
     }
 
+/**
+ * Inizializza lo stato prima di ogni test.
+ *
+ * <p>
+ * Se {@code capacity > 0} crea una nuova istanza di {@code BoundedBuffer} con la
+ * capacità specificata. Se {@code capacity} non è positiva, il test si aspetta
+ * che la costruzione del buffer sollevi un'eccezione e lascia il campo {@code buffer}
+ * a {@code null}.
+ * </p>
+ *
+ * <p>
+ * Questo metodo prepara le condizioni iniziali per i metodi di test successivi.
+ * </p>
+ */
     @Before
     public void setUp() {
     	if(capacity>0)
@@ -47,6 +102,20 @@ public class BoundedBufferParameterizedTest {
     	}
     }
 
+/**
+ * Verifica lo stato iniziale del buffer per capacità positive.
+ *
+ * <p>
+ * Controlla che:
+ * <ul>
+ *   <li>la capacità del buffer corrisponda al valore fornito;</li>
+ *   <li>la dimensione iniziale sia 0;</li>
+ *   <li>il buffer sia vuoto ({@code isEmpty() == true});</li>
+ *   <li>il buffer non sia pieno ({@code isFull() == false}).</li>
+ * </ul>
+ * I controlli sono eseguiti solo quando {@code capacity > 0}.
+ * </p>
+ */
     @Test
     public void testInitialState() {
     	
@@ -58,6 +127,20 @@ public class BoundedBufferParameterizedTest {
     	}
     }
 
+/**
+ * Testa il riempimento fino alla capacità e il comportamento in caso di overflow.
+ *
+ * <p>
+ * Azioni verificate (per {@code capacity > 0}):
+ * <ul>
+ *   <li>inserire esattamente {@code capacity} elementi con {@code push};</li>
+ *   <li>verificare che la dimensione sia uguale a {@code capacity} e {@code isFull() == true};</li>
+ *   <li>verificare che un ulteriore {@code push} non incrementi la dimensione (no-op quando è pieno);</li>
+ *   <li>controllare che l'elemento nella posizione {@code capacity-1} sia l'ultimo inserito che ha trovato posto;</li>
+ *   <li>controllare che {@code get(-1)} e {@code get(capacity)} restituiscano {@code null} per indici fuori intervallo.</li>
+ * </ul>
+ * </p>
+ */
     @Test
     public void testFillToCapacityAndOverflow() {
     	
@@ -90,6 +173,19 @@ public class BoundedBufferParameterizedTest {
     	}
     }
 
+/**
+ * Verifica il comportamento LIFO di {@code pop()} su un sottoinsieme di elementi.
+ *
+ * <p>
+ * Se {@code capacity >= 3} inserisce fino a 3 elementi (o fino alla capacità se minore)
+ * e li rimuove verificando l'ordine LIFO (ultimo inserito, primo rimosso).
+ * Dopo le rimozioni la dimensione deve essere 0 e {@code isEmpty() == true}.
+ *
+ * <p>
+ * Se {@code 0 < capacity < 3} esegue un controllo ridotto: inserisce un elemento,
+ * esegue {@code pop()} e verifica che la dimensione torni a 0 e che il buffer sia vuoto.
+ * </p>
+ */
     @Test
     public void testLifoPopPartial() {
     	if(capacity>=3) {
@@ -119,6 +215,20 @@ public class BoundedBufferParameterizedTest {
     	}
     }
     
+/**
+ * Testa il metodo {@code empty()} che svuota il buffer.
+ *
+ * <p>
+ * Per {@code capacity > 0} il test:
+ * <ol>
+ *   <li>inserisce due elementi;</li>
+ *   <li>invoca {@code empty()};</li>
+ *   <li>verifica che la dimensione sia 0 e che {@code isEmpty() == true};</li>
+ *   <li>verifica lo stato di {@code isFull()} in base alla capacità (per chiarezza logica,
+ *       il buffer non deve risultare pieno dopo uno svuotamento se {@code capacity > 0}).</li>
+ * </ol>
+ * </p>
+ */
     @Test
     public void testEmptyFunction() {
     	if(capacity>0) {

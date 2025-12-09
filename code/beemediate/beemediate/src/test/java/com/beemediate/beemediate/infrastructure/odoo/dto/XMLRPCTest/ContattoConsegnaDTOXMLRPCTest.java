@@ -27,13 +27,59 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
 /**
  * Metodo MCDC
  * 
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASE</th>
+            <th>cns == null</th>
+            <th>cns.getWarehouseId().getNum().isEmpty()</th>
+            <th>res.length == 0</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">happy path</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td style="text-align: left;">EmptyFetchException ("Non trovo informazioni del contatto di consegna.")</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+    </tbody>
+</table>
+ */
+public class ContattoConsegnaDTOXMLRPCTest {
+
+    /**
+ * Metodo MCDC
+ * 
  * CASE| 		cns == null || cns.getWarehouseId().getNum().isEmpty()		|		res.length == 0		| ESITO
  * 0   |			F			F												|			F				| happy path
  * 1   |			F			F												|			T				| EmptyFetchException ("Non trovo informazioni del contatto di consegna.")
  * 2   |			T			-												|			-				| InconsistentDTOException
  * 3   |			F			T												|			-				| InconsistentDTOException
  */
-public class ContattoConsegnaDTOXMLRPCTest {
 
     @Mock
     private OdooApiConfig odoo;

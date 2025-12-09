@@ -1,15 +1,21 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -45,7 +51,68 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
  * D) ids presenti ma readFromModel ritorna array vuoto -> lancia EmptyFetchException
  * E) ids presenti e readFromModel ritorna 1 riga -> successo (verifica mapping)
  * F) ids presenti e readFromModel ritorna più righe -> successo (verifica mapping multiplo)
- *
+ <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASO</th>
+            <th>prv == null</th>
+            <th>prv.getOrderLine().isEmpty()</th>
+            <th>ids.length == 0</th>
+            <th>res.length == 0</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>A</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+        <tr>
+            <td>B</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+        <tr>
+            <td>C</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">EmptyFetchException</td>
+        </tr>
+        <tr>
+            <td>D</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td style="text-align: left;">EmptyFetchException</td>
+        </tr>
+        <tr>
+            <td>E</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">successo (mapping)</td>
+        </tr>
+        <tr>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">successo (mapping multiplo)</td>
+        </tr>
+    </tbody>
+</table>
  * Questi casi permettono di esercitare ogni condizione in modo indipendente
  * (ad esempio per la decisione 1, proviamo la condizione prv==null e la condizione
  * getOrderLine().isEmpty() separatamente).
@@ -56,7 +123,7 @@ public class ArticoloPreventivoDTOXMLRPCTest {
     @Mock
     private OdooApiConfig odoo;
 
-    // Caso A: prv == null -> InconsistentDTOException
+    /** Caso A: prv == null -> InconsistentDTOException*/ 
     @Test
     void mcdc_prvNull_throwsInconsistent() {
         assertThrows(InconsistentDTOException.class, () -> {
@@ -64,7 +131,7 @@ public class ArticoloPreventivoDTOXMLRPCTest {
         });
     }
 
-    // Caso B: prv non null ma getOrderLine() == Optional.empty() -> InconsistentDTOException
+    /**Caso B: prv non null ma getOrderLine() == Optional.empty() -> InconsistentDTOException */
     @Test
     void mcdc_orderLineEmpty_throwsInconsistent() {
         PreventivoDTO prv = mock(PreventivoDTO.class);
@@ -75,7 +142,9 @@ public class ArticoloPreventivoDTOXMLRPCTest {
         });
     }
 
-    // Caso C: getOrderLine() presente ma ids.length == 0 -> EmptyFetchException
+    /**
+     * Caso C: getOrderLine() presente ma ids.length == 0 -> EmptyFetchException
+     */
     @Test
     void mcdc_idsLengthZero_throwsEmptyFetch() {
         PreventivoDTO prv = mock(PreventivoDTO.class);
@@ -87,7 +156,10 @@ public class ArticoloPreventivoDTOXMLRPCTest {
         });
     }
 
-    // Caso D: ids presenti ma readFromModel ritorna array vuoto -> EmptyFetchException
+    /**
+     * Caso D: ids presenti ma readFromModel ritorna array vuoto -> EmptyFetchException
+     * @throws XmlRpcException
+     */
     @Test
     void mcdc_readReturnsEmpty_throwsEmptyFetch() throws XmlRpcException {
         PreventivoDTO prv = mock(PreventivoDTO.class);
@@ -105,7 +177,10 @@ public class ArticoloPreventivoDTOXMLRPCTest {
         verify(odoo, atLeastOnce()).readFromModel(eq("purchase.order.line"), anyMap(), eq(ids));
     }
 
-    // Caso E: ids presenti e readFromModel ritorna 1 riga -> successo e mapping corretto
+    /**
+     * Caso E: ids presenti e readFromModel ritorna 1 riga -> successo e mapping corretto
+     * @throws Exception
+     */
     @Test
     void mcdc_singleRow_successfulMapping() throws Exception {
         PreventivoDTO prv = mock(PreventivoDTO.class);
@@ -149,7 +224,10 @@ public class ArticoloPreventivoDTOXMLRPCTest {
         verify(odoo, atLeastOnce()).readFromModel(eq("purchase.order.line"), anyMap(), eq(ids));
     }
 
-    // Caso F: ids presenti e readFromModel ritorna più righe -> successo mapping multiplo
+    /**
+     * Caso F: ids presenti e readFromModel ritorna più righe -> successo mapping multiplo
+     * @throws Exception
+     */
     @Test
     void mcdc_multipleRows_successfulMapping() throws Exception {
         PreventivoDTO prv = mock(PreventivoDTO.class);

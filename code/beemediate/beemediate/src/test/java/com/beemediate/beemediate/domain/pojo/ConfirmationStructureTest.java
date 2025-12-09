@@ -7,25 +7,23 @@ import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import static org.junit.Assert.*;
 
 /**
- * Test del Copy Constructor e del toString.
+ * Test class for {@link ConfirmationStructure}.
+ * This class contains unit tests for the copy constructor and the toString method.
  */
 public class ConfirmationStructureTest {
 
-
+    /**
+     * Tests that the copy constructor correctly copies all fields from the original ConfirmationStructure.
+     */
     @Test
     public void testCopyConstructor_CorrectlyCopiesAllFields() {
  
         ConfirmationStructure original = createFullConfirmation();
 
- 
         ConfirmationStructure copy = new ConfirmationStructure(original);
-
- 
-        
 
         assertNotSame("La copia deve essere una nuova istanza", original, copy);
         
-
         assertEquals(original.getOrderResponseDate(), copy.getOrderResponseDate());
         assertEquals(original.getDeliveryDate(), copy.getDeliveryDate());
         assertEquals(original.getOrderId(), copy.getOrderId());
@@ -38,24 +36,26 @@ public class ConfirmationStructureTest {
         assertEquals(original.getAddressCountryCoded(), copy.getAddressCountryCoded());
         assertEquals(original.getCurrency(), copy.getCurrency());
         
-
         assertEquals(original.getTotalItemNum(), copy.getTotalItemNum());
-
         assertEquals(original.getTotalAmount(), copy.getTotalAmount(), 0.0f);
     }
 
-
+    /**
+     * Tests that the copy constructor throws a NullPointerException when passed a null reference.
+     */
     @Test
     public void testCopyConstructor_ThrowsExceptionOnNull() {
         assertThrows(NullPointerException.class, () -> {
-        	new ConfirmationStructure(null);
+            new ConfirmationStructure(null);
         });
     }
 
-
+    /**
+     * Tests that the toString method returns the correct format for the ConfirmationStructure.
+     */
     @Test
     public void testToString_ReturnsCorrectFormat() {
-    	
+        
         ConfirmationStructure confirmation = new ConfirmationStructure();
         confirmation.setOrderResponseDate("2023-10-25");
         confirmation.setDeliveryDate("2023-11-01");
@@ -91,7 +91,11 @@ public class ConfirmationStructureTest {
         assertEquals(expected, result);
     }
 
-    // --- Helper Method per popolare i dati ---
+    /**
+     * Helper method to create a fully populated ConfirmationStructure for testing.
+     * 
+     * @return A fully populated ConfirmationStructure instance.
+     */
     private ConfirmationStructure createFullConfirmation() {
         ConfirmationStructure cs = new ConfirmationStructure();
         cs.setOrderResponseDate("2023-01-01");

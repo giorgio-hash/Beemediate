@@ -17,6 +17,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+/**
+ * Test unitario per la classe {@link OrderMapper}.
+ * <p>
+ * Verifica la logica di trasformazione (Mapping) dai DTO di infrastruttura (modello Odoo)
+ * al modello di dominio interno {@link OrderStructure}.
+ * <p>
+ * Il test utilizza {@link Mockito} per simulare i DTO di input (Preventivo, Fornitore, ecc.),
+ * permettendo di testare vari scenari di completezza dei dati senza istanziare l'intero grafo di oggetti.
+ */
 public class OrderMapperTest {
 
 	@Mock
@@ -39,6 +48,9 @@ public class OrderMapperTest {
 
     private static final DateTimeFormatter ISO_FMT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+/**
+     * Inizializza i mock prima di ogni test.
+     */
     @Before
     public void setup() {
         mockFornitore = Mockito.mock(FornitoreDTO.class);
@@ -47,6 +59,16 @@ public class OrderMapperTest {
         mockCompagnia = Mockito.mock(CompagniaDTO.class);
     }
 
+/**
+     * Verifica il "Happy Path": tutti i campi opzionali nei DTO sorgente sono presenti.
+     * <p>
+     * Risultato atteso:
+     * <ul>
+     * <li>L'{@link OrderHeader} è popolato con ID, date, riferimenti a Buyer/Supplier e Delivery.</li>
+     * <li>L'{@link OrderItem} contiene tutti i dettagli del prodotto (codici, quantità, unità di misura).</li>
+     * <li>Il sommario conteggia correttamente il numero di righe.</li>
+     * </ul>
+     */
     @Test
     public void map_allOptionalsPresent_mapsHeaderAndItemsCorrectly() {
         // Setup header-related DTOs
@@ -126,6 +148,15 @@ public class OrderMapperTest {
         assertEquals("PCS", it.getOrderUnit());
     }
 
+/**
+     * Verifica la robustezza del mapper in presenza di dati mancanti ({@code Optional.empty()}).
+     * <p>
+     * Risultato atteso:
+     * <ul>
+     * <li>Il mapper non solleva eccezioni (NullPointerException).</li>
+     * <li>I campi mancanti vengono mappati su stringhe vuote {@code ""} anziché null.</li>
+     * </ul>
+     */
     @Test
     public void map_missingOptionalHeaderFields_usesEmptyStrings() {
         // Make all header optionals empty to test branches setting empty strings
@@ -185,6 +216,17 @@ public class OrderMapperTest {
         assertEquals("", it.getOrderUnit());
     }
 
+/**
+     * Test di copertura delle condizioni miste (stile MC/DC).
+     * <p>
+     * Verifica che i campi vengano mappati in modo indipendente. Ad esempio:
+     * <ul>
+     * <li>Valuta presente ma Compagnia assente.</li>
+     * <li>Fornitore presente ma Destinazione assente.</li>
+     * <li>Lista di articoli mista: il primo completo, il secondo vuoto.</li>
+     * </ul>
+     * Serve a garantire che un dato mancante non corrompa il mapping dei dati presenti.
+     */
     @Test
     public void map_partialHeader_and_itemBranches_mcdcOriented() {
         // This test toggles some optionals to exercise different independent conditions:

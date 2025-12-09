@@ -14,19 +14,40 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.ConsegnaDTO;
 import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link ConsegnaDTO}.
+ * <p>
+ * Verifica la logica di deserializzazione dei dati grezzi provenienti da Odoo (Mappa).
+ * Il test copre scenari di robustezza e validazione strutturale, in particolare per il campo complesso
+ * {@code warehouse_id} che Odoo restituisce come tupla (array di 2 elementi: ID e Nome).
+ */
 @RunWith(Parameterized.class)
 public class ConsegnaDTOTest {
 
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input simulata (risposta XML-RPC). */
+    private Map<String, Object> in;
+/** Mappa dei valori attesi dopo il parsing. Se {@code null}, è attesa un'eccezione. */
+    private Map<String, Object> out;
 	
-	@Parameters
+/**
+     * Genera i casi di test.
+     * <p>
+     * Scenari coperti:
+     * <ol>
+     * <li><b>Happy Path:</b> ID e WarehouseID corretti e completi.</li>
+     * <li><b>Type Mismatch (Safe Parsing):</b> ID o elementi dell'array WarehouseID di tipo errato (es. String invece di Int).
+     * In questi casi il DTO deve restituire {@code Optional.empty()} senza rompersi.</li>
+     * <li><b>Malformed Data (Exception):</b> Campo {@code warehouse_id} nullo o array di lunghezza errata.
+     * In questi casi il costruttore deve fallire.</li>
+     * </ol>
+     *
+     * @return Collezione di array [Input, ExpectedOutput].
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		
 		final String ID = "id";
@@ -69,12 +90,29 @@ public class ConsegnaDTOTest {
 		return tests;
 	}
 	
-	public ConsegnaDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore del test parametrico.
+     * @param in Input map.
+     * @param out Expected map (o null per eccezione).
+     */
+    public ConsegnaDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
+/**
+     * Esegue il test di instanziazione.
+     * <p>
+     * Logica:
+     * <ul>
+     * <li>Se {@code out != null}: Verifica che il DTO venga creato e che i campi (incluso il sotto-oggetto {@link IdentifierDTO})
+     * siano popolati come atteso (inclusi gli {@code Optional.empty()} dovuti a mismatch di tipo).</li>
+     * <li>Se {@code out == null}: Si aspetta un'eccezione dal costruttore e verifica che l'input
+     * fosse effettivamente malformato (es. {@code warehouse_id} non array o lunghezza errata),
+     * confermando che il fallimento è corretto e controllato.</li>
+     * </ul>
+     */
+    @Test
 	public void Test() {
 		final String ID = "id";
 		final String warehouseID = "warehouse_id";

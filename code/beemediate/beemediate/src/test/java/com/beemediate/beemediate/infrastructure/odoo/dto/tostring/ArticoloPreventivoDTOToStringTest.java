@@ -15,6 +15,18 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
  */
 public class ArticoloPreventivoDTOToStringTest {
 
+/**
+     * Verifica che il metodo {@code toString} includa tutti i campi quando il DTO è interamente popolato.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>La mappa di input contiene valori per id, order_id, product_id e product_qty.</li>
+     * </ul>
+     * Risultato atteso:
+     * <ul>
+     * <li>La stringa risultante contiene le rappresentazioni testuali di tutti i valori inseriti.</li>
+     * </ul>
+     */
     @Test
     void toString_includesAllFields_whenAllPresent() {
         Map<String, Object> map = new HashMap<>();
@@ -33,6 +45,20 @@ public class ArticoloPreventivoDTOToStringTest {
         assertTrue(s.contains("product_qty=" + Optional.of(12.5d)), "toString deve contenere product_qty");
     }
 
+/**
+     * Verifica che il metodo {@code toString} gestisca correttamente i campi opzionali mancanti.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>La mappa di input non contiene le chiavi per "id" e "product_qty".</li>
+     * </ul>
+     * Risultato atteso:
+     * <ul>
+     * <li>Non vengono sollevate eccezioni.</li>
+     * <li>La stringa mostra esplicitamente {@code Optional.empty} per i campi mancanti.</li>
+     * <li>I campi presenti (order_id, product_id) vengono comunque renderizzati correttamente.</li>
+     * </ul>
+     */
     @Test
     void toString_handlesMissingOptionalsGracefully() {
         Map<String, Object> map = new HashMap<>();

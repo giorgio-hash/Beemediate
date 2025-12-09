@@ -13,22 +13,33 @@ import org.junit.Test;
 import com.beemediate.beemediate.infrastructure.ftp.exceptions.WrongPathException;
 
 /**
- * JUnit4 tests for FTPConfig.
+ * Test JUnit4 per FTPConfig.
  *
- * Tests:
- * - verifyDirectories succeeds when all paths are existing directories
- * - verifyDirectories throws WrongPathException when a path does not exist
- * - verifyDirectories throws WrongPathException when a path is a regular file (not a directory)
- * - getters return the same string values passed to constructor
+ * Test:
+ * - verifyDirectories ha successo quando tutti i percorsi sono directory esistenti
+ * - verifyDirectories lancia WrongPathException quando un percorso non esiste
+ * - verifyDirectories lancia WrongPathException quando un percorso è un file normale (non una directory)
+ * - i metodi getter restituiscono gli stessi valori stringa passati al costruttore
  */
 public class FTPConfigTest {
 
-    // temporary resources created by tests; cleaned in tearDown
+    /** temporary resources created by tests; cleaned in tearDown*/
     private Path tempDir1;
+    /** temporary resources created by tests; cleaned in tearDown*/
     private Path tempDir2;
+    /** temporary resources created by tests; cleaned in tearDown*/
     private Path tempDir3;
+    /** temporary resources created by tests; cleaned in tearDown*/
     private Path tempFile;
 
+    /**
+     * Pulisce le risorse temporanee create dal test.
+     * Elimina il file temporaneo (se presente) e le directory temporanee tempDir1/2/3
+     * ricorsivamente, impostando i riferimenti a null. Viene eseguito dopo ogni test
+     * (metodo annotato con @After).
+     *
+     * @throws IOException se si verificano errori durante l'eliminazione dei file o delle directory
+     */
     @After
     public void tearDown() throws IOException {
         // cleanup if created
@@ -56,6 +67,13 @@ public class FTPConfigTest {
         }
     }
 
+    /**
+     * Verifica che, con le directory di inbound/outbound/archived esistenti,
+     * il metodo verifyDirectories() non sollevi eccezioni e che i getter
+     * restituiscano esattamente i percorsi forniti al costruttore.
+     *
+     * @throws Exception se la creazione delle directory temporanee fallisce
+     */
     @Test
     public void verifyDirectories_allExist_noExceptionAndGettersMatch() throws Exception {
         tempDir1 = Files.createTempDirectory("ftp-inbound-");
@@ -77,6 +95,21 @@ public class FTPConfigTest {
         assertEquals(p3, cfg.getArchivedFolder());
     }
 
+    /**
+     * Verifica che il metodo {@link FTPConfig#verifyDirectories()} sollevi un'eccezione
+     * {@link WrongPathException} quando viene configurato un percorso di directory non esistente.
+     * <p>
+     * Scenario del test:
+     * <ul>
+     * <li>Vengono create due directory temporanee valide (inbound e outbound).</li>
+     * <li>Viene creato un percorso per la directory di archiviazione che punta a una risorsa
+     * cancellata (quindi non esistente su disco).</li>
+     * </ul>
+     * <p>
+     * Risultato atteso: Il metodo di validazione deve fallire rilevando l'assenza della directory.
+     *
+     * @throws Exception se si verificano errori di I/O durante la preparazione dei file temporanei.
+     */
     @Test(expected = WrongPathException.class)
     public void verifyDirectories_nonExistentPath_throwsWrongPathException() throws Exception {
         tempDir1 = Files.createTempDirectory("ftp-inbound-");
@@ -95,6 +128,12 @@ public class FTPConfigTest {
         cfg.verifyDirectories();
     }
 
+    /**
+ * Verifica che {@link FTPConfig#verifyDirectories()} sollevi {@link WrongPathException}
+ * quando un percorso configurato punta a un file anziché a una directory.
+ *
+ * @throws Exception per errori nella creazione delle risorse temporanee.
+ */
     @Test(expected = WrongPathException.class)
     public void verifyDirectories_fileNotDirectory_throwsWrongPathException() throws Exception {
         tempDir1 = Files.createTempDirectory("ftp-inbound-");

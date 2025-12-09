@@ -14,19 +14,40 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.ContattoConsegnaDTO;
 import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link ContattoConsegnaDTO}.
+ * <p>
+ * Verifica la logica di deserializzazione dei dati grezzi provenienti da Odoo (Mappa).
+ * Il test si concentra sulla gestione del campo complesso {@code partner_id} (tupla ID/Nome)
+ * e sulla resilienza del costruttore di fronte a tipi di dato inattesi.
+ */
 @RunWith(Parameterized.class)
 public class ContattoConsegnaDTOTest {
 
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input simulata (risposta XML-RPC). */
+    private Map<String, Object> in;
+/** Mappa dei valori attesi dopo il parsing. Se {@code null}, è attesa un'eccezione. */
+    private Map<String, Object> out;
 	
-	@Parameters
+/**
+     * Genera i casi di test combinando diversi scenari di validità.
+     * <p>
+     * Scenari coperti:
+     * <ol>
+     * <li><b>Happy Path:</b> ID (Integer) e PartnerID (Array[2]) corretti.</li>
+     * <li><b>Type Mismatch (Safe Parsing):</b> ID errato (String) o elementi interni al PartnerID errati. 
+     * Il DTO deve gestire questi casi restituendo {@code Optional.empty()} senza lanciare eccezioni.</li>
+     * <li><b>Malformed Data (Exception):</b> Campo {@code partner_id} nullo o array di lunghezza errata.
+     * Questi sono errori strutturali che devono impedire la creazione dell'oggetto.</li>
+     * </ol>
+     *
+     * @return Collezione di array [Input, ExpectedOutput].
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		
 		final String ID = "id";
@@ -69,13 +90,29 @@ public class ContattoConsegnaDTOTest {
 		return tests;
 	}
 	
-	public ContattoConsegnaDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore del test parametrico.
+     * @param in Mappa dati input.
+     * @param out Mappa dati attesi (o null).
+     */
+    public ContattoConsegnaDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
-	public void Test() {
+/**
+     * Esegue il test di instanziazione.
+     * <p>
+     * Logica di verifica:
+     * <ul>
+     * <li>Se ci si aspetta successo ({@code out != null}): Verifica che il DTO non sia nullo e che i campi
+     * (ID e PartnerID) contengano esattamente i valori attesi (inclusi gli Optional vuoti).</li>
+     * <li>Se ci si aspetta errore ({@code out == null}): Verifica che il costruttore lanci un'eccezione
+     * e che tale eccezione sia giustificata dal fatto che {@code partner_id} non rispetta la struttura Array[2].</li>
+     * </ul>
+     */
+    @Test
+    public void Test() {
 		final String ID = "id";
 		final String partnerID = "partner_id";
 		ContattoConsegnaDTO contcons = null;

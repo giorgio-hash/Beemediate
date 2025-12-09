@@ -28,6 +28,67 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchExcept
  * Metodo MCDC
  * 
  * 
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASE</th>
+            <th>f == null</th>
+            <th>f.getName().isEmpty()</th>
+            <th>ids.length == 0</th>
+            <th>res.length == 0</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">happy path</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">EmptyFetchException ("Non trovo GEALAN")</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td style="text-align: left;">EmptyFetchException ("Trovato GEALAN, ma non riesco ad estrarlo.")</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+    </tbody>
+</table>
+ */
+public class FornitoreDTOXMLRPCTest {
+
+    /**
+ * Metodo MCDC
+ * 
+ * 
  CASE| 		f == null || f.getName().isEmpty()		|		ids.length == 0			|		res.length == 0		| ESITO
     0| 			F			F						|			F					|			F				| happy path
     1| 			F			F						|			T					|			-				| EmptyFetchException ("Non trovo GEALAN")
@@ -35,7 +96,6 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchExcept
     3| 			T			-						|			-					|			-				| InconsistentDTOException
     4| 			F			T						|			-					|			-				| InconsistentDTOException
  */
-public class FornitoreDTOXMLRPCTest {
 
     @Mock
     private OdooApiConfig odoo;

@@ -4,6 +4,9 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
+/**
+ * Completa i test su <i>String.isSubstr1LessOrEqualThanSubstr2</i> con Statement Coverage. Altri test sono presenti su StringHandlerRandoop.
+ */
 public class StringHandlerisSubstr1LessOrEqualThanSubstr2Test {
 
 	//completa branch coverage.

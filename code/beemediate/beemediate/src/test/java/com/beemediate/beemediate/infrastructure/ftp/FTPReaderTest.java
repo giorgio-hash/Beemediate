@@ -21,10 +21,18 @@ import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
 import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 
 /**
- * Test per FTPReader. Usa MockedStatic per DataMapper e istanze reali di ConfirmationStructure (mock ben fatto).
+ * Test per la classe {@link FTPReader}. Usa MockedStatic per DataMapper e istanze reali di ConfirmationStructure (mock ben fatto).
+ * <p>
+ * Verifica la logica di scansione e lettura dei file dal filesystem locale (simulato tramite {@link TempDir}).
+ * <p>
+ * <b>Nota sull'architettura del test:</b><br>
+ * Viene utilizzato {@link MockedStatic} di Mockito per isolare {@link FTPReader} dalla dipendenza statica
+ * {@link DataMapper}. Questo permette di testare il flusso di lettura dei file senza eseguire
+ * realmente il parsing XML, che è testato separatamente.
  */
 public class FTPReaderTest {
 	
+    /** Gestito da JUnit 5: crea una directory temporanea isolata per ogni esecuzione o per la classe. */
     @TempDir
     Path tempDir;
 
@@ -33,8 +41,17 @@ public class FTPReaderTest {
     private Path archived;
     private FTPConfig cfg;
     
+    /** * Mock statico per {@link DataMapper}. 
+     * Deve essere statico e gestito in @BeforeAll/@AfterAll per validità nell'intero ciclo di vita dei test.
+     */
     private static MockedStatic<DataMapper> dataMapperMock;
 
+/**
+    * Inizializza il mock statico del {@link DataMapper} prima dell'esecuzione di qualsiasi test.
+    * <p>
+    * Configura il comportamento di default dei metodi statici per restituire oggetti vuoti/dummy,
+    * evitando eccezioni di parsing durante i test di I/O.
+    */
    @BeforeAll
    static void globalSetupMocks() {
 	   
@@ -47,6 +64,12 @@ public class FTPReaderTest {
 		       .thenReturn(sampleCS);
    }
 
+/**
+    * Chiude il mock statico al termine di tutti i test della classe.
+    * <p>
+    * <b>Importante:</b> Questo passaggio è fondamentale per deregistrare il mock dal thread locale
+    * ed evitare interferenze con altri test che potrebbero usare {@link DataMapper}.
+    */
    @AfterAll
    static void globalTearDownMocks() {
        if (dataMapperMock != null) {
@@ -54,8 +77,14 @@ public class FTPReaderTest {
        }
    }
         
-    
-    
+/**
+    * Prepara l'ambiente del file system prima di ogni singolo test.
+    * <p>
+    * Crea la struttura delle cartelle (inbound, outbound, archived) all'interno della directory temporanea
+    * e inizializza la configurazione {@link FTPConfig}.
+    *
+    * @throws Exception in caso di errori nella creazione delle directory.
+    */
     @BeforeEach
     void setupTempDirectories() throws Exception {
         inbound = tempDir.resolve("inbound");
@@ -69,7 +98,22 @@ public class FTPReaderTest {
         cfg = new FTPConfig(inbound.toString(), outbound.toString(), archived.toString());
     }
     
-
+/**
+     * Verifica che {@link FTPReader#fetchConfirmations()} rilevi ed elabori correttamente i file XML.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>Viene creato un file "CONF_SAMPLE.xml" nella directory outbound.</li>
+     * </ul>
+     * Risultato atteso:
+     * <ul>
+     * <li>Il metodo ritorna {@code true} (file trovati).</li>
+     * <li>Il buffer interno del reader contiene una {@link Confirmation}.</li>
+     * <li>L'ID della conferma estratta corrisponde al nome del file originale.</li>
+     * </ul>
+     *
+     * @throws Exception per errori di I/O.
+     */
     @Test
     void testFetchConfirmations_readsXmlFiles() throws Exception {
 
@@ -93,7 +137,22 @@ public class FTPReaderTest {
         assertEquals(filename, popped.getConfirmationId(), "L'ID della confirmation deve corrispondere al nome del file letto");
         
     }
-    
+   
+/**
+     * Verifica che {@link FTPReader#fetchConfirmations()} ignori i file che non sono XML.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>La directory outbound contiene file .txt, .json e sottocartelle, ma nessun .xml.</li>
+     * </ul>
+     * Risultato atteso:
+     * <ul>
+     * <li>Il metodo ritorna {@code false}.</li>
+     * <li>Il buffer interno del reader rimane vuoto.</li>
+     * </ul>
+     *
+     * @throws Exception per errori di I/O.
+     */
     @Test
     void testFetchConfirmations_returnsFalse_whenOutboundHasNoXmlFiles() throws Exception {
 

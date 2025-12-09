@@ -11,10 +11,24 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-
+/**
+ * Test unitario per la classe di utilità {@link AttributeMapper}.
+ * <p>
+ * Verifica i metodi statici di conversione dei tipi (casting sicuro).
+ * L'obiettivo è garantire che ogni metodo:
+ * <ul>
+ * <li>Restituisca un {@link Optional} popolato quando l'input è del tipo atteso (o convertibile).</li>
+ * <li>Restituisca {@link Optional#empty()} (Safe Fail) quando l'input è nullo o di tipo errato,
+ * evitando {@link ClassCastException} o {@link NullPointerException}.</li>
+ * </ul>
+ */
 public class AttributeMapperTest {
 
 	// --- stringify tests ---
+    /**
+     * Verifica la conversione sicura a Stringa.
+     */
+
     @Test
     public void stringify_returnsOptionalForString() {
         Optional<String> res = AttributeMapper.stringify("hello");
@@ -35,6 +49,10 @@ public class AttributeMapperTest {
     }
 
     // --- intify tests ---
+/**
+     * Verifica la conversione sicura a Integer.
+     */
+
     @Test
     public void intify_returnsOptionalForInteger() {
         Optional<Integer> res = AttributeMapper.intify(10);
@@ -55,6 +73,10 @@ public class AttributeMapperTest {
     }
 
     // --- toArray tests ---
+/**
+     * Verifica la conversione sicura ad Array di oggetti.
+     */
+
     @Test
     public void toArray_returnsOptionalForArray() {
         Object[] arr = new Object[] { "a", 1, true };
@@ -77,6 +99,10 @@ public class AttributeMapperTest {
     }
 
     // --- booleanify tests ---
+/**
+     * Verifica la conversione sicura a Boolean.
+     */
+
     @Test
     public void booleanify_returnsOptionalForTrue() {
         Optional<Boolean> res = AttributeMapper.booleanify(Boolean.TRUE);
@@ -104,6 +130,13 @@ public class AttributeMapperTest {
     }
 
     // --- doublify tests ---
+/**
+     * Verifica la conversione a Double.
+     * <p>
+     * Nota: Questo test verifica anche la capacità del mapper di gestire il polimorfismo numerico,
+     * convertendo altri tipi che estendono {@link Number} (es. Integer, Float, Long) in Double.
+     */
+
     @Test
     public void doublify_returnsOptionalForDouble() {
         Optional<Double> res = AttributeMapper.doublify(12.34d);
@@ -137,6 +170,10 @@ public class AttributeMapperTest {
     }
 
     // --- toLocalDateTime tests (MCDC oriented) ---
+/**
+     * Verifica il parsing di date nel formato standard {@code yyyy-MM-dd HH:mm:ss}.
+     */
+
     @Test
     public void toLocalDateTime_parsesValidString() {
     	DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -166,6 +203,10 @@ public class AttributeMapperTest {
         assertFalse(res.isPresent());
     }
 
+    /**
+     * Verifica la resilienza contro date logicamente invalide (es. Mese 13).
+     * Il mapper deve catturare la DateTimeException interna e restituire Empty.
+     */
     @Test
     public void toLocalDateTime_returnsEmptyForNonsensicalDate() {
         String bad = "2020-13-01 00:00:00"; // month 13 invalid

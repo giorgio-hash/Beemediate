@@ -5,9 +5,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+/**
+ * Test generati con EvoSuite per isDigit e has2DigitsBetween
+ */
 public class StringHandlerHas2DigitsBetweenTest_withES {
 	
-	//Generati con EvoSuite
+	
 
 	  @Test(timeout = 4000)
 	  public void test00()  throws Throwable  {
@@ -147,8 +150,4 @@ public class StringHandlerHas2DigitsBetweenTest_withES {
 	      assertFalse(boolean0);
 	  }
 
-	  @Test(timeout = 4000)
-	  public void test23()  throws Throwable  {
-	      StringHandler StringHandler_0 = new StringHandler();
-	  }
 	}

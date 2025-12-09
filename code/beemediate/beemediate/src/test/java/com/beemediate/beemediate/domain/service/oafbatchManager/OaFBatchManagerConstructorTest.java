@@ -16,18 +16,37 @@ import com.beemediate.beemediate.domain.service.OaFBatchManager;
 import com.beemediate.beemediate.domain.service.OaFBuffer;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
+/**
+ * Test class for the constructor of OaFBatchManager.
+ * 
+ * This class uses partition testing to validate the constructor behavior
+ * by dividing input space into partitions and testing boundary conditions:
+ * - Threshold below 1 (invalid partition)
+ * - Capacity below threshold (invalid partition)
+ * - Capacity above threshold (valid partition)
+ * - Capacity equals threshold (boundary partition)
+ */
 public class OaFBatchManagerConstructorTest {
 
+	/** Mock object for OaFBuffer dependency */
 	private OaFBuffer oafMock;
 	
+	/** Mock object for BoundedBuffer dependency */
 	private BoundedBuffer buffer;	
 	
+	/** Mock object for ConfirmationProviderPort dependency */
 	private ConfirmationProviderPort confirmationsMock;
 
+	/** Mock object for FTPHandlerPort dependency */
 	private FTPHandlerPort ftpMock;
 
+	/** Mock object for DataSenderPort dependency */
 	private DataSenderPort crmMock;
 	
+	/**
+	 * Setup method that initializes all mock objects before each test.
+	 * Called before each test method execution.
+	 */
 	@Before
 	public void setup() {
 		oafMock = mock(OaFBuffer.class);
@@ -39,6 +58,10 @@ public class OaFBatchManagerConstructorTest {
 		crmMock = mock(DataSenderPort.class);
 	}
 
+	/**
+	 * Tests that the constructor throws IllegalArgumentException when threshold is below 1.
+	 * Validates partition: invalid threshold values.
+	 */
 	@Test
 	public void testConstructor_whenThresholdAbove1() {
 		
@@ -51,6 +74,10 @@ public class OaFBatchManagerConstructorTest {
 		});
 	}
 	
+	/**
+	 * Tests that the constructor throws UnreachableThresholdException when capacity is below threshold.
+	 * Validates partition: capacity smaller than threshold (unreachable threshold).
+	 */
 	@Test
 	public void testConstructor_whenCapacity_belowThreshold() {
 		
@@ -63,6 +90,12 @@ public class OaFBatchManagerConstructorTest {
 		});
 	}
 	
+	/**
+	 * Tests that the constructor successfully initializes when capacity is above threshold.
+	 * Validates partition: valid capacity and threshold relationship (capacity > threshold).
+	 * 
+	 * @throws UnreachableThresholdException if the threshold cannot be reached
+	 */
 	@Test
 	public void testConstructor_whenCapacity_aboveThreshold() throws UnreachableThresholdException {
 		
@@ -73,6 +106,12 @@ public class OaFBatchManagerConstructorTest {
 		assertNotNull("Costruttore inizializzato correttamente", oafb );
 	}
 	
+	/**
+	 * Tests that the constructor successfully initializes when capacity equals threshold.
+	 * Validates partition: boundary condition (capacity == threshold).
+	 * 
+	 * @throws UnreachableThresholdException if the threshold cannot be reached
+	 */
 	@Test
 	public void testConstructor_whenCapacity_equalsThreshold() throws UnreachableThresholdException {
 		

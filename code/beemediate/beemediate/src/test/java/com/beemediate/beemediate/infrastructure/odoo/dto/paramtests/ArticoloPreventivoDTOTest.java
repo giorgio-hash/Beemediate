@@ -17,20 +17,132 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
 import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link ArticoloPreventivoDTO}.
+ * <p>
+ * Verifica la robustezza del costruttore che accetta una {@code Map<String, Object>} (tipico output di XML-RPC).
+ * Il test copre vari scenari, inclusi:
+ * <ul>
+ * <li><b>Happy Path:</b> Dati completi e corretti.</li>
+ * <li><b>Type Mismatch:</b> Gestione di tipi numerici diversi (es. Integer vs Double).</li>
+ * <li><b>Missing Data:</b> Campi opzionali nulli o mancanti.</li>
+ * <li><b>Malformed Data:</b> Strutture dati errate (es. array di lunghezza insufficiente per le chiavi esterne).</li>
+ * </ul>
+ * <p>Schema degli input
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASO</th>
+            <th>id</th>
+            <th>orderId</th>
+            <th>productId</th>
+            <th>product_qty</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>null/notOk</td>
+            <td>orderIdnotOk</td>
+            <td>-</td>
+            <td>null/notOk</td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>-</td>
+            <td>-</td>
+            <td>productIdnotOk</td>
+            <td>null/notOk</td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>null/notOk</td>
+            <td>-</td>
+            <td>productWrong1f</td>
+            <td>null/notOk</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>-</td>
+            <td>-</td>
+            <td>productWrong2f</td>
+            <td>null/notOk</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>null/notOk</td>
+            <td>orderIdnotOk</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>-</td>
+            <td>-</td>
+            <td>productIdnotOk</td>
+            <td>-</td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>null/notOk</td>
+            <td>orderWrong1f</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>-</td>
+            <td>orderWrong2f</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>8</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+    </tbody>
+</table></p>
+ */
 @RunWith(Parameterized.class)
 public class ArticoloPreventivoDTOTest {
 	
 	
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input che simula la risposta grezza di Odoo via XML-RPC. */
+    private Map<String, Object> in;
+/** * Mappa dei valori attesi dopo la costruzione del DTO. 
+     * Se {@code null}, ci si aspetta che il costruttore fallisca lanciando un'eccezione.
+     */
+    private Map<String, Object> out;
 	
-	@Parameters
+/**
+     * Genera la suite di casi di test.
+     * <p>
+     * Ogni entry nell'array contiene:
+     * <ol>
+     * <li>La mappa di input (Input Data).</li>
+     * <li>La mappa di output attesa (Expected Data) o {@code null} se è attesa un'eccezione.</li>
+     * </ol>
+     *
+     * @return Una collezione di casi di test.
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		/*
 	CASO	 		id				orderId			productId			product_qty			|ESITO
@@ -133,13 +245,30 @@ public class ArticoloPreventivoDTOTest {
 		return tests;
 	}
 	
-	public ArticoloPreventivoDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore per il test parametrico.
+     * @param in Mappa dati input.
+     * @param out Mappa dati attesi (o null).
+     */
+    public ArticoloPreventivoDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
-	public void test() {
+/**
+     * Esegue il test di istanziazione e verifica.
+     * <p>
+     * Il metodo segue due flussi logici:
+     * <ol>
+     * <li><b>Flusso di Successo (out != null):</b> Tenta di creare il DTO e asserisce che tutti i campi
+     * corrispondano ai valori attesi (inclusi i tipi {@link Optional} e i sotto-oggetti {@link IdentifierDTO}).</li>
+     * <li><b>Flusso di Errore Atteso (out == null):</b> Cattura l'eccezione generata dal costruttore e
+     * verifica che l'input fornito fosse effettivamente non valido (es. array Odoo malformati), 
+     * giustificando così il fallimento.</li>
+     * </ol>
+     */
+    @Test
+    public void test() {
 		final String ID = "id";
 		final String orderID = "order_id";
 		final String productID = "product_id";

@@ -25,8 +25,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Test unitario per la classe di configurazione e comunicazione {@link OdooApiConfig}.
+ * <p>
+ * Verifica la corretta gestione del ciclo di vita della connessione XML-RPC verso Odoo
+ * e la delega delle operazioni CRUD (search, read, update, insert) al client sottostante.
+ * Utilizza {@link Mockito} per simulare le risposte del server Odoo ({@link XmlRpcClient})
+ * ed evitare chiamate di rete reali.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class OdooApiConfigTest {
 
@@ -44,6 +53,10 @@ public class OdooApiConfigTest {
 
     private OdooApiConfig odoo;
 
+/**
+     * Inizializza l'istanza di {@link OdooApiConfig} iniettando i mock delle dipendenze XML-RPC.
+     * Questo permette di controllare completamente l'output delle chiamate remote simulate.
+     */
     @Before
     public void setUp() {
 
@@ -59,6 +72,20 @@ public class OdooApiConfigTest {
         );
     }
 
+/**
+     * Verifica il successo della procedura di connessione e autenticazione.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>La chiamata "version" ritorna correttamente.</li>
+     * <li>La chiamata "authenticate" ritorna un ID utente valido (intero).</li>
+     * </ul>
+     * Risultato:
+     * <ul>
+     * <li>Lo stato {@code isOnline()} diventa {@code true}.</li>
+     * <li>Vengono configurati gli URL dei client per le chiamate successive.</li>
+     * </ul>
+     */
     @Test
     public void connect_success_setsOnlineTrue_andConfiguresModels() throws Exception {
         when(client.execute(any(XmlRpcClientConfig.class), eq("version"), anyList()))
@@ -74,6 +101,12 @@ public class OdooApiConfigTest {
         verify(models, times(1)).setConfig(objectConfig);
     }
 
+/**
+     * Verifica la gestione di una risposta di autenticazione non valida (es. credenziali errate).
+     * <p>
+     * Se Odoo ritorna un valore non intero (spesso `Boolean.FALSE` in caso di errore) durante
+     * l'autenticazione, il metodo deve sollevare {@link FailedLoginException}.
+     */
     @Test(expected = FailedLoginException.class)
     public void connect_whenAuthenticateReturnsWrongType_throwsFailedLoginException() throws Exception {
         when(client.execute(any(XmlRpcClientConfig.class), eq("version"), anyList()))
@@ -88,6 +121,9 @@ public class OdooApiConfigTest {
         }
     }
 
+/**
+     * Verifica che le eccezioni di rete (XmlRpcException) durante la connessione vengano propagate.
+     */
     @Test(expected = XmlRpcException.class)
     public void connect_propagatesXmlRpcException_fromVersionCall() throws Exception {
         when(client.execute(any(XmlRpcClientConfig.class), eq("version"), anyList()))
@@ -96,6 +132,10 @@ public class OdooApiConfigTest {
         odoo.connect();
     }
 
+/**
+     * Verifica che il metodo di ricerca {@code searchFromModel} deleghi correttamente al client XML-RPC
+     * e restituisca l'array di ID trovato.
+     */
     @Test
     public void searchFromModel_delegates_andReturnsArray() throws Exception {
         Object[] expected = new Object[]{1, 2, 3};
@@ -107,6 +147,9 @@ public class OdooApiConfigTest {
         verify(models, times(1)).execute(eq(OdooApiConfig.EXECUTE_KW), anyList());
     }
 
+/**
+     * Verifica la propagazione delle eccezioni durante la ricerca.
+     */
     @Test(expected = XmlRpcException.class)
     public void searchFromModel_propagatesXmlRpcException() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList()))
@@ -115,6 +158,10 @@ public class OdooApiConfigTest {
         odoo.searchFromModel("res.partner", null, Arrays.asList("x"));
     }
 
+/**
+     * Verifica che il metodo di lettura {@code readFromModel} deleghi correttamente al client XML-RPC
+     * e restituisca l'array di record (Mappe/Dizionari) trovato.
+     */
     @Test
     public void readFromModel_delegates_andReturnsArray() throws Exception {
         Object[] expected = new Object[]{ new HashMap<>() };
@@ -126,6 +173,9 @@ public class OdooApiConfigTest {
         verify(models, times(1)).execute(eq(OdooApiConfig.EXECUTE_KW), anyList());
     }
 
+/**
+     * Verifica la propagazione delle eccezioni durante la lettura.
+     */
     @Test(expected = XmlRpcException.class)
     public void readFromModel_propagatesXmlRpcException() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList()))
@@ -134,6 +184,10 @@ public class OdooApiConfigTest {
         odoo.readFromModel("purchase.order", null, 1, 2, 3);
     }
 
+/**
+     * Verifica che l'aggiornamento di un record {@code updateOnModel} restituisca {@code true}
+     * quando l'operazione ha successo su Odoo.
+     */
     @Test
     public void updateOnModel_returnsBooleanFromModelsExecute() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList())).thenReturn(Boolean.TRUE);
@@ -144,6 +198,9 @@ public class OdooApiConfigTest {
         verify(models, times(1)).execute(eq(OdooApiConfig.EXECUTE_KW), anyList());
     }
 
+/**
+     * Verifica la propagazione delle eccezioni durante l'aggiornamento.
+     */
     @Test(expected = XmlRpcException.class)
     public void updateOnModel_propagatesXmlRpcException() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList()))
@@ -152,6 +209,10 @@ public class OdooApiConfigTest {
         odoo.updateOnModel("purchase.order", new HashMap<>(), 77);
     }
 
+/**
+     * Verifica che l'inserimento di un nuovo record {@code insertOnModel} restituisca l'ID (intero)
+     * del record appena creato.
+     */
     @Test
     public void insertOnModel_returnsIntFromModelsExecute() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList())).thenReturn(987);
@@ -162,6 +223,9 @@ public class OdooApiConfigTest {
         verify(models, times(1)).execute(eq(OdooApiConfig.EXECUTE_KW), anyList());
     }
 
+/**
+     * Verifica la propagazione delle eccezioni durante l'inserimento.
+     */
     @Test(expected = XmlRpcException.class)
     public void insertOnModel_propagatesXmlRpcException() throws Exception {
         when(models.execute(eq(OdooApiConfig.EXECUTE_KW), anyList()))

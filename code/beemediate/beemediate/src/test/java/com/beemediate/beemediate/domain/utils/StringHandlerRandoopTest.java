@@ -2,13 +2,12 @@ package com.beemediate.beemediate.domain.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.junit.Test; // Import necessario aggiunto
+import org.junit.Test;
 
 /**
- * Test che coprono
+ * Test fatti con Randoop che coprono
  * -	isSubstrLessOrEqualThanSubstr2
  * -	substrCompare
  * -	containsChar
@@ -40,7 +39,7 @@ public class StringHandlerRandoopTest {
     public void test3() throws Throwable {
         int var4 = StringHandler.substrCompare("", "", 1, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4, 0);
+        assertEquals(0, var4);
     }
 
     @Test
@@ -54,14 +53,14 @@ public class StringHandlerRandoopTest {
     public void test5() throws Throwable {
         int var4 = StringHandler.substrCompare("hi!", "", 10, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4,0);
+        assertEquals(0, var4);
     }
 
     @Test
     public void test6() throws Throwable {
         int var4 = StringHandler.substrCompare("hi!", "hi!", 0, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4,0);
+        assertEquals(0, var4);
     }
 
     @Test
@@ -163,7 +162,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test18");
         int var4 = StringHandler.substrCompare("hi!", "hi!", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4, 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -423,7 +422,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test48");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -431,7 +430,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test49");
         int var4 = StringHandler.substrCompare("hi!", "hi!", (-1), 0);
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -439,7 +438,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test50");
         int var4 = StringHandler.substrCompare("", "", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -447,7 +446,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test51");
         int var4 = StringHandler.substrCompare("", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -529,7 +528,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test60");
         int var4 = StringHandler.substrCompare("", "", 0, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -600,7 +599,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test67");
         int var4 = StringHandler.substrCompare("hi!", "", (-1), 0);
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -758,7 +757,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test83");
         int var4 = StringHandler.substrCompare("", "hi!", 10, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -850,7 +849,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test92");
         int var4 = StringHandler.substrCompare("", "hi!", 10, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -874,7 +873,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test95");
         int var4 = StringHandler.substrCompare("", "", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test
@@ -890,7 +889,7 @@ public class StringHandlerRandoopTest {
         if (debug) System.out.printf("%nRandoopTest0.test97");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 1, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertEquals(var4 , 0);
+        assertEquals(0,var4);
     }
 
     @Test

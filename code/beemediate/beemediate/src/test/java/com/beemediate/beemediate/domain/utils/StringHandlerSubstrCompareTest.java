@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+/**
+ * Statement Coverage per <i>StringHandler.substrCompare</i>. Estende i test in StringHandlerRandoop
+ */
 public class StringHandlerSubstrCompareTest {
 
 	//completa branch coverage e statement coverage.
