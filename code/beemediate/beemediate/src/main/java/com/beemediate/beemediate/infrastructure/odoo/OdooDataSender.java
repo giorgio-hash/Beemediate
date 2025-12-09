@@ -245,7 +245,7 @@ public class OdooDataSender implements DataSenderPort{
 	private void createWorkflowAnnotation(final String filename, final ConfirmationStructure cs) throws XmlRpcException, InconsistentDTOException {
 		
 		final Object[] ids;
-		Map<String, Object> requestInfo = new HashMap<>();
+		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);

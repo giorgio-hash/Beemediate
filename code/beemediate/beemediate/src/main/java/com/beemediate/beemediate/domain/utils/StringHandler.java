@@ -6,7 +6,7 @@ package com.beemediate.beemediate.domain.utils;
 /**
  * Classe utility per le operazioni su oggetti String.
  */
-public class StringHandler {
+public final class StringHandler {
 	
 	/**
 	 * Costruttore privato per evitare istanze
