@@ -37,9 +37,9 @@ public class FTPConfig {
 	 * @param archived - valore della chiave {@code ftp.archived}
 	 */
     public FTPConfig(
-            @Value("${ftp.inbound}") String inbound,
-            @Value("${ftp.outbound}") String outbound,
-            @Value("${ftp.archived}") String archived) {
+            @Value("${ftp.inbound}") final String inbound,
+            @Value("${ftp.outbound}") final String outbound,
+            @Value("${ftp.archived}") final String archived) {
         this.inboundFolder = inbound;
         this.outboundFolder = outbound;
         this.archivedFolder = archived;
@@ -61,8 +61,8 @@ public class FTPConfig {
      * @param path - String indicante il percorso da verificare
      * @throws WrongPathException - path non è una directory
      */
-    private void check(String path) throws WrongPathException {
-        File dir = new File(path);
+    private void check(final String path) throws WrongPathException {
+        final File dir = new File(path);
         if (!dir.exists() || !dir.isDirectory())
             throw new WrongPathException("Il path \""+ path +"\" non porta ad una directory.");
     }

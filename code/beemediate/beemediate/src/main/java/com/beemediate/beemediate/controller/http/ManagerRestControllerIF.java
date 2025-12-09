@@ -15,7 +15,7 @@ public interface ManagerRestControllerIF {
 	 * @return messaggio ReponseEntity con body String
 	 */
     @GetMapping("/healthcheck")
-    public ResponseEntity<String> checkHealth();
+    ResponseEntity<String> checkHealth();
 	
 	/**API di contatto per attivare la procedura di rilevazione, validazione e caricamento degli ordini di acquisto pendenti su Odoo.
 	 * */

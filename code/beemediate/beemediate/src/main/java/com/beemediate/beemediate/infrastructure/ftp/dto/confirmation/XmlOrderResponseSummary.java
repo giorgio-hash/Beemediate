@@ -51,7 +51,7 @@ public class XmlOrderResponseSummary {
 	 * 
 	 * @param totalItemNum - int
 	 */
-	public void setTotalItemNum(int totalItemNum) {
+	public void setTotalItemNum(final int totalItemNum) {
 		this.totalItemNum = totalItemNum;
 	}
 
@@ -67,7 +67,7 @@ public class XmlOrderResponseSummary {
 	 * 
 	 * @param totalAmount - float
 	 */
-	public void setTotalAmount(float totalAmount) {
+	public void setTotalAmount(final float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -83,7 +83,7 @@ public class XmlOrderResponseSummary {
 	 * 
 	 * @param allowOrChargesFix - {@code List} di {@code XmlAllowOrCharge}
 	 */
-	public void setAllowOrChargesFix(List<XmlAllowOrCharge> allowOrChargesFix) {
+	public void setAllowOrChargesFix(final List<XmlAllowOrCharge> allowOrChargesFix) {
 		this.allowOrChargesFix = allowOrChargesFix;
 	}
 	

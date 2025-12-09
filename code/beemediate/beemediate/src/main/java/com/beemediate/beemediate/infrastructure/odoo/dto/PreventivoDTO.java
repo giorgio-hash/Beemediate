@@ -82,8 +82,8 @@ public class PreventivoDTO{
 	 */
 	public static PreventivoDTO fromXMLRPC(final OdooApiConfig odoo, final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
 		
-		Object[] ids;
-		Object[] res;
+		final Object[] ids;
+		final Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException("Oggetto FornitoreDTO non ha le informazioni necessarie");

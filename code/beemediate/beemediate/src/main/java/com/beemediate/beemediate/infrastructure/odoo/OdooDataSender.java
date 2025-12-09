@@ -92,7 +92,7 @@ public class OdooDataSender implements DataSenderPort{
 	 *   e viene restituito false (fallimento silenzioso gestito qui).</li>
 	 * </ul>
 	 */
-	private boolean executeSignalSafely(Object o, OafStatus status) {
+	private boolean executeSignalSafely(final Object o, final OafStatus status) {
 		
 		try {
 			// se non si è connessi, prova una connessione.
@@ -132,7 +132,7 @@ public class OdooDataSender implements DataSenderPort{
 	 * @throws EmptyFetchException 
 	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Order o, OafStatus status) throws NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
+	private boolean signal(final Order o, final OafStatus status) throws NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
 		boolean res = updateTo(o.getOrderID(), status.toString() );
 		log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status.toString());
@@ -169,14 +169,13 @@ public class OdooDataSender implements DataSenderPort{
 	 * @throws EmptyFetchException 
 	 * @throws NullSuppliedArgumentException 
 	 */
-	private boolean signal(Confirmation c) throws InconsistentDTOException, NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
+	private boolean signal(final Confirmation c) throws InconsistentDTOException, NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
 		final String stato = OafStatus.CONFIRMED.toString();
-		boolean res = false;
-		ConfirmationStructure data = c.getData();
-		String resourceID = c.getConfirmationId();
+		final ConfirmationStructure data = c.getData();
+		final String resourceID = c.getConfirmationId();
 		
-		res = updateTo(data.getOrderId(),  stato );
+		boolean res = updateTo(data.getOrderId(),  stato );
 		log.info("Inviato update OaF di {} a {}.",data.getOrderId(), stato);
 		createWorkflowAnnotation(resourceID, data);
 		log.info("Inviato a {} messaggio di conferma d'ordine sul workflow.",data.getOrderId());
@@ -199,19 +198,19 @@ public class OdooDataSender implements DataSenderPort{
 		if(orderId==null || oafState==null)
 			throw new NullSuppliedArgumentException ("Non sono ammessi argomenti null");
 		
-		Object[] ids;
+		final Object[] ids;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",orderId));
+		ids = odoo.searchFromModel(odoo.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",orderId));
 		
 		if(ids.length == 0) throw new EmptyFetchException("Ordine "+orderId+" da aggiornare non è stato trovato");
 		
 		requestInfo.clear();		
 		requestInfo.put("x_studio_oaf", oafState );
 		
-		return odoo.updateOnModel("purchase.order", requestInfo, ids[0]);
+		return odoo.updateOnModel(odoo.PURCHASE_ORDER, requestInfo, ids[0]);
 		
 	}
 	
@@ -243,15 +242,14 @@ public class OdooDataSender implements DataSenderPort{
 	 * @throws InconsistentDTOException se la ricerca dell'ordine non è univoca oppure non
 	 *         ritorna alcun risultato (rispettivamente "name ambiguo" o "name non trovato")
 	 */	
-	private void createWorkflowAnnotation(String filename, ConfirmationStructure cs) throws XmlRpcException, InconsistentDTOException {
+	private void createWorkflowAnnotation(final String filename, final ConfirmationStructure cs) throws XmlRpcException, InconsistentDTOException {
 		
-		Object[] ids;
-		Object[] res;
+		final Object[] ids;
 		Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel("purchase.order", requestInfo, Arrays.asList("name","=",cs.getOrderId()));
+		ids = odoo.searchFromModel(odoo.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",cs.getOrderId()));
 		
 		if (ids.length!=1) throw new InconsistentDTOException("name ambiguo o non trovato");
 		
@@ -282,7 +280,7 @@ public class OdooDataSender implements DataSenderPort{
 	 *           (es. {@code getOrderId()}, {@code getDeliveryDate()}, ecc.) restituiscano valori validi.
 	 * @return una {@link String} contenente il corpo del messaggio in formato HTML
 	 */	
-	private String writeConfirmationMessage(String filename, ConfirmationStructure cs) {
+	private String writeConfirmationMessage(final String filename, final ConfirmationStructure cs) {
 	    // Format/convert i valori (date/numero) a stringa prima di codificarli
 	    String fn = Encode.forHtmlContent(filename == null ? "" : filename);
 	    String orderId = Encode.forHtmlContent(cs.getOrderId());

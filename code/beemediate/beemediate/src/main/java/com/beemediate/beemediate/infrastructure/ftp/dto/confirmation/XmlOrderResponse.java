@@ -71,7 +71,7 @@ public class XmlOrderResponse {
 	 * 
 	 * @param xmlns String
 	 */
-	public void setXmlns(String xmlns) {
+	public void setXmlns(final String xmlns) {
 		this.xmlns = xmlns;
 	}
 
@@ -87,7 +87,7 @@ public class XmlOrderResponse {
 	 * 
 	 * @param xsi - String
 	 */
-	public void setXsi(String xsi) {
+	public void setXsi(final String xsi) {
 		this.xsi = xsi;
 	}
 
@@ -103,7 +103,7 @@ public class XmlOrderResponse {
 	 * 
 	 * @param bmecat - String
 	 */
-	public void setBmecat(String bmecat) {
+	public void setBmecat(final String bmecat) {
 		this.bmecat = bmecat;
 	}
 

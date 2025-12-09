@@ -99,25 +99,25 @@ public final class XmlItem {
 
 
 
-	public void setLineItemId(int lineItemId) {
+	public void setLineItemId(final int lineItemId) {
 		this.lineItemId = lineItemId;
 	}
 
 
 
-	public void setProdId(XmlProductID prodId) {
+	public void setProdId(final XmlProductID prodId) {
 		this.prodId = prodId;
 	}
 
 
 
-	public void setQuantity(float quantity) {
+	public void setQuantity(final float quantity) {
 		this.quantity = quantity;
 	}
 
 
 
-	public void setOrderUnit(String orderUnit) {
+	public void setOrderUnit(final String orderUnit) {
 		this.orderUnit = orderUnit;
 	}
 

@@ -27,16 +27,18 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 /**
  * Classe utility per mappare gli oggetti POJO del dominio con le strutture XML. A tale scopo, la classe si serve delle classi con prefisso "Xml" presenti in <i>com.beemediate.beemediate.infrastructure.ftp.dto</i>.
  */
-public class DataMapper {
+public final class DataMapper {
 
-	
-	private static final Logger log = LoggerFactory.getLogger(DataMapper.class);
+	/**
+     * Logger SLF4J per il tracciamento delle operazioni e degli errori.
+     */
+	private static final Logger LOG = LoggerFactory.getLogger(DataMapper.class);
 	
 	/**
 	 * Oggetto Jackson per gestire serializzazione/deserializzazione tra strutture dati XML e DTO.
 	 */
 	@Autowired
-	private static final XmlMapper xmlMapper = initMapper();
+	private static final XmlMapper XML_MAPPER = initMapper();
 	
 	/**
 	 * Costruttore private
@@ -51,7 +53,7 @@ public class DataMapper {
 	private static XmlMapper initMapper() {
 		// disattiva la risoluzione del namespace: 
 		// https://github.com/FasterXML/jackson-dataformat-xml/issues/63
-		XMLInputFactory f = new WstxInputFactory();
+		final XMLInputFactory f = new WstxInputFactory();
 		f.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);
 		return new XmlMapper(new XmlFactory(f, new WstxOutputFactory()));
 	}
@@ -61,7 +63,7 @@ public class DataMapper {
 	 * @param os - OrderStructure
 	 * @return XmlOrder
 	 */
-	public static XmlOrder mapOrderToXml(OrderStructure os) {
+	public static XmlOrder mapOrderToXml(final OrderStructure os) {
 
 		return new XmlOrder(
 							new XmlOrderHeader(os.getHeader()),
@@ -77,11 +79,11 @@ public class DataMapper {
 	 * @param xo - XmlOrder
 	 * @return String con l'ordine serializzato
 	 */
-	public static String serializeXmlOrder(XmlOrder xo) {
+	public static String serializeXmlOrder(final XmlOrder xo) {
 		try {
-			return xmlMapper.writeValueAsString(xo);
+			return XML_MAPPER.writeValueAsString(xo);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			LOG.error("Errore durante la serializzazione XML.",e);
 		}
 		
 		return null;
@@ -92,12 +94,12 @@ public class DataMapper {
 	 * @param data - String contenente struttura serializzata
 	 * @return XmlOrderResponse
 	 */
-	public static XmlOrderResponse deserializeXmlOrderResponse(String data) {
+	public static XmlOrderResponse deserializeXmlOrderResponse(final String data) {
 		
 		try {
-			return xmlMapper.readValue(data, XmlOrderResponse.class);
+			return XML_MAPPER.readValue(data, XmlOrderResponse.class);
 		}catch(JsonProcessingException e) {
-			e.printStackTrace();
+			LOG.error("Errore durante la deserializzazione XML.",e);
 		}
 		
 		return null;
@@ -108,12 +110,12 @@ public class DataMapper {
 	 * @param xor - XmlOrderResponse
 	 * @return ConfirmationStructure
 	 */
-	public static ConfirmationStructure mapConfirmationFromXml(XmlOrderResponse xor) {
+	public static ConfirmationStructure mapConfirmationFromXml(final XmlOrderResponse xor) {
 		
-		ConfirmationStructure cs = new ConfirmationStructure();
+		final ConfirmationStructure cs = new ConfirmationStructure();
 		
 		
-		XmlOrderResponseInfo info = xor.getOrderResponseHeader()
+		final XmlOrderResponseInfo info = xor.getOrderResponseHeader()
 										.getOrderResponseInfo();
 		cs.setOrderResponseDate(info.getOrderResponseDate());
 		cs.setDeliveryDate(info.getDeliveryDate()
@@ -123,7 +125,7 @@ public class DataMapper {
 		cs.setCurrency(info.getCurrency());
 		
 		
-		XmlAddress addr = info.getParties()
+		final XmlAddress addr = info.getParties()
 								.get(0)
 								.getAddress();
 		cs.setAddressCity(addr.getCity());
@@ -134,7 +136,7 @@ public class DataMapper {
 		cs.setAddressZip(addr.getZip());
 		
 		
-		XmlOrderResponseSummary summary = xor.getOrderSummary();
+		final XmlOrderResponseSummary summary = xor.getOrderSummary();
 		cs.setTotalAmount(summary.getTotalAmount());
 		cs.setTotalItemNum(summary.getTotalItemNum());
 		

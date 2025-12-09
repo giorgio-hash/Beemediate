@@ -12,6 +12,10 @@ public interface OrderProviderPort {
 	
 	/*@ public invariant 0<=newOrders<=Integer.MAX_VALUE; @*/
 	
+	/**
+	 * Restituisce un nuovo Order
+	 * @return Order
+	 */
 	/*@ public normal_behaviour
 	  @ assigns newOrders;
 	  @ requires newOrders>0;
@@ -27,17 +31,25 @@ public interface OrderProviderPort {
 	  @ requires newOrders==0;
 	  @ ensures \result==null;
 	  @*/
-	public Order popNewOrder();
+	Order popNewOrder();
 	
+	/**
+	 * Determina se è ancora presente un Order
+	 * @return Order
+	 */
 	/*@ public normal_behaviour
 	  @ ensures \result == newOrders>0; 
 	  @*/
-	public /*@ pure @*/ boolean hasNewOrder();
+	/*@ pure @*/ boolean hasNewOrder();
 	
+	/**
+	 * Recupera nuovi Ordder
+	 * @return Order
+	 */
 	/*@ public normal_behaviour
 	  @ assigns newOrders;
 	  @ ensures \result <==> newOrders > 0;   
 	  @*/
-	public boolean fetchOrders();
+	boolean fetchOrders();
 
 }

@@ -14,8 +14,6 @@ import java.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.beemediate.beemediate.domain.pojo.confirmation.Confirmation;
@@ -56,16 +54,16 @@ public class FTPWriter implements FTPHandlerPort{
      * @param ftp - bean di configurazione FTPConfig
      */
     @Autowired 
-	public FTPWriter(FTPConfig ftp) {
+	public FTPWriter(final FTPConfig ftp) {
 		this.ftp = ftp;
 	}
 	
 	
 	@Override
-	public boolean archive(Confirmation c) {
+	public boolean archive(final Confirmation c) {
 		
-		Path sourcePath = Paths.get(ftp.getOutboundFolder(), c.getConfirmationId());
-		Path targetPath = Paths.get(ftp.getArchivedFolder(), c.getConfirmationId());
+		final Path sourcePath = Paths.get(ftp.getOutboundFolder(), c.getConfirmationId());
+		final Path targetPath = Paths.get(ftp.getArchivedFolder(), c.getConfirmationId());
 		
         try {
 

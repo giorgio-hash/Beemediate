@@ -38,7 +38,7 @@ public class XmlRemarks{
 	 * 
 	 * @param type String
 	 */
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -54,7 +54,7 @@ public class XmlRemarks{
 	 * 
 	 * @param remarks - String
 	 */
-	public void setRemarks(String remarks) {
+	public void setRemarks(final String remarks) {
 		this.remarks = remarks;
 	}
 

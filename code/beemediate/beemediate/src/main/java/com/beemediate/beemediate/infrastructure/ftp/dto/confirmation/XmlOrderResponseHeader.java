@@ -37,7 +37,7 @@ public class XmlOrderResponseHeader {
 	 * 
 	 * @param controlInfo - XmlControlInfo
 	 */
-	public void setControlInfo(XmlControlInfo controlInfo) {
+	public void setControlInfo(final XmlControlInfo controlInfo) {
 		this.controlInfo = controlInfo;
 	}
 
@@ -53,7 +53,7 @@ public class XmlOrderResponseHeader {
 	 * 
 	 * @param orderResponseInfo - XmlOrderResponseInfo
 	 */
-	public void setOrderResponseInfo(XmlOrderResponseInfo orderResponseInfo) {
+	public void setOrderResponseInfo(final XmlOrderResponseInfo orderResponseInfo) {
 		this.orderResponseInfo = orderResponseInfo;
 	}
 

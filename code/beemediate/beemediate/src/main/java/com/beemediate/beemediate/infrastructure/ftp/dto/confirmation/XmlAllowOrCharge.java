@@ -52,7 +52,7 @@ public class XmlAllowOrCharge {
 	 * 
 	 * @param value - XmlAOCValue
 	 */
-	public void setValue(XmlAOCValue value) {
+	public void setValue(final XmlAOCValue value) {
 		this.value = value;
 	}
 
@@ -84,7 +84,7 @@ public class XmlAllowOrCharge {
 	 * 
 	 * @param type - String
 	 */
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 }

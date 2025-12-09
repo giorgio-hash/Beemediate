@@ -37,9 +37,14 @@ public class OdooApiConfig {
 	public static final String EXECUTE_KW = "execute_kw";
 	
 	/**
-	 * String che identifica il model dei contatti su model
+	 * String che identifica il model dei contatti "res.partner"
 	 */
 	public static final String RES_PARTNER = "res.partner";
+	
+	/**
+	 * String che identifica il model degli ordini di acquisto "purchase.order"
+	 */
+	public static final String PURCHASE_ORDER = "purchase.order";
 	
 	/**
 	 * String per l'header utile a specificare i campi di un model
@@ -119,10 +124,10 @@ public class OdooApiConfig {
 	 * gli argomenti XmlRpcClient e XmlRpcClientConfigImpl sono Spring bean
 	 */
 	@Autowired
-	public OdooApiConfig (@Value("${api.host:noconf}") String url, @Value("${api.db:noconf}") String db, 
-							@Value("${api.username:noconf}") String username, @Value("${api.key:noconf}") String password,
-							@Qualifier("xmlRpcClientCommon") XmlRpcClient client, @Qualifier("xmlRpcClientModels") XmlRpcClient models,
-							 @Qualifier("commonConfig") XmlRpcClientConfigImpl commonConfig, @Qualifier("objectConfig") XmlRpcClientConfigImpl objectConfig) {
+	public OdooApiConfig (@Value("${api.host:noconf}") final String url, @Value("${api.db:noconf}") final String db, 
+							@Value("${api.username:noconf}") final String username, @Value("${api.key:noconf}") final String password,
+							@Qualifier("xmlRpcClientCommon") final XmlRpcClient client, @Qualifier("xmlRpcClientModels") final XmlRpcClient models,
+							 @Qualifier("commonConfig") final XmlRpcClientConfigImpl commonConfig, @Qualifier("objectConfig") final XmlRpcClientConfigImpl objectConfig) {
 		this.url = url;
 		this.db = db;
 		this.username = username;
@@ -144,7 +149,7 @@ public class OdooApiConfig {
 	public void connect() throws MalformedURLException, FailedLoginException, XmlRpcException, URISyntaxException {
 		
 		//informazioni sul server
-		commonConfig.setServerURL( (new URI(String.format("%s/xmlrpc/2/common", url))).toURL() );
+		commonConfig.setServerURL(new URI(String.format("%s/xmlrpc/2/common", url)).toURL() );
 		final Object ver = client.execute(commonConfig, "version", Collections.emptyList());
 		
 		//login
@@ -190,7 +195,7 @@ public class OdooApiConfig {
 	 * @return           array di oggetti restituito dall'XML-RPC (castare in base al formato atteso)
 	 * @throws XmlRpcException in caso di errori di comunicazione/risposta dal server Odoo
 	 */
-	public Object[] searchFromModel(String modelName, Map<String, Object> details, List<Object>... searchParams) throws XmlRpcException {
+	public Object[] searchFromModel(final String modelName, final Map<String, Object> details, final List<Object>... searchParams) throws XmlRpcException {
 		return	remoteQueryOnModel(EXECUTE_KW,modelName,SEARCH,details,searchParams);
 	}
 	
@@ -206,7 +211,7 @@ public class OdooApiConfig {
 	 * @return          array di oggetti restituito dall'XML-RPC (castare secondo il formato atteso)
 	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	public Object[] readFromModel(String modelName, Map<String, Object> details, Object... ids) throws XmlRpcException {
+	public Object[] readFromModel(final String modelName, final Map<String, Object> details, final Object... ids) throws XmlRpcException {
 		
 		return remoteQueryOnModel(EXECUTE_KW,modelName,READ,details,ids);
 	}
@@ -223,7 +228,7 @@ public class OdooApiConfig {
 	 * @return          {@code true} se l'operazione ha avuto successo, altrimenti {@code false}
 	 * @throws XmlRpcException in caso di errori nella chiamata XML-RPC
 	 */
-	public boolean updateOnModel(String modelName, Map<String, Object> details, Object id) throws XmlRpcException {
+	public boolean updateOnModel(final String modelName, final Map<String, Object> details, final Object id) throws XmlRpcException {
 		
 		return (boolean) models.execute(EXECUTE_KW,
 											Arrays.asList(
@@ -249,7 +254,7 @@ public class OdooApiConfig {
 	 * @return          identificativo intero del record creato restituito dal server Odoo
 	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	public int insertOnModel(String modelName, Map<String, Object> details) throws XmlRpcException {
+	public int insertOnModel(final String modelName, final Map<String, Object> details) throws XmlRpcException {
 		
 		return (int) models.execute(EXECUTE_KW, 
 						Arrays.asList(
@@ -272,7 +277,7 @@ public class OdooApiConfig {
 	 * @return          array di oggetti restituito dall'esecuzione XML-RPC (castare secondo il formato atteso)
 	 * @throws XmlRpcException in caso di errori di comunicazione o risposta dal server Odoo
 	 */
-	private Object[] remoteQueryOnModel(String procedure, String model, String operation, Map<String,Object> details, Object... params) throws XmlRpcException {
+	private Object[] remoteQueryOnModel(final String procedure, final String model, final String operation, final Map<String,Object> details, final Object... params) throws XmlRpcException {
 		
 		return (Object[]) models.execute(procedure,
 				Arrays.asList(

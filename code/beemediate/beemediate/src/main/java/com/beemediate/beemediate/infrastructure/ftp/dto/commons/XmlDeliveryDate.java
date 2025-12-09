@@ -19,19 +19,19 @@ public class XmlDeliveryDate{
 	@JacksonXmlProperty(isAttribute=true)
 	private String type;
 	
-	/*
+	/**
 	 * Data di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_END_DATE)
 	 */
 	@JacksonXmlProperty(localName="DELIVERY_START_DATE")
 	private String deliveryStartDate;
 	
-	/*
+	/**
 	 * Data di consegna desiderata dal cliente (N.B. è richiesto sia uguale a DELIVERY_START_DATE)
 	 */
 	@JacksonXmlProperty(localName="DELIVERY_END_DATE")
 	private String deliveryEndDate;
 	
-	/**
+	/***
 	 * Empty Constructor for Jackson deserializer 
 	 */
 	public XmlDeliveryDate() {/**Empty Constructor for Jackson deserializer*/}
@@ -42,7 +42,7 @@ public class XmlDeliveryDate{
 	 * @param deliveryEndDate - String con data in formato opportuno
 	 * @param type - DeliveryDateType
 	 */
-	public XmlDeliveryDate(String deliveryStartDate, String deliveryEndDate, DeliveryDateType type) {
+	public XmlDeliveryDate(final String deliveryStartDate, final String deliveryEndDate, final DeliveryDateType type) {
 		super();
 		this.deliveryStartDate = deliveryStartDate;
 		this.deliveryEndDate = deliveryEndDate;
@@ -77,7 +77,7 @@ public class XmlDeliveryDate{
 	 * 
 	 * @param deliveryStartDate - data di consegna (uguale a deliveryEndDate)
 	 */
-	public void setDeliveryStartDate(String deliveryStartDate) {
+	public void setDeliveryStartDate(final String deliveryStartDate) {
 		this.deliveryStartDate = deliveryStartDate;
 	}
 
@@ -85,7 +85,7 @@ public class XmlDeliveryDate{
 	 * 
 	 * @param deliveryStartDate - data di consegna (uguale a deliveryStartDate)
 	 */
-	public void setDeliveryEndDate(String deliveryEndDate) {
+	public void setDeliveryEndDate(final String deliveryEndDate) {
 		this.deliveryEndDate = deliveryEndDate;
 	}
 	
@@ -93,7 +93,7 @@ public class XmlDeliveryDate{
 	 * 
 	 * @param type - valore String di DeliveryDateType
 	 */
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 	

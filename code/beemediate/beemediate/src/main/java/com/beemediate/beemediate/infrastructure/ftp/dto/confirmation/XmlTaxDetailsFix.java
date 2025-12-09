@@ -2,6 +2,9 @@ package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
+/**
+ * Componente della struttura XML ORDERRESPONSE. Specifica i dettagli relativi a tasse ed imposte aggiuntive al prezzo base dell'ordine.
+ */
 public class XmlTaxDetailsFix{
 	
 	/**
@@ -29,7 +32,7 @@ public class XmlTaxDetailsFix{
 	 * 
 	 * @param tax - float
 	 */
-	public void setTax(float tax) {
+	public void setTax(final float tax) {
 		this.tax = tax;
 	}
 
@@ -45,7 +48,7 @@ public class XmlTaxDetailsFix{
 	 * 
 	 * @param taxAmount - float
 	 */
-	public void setTaxAmount(float taxAmount) {
+	public void setTaxAmount(final float taxAmount) {
 		this.taxAmount = taxAmount;
 	}
 	

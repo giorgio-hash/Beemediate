@@ -60,6 +60,9 @@ public class XmlOrderInfo {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String currency;
     
+    /**
+     * Indicatore di consegna parziale (false = consegna completa, true = consegna parziale)
+     */
     @JacksonXmlProperty(localName= "PARTIAL_SHIPMENT_ALLOWED")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private boolean partialShipment;
@@ -152,37 +155,37 @@ public class XmlOrderInfo {
 	}
 
 
-	public void setPartialShipment(boolean partialShipment) {
+	public void setPartialShipment(final boolean partialShipment) {
 		this.partialShipment = partialShipment;
 	}
 
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(final String orderId) {
 		this.orderId = orderId;
 	}
 
 
-	public void setOrderDate(String orderDate) {
+	public void setOrderDate(final String orderDate) {
 		this.orderDate = orderDate;
 	}
 
 
-	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+	public void setDeliveryDate(final XmlDeliveryDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
 
-	public void setOrderParties(List<XmlParty> orderParties) {
+	public void setOrderParties(final List<XmlParty> orderParties) {
 		this.orderParties = orderParties;
 	}
 
 
-	public void setOrderPartiesReference(XmlOrderPartiesReference orderPartiesReference) {
+	public void setOrderPartiesReference(final XmlOrderPartiesReference orderPartiesReference) {
 		this.orderPartiesReference = orderPartiesReference;
 	}
 
 
-	public void setCurrency(String currency) {
+	public void setCurrency(final String currency) {
 		this.currency = currency;
 	}
 	

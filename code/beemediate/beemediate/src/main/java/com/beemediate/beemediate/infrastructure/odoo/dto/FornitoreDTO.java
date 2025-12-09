@@ -1,9 +1,7 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,8 +37,8 @@ public class FornitoreDTO{
 	 * @throws XmlRpcException
 	 */
 	public static FornitoreDTO fromXMLRPC(final OdooApiConfig odoo) throws EmptyFetchException, XmlRpcException {
-		Object[] ids;
-		Object[] res;
+		final Object[] ids;
+		final Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		//cerca GEALAN

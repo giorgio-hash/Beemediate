@@ -163,39 +163,39 @@ public class XmlOrder {
 		return os;
 	}
 
-	public void setXmlns(String xmlns) {
+	public void setXmlns(final String xmlns) {
 		this.xmlns = xmlns;
 	}
 
-	public void setXsi(String xsi) {
+	public void setXsi(final String xsi) {
 		this.xsi = xsi;
 	}
 
-	public void setBmecat(String bmecat) {
+	public void setBmecat(final String bmecat) {
 		this.bmecat = bmecat;
 	}
 
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
-	public void setSchemaLocation(String schemaLocation) {
+	public void setSchemaLocation(final String schemaLocation) {
 		this.schemaLocation = schemaLocation;
 	}
 
-	public void setOh(XmlOrderHeader oh) {
+	public void setOh(final XmlOrderHeader oh) {
 		this.oh = oh;
 	}
 
-	public void setOrderItem(List<XmlItem> orderItem) {
+	public void setOrderItem(final List<XmlItem> orderItem) {
 		this.orderItem = orderItem;
 	}
 
-	public void setOs(XmlOrderSummary os) {
+	public void setOs(final XmlOrderSummary os) {
 		this.os = os;
 	}
 

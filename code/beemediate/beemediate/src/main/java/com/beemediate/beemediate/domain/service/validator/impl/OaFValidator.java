@@ -71,7 +71,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	@Override
 	public void validate(/*@ non_null @*/final Order o) {
 		
-		OrderStructure ost = o.getData();
+		final OrderStructure ost = o.getData();
 			
 		o.setCustomerNumber( this.validateCustomerNumber( ost ) );
 		o.setArticleNumber( this.validateArticleNumber( ost ) );

@@ -36,7 +36,7 @@ public class XmlPriceBaseFix{
 	 * 
 	 * @param price - float
 	 */
-	public void setPrice(float price) {
+	public void setPrice(final float price) {
 		this.price = price;
 	}
 
@@ -52,7 +52,7 @@ public class XmlPriceBaseFix{
 	 * 
 	 * @param priceUnit - String
 	 */
-	public void setPriceUnit(String priceUnit) {
+	public void setPriceUnit(final String priceUnit) {
 		this.priceUnit = priceUnit;
 	}
 	

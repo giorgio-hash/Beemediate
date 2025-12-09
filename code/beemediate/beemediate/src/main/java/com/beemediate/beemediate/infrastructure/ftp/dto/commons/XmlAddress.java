@@ -64,7 +64,7 @@ public class XmlAddress {
 	 * @param country - String
 	 * @param countryCoded - String
 	 */
-	public XmlAddress(String name, String street, String zip, String city, String country, String countryCoded) {
+	public XmlAddress(final String name, final String street, final String zip, final String city, final String country, final String countryCoded) {
 		super();
 		this.name = name;
 		this.street = street;

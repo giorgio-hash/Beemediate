@@ -74,7 +74,7 @@ public class Order {
 	//@ public normal_behaviour
 	//@ ensures \result == (!articleNumber | !quantityMeasure | (deliveryDate & !deliveryDateContent) );
 	public /*@ pure @*/ boolean hasContentError() {
-		return !articleNumber || !quantityMeasure || (!deliveryDateContent || !deliveryDate);
+		return !articleNumber || !quantityMeasure || !deliveryDateContent || !deliveryDate;
 	}
 
 	/**

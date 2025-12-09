@@ -20,15 +20,6 @@ public class OrderItem {
 	/***descrizione aggiuntiva*/
 	private /*@ spec_public @*/ String descriptionShort = "";
 	
-	/**
-	 * Costruttore
-	 */
-	//@ public normal_behaviour
-	/*@ ensures lineItemID!=null & quantity!=null & orderUnit!=null
-	  @			& supplierID!=null & buyerID!=null & descriptionShort!=null;
-	  @ pure
-	  @*/
-	public OrderItem() {/*empty constructor*/}
 	
 	/**
 	 * 

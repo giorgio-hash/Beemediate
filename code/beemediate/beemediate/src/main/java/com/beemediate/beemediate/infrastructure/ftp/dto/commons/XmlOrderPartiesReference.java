@@ -42,8 +42,8 @@ public class XmlOrderPartiesReference {
 	 * @param shipmentPartiesRef - String con informazioni sul luogo di destinazione
 	 * @param shipmentPartyType - ulteriori informazioni sul tipo di spedizione
 	 */
-	public XmlOrderPartiesReference(String buyerIdRef, PartyType buyerIdType, String supplierIdRef, PartyType supplierIdType,
-			String shipmentPartiesRef, PartyType shipmentPartyType) {
+	public XmlOrderPartiesReference(final String buyerIdRef, final PartyType buyerIdType, final String supplierIdRef, final PartyType supplierIdType,
+			final String shipmentPartiesRef, final PartyType shipmentPartyType) {
 		super();
 		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);
 		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);
@@ -80,7 +80,7 @@ public class XmlOrderPartiesReference {
 	 * 
 	 * @param buyerIdRef - XmlPartyID
 	 */
-	public void setBuyerIdRef(XmlPartyID buyerIdRef) {
+	public void setBuyerIdRef(final XmlPartyID buyerIdRef) {
 		this.buyerIdRef = buyerIdRef;
 	}
 
@@ -88,7 +88,7 @@ public class XmlOrderPartiesReference {
 	 * 
 	 * @param supplierIdRef - XmlPartyID
 	 */
-	public void setSupplierIdRef(XmlPartyID supplierIdRef) {
+	public void setSupplierIdRef(final XmlPartyID supplierIdRef) {
 		this.supplierIdRef = supplierIdRef;
 	}
 
@@ -96,7 +96,7 @@ public class XmlOrderPartiesReference {
 	 * 
 	 * @param buyerIdRef - ShipmentPartiesReference
 	 */
-	public void setShipmentPartiesRef(XmlShipmentPartiesReference shipmentPartiesRef) {
+	public void setShipmentPartiesRef(final XmlShipmentPartiesReference shipmentPartiesRef) {
 		this.shipmentPartiesRef = shipmentPartiesRef;
 	}
 	

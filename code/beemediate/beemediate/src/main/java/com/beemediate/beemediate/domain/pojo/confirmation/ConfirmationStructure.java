@@ -114,7 +114,7 @@ public class ConfirmationStructure {
 	  @ ensures this.totalAmount == copy.totalAmount;
 	  @ ensures this.currency == copy.currency;
 	@*/
-	public ConfirmationStructure(ConfirmationStructure copy) {
+	public ConfirmationStructure(final ConfirmationStructure copy) {
 		super();
 		this.orderResponseDate =  copy.orderResponseDate;
 		this.deliveryDate = copy.deliveryDate;
@@ -147,7 +147,7 @@ public class ConfirmationStructure {
 	 * @param deliveryDate la data di consegna (formato stringa)
 	 */
 	/*@ ensures this.deliveryDate == deliveryDate; @*/
-	public void setDeliveryDate(String deliveryDate) {
+	public void setDeliveryDate(final String deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
@@ -157,7 +157,7 @@ public class ConfirmationStructure {
 	 * @param orderId identificativo dell'ordine
 	 */
 	/*@ ensures this.orderId == orderId; @*/
-	public void setOrderId(String orderId) {
+	public void setOrderId(final String orderId) {
 		this.orderId = orderId;
 	}
 
@@ -167,7 +167,7 @@ public class ConfirmationStructure {
 	 * @param orderIdGealan identificativo Gealan
 	 */
 	/*@ ensures this.orderIdGealan == orderIdGealan; @*/
-	public void setOrderIdGealan(String orderIdGealan) {
+	public void setOrderIdGealan(final String orderIdGealan) {
 		this.orderIdGealan = orderIdGealan;
 	}
 
@@ -177,7 +177,7 @@ public class ConfirmationStructure {
 	 * @param addressName nome o ragione sociale
 	 */
 	/*@ ensures this.addressName == addressName; @*/
-	public void setAddressName(String addressName) {
+	public void setAddressName(final String addressName) {
 		this.addressName = addressName;
 	}
 
@@ -187,7 +187,7 @@ public class ConfirmationStructure {
 	 * @param addressStreet la via/strada
 	 */
 	/*@ ensures this.addressStreet == addressStreet; @*/
-	public void setAddressStreet(String addressStreet) {
+	public void setAddressStreet(final String addressStreet) {
 		this.addressStreet = addressStreet;
 	}
 
@@ -197,7 +197,7 @@ public class ConfirmationStructure {
 	 * @param addressZip CAP / codice postale
 	 */
 	/*@ ensures this.addressZip == addressZip; @*/
-	public void setAddressZip(String addressZip) {
+	public void setAddressZip(final String addressZip) {
 		this.addressZip = addressZip;
 	}
 
@@ -207,7 +207,7 @@ public class ConfirmationStructure {
 	 * @param addressCity la città
 	 */
 	/*@ ensures this.addressCity == addressCity; @*/
-	public void setAddressCity(String addressCity) {
+	public void setAddressCity(final String addressCity) {
 		this.addressCity = addressCity;
 	}
 
@@ -217,7 +217,7 @@ public class ConfirmationStructure {
 	 * @param addressCountry nome del paese
 	 */
 	/*@ ensures this.addressCountry == addressCountry; @*/
-	public void setAddressCountry(String addressCountry) {
+	public void setAddressCountry(final String addressCountry) {
 		this.addressCountry = addressCountry;
 	}
 
@@ -227,7 +227,7 @@ public class ConfirmationStructure {
 	 * @param addressCountryCoded codice paese
 	 */
 	/*@ ensures this.addressCountryCoded == addressCountryCoded; @*/
-	public void setAddressCountryCoded(String addressCountryCoded) {
+	public void setAddressCountryCoded(final String addressCountryCoded) {
 		this.addressCountryCoded = addressCountryCoded;
 	}
 
@@ -237,7 +237,7 @@ public class ConfirmationStructure {
 	 * @param totalItemNum numero totale di articoli
 	 */
 	/*@ ensures this.totalItemNum == totalItemNum; @*/
-	public void setTotalItemNum(int totalItemNum) {
+	public void setTotalItemNum(final int totalItemNum) {
 		this.totalItemNum = totalItemNum;
 	}
 
@@ -247,7 +247,7 @@ public class ConfirmationStructure {
 	 * @param totalAmount importo totale
 	 */
 	/*@ ensures this.totalAmount == totalAmount; @*/
-	public void setTotalAmount(float totalAmount) {
+	public void setTotalAmount(final float totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -257,7 +257,7 @@ public class ConfirmationStructure {
 	 * @param currency codice valuta (es. "EUR")
 	 */
 	/*@ ensures this.currency == currency; @*/
-	public void setCurrency(String currency) {
+	public void setCurrency(final String currency) {
 		this.currency = currency;
 	}
 

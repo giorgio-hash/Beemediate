@@ -1,11 +1,9 @@
 package com.beemediate.beemediate.infrastructure.odoo;
 
-import com.beemediate.beemediate.domain.pojo.order.*;
-import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.dto.*;
-import com.beemediate.beemediate.infrastructure.odoo.exceptions.*;
-import com.beemediate.beemediate.infrastructure.odoo.mapper.OrderMapper;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+
+import javax.security.auth.login.FailedLoginException;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
@@ -13,15 +11,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.login.FailedLoginException;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
+import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.CompagniaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ContattoConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.DestinazioneDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.FornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.PreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoFornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.OrderMapper;
 
 /**
  * Adattatore che implementa OrderProviderPort. Recupera gli ordini di acquisto dal CRM Odoo, ricostruisce i corrispondenti Order e li conserva in un buffer.
@@ -38,6 +43,8 @@ public class OdooOrderProvider implements OrderProviderPort{
 	private final Logger log = LoggerFactory.getLogger(OdooOrderProvider.class);
 	/***Riferimento a Configurazione per autenticazione e comunicazione con CRM Odoo usando il protocollo XML-RPC.*/
 	private final OdooApiConfig odoo;
+	
+	private static final String UNSAFE_CHARS_REGEX="[\r\n]";
 	
 	
 	/**
@@ -69,8 +76,6 @@ public class OdooOrderProvider implements OrderProviderPort{
 
 	@Override
 	public boolean fetchOrders() {
-		 
-		ordine = null;
 		
 		try {
 			return fetchData();
@@ -117,12 +122,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			//trova ed estrai GEALAN (e stampa su log)
 			f = FornitoreDTO.fromXMLRPC(odoo);
-			log.info(f.toString().replaceAll("[\r\n]",""));
+			log.info(f.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			
 			
 			//trova ed estrai preventivo (e stampa su log)
 			prev = PreventivoDTO.fromXMLRPC(odoo, f);
-			log.info(prev.toString().replaceAll("[\r\n]",""));
+			log.info(prev.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
@@ -133,16 +138,16 @@ public class OdooOrderProvider implements OrderProviderPort{
 										ConsegnaDTO.fromXMLRPC(odoo, prev)
 									)
 							);
-			log.info(dest.toString().replaceAll("[\r\n]",""));
+			log.info(dest.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			
 			//trova informazioni sulla compagnia cliente (e stampa su log)
 			comp = CompagniaDTO.fromXMLRPC(odoo, prev);
-			log.info(comp.toString().replaceAll("[\r\n]",""));
+			log.info(comp.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			
 			//trova ed estrai parti del preventivo (e stampa su log)
 			artpr = ArticoloPreventivoDTO.fromXMLRPC(odoo, prev);
 			for(ArticoloPreventivoDTO p : artpr) {
-				log.info(p.toString().replaceAll("[\r\n]",""));
+				log.info(p.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			}
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
@@ -152,12 +157,12 @@ public class OdooOrderProvider implements OrderProviderPort{
 								f
 							);
 			for(ProdottoFornitoreDTO p : prodf) {
-				log.info(p.toString().replaceAll("[\r\n]",""));
+				log.info(p.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			}
 			
 			//costruzione struct ordine
 			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);
-			log.info(ordstr.toString().replaceAll("[\r\n]",""));
+			log.info(ordstr.toString().replaceAll(UNSAFE_CHARS_REGEX,""));
 			//costruzione ordine
 			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );
 			

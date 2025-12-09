@@ -35,7 +35,7 @@ public class OaFBuffer {
 	/*@ public invariant or!=null; @*/
 
 	//per testing
-	private OaFBuffer() {/*empty constructor for mockito testing*/};
+	private OaFBuffer() {/*empty constructor for mockito testing*/}
 	
 	/**
 	 * Costruttore

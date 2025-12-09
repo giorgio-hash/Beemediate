@@ -42,7 +42,7 @@ public class ConsegnaDTO{
 		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
 		final Object id = prv.getPickingTypeId().getNum().get();
-		Object[] res;
+		final Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();

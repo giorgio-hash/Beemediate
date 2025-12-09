@@ -3,7 +3,6 @@ package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
  * Mappatura XML-OpenTrans con identificativi del prodotto per ogni partner commerciale coinvolto nella transazione
@@ -43,7 +42,7 @@ public class XmlProductID{
 	 * @param buyerId - identificativo dell'articolo sul sistema cliente
 	 * @param descriptionShort - descrizione dell'articolo
 	 */
-	public XmlProductID(String supplierId, String buyerId, String descriptionShort) {
+	public XmlProductID(final String supplierId, final String buyerId, final String descriptionShort) {
 		super();
 		if(supplierId==null || supplierId.isEmpty() || supplierId.isBlank())
 			this.supplierId = null;
@@ -72,7 +71,7 @@ public class XmlProductID{
 	 * 
 	 * @return BuyerID con identificativo ordine
 	 */
-	public void setSupplierId(XmlPartyID supplierId) {
+	public void setSupplierId(final XmlPartyID supplierId) {
 		this.supplierId = supplierId;
 	}
 
@@ -84,7 +83,7 @@ public class XmlProductID{
 		return buyerId;
 	}
 
-	public void setBuyerId(XmlPartyID buyerId) {
+	public void setBuyerId(final XmlPartyID buyerId) {
 		this.buyerId = buyerId;
 	}
 
@@ -92,7 +91,7 @@ public class XmlProductID{
 		return descriptionShort;
 	}
 
-	public void setDescriptionShort(String descriptionShort) {
+	public void setDescriptionShort(final String descriptionShort) {
 		this.descriptionShort = descriptionShort;
 	}
 

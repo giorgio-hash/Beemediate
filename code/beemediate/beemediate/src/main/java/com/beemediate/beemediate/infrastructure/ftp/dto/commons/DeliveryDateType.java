@@ -15,7 +15,7 @@ public enum DeliveryDateType{
 	 * Costruttore private
 	 * @param type - valore String corrispondente
 	 */
-	DeliveryDateType(String type){
+	DeliveryDateType(final String type){
 		this.type=type;
 	}
 	
