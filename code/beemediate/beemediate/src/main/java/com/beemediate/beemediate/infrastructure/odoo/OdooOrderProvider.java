@@ -170,7 +170,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 		} catch (InconsistentDTOException | ClassCastException e1) {
 			log.error("Problema nel recupero degli ordini.",e1);
 		} catch(EmptyFetchException e) {
-			log.info("Problema nel recupero degli ordini: {}",e.getMessage());
+			log.info("Problema nel recupero degli ordini.",e);
 		}
 		
 		return hasNewOrder();

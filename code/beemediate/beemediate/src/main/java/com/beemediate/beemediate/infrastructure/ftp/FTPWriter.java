@@ -126,9 +126,9 @@ public class FTPWriter implements FTPHandlerPort{
                         StandardOpenOption.CREATE,
                         StandardOpenOption.TRUNCATE_EXISTING);
 
-            log.info("File scritto con successo: {}", filePath.toAbsolutePath().toString().replaceAll("[\r\n]","") );
+            log.info("File scritto con successo: {0}", filePath.toAbsolutePath().toString().replaceAll("[\r\n]","") );
         } catch (IOException e) {
-        	log.error("Problema di scrittura sul filesystem:".concat(filePath.toAbsolutePath().toString().replaceAll("[\r\n]","") ),e);
+        	log.error("Problema di scrittura sul filesystem: {0}", filePath.toAbsolutePath().toString().replaceAll("[\r\n]",""), e);
         }
         return Files.exists(filePath);
 	}
