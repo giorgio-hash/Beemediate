@@ -125,7 +125,7 @@ public class FTPReader implements ConfirmationProviderPort{
             return walk
                     .filter(Files::isRegularFile)          // solo file "normali"
                     .filter(path -> path.toString().toLowerCase().endsWith(".xml"))  // estensione .xml
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
     

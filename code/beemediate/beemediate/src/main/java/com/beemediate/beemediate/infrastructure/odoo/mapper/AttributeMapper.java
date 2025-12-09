@@ -26,7 +26,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente String, oppure <i>Optional.empty()</i>;
 	 */
 	public static Optional<String> stringify(final Object o) {
-		return (o instanceof String)? Optional.of((String) o) : Optional.empty();
+		return (o instanceof String tmp)? Optional.of(tmp) : Optional.empty();
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente Integer, oppure <i>Optional.empty()</i>;
 	 */
 	public static Optional<Integer> intify(final Object o) {
-		return (o instanceof Integer)? Optional.of((Integer) o) : Optional.empty();
+		return (o instanceof Integer tmp)? Optional.of(tmp) : Optional.empty();
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente Object[], oppure <i>Optional.empty()</i>;
 	 */
 	public static Optional<Object[]> toArray(final Object o) {
-		return (o instanceof Object[])? Optional.of((Object[]) o) : Optional.empty();
+		return (o instanceof Object[] tmp)? Optional.of(tmp) : Optional.empty();
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente Boolean, oppure <i>Optional.empty()</i>;
 	 */
     public static Optional<Boolean> booleanify(final Object o) {
-    	return (o instanceof Boolean)? Optional.of((Boolean) o) : Optional.empty();
+    	return (o instanceof Boolean tmp)? Optional.of(tmp) : Optional.empty();
 	}
     
 	/**
@@ -62,7 +62,7 @@ public final class AttributeMapper {
 	 * @return Optional contenente Double, oppure <i>Optional.empty()</i>;
 	 */
     public static Optional<Double> doublify(final Object o){
-    	return (o instanceof Number)? Optional.of( ((Number) o).doubleValue() ) : Optional.empty();
+    	return (o instanceof Number tmp)? Optional.of( tmp.doubleValue() ) : Optional.empty();
     }
 	
 	/**

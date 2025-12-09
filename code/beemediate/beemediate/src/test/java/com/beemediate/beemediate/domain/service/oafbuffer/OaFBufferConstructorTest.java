@@ -50,7 +50,8 @@ public class OaFBufferConstructorTest {
     		assertNotNull("Oggetto creato corretttamente", new OaFBuffer(capacity, vMock , orderProvMock));
     	else {
     		assertThrows("Oggetto non creato, solleva eccezioni", Exception.class, ()->{
-    			OaFBuffer oaf = new OaFBuffer(capacity, vMock , orderProvMock);
+    			@SuppressWarnings("unused")
+				OaFBuffer oaf = new OaFBuffer(capacity, vMock , orderProvMock);
     		});
     	}
     }

@@ -396,9 +396,9 @@ public class StringHandler {
     public static /*@ pure @*/ boolean has2DigitsBetween(final String s, final int index, 
     											final char startRangeFirstDigit, final char endRangeFirstDigit,
     											final char startRangeSecondDigit, final char endRangeSecondDigit) {
-        if (s == null) return false;
-        if (index < 0 || index + 1 >= s.length()) return false;
-        if (!isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)
+        if (s == null
+        		|| index < 0 || index + 1 >= s.length()
+        		|| !isDigit(startRangeFirstDigit, false) || !isDigit(endRangeFirstDigit, false)
         		|| !isDigit(startRangeSecondDigit, false) || !isDigit(endRangeSecondDigit, false) )
         				return false;
         
@@ -517,9 +517,9 @@ public class StringHandler {
 //	@CodeBigintMath
 	public static /*@ pure @*/ boolean isSubstr1LessOrEqualThanSubstr2(final String s1, final String s2, final int pos, final int substrSize) {
 
-		if(s1==null || s2==null || s1.length()==0 || s2.length()==0 ) return false;
-		if(pos<0 || substrSize<=0) return false;
-		if(pos+substrSize>s1.length() || pos+substrSize>s2.length()) return false;
+		if(s1==null || s2==null || s1.length()==0 || s2.length()==0
+					|| pos<0 || substrSize<=0
+					|| pos+substrSize>s1.length() || pos+substrSize>s2.length()) return false;
 		
 		//@ loop_writes i;
 		//@ loop_invariant 0<=i<=substrSize;

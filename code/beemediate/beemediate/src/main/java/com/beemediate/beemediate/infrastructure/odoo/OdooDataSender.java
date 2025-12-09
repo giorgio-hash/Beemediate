@@ -135,7 +135,7 @@ public class OdooDataSender implements DataSenderPort{
 	private boolean signal(final Order o, final OafStatus status) throws NullSuppliedArgumentException, EmptyFetchException, XmlRpcException {
 		
 		boolean res = updateTo(o.getOrderID(), status.toString() );
-		log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status.toString());
+		log.info("Inviato update OaF di {} a {}.",o.getOrderID(),status);
 		
 		return res;
 	}

@@ -75,7 +75,7 @@ public class OaFManagerHandleConfirmationsTest {
 		
 		cStackMock = new Stack<>();
 		Confirmation c = new Confirmation("esempio1", null);cStackMock.add(c);
-		//Confirmation c1 = new Confirmation("esempio2", null);cStackMock.add(c1);
+
 		when(confirmationsMock.hasConfirmation()).thenAnswer(new Answer<Boolean>() {
 			@Override
 			public Boolean answer(InvocationOnMock invocation) throws Throwable {

@@ -59,11 +59,11 @@ public class ArticoloPreventivoDTO{
 		//verifica che il preventivo contenga le sue parti
 		ids = prv.getOrderLine().get();
 		
-		if(ids.length == 0) throw new EmptyFetchException ("Non sono stati trovati articoli nel preventivo " + prv);
+		if(ids.length==0) throw new EmptyFetchException ("Non sono stati trovati articoli nel preventivo " + prv);
 		
 		//estrai parti del preventivo
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("order_id","product_id","product_qty"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("order_id","product_id","product_qty"));
 		res = odoo.readFromModel("purchase.order.line", requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Il preventivo ha articoli, ma non li trovo. Preventivo: " + prv);

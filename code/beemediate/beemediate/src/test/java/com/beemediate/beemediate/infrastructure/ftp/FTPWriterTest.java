@@ -116,7 +116,7 @@ public class FTPWriterTest {
     @Test
     void testArchive_movesFile() throws Exception {
 
-        FTPConfig cfg = new FTPConfig(inbound.toString(), outbound.toString(), archived.toString());
+        cfg = new FTPConfig(inbound.toString(), outbound.toString(), archived.toString());
         cfg.verifyDirectories();
 
 
@@ -139,12 +139,11 @@ public class FTPWriterTest {
     }
     
     @Test
-    void testLoadOrder_returnsFalse_whenIOExceptionDuringCreateDirectories() throws Exception {
+    void testLoadOrder_returnsFalse_whenIOExceptionDuringCreateDirectories() {
 
         FTPWriter writer = new FTPWriter(cfg);
 
         OrderStructure sampleOS = new OrderStructure();
-        String expectedContent = "<order><id>ORD-123</id></order>";;
 
         // mock static DataMapper per mantenere la serializzazione costante
 

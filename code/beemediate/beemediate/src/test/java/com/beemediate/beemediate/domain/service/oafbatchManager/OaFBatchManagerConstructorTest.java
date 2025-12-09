@@ -46,6 +46,7 @@ public class OaFBatchManagerConstructorTest {
 		int threshold = 0;
 		
 		assertThrows("Costruttore lancia eccezione (threshold<1)", IllegalArgumentException.class, ()->{
+			@SuppressWarnings("unused")
 			OaFBatchManager oaf = new OaFBatchManager(threshold, oafMock, confirmationsMock, ftpMock,  crmMock);
 		});
 	}
@@ -57,6 +58,7 @@ public class OaFBatchManagerConstructorTest {
 		int threshold = 2;
 		
 		assertThrows("Costruttore lancia eccezione (capacity<threshold --> non si raggiungerà mai soglia minima ordini)", UnreachableThresholdException.class, ()->{
+			@SuppressWarnings("unused")
 			OaFBatchManager oaf = new OaFBatchManager(threshold, oafMock, confirmationsMock, ftpMock,  crmMock);
 		});
 	}

@@ -92,14 +92,14 @@ public class PreventivoDTO{
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
 		ids = odoo.searchFromModel("purchase.order", requestInfo, 
-									Arrays.asList(odoo.PARTNER_ID_FIELD,"=",f.getName().get()),
+									Arrays.asList(OdooApiConfig.PARTNER_ID_FIELD,"=",f.getName().get()),
 									Arrays.asList("x_studio_oaf","=",OafStatus.NEW.toString() ));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Nessun preventivo \"new\" per GEALAN");
 		
 		//estrai preventivo
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("name",odoo.PARTNER_ID_FIELD,"product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("name",OdooApiConfig.PARTNER_ID_FIELD,"product_id","origin","order_line","currency_id","date_order","date_approve","date_planned","picking_type_id","company_id","x_studio_oaf"));
 		res = odoo.readFromModel("purchase.order", requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Trovato preventivi per GEALAN, ma nessuno estratto.");

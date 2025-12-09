@@ -1,8 +1,10 @@
 package com.beemediate.beemediate.domain.utils;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.assertFalse;
+
 import org.junit.Test; // Import necessario aggiunto
 
 /**
@@ -11,7 +13,7 @@ import org.junit.Test; // Import necessario aggiunto
  * -	substrCompare
  * -	containsChar
  */
-public class StringHandlerRandoop {
+public class StringHandlerRandoopTest {
 
     public static boolean debug = false;
 
@@ -19,7 +21,7 @@ public class StringHandlerRandoop {
     public void test1() throws Throwable {
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 10, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -38,49 +40,49 @@ public class StringHandlerRandoop {
     public void test3() throws Throwable {
         int var4 = StringHandler.substrCompare("", "", 1, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4, 0);
     }
 
     @Test
     public void test4() throws Throwable {
         boolean var2 = StringHandler.containsChar("", '4');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
     public void test5() throws Throwable {
         int var4 = StringHandler.substrCompare("hi!", "", 10, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4,0);
     }
 
     @Test
     public void test6() throws Throwable {
         int var4 = StringHandler.substrCompare("hi!", "hi!", 0, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4,0);
     }
 
     @Test
     public void test7() throws Throwable {
         boolean var2 = StringHandler.containsChar("hi!", 'a');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
     public void test8() throws Throwable {
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 10, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
     public void test9() throws Throwable {
         boolean var2 = StringHandler.containsChar("", ' ');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -100,7 +102,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test11");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", (-1), 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -108,7 +110,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test12");
         boolean var2 = StringHandler.containsChar("", '#');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -116,7 +118,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test13");
         boolean var2 = StringHandler.containsChar("hi!", '#');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -124,7 +126,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test14");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 0, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -145,7 +147,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test16");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 1, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -153,7 +155,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test17");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 0, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -161,7 +163,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test18");
         int var4 = StringHandler.substrCompare("hi!", "hi!", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4, 0);
     }
 
     @Test
@@ -169,7 +171,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test19");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 10, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -177,7 +179,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test20");
         boolean var2 = StringHandler.containsChar("hi!", ' ');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -185,7 +187,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test21");
         boolean var2 = StringHandler.containsChar("", 'a');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -193,7 +195,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test22");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", (-1), 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -214,7 +216,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test24");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 100, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -222,7 +224,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test25");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", (-1), 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -230,7 +232,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test26");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 1, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4, 0);
     }
 
     @Test
@@ -238,7 +240,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test27");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 100, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -246,7 +248,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test28");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -254,7 +256,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test29");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 100, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -262,7 +264,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test30");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 0, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -270,7 +272,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test31");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 10, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -278,7 +280,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test32");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 100, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -286,7 +288,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test33");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -307,7 +309,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test35");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 1, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -315,7 +317,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test36");
         boolean var2 = StringHandler.containsChar("hi!", '4');
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var2 == false);
+        assertFalse(var2);
     }
 
     @Test
@@ -323,7 +325,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test37");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 0, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4 );
     }
 
     @Test
@@ -331,7 +333,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test38");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 0, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4,0);
     }
 
     @Test
@@ -339,7 +341,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test39");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 100, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -347,7 +349,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test40");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 0, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -368,7 +370,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test42");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 0, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -376,7 +378,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test43");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 10, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -384,7 +386,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test44");
         int var4 = StringHandler.substrCompare("hi!", "", 0, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4, 0);
     }
 
     @Test
@@ -392,7 +394,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test45");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 1, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -413,7 +415,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test47");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", (-1), 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -421,7 +423,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test48");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -429,7 +431,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test49");
         int var4 = StringHandler.substrCompare("hi!", "hi!", (-1), 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -437,7 +439,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test50");
         int var4 = StringHandler.substrCompare("", "", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -445,7 +447,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test51");
         int var4 = StringHandler.substrCompare("", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -466,7 +468,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test53");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", (-1), 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -474,7 +476,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test54");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 0, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -495,7 +497,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test56");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -503,7 +505,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test57");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 0, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -511,7 +513,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test58");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", (-1), 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -519,7 +521,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test59");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -527,7 +529,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test60");
         int var4 = StringHandler.substrCompare("", "", 0, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -548,7 +550,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test62");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 10, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -569,7 +571,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test64");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 0, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -590,7 +592,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test66");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 100, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -598,7 +600,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test67");
         int var4 = StringHandler.substrCompare("hi!", "", (-1), 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -645,7 +647,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test71");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 10, 100);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -666,7 +668,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test73");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 1, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -674,7 +676,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test74");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 10, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -682,7 +684,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test75");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", (-1), 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -716,7 +718,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test78");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 0, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -724,7 +726,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test79");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 100, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -732,7 +734,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test80");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", 10, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -740,7 +742,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test81");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", (-1), (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -748,7 +750,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test82");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 0, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -756,7 +758,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test83");
         int var4 = StringHandler.substrCompare("", "hi!", 10, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -777,7 +779,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test85");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 100, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -824,7 +826,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test89");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -832,7 +834,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test90");
         int var4 = StringHandler.substrCompare("", "", 100, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -840,7 +842,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test91");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "", 0, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -848,7 +850,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test92");
         int var4 = StringHandler.substrCompare("", "hi!", 10, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -856,7 +858,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test93");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 10, 0);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -864,7 +866,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test94");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "", (-1), 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -872,7 +874,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test95");
         int var4 = StringHandler.substrCompare("", "", 100, (-1));
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -880,7 +882,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test96");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("", "hi!", 100, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test
@@ -888,7 +890,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test97");
         int var4 = StringHandler.substrCompare("hi!", "hi!", 1, 1);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == 0);
+        assertEquals(var4 , 0);
     }
 
     @Test
@@ -896,7 +898,7 @@ public class StringHandlerRandoop {
         if (debug) System.out.printf("%nRandoopTest0.test98");
         boolean var4 = StringHandler.isSubstr1LessOrEqualThanSubstr2("hi!", "hi!", 1, 10);
         // Regression assertion (captures the current behavior of the code)
-        assertTrue(var4 == false);
+        assertFalse(var4);
     }
 
     @Test

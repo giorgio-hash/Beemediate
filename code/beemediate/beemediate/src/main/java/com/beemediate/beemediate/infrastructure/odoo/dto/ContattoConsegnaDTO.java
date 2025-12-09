@@ -46,7 +46,7 @@ public class ContattoConsegnaDTO{
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList(odoo.PARTNER_ID_FIELD));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(OdooApiConfig.PARTNER_ID_FIELD));
 		res = odoo.readFromModel("stock.warehouse", requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni del contatto di consegna.");

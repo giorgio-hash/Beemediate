@@ -43,14 +43,14 @@ public class FornitoreDTO{
 		
 		//cerca GEALAN
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel(odoo.RES_PARTNER, requestInfo, Arrays.asList("name","=","GEALAN"));
+		ids = odoo.searchFromModel(OdooApiConfig.RES_PARTNER, requestInfo, Arrays.asList("name","=","GEALAN"));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Non trovo GEALAN");
 		
 		//estrai GEALAN
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("name","ref"));
-		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, ids);
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("name","ref"));
+		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Trovato GEALAN, ma non riesco ad estrarlo.");
 		

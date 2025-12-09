@@ -47,7 +47,7 @@ public class OdooOrderProviderTest {
     }
 
     @Test
-    public void fetchOrders_happyPath_buildsOrder() throws Exception {
+    public void fetchOrders_happyPath_buildsOrder() {
         // Preparazione mocks DTO e comportamenti
         when(odooMock.isOnline()).thenReturn(true);
 
@@ -125,12 +125,8 @@ public class OdooOrderProviderTest {
             assertNotNull("popNewOrder non deve restituire null dopo fetchOrders felice", created);
 
             
-            try {
-                assertEquals("ORD-1", created.getOrderID());
-            } catch (NoSuchMethodError | AbstractMethodError | Exception e) {
-                // se la POJO usa altro nome, almeno verifichiamo che l'oggetto non sia nullo (fallback)
-                assertNotNull(created);
-            }
+            
+            assertEquals("ORD-1", created.getOrderID());
 
             // dopo pop il buffer è vuoto
             assertFalse(provider.hasNewOrder());
@@ -138,7 +134,7 @@ public class OdooOrderProviderTest {
     }
 
     @Test
-    public void fetchOrders_whenFornitoreXmlRpcException_fetchOrdersFalse() throws Exception {
+    public void fetchOrders_whenFornitoreXmlRpcException_fetchOrdersFalse()  {
         when(odooMock.isOnline()).thenReturn(true);
 
         try (MockedStatic<FornitoreDTO> mockF = Mockito.mockStatic(FornitoreDTO.class)) {
@@ -151,7 +147,7 @@ public class OdooOrderProviderTest {
     }
 
     @Test
-    public void fetchOrders_whenArticoloEmptyFetchHandled_returnsFalse_noOrder() throws Exception {
+    public void fetchOrders_whenArticoloEmptyFetchHandled_returnsFalse_noOrder() {
         when(odooMock.isOnline()).thenReturn(true);
 
         FornitoreDTO fornitore = mock(FornitoreDTO.class);
@@ -189,7 +185,7 @@ public class OdooOrderProviderTest {
     }
 
     @Test
-    public void fetchOrders_whenPreventivoInconsistentHandled_returnsFalse_noOrder() throws Exception {
+    public void fetchOrders_whenPreventivoInconsistentHandled_returnsFalse_noOrder() {
         when(odooMock.isOnline()).thenReturn(true);
 
         FornitoreDTO fornitore = mock(FornitoreDTO.class);

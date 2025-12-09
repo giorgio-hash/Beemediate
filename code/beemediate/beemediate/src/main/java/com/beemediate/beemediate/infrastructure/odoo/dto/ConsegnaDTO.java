@@ -46,7 +46,7 @@ public class ConsegnaDTO{
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("warehouse_id"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("warehouse_id"));
 		res = odoo.readFromModel("stock.picking.type", requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni sulla consegna.");

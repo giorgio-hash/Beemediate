@@ -87,14 +87,14 @@ public class ProdottoFornitoreDTO{
 		
 		//cerco gli ordini a fornitore con tali ID assicuradomi che siano dal catalogo di GEALAN
 		ids = odoo.searchFromModel("product.supplierinfo", requestInfo, 
-									Arrays.asList(odoo.PARTNER_ID_FIELD,"=", f.getName().get() ),
+									Arrays.asList(OdooApiConfig.PARTNER_ID_FIELD,"=", f.getName().get() ),
 									Arrays.asList("id","in",elems));
 		
 		if (ids.length == 0) throw new EmptyFetchException("Id prodottoFornitoreDTO non trovati");
 
 		// ora estraggo
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",odoo.PARTNER_ID_FIELD,"product_uom_id"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("id","product_id","sequence","product_name","product_code",OdooApiConfig.PARTNER_ID_FIELD,"product_uom_id"));
 		res = odoo.readFromModel("product.supplierinfo", requestInfo, ids);
 		
 		if (res.length == 0) throw new EmptyFetchException("Non sono stati trovati i prodotti fornitore");

@@ -59,7 +59,7 @@ public class ProdottoDTO{
 		
 		//estrazione
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("seller_ids"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("seller_ids"));
 		res = odoo.readFromModel("product.product", requestInfo, ids);
 		
 		if(res.length==0) {

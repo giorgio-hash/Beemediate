@@ -1,6 +1,7 @@
 package com.beemediate.beemediate.controller.http.impl;
 
 import org.slf4j.Logger;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +52,7 @@ public class ManagerRestController implements ManagerRestControllerIF{
      * Gestisce il flusso, logga il risultato e cattura eventuali eccezioni per evitare crash non gestiti.
      */
 	@Override
-	public ResponseEntity manageOrders() {
+	public ResponseEntity<String> manageOrders() {
 		try {
 			final int processed = oafManager.handleOrders();
 			log.info("manageOrders -> processed {} orders", processed);
@@ -71,7 +72,7 @@ public class ManagerRestController implements ManagerRestControllerIF{
      * Struttura speculare a manageOrders.
      */
 	@Override
-	public ResponseEntity manageConfirmations() {
+	public ResponseEntity<String> manageConfirmations() {
 		try {
 			final int processed = oafManager.handleConfirmations();
 			log.info("manageConfirmations -> processed {} confirmations", processed);

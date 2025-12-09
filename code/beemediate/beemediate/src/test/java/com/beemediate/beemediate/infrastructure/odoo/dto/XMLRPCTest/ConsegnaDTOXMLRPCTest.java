@@ -4,12 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.junit.After;
@@ -93,7 +92,7 @@ public class ConsegnaDTOXMLRPCTest {
 
     // 2: prv == null -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenPreventivoIsNull() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenPreventivoIsNull() {
         PreventivoDTO nullPrv = null;
         assertThrows(InconsistentDTOException.class, () -> {
             ConsegnaDTO.fromXMLRPC(odoo, nullPrv);
@@ -102,7 +101,7 @@ public class ConsegnaDTOXMLRPCTest {
 
     // 3: prv present but pickingTypeId num empty -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenPickingTypeIdMissing() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenPickingTypeIdMissing() {
         // IdentifierDTO built from empty array to simulate missing num (getNum() -> Optional.empty())
         IdentifierDTO emptyIdDto = new IdentifierDTO(new Object[] { null, null}); 
         when(prv.getPickingTypeId()).thenReturn(emptyIdDto);
