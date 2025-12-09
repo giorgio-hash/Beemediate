@@ -115,7 +115,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoFornitoreDTO;
 </table></p>
  */
 @RunWith(Parameterized.class)
-public class ProdottoFornitoreDTOTest {
+public class ProdForDTOTest {
 	
 /** Mappa di input simulata. */
     private Map<String, Object> in;
@@ -199,7 +199,7 @@ public class ProdottoFornitoreDTOTest {
      * @param in Mappa input.
      * @param out Mappa output atteso.
      */
-    public ProdottoFornitoreDTOTest(Map<String, Object> in, Map<String, Object> out) {
+    public ProdForDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}

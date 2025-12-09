@@ -29,28 +29,6 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
 
 /**
  * Test suite MCDC per ArticoloPreventivoDTO.fromXMLRPC
- *
- * Obiettivo MCDC:
- * - Identificare tutte le decisioni/condizioni rilevanti nel metodo e
- *   fornire casi di test che dimostrino che ogni singola condizione
- *   può influenzare l'output indipendentemente dalle altre.
- *
- * Decisioni nel metodo:
- * 1) (prv == null || prv.getOrderLine().isEmpty()) -> InconsistentDTOException
- *    - condizioni: prv == null  OR  prv.getOrderLine().isEmpty()
- * 2) ids.length == 0 -> EmptyFetchException
- * 3) res.length == 0 -> EmptyFetchException
- *
- * Per MCDC bisogna fornire test tali che per ogni singola condizione
- * si possa dimostrare che cambiando solo quella condizione cambia l'esito.
- *
- * Casi inclusi:
- * A) prv == null -> lancia InconsistentDTOException
- * B) prv non null ma getOrderLine() == Optional.empty() -> lancia InconsistentDTOException
- * C) getOrderLine() presente ma ids.length == 0 -> lancia EmptyFetchException
- * D) ids presenti ma readFromModel ritorna array vuoto -> lancia EmptyFetchException
- * E) ids presenti e readFromModel ritorna 1 riga -> successo (verifica mapping)
- * F) ids presenti e readFromModel ritorna più righe -> successo (verifica mapping multiplo)
  <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
     <thead>
         <tr style="background-color: #f2f2f2;">
@@ -118,7 +96,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
  * getOrderLine().isEmpty() separatamente).
  */
 @ExtendWith(MockitoExtension.class)
-public class ArticoloPreventivoDTOXMLRPCTest {
+public class ArtPrDTOXMLRPCTest {
 
     @Mock
     private OdooApiConfig odoo;

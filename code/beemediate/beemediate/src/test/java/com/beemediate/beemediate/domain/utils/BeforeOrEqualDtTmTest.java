@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
  * <li>Statement Coverage per coprire casi extra</li>
  * </ul>
  */
-public class StringHandlerBeforeOrEqualDateTimeTest {
+public class BeforeOrEqualDtTmTest {
 
 /*
  * PairWise testing (algoritmo IPO)

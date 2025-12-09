@@ -14,7 +14,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.CompagniaDTO;
  * Test per CompagniaDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class CompagniaDTOToStringTest {
+public class CompDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

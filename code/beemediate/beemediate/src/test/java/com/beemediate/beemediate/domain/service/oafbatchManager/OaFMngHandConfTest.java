@@ -26,7 +26,7 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
  * test per verificare gestione conferme.
  * - implementazione scenario checkConfirmation.avalla
  */
-public class OaFManagerHandleConfirmationsTest {
+public class OaFMngHandConfTest {
 
 	private OaFBuffer oafMock;
 	

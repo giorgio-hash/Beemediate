@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Completa i test su <i>String.isSubstr1LessOrEqualThanSubstr2</i> con Statement Coverage. Altri test sono presenti su StringHandlerRandoop.
  */
-public class StringHandlerisSubstr1LessOrEqualThanSubstr2Test {
+public class IsSubstr1LeqSubstr2Test {
 
 	//completa branch coverage.
 	//altri test sono in StringHandlerRandoop.

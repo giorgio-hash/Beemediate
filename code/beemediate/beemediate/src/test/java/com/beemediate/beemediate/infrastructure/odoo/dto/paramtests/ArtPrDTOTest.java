@@ -38,8 +38,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
         <tr style="background-color: #f2f2f2;">
             <th>CASO</th>
             <th>id</th>
-            <th>orderId</th>
-            <th>productId</th>
+            <th>orderId/productId</th>
             <th>product_qty</th>
             <th>ESITO</th>
         </tr>
@@ -49,14 +48,12 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
             <td>0</td>
             <td>null/notOk</td>
             <td>orderIdnotOk</td>
-            <td>-</td>
             <td>null/notOk</td>
             <td style="text-align: left;">eccezione</td>
         </tr>
         <tr>
             <td>1</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td>productIdnotOk</td>
             <td>null/notOk</td>
             <td style="text-align: left;">eccezione</td>
@@ -64,15 +61,13 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
         <tr>
             <td>2</td>
             <td>null/notOk</td>
-            <td>-</td>
             <td>productWrong1f</td>
             <td>null/notOk</td>
             <td style="text-align: left;">ok</td>
         </tr>
         <tr>
             <td>3</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td>productWrong2f</td>
             <td>null/notOk</td>
             <td style="text-align: left;">ok</td>
@@ -81,47 +76,42 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
             <td>4</td>
             <td>null/notOk</td>
             <td>orderIdnotOk</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td style="text-align: left;">eccezione</td>
         </tr>
         <tr>
             <td>5</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td>productIdnotOk</td>
-            <td>-</td>
+            <td></td>
             <td style="text-align: left;">eccezione</td>
         </tr>
         <tr>
             <td>6</td>
             <td>null/notOk</td>
             <td>orderWrong1f</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td style="text-align: left;">ok</td>
         </tr>
         <tr>
             <td>7</td>
-            <td>-</td>
+            <td></td>
             <td>orderWrong2f</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
             <td style="text-align: left;">ok</td>
         </tr>
         <tr>
             <td>8</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td style="text-align: left;">ok</td>
         </tr>
     </tbody>
 </table></p>
  */
 @RunWith(Parameterized.class)
-public class ArticoloPreventivoDTOTest {
+public class ArtPrDTOTest {
 	
 	
 /** Mappa di input che simula la risposta grezza di Odoo via XML-RPC. */
@@ -250,7 +240,7 @@ public class ArticoloPreventivoDTOTest {
      * @param in Mappa dati input.
      * @param out Mappa dati attesi (o null).
      */
-    public ArticoloPreventivoDTOTest(Map<String, Object> in, Map<String, Object> out) {
+    public ArtPrDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}

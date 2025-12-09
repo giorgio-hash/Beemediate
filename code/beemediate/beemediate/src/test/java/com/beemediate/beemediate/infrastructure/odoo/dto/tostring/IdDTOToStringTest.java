@@ -12,7 +12,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
  * Test per IdentifierDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class IdentifierDTOToStringTest {
+public class IdDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

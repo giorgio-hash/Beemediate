@@ -26,7 +26,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
  * e sulla resilienza del costruttore di fronte a tipi di dato inattesi.
  */
 @RunWith(Parameterized.class)
-public class ContattoConsegnaDTOTest {
+public class ConConDTOTest {
 
 /** Mappa di input simulata (risposta XML-RPC). */
     private Map<String, Object> in;
@@ -95,7 +95,7 @@ public class ContattoConsegnaDTOTest {
      * @param in Mappa dati input.
      * @param out Mappa dati attesi (o null).
      */
-    public ContattoConsegnaDTOTest(Map<String, Object> in, Map<String, Object> out) {
+    public ConConDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}

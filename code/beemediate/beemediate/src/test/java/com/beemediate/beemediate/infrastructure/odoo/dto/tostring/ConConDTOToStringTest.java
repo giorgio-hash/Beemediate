@@ -14,7 +14,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ContattoConsegnaDTO;
  * Test per ContattoConsegnaDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class ContattoConsegnaDTOToStringTest {
+public class ConConDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

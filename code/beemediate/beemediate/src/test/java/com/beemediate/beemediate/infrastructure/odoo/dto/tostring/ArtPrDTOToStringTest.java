@@ -13,7 +13,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
 /**
  * Test per ArticoloPreventivoDTO.toString()
  */
-public class ArticoloPreventivoDTOToStringTest {
+public class ArtPrDTOToStringTest {
 
 /**
      * Verifica che il metodo {@code toString} includa tutti i campi quando il DTO è interamente popolato.

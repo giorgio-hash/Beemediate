@@ -13,7 +13,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ConsegnaDTO;
  * Test per ConsegnaDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class ConsegnaDTOToStringTest {
+public class ConDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

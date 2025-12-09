@@ -25,7 +25,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchExcept
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /**
- * Metodo MCDC
+ * Metodo MCDC per ContattoConsegnaDTO.fromXMLRPC
  * 
 <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
     <thead>
@@ -69,7 +69,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
     </tbody>
 </table>
  */
-public class ContattoConsegnaDTOXMLRPCTest {
+public class ConConDTOXMLRPCTest {
 
     /**
  * Metodo MCDC

@@ -25,11 +25,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchExcept
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /**
- * Metodo MCDC
-     /**
-     * Metodo MCDC
-     * 
-     * 
+ * Metodo MCDC per ProdottoFornitoreDTO.fromXMLRPC
 <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
     <thead>
         <tr style="background-color: #f2f2f2;">
@@ -117,7 +113,7 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
     </tbody>
 </table>
  */
-public class ProdottoFornitoreDTOXMLRPCTest {
+public class ProdForDTOXMLRPCTest {
 
     /**
      * Metodo MCDC

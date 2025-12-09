@@ -26,7 +26,7 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
  * - Capacity above threshold (valid partition)
  * - Capacity equals threshold (boundary partition)
  */
-public class OaFBatchManagerConstructorTest {
+public class OaFBatchMngCreateTest {
 
 	/** Mock object for OaFBuffer dependency */
 	private OaFBuffer oafMock;

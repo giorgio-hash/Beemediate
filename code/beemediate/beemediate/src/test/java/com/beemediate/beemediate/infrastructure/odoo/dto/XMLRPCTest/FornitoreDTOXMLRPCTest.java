@@ -25,7 +25,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.FornitoreDTO;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 
 /**
- * Metodo MCDC
+ * Metodo MCDC per FornitoreDTO.fromXMLRPC
  * 
  * 
 <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">

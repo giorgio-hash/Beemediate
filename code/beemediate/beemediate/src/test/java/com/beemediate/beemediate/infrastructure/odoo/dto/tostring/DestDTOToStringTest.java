@@ -14,7 +14,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.DestinazioneDTO;
  * Test per DestinazioneDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class DestinazioneDTOToStringTest {
+public class DestDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

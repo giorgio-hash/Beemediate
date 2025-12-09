@@ -15,7 +15,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.PreventivoDTO;
  * Test per PreventivoDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class PreventivoDTOToStringTest {
+public class PrevDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {

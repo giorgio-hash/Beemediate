@@ -28,7 +28,7 @@ import com.beemediate.beemediate.domain.utils.BoundedBuffer;
  * - implementazione scenario noOrder.avalla
  * - implementazione scenario sendOrder.avalla
  */
-public class OaFManagerHandlerOrdersTest {
+public class OaFMngHandOrdTest {
 
 	private OaFBuffer oafMock;
 	

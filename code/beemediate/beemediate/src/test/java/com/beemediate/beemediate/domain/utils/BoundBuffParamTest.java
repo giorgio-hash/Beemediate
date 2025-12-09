@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * inclusi test per empty().
  */
 @RunWith(Parameterized.class)
-public class BoundedBufferParameterizedTest {
+public class BoundBuffParamTest {
 
 
 	/**
@@ -72,7 +72,7 @@ public class BoundedBufferParameterizedTest {
  *
  * @param capacity la capacità del buffer per questa istanza di test
  */
-    public BoundedBufferParameterizedTest(int capacity) {
+    public BoundBuffParamTest(int capacity) {
         this.capacity = capacity;
     }
 

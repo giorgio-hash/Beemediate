@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * Test generati con EvoSuite per isDigit e has2DigitsBetween
  */
-public class StringHandlerHas2DigitsBetweenTest_withES {
+public class Has2DigitsBtwn_WithES {
 	
 	
 

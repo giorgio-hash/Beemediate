@@ -14,7 +14,7 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoDTO;
  * Test per ProdottoDTO.toString()
  * Stesso stile e approccio dei test per ArticoloPreventivoDTO.toString()
  */
-public class ProdottoDTOToStringTest {
+public class ProdDTOToStringTest {
 
     @Test
     void toString_includesAllFields_whenAllPresent() {
