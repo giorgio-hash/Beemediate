@@ -35,6 +35,21 @@ import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoFornitoreDTO;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
+/**
+ * Test unitario per {@link OdooOrderProvider}.
+ * <p>
+ * Questa classe verifica la logica di orchestrazione del recupero ordini da Odoo.
+ * <p>
+ * <b>Nota tecnica sull'implementazione del test:</b><br>
+ * Poiché i DTO (es. {@link FornitoreDTO}, {@link PreventivoDTO}) utilizzano metodi factory statici 
+ * (es. {@code fromXMLRPC}) per istanziarsi tramite chiamate di rete, questo test fa ampio uso di 
+ * {@link MockedStatic} di Mockito. Questo permette di:
+ * <ul>
+ * <li>Simulare le risposte delle chiamate XML-RPC senza effettuare traffico di rete reale.</li>
+ * <li>Restituire istanze DTO mockate pre-popolate per verificare la mappatura dei campi.</li>
+ * <li>Simulare eccezioni specifiche (EmptyFetch, InconsistentDTO) per testare la robustezza del Provider.</li>
+ * </ul>
+ */
 public class OdooOrderProviderTest {
 
     private OdooApiConfig odooMock;
@@ -46,6 +61,21 @@ public class OdooOrderProviderTest {
         provider = new OdooOrderProvider(odooMock);
     }
 
+    /**
+     * Verifica il "Happy Path" completo: dal fetch dei DTO alla creazione dell'oggetto {@link Order}.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>Tutte le chiamate statiche ai DTO (Fornitore, Preventivo, Consegna, ecc.) restituiscono istanze valide.</li>
+     * <li>I campi necessari per il mapping (es. ID ordine, date, prodotti) sono popolati nei mock.</li>
+     * </ul>
+     * Risultato atteso:
+     * <ul>
+     * <li>{@code fetchOrders()} ritorna {@code true}.</li>
+     * <li>Il buffer interno del provider contiene un nuovo ordine.</li>
+     * <li>L'ordine estratto ({@code popNewOrder()}) contiene i dati mappati correttamente (es. OrderID).</li>
+     * </ul>
+     */
     @Test
     public void fetchOrders_happyPath_buildsOrder() {
         // Preparazione mocks DTO e comportamenti
@@ -133,6 +163,12 @@ public class OdooOrderProviderTest {
         }
     }
 
+    /**
+     * Verifica la gestione di errori di rete o XML-RPC.
+     * <p>
+     * Scenario: Il primo tentativo di chiamare Odoo (recupero Fornitore) fallisce con {@link XmlRpcException}.
+     * Risultato: L'eccezione viene catturata, il metodo ritorna {@code false} e nessun ordine viene creato.
+     */
     @Test
     public void fetchOrders_whenFornitoreXmlRpcException_fetchOrdersFalse()  {
         when(odooMock.isOnline()).thenReturn(true);
@@ -146,6 +182,12 @@ public class OdooOrderProviderTest {
         }
     }
 
+    /**
+     * Verifica la gestione di dati mancanti (EmptyFetchException) durante la catena di recupero.
+     * <p>
+     * Scenario: Recupero Fornitore e Preventivo OK, ma il recupero degli Articoli fallisce perché vuoto.
+     * Risultato: Il provider interrompe il flusso, logga l'errore (impliciitamente) e ritorna {@code false}.
+     */
     @Test
     public void fetchOrders_whenArticoloEmptyFetchHandled_returnsFalse_noOrder() {
         when(odooMock.isOnline()).thenReturn(true);
@@ -184,6 +226,12 @@ public class OdooOrderProviderTest {
         }
     }
 
+    /**
+     * Verifica la gestione di dati inconsistenti (InconsistentDTOException).
+     * <p>
+     * Scenario: Il recupero del Preventivo fallisce per validazione interna (es. campi obbligatori mancanti).
+     * Risultato: Il provider gestisce l'eccezione custom e ritorna {@code false}.
+     */
     @Test
     public void fetchOrders_whenPreventivoInconsistentHandled_returnsFalse_noOrder() {
         when(odooMock.isOnline()).thenReturn(true);
@@ -203,6 +251,12 @@ public class OdooOrderProviderTest {
         }
     }
 
+    /**
+     * Verifica la logica di riconnessione automatica.
+     * <p>
+     * Scenario: {@code isOnline()} ritorna false all'inizio.
+     * Risultato: Viene invocato {@code connect()} prima di tentare qualsiasi operazione XML-RPC.
+     */
     @Test
     public void fetchOrders_whenNotOnline_callsConnect_thenProceed() throws Exception {
         when(odooMock.isOnline()).thenReturn(false);

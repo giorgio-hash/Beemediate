@@ -9,6 +9,10 @@ package com.beemediate.beemediate.domain.utils;
 public class StringHandler {
 	
 	/**
+	 * Costruttore privato per evitare istanze
+	 */
+	private StringHandler() {/*Costruttore vuoto*/}
+	/**
 	 * Determina se due oggetti String sono uguali.
 	 * @param s1 - String
 	 * @param s2 - String

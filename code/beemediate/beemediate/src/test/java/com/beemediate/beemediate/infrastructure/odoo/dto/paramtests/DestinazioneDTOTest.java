@@ -14,18 +14,43 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.DestinazioneDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link DestinazioneDTO}.
+ * <p>
+ * Verifica la logica di costruzione del DTO a partire da una mappa di valori (stile XML-RPC).
+ * Il test si concentra sulla robustezza del parsing:
+ * <ul>
+ * <li>Se i dati sono conformi (ID intero, Codice stringa), vengono mappati correttamente.</li>
+ * <li>Se i dati sono nulli o di tipo errato, il DTO deve gestire la situazione restituendo 
+ * un {@link Optional#empty()} invece di lanciare eccezioni di cast.</li>
+ * </ul>
+ */
 @RunWith(Parameterized.class)
 public class DestinazioneDTOTest {
 	
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input simulata. */
+    private Map<String, Object> in;
+/** Mappa dei valori attesi (Optional popolati o vuoti). */
+    private Map<String, Object> out;
 	
-	@Parameters
+/**
+     * Definisce i casi di test.
+     * <p>
+     * Scenari:
+     * <ol>
+     * <li><b>Happy Path:</b> ID (Integer) e Ref (String) presenti e corretti.</li>
+     * <li><b>Safe Parsing 1:</b> ID di tipo errato (String) e Ref nullo. 
+     * Atteso: Entrambi {@code Optional.empty()}.</li>
+     * <li><b>Safe Parsing 2:</b> ID nullo e Ref di tipo errato (Integer). 
+     * Atteso: Entrambi {@code Optional.empty()}.</li>
+     * </ol>
+     *
+     * @return Collezione di array [Input, ExpectedOutput].
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		
 		final String ID = "id";
@@ -54,13 +79,28 @@ public class DestinazioneDTOTest {
 		
 	}
 	
-	public DestinazioneDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore del test parametrico.
+     * @param in Mappa input.
+     * @param out Mappa output atteso.
+     */
+    public DestinazioneDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
-	public void Test() {
+/**
+     * Esegue il test di instanziazione.
+     * <p>
+     * Verifica che:
+     * <ul>
+     * <li>L'oggetto {@link DestinazioneDTO} venga creato correttamente (non null).</li>
+     * <li>Il campo {@code id} corrisponda all'Optional atteso (valore o empty).</li>
+     * <li>Il campo {@code codiceDestinazione} corrisponda all'Optional atteso (valore o empty).</li>
+     * </ul>
+     */
+    @Test
+    public void Test() {
 		final String ID = "id";
 		final String codiceDestinazione = "ref";
 		DestinazioneDTO dest = null;

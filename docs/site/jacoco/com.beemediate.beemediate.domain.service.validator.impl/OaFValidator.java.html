@@ -28,7 +28,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
 	private /*@ spec_public */ static final char QUANTITY_MEASURE = 'M';
 	/***Numeri corretti di località di consegna*/
-<span class="fc" id="L31">	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {&quot;3024005150&quot;,&quot;30901505150&quot;};</span>
+<span class="nc" id="L31">	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {CUSTOMER_NUMBER,&quot;30901505150&quot;};</span>
 	/***Elenco numeri articolo da catalogo fornitore.*/
 	private /*@ spec_public */ final String[] articleNumbers;
 	
@@ -60,27 +60,27 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @*/
 //	@CodeBigintMath
 	@Autowired
-<span class="fc" id="L63">	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {</span>
-<span class="fc" id="L64">		final String[] rows = catalog.readArticleNumbers(); </span>
-<span class="fc bfc" id="L65" title="All 4 branches covered.">		if(rows == null || rows.length == 0)</span>
-<span class="fc" id="L66">			throw new EmptyArrayException(&quot;ID articoli non trovati.&quot;);</span>
-<span class="fc" id="L67">		articleNumbers = rows;</span>
-<span class="fc" id="L68">	}</span>
+<span class="nc" id="L63">	public /*@ pure*/ OaFValidator (final SupplierCatalogReaderPort catalog) throws EmptyArrayException {</span>
+<span class="nc" id="L64">		final String[] rows = catalog.readArticleNumbers(); </span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">		if(rows == null || rows.length == 0)</span>
+<span class="nc" id="L66">			throw new EmptyArrayException(&quot;ID articoli non trovati.&quot;);</span>
+<span class="nc" id="L67">		articleNumbers = rows;</span>
+<span class="nc" id="L68">	}</span>
 	
 //	@SkipEsc
 	@Override
 	public void validate(/*@ non_null @*/final Order o) {
 		
-<span class="fc" id="L74">		OrderStructure ost = o.getData();</span>
+<span class="nc" id="L74">		final OrderStructure ost = o.getData();</span>
 			
-<span class="fc" id="L76">		o.setCustomerNumber( this.validateCustomerNumber( ost ) );</span>
-<span class="fc" id="L77">		o.setArticleNumber( this.validateArticleNumber( ost ) );</span>
-<span class="fc" id="L78">		o.setQuantityMeasure( this.validateQuantityMeasure( ost ) );</span>
-<span class="fc" id="L79">		o.setQuantity( this.validateQuantity( ost ) );</span>
-<span class="fc" id="L80">		o.setDeliveryLocationNumber( this.validateDeliveryLocationNumber( ost ) );</span>
-<span class="fc" id="L81">		o.setDeliveryDate( this.validateDeliveryDate( ost) );</span>
-<span class="fc" id="L82">		o.setDeliveryDateContent( this.validateDeliveryDateContent( ost ) );</span>
-<span class="fc" id="L83">	}</span>
+<span class="nc" id="L76">		o.setCustomerNumber( this.validateCustomerNumber( ost ) );</span>
+<span class="nc" id="L77">		o.setArticleNumber( this.validateArticleNumber( ost ) );</span>
+<span class="nc" id="L78">		o.setQuantityMeasure( this.validateQuantityMeasure( ost ) );</span>
+<span class="nc" id="L79">		o.setQuantity( this.validateQuantity( ost ) );</span>
+<span class="nc" id="L80">		o.setDeliveryLocationNumber( this.validateDeliveryLocationNumber( ost ) );</span>
+<span class="nc" id="L81">		o.setDeliveryDate( this.validateDeliveryDate( ost) );</span>
+<span class="nc" id="L82">		o.setDeliveryDateContent( this.validateDeliveryDateContent( ost ) );</span>
+<span class="nc" id="L83">	}</span>
 	
 	/**
 	 * Verifica che buyerID, buyerIDRef e customerNumber abbiano lo stesso valore.
@@ -110,8 +110,8 @@ public final class OaFValidator implements OaFValidatorIF{
 //	@CodeBigintMath
 	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/final OrderStructure ost) {
 		
-<span class="fc bfc" id="L113" title="All 2 branches covered.">		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">				&amp;&amp; StringHandler.equals(ost.getHeader().getBuyerID(), this.CUSTOMER_NUMBER);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">				&amp;&amp; StringHandler.equals(ost.getHeader().getBuyerID(), CUSTOMER_NUMBER);</span>
 	}
 	
 	/**
@@ -148,9 +148,9 @@ public final class OaFValidator implements OaFValidatorIF{
 //	@CodeBigintMath
 	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/final OrderStructure ost) {
 		
-<span class="fc bfc" id="L151" title="All 2 branches covered.">		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())</span>
-<span class="fc bfc" id="L152" title="All 2 branches covered.">				&amp;&amp; (StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[0])</span>
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[1]));</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				&amp;&amp; (StringHandler.equals(ost.getHeader().getDeliveryID(), DELIVERY_LOCATION_NUMBER[0])</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">						|| StringHandler.equals(ost.getHeader().getDeliveryID(), DELIVERY_LOCATION_NUMBER[1]));</span>
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public final class OaFValidator implements OaFValidatorIF{
 //	@CodeBigintMath
 	private /*@ spec_public pure @*/ boolean validateArticleNumber(/*@ non_null @*/final OrderStructure ost) {
 		
-<span class="fc" id="L176">		boolean found = true;</span>
+<span class="nc" id="L176">		boolean found = true;</span>
 		
 		/*@ loop_writes found;
 		  @ loop_invariant \count &lt; ost.itemList.length ==&gt; il!=null;
@@ -181,14 +181,14 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant found &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; isInCatalog(ost.itemList[j].supplierID) );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
-<span class="fc bfc" id="L184" title="All 2 branches covered.">		for(OrderItem il : ost.getItemList()) {</span>
-<span class="fc bfc" id="L185" title="All 2 branches covered.">			if( !isInCatalog(il.getSupplierID()) ) {</span>
-<span class="fc" id="L186">				found = false;</span>
-<span class="fc" id="L187">				break;</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">			if( !isInCatalog(il.getSupplierID()) ) {</span>
+<span class="nc" id="L186">				found = false;</span>
+<span class="nc" id="L187">				break;</span>
 			}
 		}
 		
-<span class="fc" id="L191">		return found;</span>
+<span class="nc" id="L191">		return found;</span>
 	}
 	
 	/**
@@ -203,7 +203,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @*/
 	private /*@ spec_public pure @*/ boolean isInCatalog(/*@ non_null @*/final String artNum) {
 		
-<span class="fc" id="L206">		boolean inCatalog = false;</span>
+<span class="nc" id="L206">		boolean inCatalog = false;</span>
 		
 		/*@ loop_writes inCatalog;
 		  @ loop_invariant \count &lt; articleNumbers.length ==&gt; a!=null;
@@ -211,13 +211,13 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant !inCatalog &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; !StringHandler.equals(articleNumbers[j], artNum) );
 		  @ decreases articleNumbers.length - \count;
 		  @*/
-<span class="fc bfc" id="L214" title="All 2 branches covered.">		for(String a : articleNumbers) {</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">			if( StringHandler.equals(a, artNum) ) {</span>
-<span class="fc" id="L216">				inCatalog = true;</span>
-<span class="fc" id="L217">				break;</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		for(String a : articleNumbers) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">			if( StringHandler.equals(a, artNum) ) {</span>
+<span class="nc" id="L216">				inCatalog = true;</span>
+<span class="nc" id="L217">				break;</span>
 			}
 		}
-<span class="fc" id="L220">		return inCatalog;</span>
+<span class="nc" id="L220">		return inCatalog;</span>
 	}
 	
 	/**
@@ -239,7 +239,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateQuantityMeasure(/*@ non_null @*/final OrderStructure ost) {
 		
-<span class="fc" id="L242">		boolean rightMeasureUnit = true;</span>
+<span class="nc" id="L242">		boolean rightMeasureUnit = true;</span>
 		
 		/*@ loop_writes rightMeasureUnit;
 		  @ loop_invariant \count &lt; ost.itemList.length ==&gt; il!=null;
@@ -247,14 +247,14 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant rightMeasureUnit &lt;==&gt; (\forall int j; 0&lt;=j&lt;\count; ost.itemList[j].orderUnit.length()==1 &amp; ost.itemList[j].orderUnit.charAt(0) == quantityMeasure );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
-<span class="fc bfc" id="L250" title="All 2 branches covered.">		for(OrderItem il : ost.getItemList()) {</span>
-<span class="fc bfc" id="L251" title="All 6 branches covered.">			if( il.getOrderUnit()==null || il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {</span>
-<span class="fc" id="L252">				rightMeasureUnit = false;</span>
-<span class="fc" id="L253">				break;</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="nc bnc" id="L251" title="All 6 branches missed.">			if( il.getOrderUnit()==null || il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != QUANTITY_MEASURE ) {</span>
+<span class="nc" id="L252">				rightMeasureUnit = false;</span>
+<span class="nc" id="L253">				break;</span>
 			}
 		}
 		
-<span class="fc" id="L257">		return rightMeasureUnit;</span>
+<span class="nc" id="L257">		return rightMeasureUnit;</span>
 	}
 	
 	/**
@@ -288,7 +288,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
 		
 		
-<span class="fc" id="L291">		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;</span>
+<span class="nc" id="L291">		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;</span>
 		
 		/*@ loop_writes \nothing;
 		  @ loop_invariant 0&lt;=\count&lt;=ost.itemList.length;
@@ -299,24 +299,24 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant qfv==QuantityFieldValue.NAN ==&gt; (!StringHandler.isDouble(il.quantity) &amp; !StringHandler.isInteger(il.quantity) &amp; !StringHandler.containsChar(il.quantity,',') );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
-<span class="fc bfc" id="L302" title="All 2 branches covered.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">		for(OrderItem il : ost.getItemList()) {</span>
 			
-<span class="fc bfc" id="L304" title="All 2 branches covered.">			if(StringHandler.isDouble(il.getQuantity()))</span>
-<span class="fc" id="L305">				continue;</span>
-<span class="fc bfc" id="L306" title="All 2 branches covered.">			else if(StringHandler.isInteger(il.getQuantity())) {</span>
-<span class="fc" id="L307">				qfv = QuantityFieldValue.INTEGER;</span>
-<span class="fc" id="L308">				continue;</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">			if(StringHandler.isDouble(il.getQuantity()))</span>
+<span class="nc" id="L305">				continue;</span>
+<span class="nc bnc" id="L306" title="All 2 branches missed.">			else if(StringHandler.isInteger(il.getQuantity())) {</span>
+<span class="nc" id="L307">				qfv = QuantityFieldValue.INTEGER;</span>
+<span class="nc" id="L308">				continue;</span>
 			} else {
-<span class="fc bfc" id="L310" title="All 2 branches covered.">				if(StringHandler.containsChar(il.getQuantity(),','))</span>
-<span class="fc" id="L311">					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">				if(StringHandler.containsChar(il.getQuantity(),','))</span>
+<span class="nc" id="L311">					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;</span>
 				else
-<span class="fc" id="L313">					qfv = QuantityFieldValue.NAN;</span>
+<span class="nc" id="L313">					qfv = QuantityFieldValue.NAN;</span>
 				
-<span class="fc" id="L315">				return qfv;</span>
+<span class="nc" id="L315">				return qfv;</span>
 			} 
 		}
 		
-<span class="fc" id="L319">		return qfv;</span>
+<span class="nc" id="L319">		return qfv;</span>
 	}
 	
 	/**
@@ -335,9 +335,9 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ ensures !\result &lt;==&gt; (!StringHandler.isDateTime(ost.header.orderDate) | !StringHandler.isDateTime(ost.header.startDate) | !StringHandler.isDateTime(ost.header.endDate));
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/final OrderStructure ost) {
-<span class="fc bfc" id="L338" title="All 4 branches covered.">		return ost.getHeader().getStartDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getStartDate())</span>
-<span class="fc bfc" id="L339" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getOrderDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getOrderDate())</span>
-<span class="fc bfc" id="L340" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getEndDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getEndDate());</span>
+<span class="nc bnc" id="L338" title="All 4 branches missed.">		return ost.getHeader().getStartDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getStartDate())</span>
+<span class="nc bnc" id="L339" title="All 4 branches missed.">				&amp;&amp; ost.getHeader().getOrderDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getOrderDate())</span>
+<span class="nc bnc" id="L340" title="All 4 branches missed.">				&amp;&amp; ost.getHeader().getEndDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getEndDate());</span>
 	}
 	
 	/**
@@ -400,9 +400,9 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ ensures \result;
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
-<span class="fc bfc" id="L403" title="All 2 branches covered.">		return validateDeliveryDateContent(ost) </span>
-<span class="fc bfc" id="L404" title="All 2 branches covered.">				&amp;&amp; StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())</span>
-<span class="fc bfc" id="L405" title="All 2 branches covered.">				&amp;&amp; StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());</span>
+<span class="nc bnc" id="L403" title="All 2 branches missed.">		return validateDeliveryDateContent(ost) </span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">				&amp;&amp; StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">				&amp;&amp; StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());</span>
 	}
 
 }

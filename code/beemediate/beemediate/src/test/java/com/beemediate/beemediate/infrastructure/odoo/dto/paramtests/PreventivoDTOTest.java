@@ -17,21 +17,201 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.IdentifierDTO;
 import com.beemediate.beemediate.infrastructure.odoo.dto.PreventivoDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link PreventivoDTO}.
+ * <p>
+ * Verifica la logica di costruzione e mapping del DTO a partire da una mappa di proprietà 
+ * (tipicamente proveniente da una risposta XML-RPC di Odoo).
+ * <p>
+ * Il test copre due scenari principali:
+ * <ul>
+ * <li><b>Happy Path:</b> La mappa contiene dati validi e il DTO viene popolato correttamente con i tipi attesi 
+ * (es. {@link IdentifierDTO} per le chiavi esterne, {@link LocalDateTime} per le date, {@link Optional} per i campi nullable).</li>
+ * <li><b>Error Path:</b> La mappa contiene dati malformati (es. array mancanti per le foreign key), 
+ * verificando che il costruttore sollevi le eccezioni appropriate.</li>
+ * </ul>
+ * <p>Schema di input dei test<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center; font-size: 12px;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASE</th>
+            <th>id</th>
+            <th>name</th>
+            <th>partnerId</th>
+            <th>productId</th>
+            <th>currencytId</th>
+            <th>pickingTypeId</th>
+            <th>companyId</th>
+            <th>origin</th>
+            <th>orderLine</th>
+            <th>dateOrder</th>
+            <th>dateApprove</th>
+            <th>datePlanned</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td>null</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>notOk</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>null</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>notOk</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>null</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="text-align: left;">eccezione</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>notOk</td>
+            <td>notOk</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>notOk</td>
+            <td>notOK</td>
+            <td>notOK</td>
+            <td>notOk</td>
+            <td>notOK</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>null</td>
+            <td>null</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>null</td>
+            <td>null</td>
+            <td>null</td>
+            <td>null</td>
+            <td>null</td>
+            <td style="text-align: left;">ok</td>
+        </tr>
+    </tbody>
+</table></p>
+ */
 @RunWith(Parameterized.class)
 public class PreventivoDTOTest {
 
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input simulata (chiave-valore come da Odoo). */
+    private Map<String, Object> in;
+/** Mappa dei valori attesi nel DTO dopo la costruzione (o null se ci si aspetta un'eccezione). */
+    private Map<String, Object> out;
 	
-	
-	
-	@Parameters
+/**
+     * Definisce i parametri del test.
+     * <p>
+     * Ogni elemento della collezione è un array di oggetti contenente:
+     * <ol>
+     * <li><b>Input Map:</b> La mappa grezza passata al costruttore di {@link PreventivoDTO}.</li>
+     * <li><b>Expected Map:</b> La mappa dei valori attesi per le asserzioni, oppure {@code null} se il test case deve fallire.</li>
+     * </ol>
+     * <p>
+     * Casi di test coperti:
+     * <ul>
+     * <li>0: Caso completo e corretto.</li>
+     * <li>1-5: Casi di errore (dati mancanti o malformati per campi obbligatori o complessi come gli ID).</li>
+     * <li>6-7: Casi limite (valori nulli, opzionali vuoti o tipi errati gestiti).</li>
+     * </ul>
+     *
+     * @return Una collezione di casi di test.
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		
 		final String ID = "id";
@@ -107,15 +287,35 @@ public class PreventivoDTOTest {
 		return tests;
 	}
 	
-	
-	public PreventivoDTOTest(Map<String,Object> in, Map<String,Object> out) {
+/**
+     * Costruttore per il runner parametrico.
+     * * @param in Mappa di input simulata.
+     * @param out Mappa dei valori attesi (o null se attesa eccezione).
+     */
+    public PreventivoDTOTest(Map<String,Object> in, Map<String,Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	
-	@Test
-	public void test() {
+/**
+     * Esegue il test unitario di mapping.
+     * <p>
+     * Se {@code out} è popolato:
+     * <ul>
+     * <li>Verifica che il DTO non sia nullo.</li>
+     * <li>Confronta puntualmente ogni campo del DTO con il valore atteso in {@code out}.</li>
+     * <li>Verifica specificamente i sotto-oggetti complessi (es. {@link IdentifierDTO}) controllandone ID e Nome.</li>
+     * </ul>
+     * <p>
+     * Se {@code out} è {@code null} (si è verificata un'eccezione):
+     * <ul>
+     * <li>Il test cattura l'eccezione attesa durante la costruzione del DTO.</li>
+     * <li>Verifica che l'eccezione sia giustificata, controllando che almeno uno dei campi di input obbligatori
+     * (partnerId, productId, ecc.) fosse effettivamente malformato (es. non array o lunghezza errata).</li>
+     * </ul>
+     */
+    @Test
+    public void test() {
 		
 		final String ID = "id";
 		final String name = "name";

@@ -28,7 +28,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	/***Unità di misura corretta per il valore di quantità di ogni articolo.*/
 	private /*@ spec_public */ static final char QUANTITY_MEASURE = 'M';
 	/***Numeri corretti di località di consegna*/
-	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {"3024005150","30901505150"};
+	private /*@ spec_public */ static final String[] DELIVERY_LOCATION_NUMBER = {CUSTOMER_NUMBER,"30901505150"};
 	/***Elenco numeri articolo da catalogo fornitore.*/
 	private /*@ spec_public */ final String[] articleNumbers;
 	
@@ -111,7 +111,7 @@ public final class OaFValidator implements OaFValidatorIF{
 	private /*@ spec_public pure @*/ boolean validateCustomerNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getBuyerID(), ost.getHeader().getBuyerIDRef())
-				&& StringHandler.equals(ost.getHeader().getBuyerID(), this.CUSTOMER_NUMBER);
+				&& StringHandler.equals(ost.getHeader().getBuyerID(), CUSTOMER_NUMBER);
 	}
 	
 	/**
@@ -149,8 +149,8 @@ public final class OaFValidator implements OaFValidatorIF{
 	private /*@ spec_public pure @*/ boolean validateDeliveryLocationNumber( /*@ non_null @*/final OrderStructure ost) {
 		
 		return StringHandler.equals(ost.getHeader().getDeliveryID(), ost.getHeader().getDeliveryIDRef())
-				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[0])
-						|| StringHandler.equals(ost.getHeader().getDeliveryID(), this.DELIVERY_LOCATION_NUMBER[1]));
+				&& (StringHandler.equals(ost.getHeader().getDeliveryID(), DELIVERY_LOCATION_NUMBER[0])
+						|| StringHandler.equals(ost.getHeader().getDeliveryID(), DELIVERY_LOCATION_NUMBER[1]));
 	}
 	
 	/**
@@ -248,7 +248,7 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ decreases ost.itemList.length - \count;
 		  @*/
 		for(OrderItem il : ost.getItemList()) {
-			if( il.getOrderUnit()==null || il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != this.QUANTITY_MEASURE ) {
+			if( il.getOrderUnit()==null || il.getOrderUnit().length()!=1 || il.getOrderUnit().charAt(0) != QUANTITY_MEASURE ) {
 				rightMeasureUnit = false;
 				break;
 			}

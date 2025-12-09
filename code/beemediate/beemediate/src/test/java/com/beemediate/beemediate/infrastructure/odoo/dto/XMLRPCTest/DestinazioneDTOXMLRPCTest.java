@@ -25,6 +25,53 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchExcept
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
 
 /**
+ * Metodo MCDC per DestinazioneDTO.fromXMLRPC
+ * 
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASE</th>
+            <th>concons == null</th>
+            <th>concons.getPartnerId().getNum().isEmpty()</th>
+            <th>res.length == 0</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">happy path</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td style="text-align: left;">EmptyFetchException ("Non trovo informazioni della destinazione.")</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">InconsistentDTOException</td>
+        </tr>
+    </tbody>
+</table>
+*/
+public class DestinazioneDTOXMLRPCTest {
+
+    /**
  * Metodo MCDC
  * 
  * CASE| 		concons == null || concons.getPartnerId().getNum().isEmpty()		|		res.length == 0		| ESITO
@@ -33,7 +80,6 @@ import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOE
  * 2   |			T			-														|			-				| InconsistentDTOException
  * 3   |			F			T														|			-				| InconsistentDTOException
  */
-public class DestinazioneDTOXMLRPCTest {
 
     @Mock
     private OdooApiConfig odoo;

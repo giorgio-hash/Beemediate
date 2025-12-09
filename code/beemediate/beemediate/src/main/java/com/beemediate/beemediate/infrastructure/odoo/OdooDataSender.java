@@ -203,14 +203,14 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel(odoo.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",orderId));
+		ids = odoo.searchFromModel(OdooApiConfig.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",orderId));
 		
 		if(ids.length == 0) throw new EmptyFetchException("Ordine "+orderId+" da aggiornare non è stato trovato");
 		
 		requestInfo.clear();		
 		requestInfo.put("x_studio_oaf", oafState );
 		
-		return odoo.updateOnModel(odoo.PURCHASE_ORDER, requestInfo, ids[0]);
+		return odoo.updateOnModel(OdooApiConfig.PURCHASE_ORDER, requestInfo, ids[0]);
 		
 	}
 	
@@ -249,7 +249,7 @@ public class OdooDataSender implements DataSenderPort{
 		
 		requestInfo.clear();
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel(odoo.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",cs.getOrderId()));
+		ids = odoo.searchFromModel(OdooApiConfig.PURCHASE_ORDER, requestInfo, Arrays.asList("name","=",cs.getOrderId()));
 		
 		if (ids.length!=1) throw new InconsistentDTOException("name ambiguo o non trovato");
 		

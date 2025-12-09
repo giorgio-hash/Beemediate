@@ -38,36 +38,36 @@ public class DestinazioneDTO{
 	 */
 	public static DestinazioneDTO fromXMLRPC(final OdooApiConfig odoo, final ContattoConsegnaDTO concons) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 
-<span class="fc bfc" id="L41" title="All 4 branches covered.">		if (concons == null || concons.getPartnerId().getNum().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto ContattoConsegnaDTO non ha le informazioni necessarie&quot;);</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">		if (concons == null || concons.getPartnerId().getNum().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto ContattoConsegnaDTO non ha le informazioni necessarie&quot;);</span>
 		
-<span class="fc" id="L43">		final Object id = concons.getPartnerId().getNum().get();</span>
+<span class="nc" id="L43">		final Object id = concons.getPartnerId().getNum().get();</span>
 		final Object[] res;
-<span class="fc" id="L45">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L45">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
-<span class="fc" id="L47">		requestInfo.clear();</span>
-<span class="fc" id="L48">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;ref&quot;));</span>
-<span class="fc" id="L49">		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, id);</span>
+<span class="nc" id="L47">		requestInfo.clear();</span>
+<span class="nc" id="L48">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;ref&quot;));</span>
+<span class="nc" id="L49">		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, id);</span>
 		
-<span class="fc bfc" id="L51" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni della destinazione.&quot;);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Non trovo informazioni della destinazione.&quot;);</span>
 		
-<span class="fc" id="L53">		return new DestinazioneDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
+<span class="nc" id="L53">		return new DestinazioneDTO( (HashMap&lt;String, Object&gt;) res[0]);</span>
 	}
 	
 	/**
 	 * 
 	 * @param map - Map contente una tupla del model &lt;i&gt;res.partner&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="fc" id="L60">	public DestinazioneDTO( final Map&lt;String, Object&gt; map) {</span>
-<span class="fc" id="L61">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
-<span class="fc" id="L62">		codiceDestinazione = AttributeMapper.stringify( map.get(&quot;ref&quot;) );</span>
-<span class="fc" id="L63">	}</span>
+<span class="nc" id="L60">	public DestinazioneDTO( final Map&lt;String, Object&gt; map) {</span>
+<span class="nc" id="L61">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+<span class="nc" id="L62">		codiceDestinazione = AttributeMapper.stringify( map.get(&quot;ref&quot;) );</span>
+<span class="nc" id="L63">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="fc" id="L70">		return id;</span>
+<span class="nc" id="L70">		return id;</span>
 	}
 
 	/**
@@ -75,12 +75,12 @@ public class DestinazioneDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getCodiceDestinazione() {
-<span class="fc" id="L78">		return codiceDestinazione;</span>
+<span class="nc" id="L78">		return codiceDestinazione;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L83">		return &quot;DestinazioneDTO [id=&quot; + id + &quot;, codiceDestinazione=&quot; + codiceDestinazione + &quot;]&quot;;</span>
+<span class="nc" id="L83">		return &quot;DestinazioneDTO [id=&quot; + id + &quot;, codiceDestinazione=&quot; + codiceDestinazione + &quot;]&quot;;</span>
 	}
 
 	

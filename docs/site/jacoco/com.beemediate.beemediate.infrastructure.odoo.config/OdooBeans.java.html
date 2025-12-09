@@ -11,26 +11,38 @@ import org.springframework.context.annotation.Configuration;
  * need to perform XML-RPC calls to Odoo, improving testability and configurability.
  */
 @Configuration
-<span class="fc" id="L14">public class OdooBeans {</span>
+<span class="nc" id="L14">public class OdooBeans {</span>
 
+	/**
+	 * @returns Bean di configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClientConfigImpl commonConfig() {
-<span class="fc" id="L18">        return new XmlRpcClientConfigImpl();</span>
+<span class="nc" id="L21">        return new XmlRpcClientConfigImpl();</span>
     }
 
+	/**
+	 * @returns Bean di configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClientConfigImpl objectConfig() {
-<span class="fc" id="L23">        return new XmlRpcClientConfigImpl();</span>
+<span class="nc" id="L29">        return new XmlRpcClientConfigImpl();</span>
     }
 
+	/**
+	 * @returns Bean di comunicazione a gestire il protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClient xmlRpcClientCommon() {
-<span class="fc" id="L28">        return new XmlRpcClient();</span>
+<span class="nc" id="L37">        return new XmlRpcClient();</span>
     }
-
+    
+	/**
+	 * @returns Bean di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
+	 */
     @Bean
     public XmlRpcClient xmlRpcClientModels() {
-<span class="fc" id="L33">        return new XmlRpcClient();</span>
+<span class="nc" id="L45">        return new XmlRpcClient();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

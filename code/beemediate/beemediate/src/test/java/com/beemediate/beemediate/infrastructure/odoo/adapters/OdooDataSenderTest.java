@@ -36,6 +36,181 @@ import com.beemediate.beemediate.infrastructure.odoo.OdooDataSender;
 import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
 import com.beemediate.beemediate.infrastructure.odoo.exceptions.NullSuppliedArgumentException;
 
+/**
+ * Test MCDC-like dei metodi della classe.
+* <p>
+ * Verifica la logica di invio dati verso Odoo tramite XML-RPC mockato.
+ * Copre tre aree principali:
+ * <ol>
+ * <li>Segnalazione stati ordine (Spedito, Errore) e gestione automatica della riconnessione.</li>
+ * <li>Invio delle Conferme d'Ordine (Confirmation), che include l'aggiornamento stato e l'inserimento di messaggi nella chat di Odoo.</li>
+ * <li>Validazione interna e gestione delle eccezioni di rete/login.</li>
+ * </ol>
+ *
+ * <ul>
+ * <li>Tabella test per <i>signalShipped, signalOpentransError, signalContentError</i>
+ <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CASE</th>
+            <th>odoo.isOnline()</th>
+            <th>FailedLoginException</th>
+            <th>MalformedURLException</th>
+            <th>XmlRpcException</th>
+            <th>URISyntaxException</th>
+            <th>orderId!=null</th>
+            <th>oafState!=null</th>
+            <th>ids.length!=0</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>T</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>T</td>
+            <td>T</td>
+            <td style="text-align: left;">happy path</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>T</td>
+            <td>T</td>
+            <td style="text-align: left;">happy path (si riconnette)</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">false</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">false</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">false</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">false</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">false (NullSuppliedArgumentException)</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>T</td>
+            <td>F</td>
+            <td style="text-align: left;">false (NullSuppliedArgumentException)</td>
+        </tr>
+    </tbody>
+</table></li>
+<li>Tabella test per signalConfirmation
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; font-family: monospace; text-align: center;">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>CODE</th>
+            <th>orderId==null</th>
+            <th>oafState==null</th>
+            <th>ids.length==0</th>
+            <th>ids.length!=1</th>
+            <th>ESITO</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>0</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td style="text-align: left;">happy path</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>T</td>
+            <td>F</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: left;">false (NullSuppliedArgumentException)</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td>-</td>
+            <td style="text-align: left;">false (EmptyFetchException)</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>F</td>
+            <td>F</td>
+            <td>F</td>
+            <td>T</td>
+            <td style="text-align: left;">false (InconsistentDTOException)</td>
+        </tr>
+    </tbody>
+</table></li></ul>
+ */
 public class OdooDataSenderTest {
 
     private OdooApiConfig odooMock;
@@ -61,6 +236,17 @@ public class OdooDataSenderTest {
      */
     
     // --- HAPPY PATH for signalShipped (via updateTo) ---
+    /**
+     * Verifica il "Happy Path" per i metodi di segnalazione (Shipped, OpenTransError, ContentError).
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>Odoo è online.</li>
+     * <li>La ricerca dell'ordine restituisce un ID valido.</li>
+     * <li>L'aggiornamento del record ha successo.</li>
+     * </ul>
+     * Risultato: Tutti i metodi di segnalazione devono ritornare {@code true}.
+     */
     @Test
     public void signalsForShippingAndValidation_whenUpdateSucceeds_returnsTrue() throws Exception {
         Order order = mock(Order.class);
@@ -85,6 +271,17 @@ public class OdooDataSenderTest {
     }
 
     // --- verify connect called when offline ---
+    /**
+     * Verifica la logica di riconnessione automatica (Retry).
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>Il client risulta offline (`isOnline() == false`).</li>
+     * <li>Viene invocato `connect()` e ha successo.</li>
+     * </ul>
+     * Risultato: Il metodo deve procedere con l'aggiornamento e ritornare {@code true},
+     * dopo aver tentato la connessione una volta.
+     */
     @Test
     public void signal_whenNotOnline_callsConnect_thenProceed() throws Exception {
         Order order = mock(Order.class);
@@ -105,6 +302,16 @@ public class OdooDataSenderTest {
         assertTrue(res);
     }
     
+    /**
+     * Verifica la gestione dei fallimenti durante la riconnessione.
+     * <p>
+     * Scenario:
+     * <ul>
+     * <li>Il client è offline.</li>
+     * <li>Il tentativo di `connect()` lancia varie eccezioni (rete, login, URL errato).</li>
+     * </ul>
+     * Risultato: Le eccezioni vengono catturate internamente e il metodo ritorna {@code false}.
+     */
     @Test
     public void throws_whenNotOnline_callsConnect_returnsFalse() throws Exception {
         Order order = mock(Order.class);
@@ -135,7 +342,12 @@ public class OdooDataSenderTest {
         assertFalse(res);
     }
 
-
+    /**
+     * Verifica la validazione degli argomenti.
+     * <p>
+     * Scenario: L'oggetto {@link Order} passato ha un ID nullo.
+     * Risultato: Il metodo ritorna {@code false} senza tentare chiamate RPC.
+     */
     @Test
     public void signalForShippingAndValidation_whenOrderIdNull_returnsFalse() throws Exception {
         Order order = mock(Order.class);
@@ -159,6 +371,15 @@ public class OdooDataSenderTest {
       	3		F					F							F							T				| false (InconsistentDTOException)
      * */
 
+        /**
+     * Verifica il flusso completo di invio Conferma d'Ordine (Confirmation).
+     * <p>
+     * Il processo prevede due step su Odoo:
+     * <ol>
+     * <li>Aggiornamento dello stato dell'ordine (Purchase Order).</li>
+     * <li>Inserimento di un messaggio nel chatter (Mail Message).</li>
+     * </ol>
+     */
     @Test
     public void signalConfirmation_happyPath_returnsTrue() throws Exception {
         Confirmation conf = mock(Confirmation.class);
@@ -188,6 +409,9 @@ public class OdooDataSenderTest {
         verify(odooMock, atLeastOnce()).insertOnModel(eq("mail.message"), anyMap());
     }
     
+    /**
+     * Verifica che l'invio fallisca se la struttura dati della conferma è incompleta (ID mancante).
+     */
     @Test
     public void signalConfirmation_whenOrderIdNull_returnsFalse() throws XmlRpcException {
     	Confirmation conf = mock(Confirmation.class);
@@ -205,6 +429,12 @@ public class OdooDataSenderTest {
         assertFalse(res);
     }
 
+    /**
+     * Verifica il caso in cui l'ordine riferito nella conferma non esiste su Odoo.
+     * <p>
+     * Risultato: Se la ricerca (`searchFromModel`) per l'ID ordine non restituisce risultati,
+     * il processo deve interrompersi e ritornare {@code false}.
+     */
     @Test
     public void signalConfirmation_whenCreateWorkflowAnnotationNameNotFound_returnsFalse() throws Exception {
         Confirmation conf = mock(Confirmation.class);
@@ -229,6 +459,15 @@ public class OdooDataSenderTest {
     }
 
     // --- Test writeConfirmationMessage via reflection to assert HTML encoding and structure ---
+    /**
+     * Test specifico tramite <b>Reflection</b> per il metodo privato di formattazione messaggio.
+     * <p>
+     * Verifica che:
+     * <ul>
+     * <li>I caratteri speciali HTML siano correttamente codificati (es. {@code <} diventa {@code &lt;}).</li>
+     * <li>Il messaggio contenga tutti i campi chiave (Importo, Valuta, ID).</li>
+     * </ul>
+     */
     @Test
     public void writeConfirmationMessage_encodesFieldsProperly_andContainsExpectedParts() throws Exception {
         // create a real-ish ConfirmationStructure mock with fields containing characters that must be encoded
@@ -266,6 +505,10 @@ public class OdooDataSenderTest {
     }
 
     // --- ensure updateTo throws when null args via reflection (direct test of private updateTo) ---
+    /**
+     * Test tramite <b>Reflection</b> per verificare che il metodo privato `updateTo` lanci
+     * {@link NullSuppliedArgumentException} se riceve parametri nulli, garantendo la robustezza interna.
+     */
     @Test
     public void updateTo_privateMethod_throwsOnNulls() throws Throwable {
         // call private updateTo with null args using reflection to assert it throws NullSuppliedArgumentException

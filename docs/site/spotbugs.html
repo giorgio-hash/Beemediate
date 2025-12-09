@@ -110,7 +110,7 @@
 <td>3</td></tr>
 <tr class="b">
 <td><a href="#com.beemediate.beemediate.infrastructure.ftp.FTPWriter">com.beemediate.beemediate.infrastructure.ftp.FTPWriter</a></td>
-<td>5</td></tr>
+<td>6</td></tr>
 <tr class="a">
 <td><a href="#com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig">com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig</a></td>
 <td>1</td></tr>
@@ -167,7 +167,7 @@
 <td>4</td></tr>
 <tr class="a">
 <td><a href="#com.beemediate.beemediate.infrastructure.odoo.OdooOrderProvider">com.beemediate.beemediate.infrastructure.odoo.OdooOrderProvider</a></td>
-<td>2</td></tr>
+<td>1</td></tr>
 <tr class="b">
 <td><a href="#com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig">com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig</a></td>
 <td>4</td></tr></table></section><a name="com.beemediate.beemediate.controller.http.ManagerRestControllerIF"></a><section>
@@ -389,31 +389,37 @@
 <td>This use of org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CRLF_INJECTION_LOGS">CRLF_INJECTION_LOGS</a></td>
-<td>75</td>
+<td>73</td>
 <td>Low</td></tr>
 <tr class="a">
+<td>This use of org/slf4j/Logger.error(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
+<td>SECURITY</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CRLF_INJECTION_LOGS">CRLF_INJECTION_LOGS</a></td>
+<td>131</td>
+<td>Low</td></tr>
+<tr class="b">
 <td>Possible null pointer dereference in com.beemediate.beemediate.infrastructure.ftp.FTPWriter.writeToInbound(String, Path) due to return value of called method</td>
 <td>STYLE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE">NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE</a></td>
-<td>124</td>
-<td>Medium</td></tr>
-<tr class="b">
-<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td>67</td>
+<td>122</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td>68</td>
+<td>65</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
-<td>108</td>
+<td>66</td>
+<td>Medium</td></tr>
+<tr class="a">
+<td>This API (java/nio/file/Paths.get(Ljava/lang/String;[Ljava/lang/String;)Ljava/nio/file/Path;) reads a file whose location might be specified by user input</td>
+<td>SECURITY</td>
+<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#PATH_TRAVERSAL_IN">PATH_TRAVERSAL_IN</a></td>
+<td>106</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig"></a>com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig</h3>
 <table border="0" class="bodyTable">
@@ -525,25 +531,25 @@
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID.getBuyerId() may expose internal representation by returning XmlProductID.buyerId</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>84</td>
+<td>83</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID.getSupplierId() may expose internal representation by returning XmlProductID.supplierId</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>68</td>
+<td>67</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID.setBuyerId(XmlPartyID) may expose internal representation by storing an externally mutable object into XmlProductID.buyerId</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>88</td>
+<td>87</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlProductID.setSupplierId(XmlPartyID) may expose internal representation by storing an externally mutable object into XmlProductID.supplierId</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>76</td>
+<td>75</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference"></a>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference</h3>
 <table border="0" class="bodyTable">
@@ -557,19 +563,19 @@
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference.getDeliveryIdRef() may expose internal representation by returning XmlShipmentPartiesReference.deliveryIdRef</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>34</td>
+<td>37</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>new com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference(XmlPartyID) may expose internal representation by storing an externally mutable object into XmlShipmentPartiesReference.deliveryIdRef</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>26</td>
+<td>29</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlShipmentPartiesReference.setDeliveryIdRef(XmlPartyID) may expose internal representation by storing an externally mutable object into XmlShipmentPartiesReference.deliveryIdRef</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>42</td>
+<td>45</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlAllowOrCharge"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlAllowOrCharge"></a>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlAllowOrCharge</h3>
 <table border="0" class="bodyTable">
@@ -679,49 +685,49 @@
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.getDeliveryDate() may expose internal representation by returning XmlOrderResponseInfo.deliveryDate</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>201</td>
+<td>200</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.getOrderPartiesReference() may expose internal representation by returning XmlOrderResponseInfo.orderPartiesReference</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>169</td>
+<td>168</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.getParties() may expose internal representation by returning XmlOrderResponseInfo.parties</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>217</td>
+<td>216</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.getRemarks() may expose internal representation by returning XmlOrderResponseInfo.remarks</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>233</td>
+<td>232</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.setDeliveryDate(XmlDeliveryDate) may expose internal representation by storing an externally mutable object into XmlOrderResponseInfo.deliveryDate</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>209</td>
+<td>208</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.setOrderPartiesReference(XmlOrderPartiesReference) may expose internal representation by storing an externally mutable object into XmlOrderResponseInfo.orderPartiesReference</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>177</td>
+<td>176</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.setParties(List) may expose internal representation by storing an externally mutable object into XmlOrderResponseInfo.parties</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>225</td>
+<td>224</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseInfo.setRemarks(XmlRemarks) may expose internal representation by storing an externally mutable object into XmlOrderResponseInfo.remarks</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>241</td>
+<td>240</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseItem"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseItem"></a>com.beemediate.beemediate.infrastructure.ftp.dto.confirmation.XmlOrderResponseItem</h3>
 <table border="0" class="bodyTable">
@@ -945,37 +951,37 @@
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.getDeliveryDate() may expose internal representation by returning XmlOrderInfo.deliveryDate</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>126</td>
+<td>129</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.getOrderParties() may expose internal representation by returning XmlOrderInfo.orderParties</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>134</td>
+<td>137</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.getOrderPartiesReference() may expose internal representation by returning XmlOrderInfo.orderPartiesReference</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP">EI_EXPOSE_REP</a></td>
-<td>142</td>
+<td>145</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.setDeliveryDate(XmlDeliveryDate) may expose internal representation by storing an externally mutable object into XmlOrderInfo.deliveryDate</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>171</td>
+<td>174</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.setOrderParties(List) may expose internal representation by storing an externally mutable object into XmlOrderInfo.orderParties</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>176</td>
+<td>179</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>com.beemediate.beemediate.infrastructure.ftp.dto.order.XmlOrderInfo.setOrderPartiesReference(XmlOrderPartiesReference) may expose internal representation by storing an externally mutable object into XmlOrderInfo.orderPartiesReference</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>181</td>
+<td>184</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.odoo.OdooDataSender"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.odoo.OdooDataSender"></a>com.beemediate.beemediate.infrastructure.odoo.OdooDataSender</h3>
 <table border="0" class="bodyTable">
@@ -989,13 +995,13 @@
 <td>This use of org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CRLF_INJECTION_LOGS">CRLF_INJECTION_LOGS</a></td>
-<td>180</td>
+<td>179</td>
 <td>Low</td></tr>
 <tr class="a">
 <td>This use of org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
 <td>SECURITY</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CRLF_INJECTION_LOGS">CRLF_INJECTION_LOGS</a></td>
-<td>182</td>
+<td>181</td>
 <td>Low</td></tr>
 <tr class="b">
 <td>This use of org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
@@ -1018,16 +1024,10 @@
 <th>Line</th>
 <th>Priority</th></tr>
 <tr class="b">
-<td>This use of org/slf4j/Logger.info(Ljava/lang/String;Ljava/lang/Object;)V might be used to include CRLF characters into log messages</td>
-<td>SECURITY</td>
-<td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#CRLF_INJECTION_LOGS">CRLF_INJECTION_LOGS</a></td>
-<td>168</td>
-<td>Low</td></tr>
-<tr class="a">
 <td>new com.beemediate.beemediate.infrastructure.odoo.OdooOrderProvider(OdooApiConfig) may expose internal representation by storing an externally mutable object into OdooOrderProvider.odoo</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>49</td>
+<td>56</td>
 <td>Medium</td></tr></table></section><a name="com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig"></a><section>
 <h3><a name="com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig"></a>com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig</h3>
 <table border="0" class="bodyTable">
@@ -1041,25 +1041,25 @@
 <td>new com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig(String, String, String, String, XmlRpcClient, XmlRpcClient, XmlRpcClientConfigImpl, XmlRpcClientConfigImpl) may expose internal representation by storing an externally mutable object into OdooApiConfig.client</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>130</td>
+<td>135</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>new com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig(String, String, String, String, XmlRpcClient, XmlRpcClient, XmlRpcClientConfigImpl, XmlRpcClientConfigImpl) may expose internal representation by storing an externally mutable object into OdooApiConfig.commonConfig</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>132</td>
+<td>137</td>
 <td>Medium</td></tr>
 <tr class="b">
 <td>new com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig(String, String, String, String, XmlRpcClient, XmlRpcClient, XmlRpcClientConfigImpl, XmlRpcClientConfigImpl) may expose internal representation by storing an externally mutable object into OdooApiConfig.models</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>131</td>
+<td>136</td>
 <td>Medium</td></tr>
 <tr class="a">
 <td>new com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig(String, String, String, String, XmlRpcClient, XmlRpcClient, XmlRpcClientConfigImpl, XmlRpcClientConfigImpl) may expose internal representation by storing an externally mutable object into OdooApiConfig.objectConfig</td>
 <td>MALICIOUS_CODE</td>
 <td><a class="externalLink" href="https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html#EI_EXPOSE_REP2">EI_EXPOSE_REP2</a></td>
-<td>133</td>
+<td>138</td>
 <td>Medium</td></tr></table></section>
       </div>
     </div>

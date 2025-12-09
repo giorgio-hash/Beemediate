@@ -12,6 +12,8 @@ on:
     branches: [main]
     types: 
       - completed
+permissions:
+  contents: read
 jobs:
   sonar:
     if: github.actor == 'giorgio-hash' && ${{ github.event.workflow_run.conclusion == 'success' }}

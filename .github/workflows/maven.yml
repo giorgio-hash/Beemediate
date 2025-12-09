@@ -20,7 +20,8 @@ on:
     paths:
       - 'code/beemediate/beemediate/**'
       - '.github/workflows/**'
-
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest

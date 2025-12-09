@@ -14,17 +14,46 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.FornitoreDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link FornitoreDTO}.
+ * <p>
+ * Verifica la logica di deserializzazione "safe" dei dati provenienti da Odoo.
+ * Il test copre combinazioni di input validi, nulli e di tipo errato per i tre campi principali:
+ * <ul>
+ * <li><b>ID</b> (atteso Integer)</li>
+ * <li><b>Name</b> (atteso String)</li>
+ * <li><b>Ref</b> / Codice Azienda (atteso String)</li>
+ * </ul>
+ * L'obiettivo è assicurare che il DTO non sollevi eccezioni in caso di dati sporchi, 
+ * ma popoli correttamente gli {@link Optional}.
+ */
 @RunWith(Parameterized.class)
 public class FornitoreDTOTest {
 	
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input simulata (risposta XML-RPC). */
+    private Map<String, Object> in;
+/** Mappa dei valori attesi (Optional popolati o vuoti). */
+    private Map<String, Object> out;
 	
+/**
+     * Genera la suite di casi di test.
+     * <p>
+     * I casi sono selezionati per coprire diverse permutazioni di validità tra i tre campi, 
+     * evitando ridondanze eccessive ma garantendo che ogni campo venga testato sia in scenario di successo 
+     * che di fallimento (null o type mismatch).
+     * <p>
+     * Esempi di scenari:
+     * <ul>
+     * <li><b>Case 3:</b> ID nullo, Nome tipo errato (Int), Ref valido. -> Solo Ref popolato.</li>
+     * <li><b>Case 5:</b> ID tipo errato (String), Nome valido, Ref nullo. -> Solo Nome popolato.</li>
+     * <li><b>Case 6:</b> ID valido, Nome nullo, Ref tipo errato (Int). -> Solo ID popolato.</li>
+     * </ul>
+     *
+     * @return Collezione di array [Input, ExpectedOutput].
+     */
 	@Parameters
 	public static Collection<Object[]> parameters() {
 		
@@ -69,13 +98,28 @@ public class FornitoreDTOTest {
 		
 	}
 	
-	public FornitoreDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore del test parametrico.
+     * @param in Mappa input.
+     * @param out Mappa output atteso.
+     */
+    public FornitoreDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
-	public void Test() {
+/**
+     * Esegue il test di instanziazione e validazione dei campi.
+     * <p>
+     * Verifica che:
+     * <ul>
+     * <li>L'oggetto {@link FornitoreDTO} venga creato correttamente.</li>
+     * <li>Tutti i campi (ID, Nome, CodiceAzienda) corrispondano esattamente allo stato 
+     * (presente/vuoto) e al valore definito nella mappa di output atteso.</li>
+     * </ul>
+     */
+    @Test
+    public void Test() {
 		final String ID = "id";
 		final String nome="name";
 		final String codiceAzienda = "ref";

@@ -3,11 +3,10 @@ package com.beemediate.beemediate.domain.utils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Branch e statement coverage per isDateTime (AI-generated)
+ */
 public class StringHandlerIsDateTimeTest {
-	
-	
-	//branch+statement coverage
 	
 	
     @Test

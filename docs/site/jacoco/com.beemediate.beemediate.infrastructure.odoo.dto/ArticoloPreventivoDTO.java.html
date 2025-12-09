@@ -47,34 +47,34 @@ public class ArticoloPreventivoDTO{
 	 */
 	public static ArticoloPreventivoDTO[] fromXMLRPC(final OdooApiConfig odoo, final PreventivoDTO prv) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-<span class="fc bfc" id="L50" title="All 4 branches covered.">		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
+<span class="nc bnc" id="L50" title="All 4 branches missed.">		if (prv == null || prv.getOrderLine().isEmpty() ) throw new InconsistentDTOException(&quot;Oggetto PreventivoDTO non ha le informazioni necessarie&quot;);</span>
 		
 		Object[] ids;
 		Object[] res;
 		ArticoloPreventivoDTO[] artPrv;
-<span class="fc" id="L55">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L55">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
 		
 		
 		//verifica che il preventivo contenga le sue parti
-<span class="fc" id="L60">		ids = prv.getOrderLine().get();</span>
+<span class="nc" id="L60">		ids = prv.getOrderLine().get();</span>
 		
-<span class="fc bfc" id="L62" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Non sono stati trovati articoli nel preventivo &quot; + prv);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if(ids.length==0) throw new EmptyFetchException (&quot;Non sono stati trovati articoli nel preventivo &quot; + prv);</span>
 		
 		//estrai parti del preventivo
-<span class="fc" id="L65">		requestInfo.clear();</span>
-<span class="fc" id="L66">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;order_id&quot;,&quot;product_id&quot;,&quot;product_qty&quot;));</span>
-<span class="fc" id="L67">		res = odoo.readFromModel(&quot;purchase.order.line&quot;, requestInfo, ids);</span>
+<span class="nc" id="L65">		requestInfo.clear();</span>
+<span class="nc" id="L66">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;order_id&quot;,&quot;product_id&quot;,&quot;product_qty&quot;));</span>
+<span class="nc" id="L67">		res = odoo.readFromModel(&quot;purchase.order.line&quot;, requestInfo, ids);</span>
 		
-<span class="fc bfc" id="L69" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Il preventivo ha articoli, ma non li trovo. Preventivo: &quot; + prv);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Il preventivo ha articoli, ma non li trovo. Preventivo: &quot; + prv);</span>
 		
 		//collezione di POJO
-<span class="fc" id="L72">		artPrv = new ArticoloPreventivoDTO[res.length];</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
-<span class="fc" id="L74">			artPrv[i] = new ArticoloPreventivoDTO( (HashMap&lt;String,Object&gt;) res[i] );</span>
+<span class="nc" id="L72">		artPrv = new ArticoloPreventivoDTO[res.length];</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		for(int i=0; i&lt;res.length; i++) {</span>
+<span class="nc" id="L74">			artPrv[i] = new ArticoloPreventivoDTO( (HashMap&lt;String,Object&gt;) res[i] );</span>
 		}
 		
-<span class="fc" id="L77">		return artPrv;</span>
+<span class="nc" id="L77">		return artPrv;</span>
 	}
 	
 	
@@ -83,23 +83,23 @@ public class ArticoloPreventivoDTO{
 	 * Costruttore
 	 * @param map - Map contente una tupla del model &lt;i&gt;purchase.order.line&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="fc" id="L86">	public ArticoloPreventivoDTO( final Map&lt;String, Object&gt; map ) {</span>
+<span class="nc" id="L86">	public ArticoloPreventivoDTO( final Map&lt;String, Object&gt; map ) {</span>
 		
-<span class="fc" id="L88">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
+<span class="nc" id="L88">		id = AttributeMapper.intify( map.get(&quot;id&quot;) );</span>
 		
-<span class="fc" id="L90">		orderId = new IdentifierDTO( (Object[]) map.get(&quot;order_id&quot;) );</span>
+<span class="nc" id="L90">		orderId = new IdentifierDTO( (Object[]) map.get(&quot;order_id&quot;) );</span>
 		
-<span class="fc" id="L92">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
+<span class="nc" id="L92">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
 		
-<span class="fc" id="L94">		productQty = AttributeMapper.doublify( map.get(&quot;product_qty&quot;) );</span>
-<span class="fc" id="L95">	}</span>
+<span class="nc" id="L94">		productQty = AttributeMapper.doublify( map.get(&quot;product_qty&quot;) );</span>
+<span class="nc" id="L95">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="fc" id="L102">		return id;</span>
+<span class="nc" id="L102">		return id;</span>
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class ArticoloPreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo dell'ordine
 	 */
 	public IdentifierDTO getOrderId() {
-<span class="fc" id="L110">		return orderId;</span>
+<span class="nc" id="L110">		return orderId;</span>
 	}
 
 	/**
@@ -115,7 +115,7 @@ public class ArticoloPreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo del prodotto associato a questo articolo.
 	 */
 	public IdentifierDTO getProductId() {
-<span class="fc" id="L118">		return productId;</span>
+<span class="nc" id="L118">		return productId;</span>
 	}
 
 	/**
@@ -123,13 +123,13 @@ public class ArticoloPreventivoDTO{
 	 * @return oggetto Optional contenente Double, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Double&gt; getProductQty() {
-<span class="fc" id="L126">		return productQty;</span>
+<span class="nc" id="L126">		return productQty;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L131">		return &quot;ArticoloPreventivoDTO [id=&quot; + id + &quot;, order_id=&quot; + orderId + &quot;, product_id=&quot; + productId</span>
-<span class="fc" id="L132">				+ &quot;, product_qty=&quot; + productQty + &quot;]&quot;;</span>
+<span class="nc" id="L131">		return &quot;ArticoloPreventivoDTO [id=&quot; + id + &quot;, order_id=&quot; + orderId + &quot;, product_id=&quot; + productId</span>
+<span class="nc" id="L132">				+ &quot;, product_qty=&quot; + productQty + &quot;]&quot;;</span>
 	}
 
 	

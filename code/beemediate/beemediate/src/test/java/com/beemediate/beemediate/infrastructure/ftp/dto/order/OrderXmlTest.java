@@ -37,12 +37,33 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * Test sulla struttura dell'ORDER di esempio (ESEMPIO_CASO_REALE.xml) usando ResourceLoader, xmlMapper e DataMapper.
+ * Test suite per la validazione della struttura e del mapping dei file ORDER (BMEcat).
+ * <p>
+ * Questa classe utilizza un file reale di esempio ({@code ESEMPIO_CASO_REALE.xml}) per verificare:
+ * <ul>
+ * <li>La corretta deserializzazione dei campi XML nei DTO infrastrutturali.</li>
+ * <li>La consistenza dei dati durante il round-trip di conversione (XML -> DTO -> POJO -> XML).</li>
+ * </ul>
  */
 public class OrderXmlTest {
 
+    /** Mapper Jackson configurato per la gestione specifica dell'XML BMEcat. */
     private XmlMapper mapper;
+    /** Loader per accedere alle risorse nel classpath (es. il file XML di test). */
     private ResourceLoader resourceLoader;
 
+    /**
+     * Fabbrica e configura l'istanza di {@link XmlMapper}.
+     * <p>
+     * Configurazioni chiave:
+     * <ul>
+     * <li>Disabilitazione del supporto namespace (tramite Woodstox) per semplificare il parsing.</li>
+     * <li>Tolleranza verso proprietà sconosciute nel JSON/XML.</li>
+     * <li>Accettazione di valori singoli come array per gestire liste con un solo elemento.</li>
+     * </ul>
+     *
+     * @return L'istanza configurata di XmlMapper.
+     */
     private XmlMapper getXmlMapper() {
 		// disattiva la risoluzione del namespace: 
 		// https://github.com/FasterXML/jackson-dataformat-xml/issues/63
@@ -55,12 +76,22 @@ public class OrderXmlTest {
         return m;
     }
 
+    /**
+     * Inizializza il mapper e il resource loader prima di ogni test.
+     */
     @Before
     public void setUp() {
         mapper = getXmlMapper();
         resourceLoader = new DefaultResourceLoader();
     }
 
+    /**
+     * Verifica la mappatura degli attributi radice del file XML (Namespace, Versione, Schema).
+     * <p>
+     * Assicura che i metadati fondamentali del formato BMEcat siano letti correttamente
+     * nel DTO {@link XmlOrder}.
+     * * @throws Exception in caso di errori di I/O o parsing.
+     */
     @Test
     public void validateRootAttributes() throws Exception {
         Resource res = resourceLoader.getResource("classpath:xml/order/ESEMPIO_CASO_REALE.xml");
@@ -81,6 +112,13 @@ public class OrderXmlTest {
         }
     }
     
+    /**
+     * Verifica la deserializzazione della sezione Header (ORDER_HEADER).
+     * <p>
+     * Controlla: ID ordine, date, valuta, riferimenti alle parti (Buyer, Supplier) e
+     * indirizzi di spedizione.
+     * * @throws Exception in caso di errori di I/O o parsing.
+     */
     @Test
     public void validateHeader() throws Exception {
         Resource res = resourceLoader.getResource("classpath:xml/order/ESEMPIO_CASO_REALE.xml");
@@ -118,6 +156,13 @@ public class OrderXmlTest {
         }
     }
     
+    /**
+     * Verifica la deserializzazione delle righe d'ordine (ORDER_ITEM_LIST).
+     * <p>
+     * Controlla che la lista degli articoli venga letta come array e valida i campi
+     * del singolo articolo (Quantità, Unità, ID prodotto, Descrizione).
+     * * @throws Exception in caso di errori di I/O o parsing.
+     */
     @Test
     public void validateItem() throws Exception{
     	
@@ -142,6 +187,10 @@ public class OrderXmlTest {
         }
     }
     
+    /**
+     * Verifica la deserializzazione del sommario finale (ORDER_SUMMARY).
+     * * @throws Exception in caso di errori di I/O o parsing.
+     */
     @Test
     public void validateSummary() throws Exception {
         Resource res = resourceLoader.getResource("classpath:xml/order/ESEMPIO_CASO_REALE.xml");
@@ -155,6 +204,19 @@ public class OrderXmlTest {
         }
     }
     
+    /**
+     * Test di "Round-Trip" per verificare l'integrità del mapping strutturale.
+     * <p>
+     * Il test esegue i seguenti passaggi:
+     * <ol>
+     * <li>Deserializza l'XML in un oggetto DTO {@link XmlOrder}.</li>
+     * <li>Ricostruisce manualmente un oggetto di dominio {@link OrderStructure} a partire dai dati del DTO.</li>
+     * <li>Utilizza {@link DataMapper} per riconvertire il POJO di dominio in XML.</li>
+     * <li>Confronta la stringa XML generata con quella attesa dal DTO originale.</li>
+     * </ol>
+     * Serve a garantire che la trasformazione DTO -> Domain -> XML non perda informazioni.
+     * * @throws IOException in caso di errori di lettura o scrittura.
+     */
     @Test
     public void roundTripOrderStructuralEquality_usingDataMapper() throws IOException {
         Resource res = resourceLoader.getResource("classpath:xml/order/ESEMPIO_CASO_REALE.xml");

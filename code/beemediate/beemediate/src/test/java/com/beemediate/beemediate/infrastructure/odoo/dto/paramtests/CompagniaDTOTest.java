@@ -14,18 +14,47 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.beemediate.beemediate.infrastructure.odoo.dto.CompagniaDTO;
 
-@SpringBootTest
+/**
+ * Test parametrico per la classe {@link CompagniaDTO}.
+ * <p>
+ * Verifica la logica di parsing "safe" del costruttore a partire da una Mappa generica.
+ * Il test copre quattro scenari combinatori per verificare che:
+ * <ul>
+ * <li>Se i tipi di dato sono corretti (Integer per ID, String per Ref), i valori vengono popolati.</li>
+ * <li>Se i tipi di dato sono errati (Type Mismatch), il DTO restituisce {@link Optional#empty()} 
+ * invece di lanciare eccezioni di cast.</li>
+ * </ul>
+ */
 @RunWith(Parameterized.class)
 public class CompagniaDTOTest {
 	
-	private Map<String, Object> in;
-	private Map<String, Object> out;
+/** Mappa di input con i dati grezzi simulati da Odoo. */
+    private Map<String, Object> in;
+/** Mappa contenente gli oggetti {@link Optional} attesi dopo il parsing. */
+    private Map<String, Object> out;
 	
-	@Parameters
+/**
+     * Definisce la matrice dei casi di test.
+     * <p>
+     * Le chiavi utilizzate sono:
+     * <ul>
+     * <li>{@code id}: Atteso Integer.</li>
+     * <li>{@code ref} (companyRegistry): Atteso String.</li>
+     * </ul>
+     * Casi testati:
+     * <ol>
+     * <li>ID ok, Ref ok -> Entrambi presenti.</li>
+     * <li>ID errato (String), Ref ok -> ID Empty, Ref Presente.</li>
+     * <li>ID ok, Ref errato (Integer) -> ID Presente, Ref Empty.</li>
+     * <li>Entrambi errati -> Entrambi Empty.</li>
+     * </ol>
+     *
+     * @return Collezione di array contenenti input e output atteso.
+     */
+    @Parameters
 	public static Collection<Object[]> parameters() {
 		
 		final String ID = "id";
@@ -60,13 +89,28 @@ public class CompagniaDTOTest {
 		
 	}
 	
-	public CompagniaDTOTest(Map<String, Object> in, Map<String, Object> out) {
+/**
+     * Costruttore del test parametrico.
+     *
+     * @param in mappa dati in ingresso.
+     * @param out mappa dati attesi.
+     */
+    public CompagniaDTOTest(Map<String, Object> in, Map<String, Object> out) {
 		this.in = in;
 		this.out = out;
 	}
 	
-	@Test
-	public void Test() {
+/**
+     * Esegue il test di instanziazione.
+     * <p>
+     * Verifica che:
+     * <ul>
+     * <li>L'oggetto venga creato (non null).</li>
+     * <li>I campi corrispondano esattamente agli {@link Optional} definiti nella mappa {@code out}.</li>
+     * </ul>
+     */
+    @Test
+    public void Test() {
 		final String ID = "id";
 		final String companyRegistry = "ref";
 		CompagniaDTO comp = null;

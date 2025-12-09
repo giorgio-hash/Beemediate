@@ -30,6 +30,17 @@ import com.beemediate.beemediate.domain.service.OaFBuffer;
 import com.beemediate.beemediate.domain.service.validator.OaFValidatorIF;
 import com.beemediate.beemediate.domain.utils.BoundedBuffer;
 
+/**
+ * Test class for validating the buffer functionality of OaFBuffer.
+ * 
+ * This is a parameterized test class that tests the validateBuffer() method
+ * with various input scenarios including empty buffers, valid orders, orders with
+ * content errors, and orders with OpenTrans errors.
+ * 
+ * The test verifies that:
+ * - The correct number of valid orders are identified
+ * - The buffer remains unchanged after validation
+ */
 @RunWith(Parameterized.class)
 public class OaFBufferValidateBufferTest {
 
@@ -48,6 +59,15 @@ public class OaFBufferValidateBufferTest {
 	
 	private int expectedResult;
 	
+
+/**
+ * Sets up the test fixtures before each test execution.
+ * 
+ * Initializes mock objects and configures their behavior:
+ * - Configures the buffer mock to simulate push, getSize, and get operations
+ * - Configures the validator mock to handle order validation
+ * - Initializes bbMock as an empty list to track buffer contents
+ */
 	@Before
 	public void setup() {
 		
@@ -77,6 +97,19 @@ public class OaFBufferValidateBufferTest {
 		}).when(validator).validate(any(Order.class));
 	}
 	
+
+/**
+ * Provides parameterized test data for the validation test.
+ * 
+ * Creates a collection of test cases including:
+ * - Empty buffer scenario
+ * - Single valid order
+ * - Single order with content error
+ * - Single order with OpenTrans error
+ * - Multiple orders with mixed validation states
+ * 
+ * @return Collection of Object arrays containing input orders and expected valid count
+ */
 	@Parameters
 	public static Collection<Object[]> parameters() {
 		
@@ -162,11 +195,27 @@ public class OaFBufferValidateBufferTest {
 		return tests;
 	}
 	
+/**
+ * Constructs the parameterized test with input data and expected results.
+ * 
+ * @param input List of Order objects to be validated in the buffer
+ * @param output Expected number of valid orders that should be validated
+ */
 	public OaFBufferValidateBufferTest(List<Order> input, int output) {
 		bbMock = input;
 		expectedResult = output;
 	}
 	
+/**
+ * Tests the buffer validation functionality.
+ * 
+ * Verifies that validateBuffer() correctly counts valid orders and that
+ * the buffer contents remain unchanged after validation.
+ * 
+ * Assertions:
+ * - The number of valid orders matches the expected result
+ * - The buffer order IDs remain unchanged before and after validation
+ */
 	@Test
 	public void test() {
 		

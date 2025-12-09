@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;

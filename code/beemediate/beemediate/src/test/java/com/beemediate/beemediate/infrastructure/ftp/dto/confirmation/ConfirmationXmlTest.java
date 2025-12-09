@@ -31,14 +31,31 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
+
 /**
- * Test mapping specifico per Confirmation.xml usando ResourceLoader.
+ * Test suite dedicata alla verifica del processo di importazione dei file di conferma (Confirmation.xml).
+ * <p>
+ * Questa classe testa due fasi distinte:
+ * <ol>
+ * <li>La deserializzazione "grezza" dall'XML agli oggetti DTO infrastrutturali.</li>
+ * <li>Il mapping logico dai DTO all'oggetto di dominio {@link ConfirmationStructure}.</li>
+ * </ol>
  */
 public class ConfirmationXmlTest {
 
+    /** Mapper Jackson. */
     private XmlMapper mapper;
+    /** Loader per recuperare il file XML di test dal classpath. */
     private ResourceLoader resourceLoader;
     
+/**
+     * Configura e restituisce un'istanza di {@link XmlMapper} con impostazioni custom.
+     * <p>
+     * Disabilita la gestione dei namespace (per problemi noti con Woodstox/Jackson) e 
+     * configura la tolleranza verso proprietà sconosciute o singoli valori trattati come array.
+     *
+     * @return un'istanza configurata di XmlMapper.
+     */
     private XmlMapper getXmlMapper() {
 		// disattiva la risoluzione del namespace: 
 		// https://github.com/FasterXML/jackson-dataformat-xml/issues/63
@@ -51,12 +68,24 @@ public class ConfirmationXmlTest {
         return m;
     }
 
+/**
+     * Inizializza le dipendenze del test prima di ogni esecuzione.
+     */
     @Before
     public void setUp() {
         mapper = getXmlMapper();
         resourceLoader = new DefaultResourceLoader();
     }
 
+/**
+     * Verifica la correttezza strutturale della deserializzazione nei DTO {@link XmlOrderResponse}.
+     * <p>
+     * Il test legge il file {@code Confirmation.xml}, lo converte in DTO e confronta puntualmente
+     * ogni campo popolato nel DTO con il nodo corrispondente nell'albero XML grezzo letto da Jackson.
+     * Serve a garantire che nessun dato venga perso o mappato nel campo sbagliato.
+     *
+     * @throws Exception in caso di errori I/O o di parsing.
+     */
     @Test
     public void deserializeOrderResponseAndValidateFields() throws Exception {
         Resource res = resourceLoader.getResource("classpath:xml/confirmation/Confirmation.xml");
@@ -198,7 +227,18 @@ public class ConfirmationXmlTest {
         }
     }
     
-    
+/**
+     * Verifica la logica di mapping finale verso l'oggetto di dominio {@link ConfirmationStructure}.
+     * <p>
+     * Il test simula il flusso completo:
+     * <ol>
+     * <li>Deserializzazione dell'XML in DTO.</li>
+     * <li>Conversione tramite {@link DataMapper#mapConfirmationFromXml(XmlOrderResponse)}.</li>
+     * <li>Validazione dei campi dell'oggetto di dominio risultante confrontandoli direttamente con l'XML sorgente.</li>
+     * </ol>
+     *
+     * @throws IOException se il file di test non è accessibile.
+     */
     @Test
     public void deserializeAndConvertToPOJO_validateFields() throws IOException {
     	
