@@ -46,6 +46,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 	
 	private static final String UNSAFE_CHARS_REGEX="[\r\n]";
 	
+	private static final String PROBLEMA_ORDINI_MSG = "Problema nel recupero degli ordini.";
 	
 	/**
 	 * Costruttore
@@ -80,7 +81,7 @@ public class OdooOrderProvider implements OrderProviderPort{
 		try {
 			return fetchData();
 		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){
-			log.error("Problema nel recupero degli ordini.",e);
+			log.error(PROBLEMA_ORDINI_MSG,e);
 		}
 		
 		return false;
@@ -168,9 +169,9 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			
 		} catch (InconsistentDTOException | ClassCastException e1) {
-			log.error("Problema nel recupero degli ordini.",e1);
+			log.error(PROBLEMA_ORDINI_MSG,e1);
 		} catch(EmptyFetchException e) {
-			log.info("Problema nel recupero degli ordini.",e);
+			log.info(PROBLEMA_ORDINI_MSG,e);
 		}
 		
 		return hasNewOrder();
