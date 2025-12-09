@@ -31,7 +31,7 @@ public class XmlOrderPartiesReference {
 	/**
 	 * Empty Constructor for Jackson deserializer
 	 */
-<span class="fc" id="L34">	public XmlOrderPartiesReference() {/*Empty Constructor for Jackson deserializer*/}</span>
+<span class="nc" id="L34">	public XmlOrderPartiesReference() {/*Empty Constructor for Jackson deserializer*/}</span>
 	
 	/**
 	 * Costruttore 
@@ -42,22 +42,22 @@ public class XmlOrderPartiesReference {
 	 * @param shipmentPartiesRef - String con informazioni sul luogo di destinazione
 	 * @param shipmentPartyType - ulteriori informazioni sul tipo di spedizione
 	 */
-	public XmlOrderPartiesReference(String buyerIdRef, PartyType buyerIdType, String supplierIdRef, PartyType supplierIdType,
-			String shipmentPartiesRef, PartyType shipmentPartyType) {
-<span class="fc" id="L47">		super();</span>
-<span class="fc" id="L48">		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);</span>
-<span class="fc" id="L49">		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);</span>
-<span class="fc" id="L50">		this.shipmentPartiesRef = new XmlShipmentPartiesReference(</span>
-<span class="fc" id="L51">											new XmlPartyID( shipmentPartiesRef, shipmentPartyType)</span>
+	public XmlOrderPartiesReference(final String buyerIdRef, final PartyType buyerIdType, final String supplierIdRef, final PartyType supplierIdType,
+			final String shipmentPartiesRef, final PartyType shipmentPartyType) {
+<span class="nc" id="L47">		super();</span>
+<span class="nc" id="L48">		this.buyerIdRef = new XmlPartyID( buyerIdRef, buyerIdType);</span>
+<span class="nc" id="L49">		this.supplierIdRef = new XmlPartyID( supplierIdRef, supplierIdType);</span>
+<span class="nc" id="L50">		this.shipmentPartiesRef = new XmlShipmentPartiesReference(</span>
+<span class="nc" id="L51">											new XmlPartyID( shipmentPartiesRef, shipmentPartyType)</span>
 										);
-<span class="fc" id="L53">	}</span>
+<span class="nc" id="L53">	}</span>
 
 	/**
 	 * 
 	 * @return XmlPartyID con informazioni sul cliente
 	 */
 	public XmlPartyID getBuyerIdRef() {
-<span class="fc" id="L60">		return buyerIdRef;</span>
+<span class="nc" id="L60">		return buyerIdRef;</span>
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class XmlOrderPartiesReference {
 	 * @return XmlPartyID con informazioni sul fornitore
 	 */
 	public XmlPartyID getSupplierIdRef() {
-<span class="fc" id="L68">		return supplierIdRef;</span>
+<span class="nc" id="L68">		return supplierIdRef;</span>
 	}
 
 	/**
@@ -73,32 +73,32 @@ public class XmlOrderPartiesReference {
 	 * @return XmlPartyID con informazioni sul luogo di destinazione
 	 */
 	public XmlShipmentPartiesReference getShipmentPartiesRef() {
-<span class="fc" id="L76">		return shipmentPartiesRef;</span>
+<span class="nc" id="L76">		return shipmentPartiesRef;</span>
 	}
 
 	/**
 	 * 
 	 * @param buyerIdRef - XmlPartyID
 	 */
-	public void setBuyerIdRef(XmlPartyID buyerIdRef) {
-<span class="fc" id="L84">		this.buyerIdRef = buyerIdRef;</span>
-<span class="fc" id="L85">	}</span>
+	public void setBuyerIdRef(final XmlPartyID buyerIdRef) {
+<span class="nc" id="L84">		this.buyerIdRef = buyerIdRef;</span>
+<span class="nc" id="L85">	}</span>
 
 	/**
 	 * 
 	 * @param supplierIdRef - XmlPartyID
 	 */
-	public void setSupplierIdRef(XmlPartyID supplierIdRef) {
-<span class="fc" id="L92">		this.supplierIdRef = supplierIdRef;</span>
-<span class="fc" id="L93">	}</span>
+	public void setSupplierIdRef(final XmlPartyID supplierIdRef) {
+<span class="nc" id="L92">		this.supplierIdRef = supplierIdRef;</span>
+<span class="nc" id="L93">	}</span>
 
 	/**
 	 * 
 	 * @param buyerIdRef - ShipmentPartiesReference
 	 */
-	public void setShipmentPartiesRef(XmlShipmentPartiesReference shipmentPartiesRef) {
-<span class="fc" id="L100">		this.shipmentPartiesRef = shipmentPartiesRef;</span>
-<span class="fc" id="L101">	}</span>
+	public void setShipmentPartiesRef(final XmlShipmentPartiesReference shipmentPartiesRef) {
+<span class="nc" id="L100">		this.shipmentPartiesRef = shipmentPartiesRef;</span>
+<span class="nc" id="L101">	}</span>
 	
 	
 	

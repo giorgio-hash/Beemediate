@@ -11,7 +11,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = &quot;ORDERRESPONSE_HEADER&quot;)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L14">public class XmlOrderResponseHeader {</span>
+<span class="nc" id="L14">public class XmlOrderResponseHeader {</span>
 	
 	/**
 	 * Informazioni di controllo sulla generazione del documento
@@ -30,32 +30,32 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @return XmlControlInfo
 	 */
 	public XmlControlInfo getControlInfo() {
-<span class="fc" id="L33">		return controlInfo;</span>
+<span class="nc" id="L33">		return controlInfo;</span>
 	}
 
 	/**
 	 * 
 	 * @param controlInfo - XmlControlInfo
 	 */
-	public void setControlInfo(XmlControlInfo controlInfo) {
-<span class="fc" id="L41">		this.controlInfo = controlInfo;</span>
-<span class="fc" id="L42">	}</span>
+	public void setControlInfo(final XmlControlInfo controlInfo) {
+<span class="nc" id="L41">		this.controlInfo = controlInfo;</span>
+<span class="nc" id="L42">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderResponseInfo
 	 */
 	public XmlOrderResponseInfo getOrderResponseInfo() {
-<span class="fc" id="L49">		return orderResponseInfo;</span>
+<span class="nc" id="L49">		return orderResponseInfo;</span>
 	}
 
 	/**
 	 * 
 	 * @param orderResponseInfo - XmlOrderResponseInfo
 	 */
-	public void setOrderResponseInfo(XmlOrderResponseInfo orderResponseInfo) {
-<span class="fc" id="L57">		this.orderResponseInfo = orderResponseInfo;</span>
-<span class="fc" id="L58">	}</span>
+	public void setOrderResponseInfo(final XmlOrderResponseInfo orderResponseInfo) {
+<span class="nc" id="L57">		this.orderResponseInfo = orderResponseInfo;</span>
+<span class="nc" id="L58">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

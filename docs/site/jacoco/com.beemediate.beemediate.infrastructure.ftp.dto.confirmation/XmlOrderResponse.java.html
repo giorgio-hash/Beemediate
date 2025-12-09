@@ -14,31 +14,31 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName = &quot;ORDERRESPONSE&quot;)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L17">public class XmlOrderResponse {</span>
+<span class="nc" id="L17">public class XmlOrderResponse {</span>
 	
 	/**
 	 * namespace
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-<span class="fc" id="L23">	private String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;</span>
+<span class="nc" id="L23">	private String xmlns = &quot;http://www.opentrans.org/XMLSchema/2.1&quot;;</span>
 	
 	/**
 	 * namespace
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:xsi&quot;)
-<span class="fc" id="L29">	private String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;</span>
+<span class="nc" id="L29">	private String xsi = &quot;http://www.w3.org/2001/XMLSchema-instance&quot;;</span>
 	
 	/**
 	 * namespace
 	 */
 	@JacksonXmlProperty(isAttribute=true, localName=&quot;xmlns:bmecat&quot;)
-<span class="fc" id="L35">	private String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;</span>
+<span class="nc" id="L35">	private String bmecat = &quot;http://www.bmecat.org/bmecat/2005&quot;;</span>
 	
 	/**
 	 * versione
 	 */
 	@JacksonXmlProperty(isAttribute=true)
-<span class="fc" id="L41">	private String version=&quot;2.1&quot;;</span>
+<span class="nc" id="L41">	private String version=&quot;2.1&quot;;</span>
 	
 	/**
 	 * Intestazione della conferma d'ordine XML
@@ -64,55 +64,55 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @return String
 	 */
 	public String getXmlns() {
-<span class="fc" id="L67">		return xmlns;</span>
+<span class="nc" id="L67">		return xmlns;</span>
 	}
 
 	/**
 	 * 
 	 * @param xmlns String
 	 */
-	public void setXmlns(String xmlns) {
-<span class="fc" id="L75">		this.xmlns = xmlns;</span>
-<span class="fc" id="L76">	}</span>
+	public void setXmlns(final String xmlns) {
+<span class="nc" id="L75">		this.xmlns = xmlns;</span>
+<span class="nc" id="L76">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getXsi() {
-<span class="fc" id="L83">		return xsi;</span>
+<span class="nc" id="L83">		return xsi;</span>
 	}
 
 	/**
 	 * 
 	 * @param xsi - String
 	 */
-	public void setXsi(String xsi) {
-<span class="fc" id="L91">		this.xsi = xsi;</span>
-<span class="fc" id="L92">	}</span>
+	public void setXsi(final String xsi) {
+<span class="nc" id="L91">		this.xsi = xsi;</span>
+<span class="nc" id="L92">	}</span>
 
 	/**
 	 * 
 	 * @return - String
 	 */
 	public String getBmecat() {
-<span class="fc" id="L99">		return bmecat;</span>
+<span class="nc" id="L99">		return bmecat;</span>
 	}
 
 	/**
 	 * 
 	 * @param bmecat - String
 	 */
-	public void setBmecat(String bmecat) {
-<span class="fc" id="L107">		this.bmecat = bmecat;</span>
-<span class="fc" id="L108">	}</span>
+	public void setBmecat(final String bmecat) {
+<span class="nc" id="L107">		this.bmecat = bmecat;</span>
+<span class="nc" id="L108">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getVersion() {
-<span class="fc" id="L115">		return version;</span>
+<span class="nc" id="L115">		return version;</span>
 	}
 
 	/**
@@ -120,15 +120,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @param version - String
 	 */
 	public void setVersion(String version) {
-<span class="fc" id="L123">		this.version = version;</span>
-<span class="fc" id="L124">	}</span>
+<span class="nc" id="L123">		this.version = version;</span>
+<span class="nc" id="L124">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderResponseHeader 
 	 */
 	public XmlOrderResponseHeader getOrderResponseHeader() {
-<span class="fc" id="L131">		return orderResponseHeader;</span>
+<span class="nc" id="L131">		return orderResponseHeader;</span>
 	}
 
 	/**
@@ -136,15 +136,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @param orderResponseHeader - XmlOrderResponseHeader
 	 */
 	public void setOrderResponseHeader(XmlOrderResponseHeader orderResponseHeader) {
-<span class="fc" id="L139">		this.orderResponseHeader = orderResponseHeader;</span>
-<span class="fc" id="L140">	}</span>
+<span class="nc" id="L139">		this.orderResponseHeader = orderResponseHeader;</span>
+<span class="nc" id="L140">	}</span>
 
 	/**
 	 * 
 	 * @return List di XmlOrderResponseItem
 	 */
 	public List&lt;XmlOrderResponseItem&gt; getOrderResponseItemList() {
-<span class="fc" id="L147">		return orderResponseItemList;</span>
+<span class="nc" id="L147">		return orderResponseItemList;</span>
 	}
 
 	/**
@@ -152,15 +152,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @param orderResponseItem - List List di XmlOrderResponseItem
 	 */
 	public void setOrderResponseItemList(List&lt;XmlOrderResponseItem&gt; orderResponseItemList) {
-<span class="fc" id="L155">		this.orderResponseItemList = orderResponseItemList;</span>
-<span class="fc" id="L156">	}</span>
+<span class="nc" id="L155">		this.orderResponseItemList = orderResponseItemList;</span>
+<span class="nc" id="L156">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderResponseSummary
 	 */
 	public XmlOrderResponseSummary getOrderSummary() {
-<span class="fc" id="L163">		return orderSummary;</span>
+<span class="nc" id="L163">		return orderSummary;</span>
 	}
 
 	/**
@@ -168,8 +168,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 	 * @param orderSummary - XmlOrderResponseSummary 
 	 */
 	public void setOrderSummary(XmlOrderResponseSummary orderSummary) {
-<span class="fc" id="L171">		this.orderSummary = orderSummary;</span>
-<span class="fc" id="L172">	}</span>
+<span class="nc" id="L171">		this.orderSummary = orderSummary;</span>
+<span class="nc" id="L172">	}</span>
 
 	
 }

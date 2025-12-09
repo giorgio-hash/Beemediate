@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OdooOrderProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">beemediate</a> &gt; <a href="index.source.html" class="el_package">com.beemediate.beemediate.infrastructure.odoo</a> &gt; <span class="el_source">OdooOrderProvider.java</span></div><h1>OdooOrderProvider.java</h1><pre class="source lang-java linenums">package com.beemediate.beemediate.infrastructure.odoo;
 
-import com.beemediate.beemediate.domain.pojo.order.*;
-import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
-import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
-import com.beemediate.beemediate.infrastructure.odoo.dto.*;
-import com.beemediate.beemediate.infrastructure.odoo.exceptions.*;
-import com.beemediate.beemediate.infrastructure.odoo.mapper.OrderMapper;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+
+import javax.security.auth.login.FailedLoginException;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
@@ -13,15 +11,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.login.FailedLoginException;
+import com.beemediate.beemediate.domain.pojo.order.Order;
+import com.beemediate.beemediate.domain.pojo.order.OrderStructure;
+import com.beemediate.beemediate.domain.ports.infrastructure.odoo.OrderProviderPort;
+import com.beemediate.beemediate.infrastructure.odoo.config.OdooApiConfig;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ArticoloPreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.CompagniaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ContattoConsegnaDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.DestinazioneDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.FornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.PreventivoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoDTO;
+import com.beemediate.beemediate.infrastructure.odoo.dto.ProdottoFornitoreDTO;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.EmptyFetchException;
+import com.beemediate.beemediate.infrastructure.odoo.exceptions.InconsistentDTOException;
+import com.beemediate.beemediate.infrastructure.odoo.mapper.OrderMapper;
 
 /**
  * Adattatore che implementa OrderProviderPort. Recupera gli ordini di acquisto dal CRM Odoo, ricostruisce i corrispondenti Order e li conserva in un buffer.
@@ -32,12 +37,14 @@ public class OdooOrderProvider implements OrderProviderPort{
 	/**
 	 * Buffer con singolo elemento Order.
 	 */
-<span class="fc" id="L35">	private Order ordine = null;</span>
+<span class="nc" id="L40">	private Order ordine = null;</span>
 	
 	/***riferimento a Logger*/
-<span class="fc" id="L38">	private final Logger log = LoggerFactory.getLogger(OdooOrderProvider.class);</span>
+<span class="nc" id="L43">	private final Logger log = LoggerFactory.getLogger(OdooOrderProvider.class);</span>
 	/***Riferimento a Configurazione per autenticazione e comunicazione con CRM Odoo usando il protocollo XML-RPC.*/
 	private final OdooApiConfig odoo;
+	
+	private static final String UNSAFE_CHARS_REGEX=&quot;[\r\n]&quot;;
 	
 	
 	/**
@@ -45,40 +52,38 @@ public class OdooOrderProvider implements OrderProviderPort{
 	 * @param odoo - configurazione per autenticazione e comunicazione con Odoo via XML-RPC
 	 */
 	@Autowired
-<span class="fc" id="L48">	public OdooOrderProvider(final OdooApiConfig odoo) {</span>
-<span class="fc" id="L49">		this.odoo = odoo;</span>
-<span class="fc" id="L50">	}</span>
+<span class="nc" id="L55">	public OdooOrderProvider(final OdooApiConfig odoo) {</span>
+<span class="nc" id="L56">		this.odoo = odoo;</span>
+<span class="nc" id="L57">	}</span>
 
 
 	
 	@Override
 	public Order popNewOrder() {
-<span class="fc" id="L56">		final Order o = ordine;</span>
-<span class="fc" id="L57">		ordine = null;</span>
-<span class="fc" id="L58">		return o;</span>
+<span class="nc" id="L63">		final Order o = ordine;</span>
+<span class="nc" id="L64">		ordine = null;</span>
+<span class="nc" id="L65">		return o;</span>
 	}
 
 
 
 	@Override
 	public boolean hasNewOrder() {
-<span class="fc bfc" id="L65" title="All 2 branches covered.">		return ordine != null;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		return ordine != null;</span>
 	}
 
 
 
 	@Override
 	public boolean fetchOrders() {
-		 
-<span class="fc" id="L73">		ordine = null;</span>
 		
 		try {
-<span class="fc" id="L76">			return fetchData();</span>
-<span class="fc" id="L77">		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){</span>
-<span class="fc" id="L78">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e);</span>
+<span class="nc" id="L81">			return fetchData();</span>
+<span class="nc" id="L82">		}catch(MalformedURLException | FailedLoginException | XmlRpcException | URISyntaxException e){</span>
+<span class="nc" id="L83">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e);</span>
 		}
 		
-<span class="fc" id="L81">		return false;</span>
+<span class="nc" id="L86">		return false;</span>
 	}
 	
 	
@@ -98,11 +103,11 @@ public class OdooOrderProvider implements OrderProviderPort{
 	private boolean fetchData() throws FailedLoginException, XmlRpcException, URISyntaxException, MalformedURLException {
 		
 		// se non si è connessi, prova una connessione.
-<span class="fc bfc" id="L101" title="All 2 branches covered.">		if(!odoo.isOnline())</span>
-<span class="fc" id="L102">			odoo.connect();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		if(!odoo.isOnline())</span>
+<span class="nc" id="L107">			odoo.connect();</span>
 		
 		
-<span class="fc" id="L105">		ordine = null;</span>
+<span class="nc" id="L110">		ordine = null;</span>
 		
 		try {
 			
@@ -116,59 +121,59 @@ public class OdooOrderProvider implements OrderProviderPort{
 			
 			
 			//trova ed estrai GEALAN (e stampa su log)
-<span class="fc" id="L119">			f = FornitoreDTO.fromXMLRPC(odoo);</span>
-<span class="fc" id="L120">			log.info(f.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L124">			f = FornitoreDTO.fromXMLRPC(odoo);</span>
+<span class="nc" id="L125">			log.info(f.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			
 			
 			//trova ed estrai preventivo (e stampa su log)
-<span class="fc" id="L124">			prev = PreventivoDTO.fromXMLRPC(odoo, f);</span>
-<span class="fc" id="L125">			log.info(prev.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L129">			prev = PreventivoDTO.fromXMLRPC(odoo, f);</span>
+<span class="nc" id="L130">			log.info(prev.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			
 			
 			//trova informazioni sulla delivery specificata nel preventivo (e stampa su log)
-<span class="fc" id="L129">			dest = DestinazioneDTO.fromXMLRPC(</span>
-<span class="fc" id="L130">							odoo,</span>
-<span class="fc" id="L131">							ContattoConsegnaDTO.fromXMLRPC(</span>
-<span class="fc" id="L132">										odoo,</span>
-<span class="fc" id="L133">										ConsegnaDTO.fromXMLRPC(odoo, prev)</span>
+<span class="nc" id="L134">			dest = DestinazioneDTO.fromXMLRPC(</span>
+<span class="nc" id="L135">							odoo,</span>
+<span class="nc" id="L136">							ContattoConsegnaDTO.fromXMLRPC(</span>
+<span class="nc" id="L137">										odoo,</span>
+<span class="nc" id="L138">										ConsegnaDTO.fromXMLRPC(odoo, prev)</span>
 									)
 							);
-<span class="fc" id="L136">			log.info(dest.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L141">			log.info(dest.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			
 			//trova informazioni sulla compagnia cliente (e stampa su log)
-<span class="fc" id="L139">			comp = CompagniaDTO.fromXMLRPC(odoo, prev);</span>
-<span class="fc" id="L140">			log.info(comp.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L144">			comp = CompagniaDTO.fromXMLRPC(odoo, prev);</span>
+<span class="nc" id="L145">			log.info(comp.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			
 			//trova ed estrai parti del preventivo (e stampa su log)
-<span class="fc" id="L143">			artpr = ArticoloPreventivoDTO.fromXMLRPC(odoo, prev);</span>
-<span class="fc bfc" id="L144" title="All 2 branches covered.">			for(ArticoloPreventivoDTO p : artpr) {</span>
-<span class="fc" id="L145">				log.info(p.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L148">			artpr = ArticoloPreventivoDTO.fromXMLRPC(odoo, prev);</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">			for(ArticoloPreventivoDTO p : artpr) {</span>
+<span class="nc" id="L150">				log.info(p.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			}
 			
 			//per ogni prodotto associato ad una parte del preventivo, trova ed estrai info su catalogo fornitore (e stampa su log)
-<span class="fc" id="L149">			prodf = ProdottoFornitoreDTO.fromXMLRPC(</span>
-<span class="fc" id="L150">								odoo,</span>
-<span class="fc" id="L151">								ProdottoDTO.fromXMLRPC(odoo, artpr),</span>
-<span class="fc" id="L152">								f</span>
+<span class="nc" id="L154">			prodf = ProdottoFornitoreDTO.fromXMLRPC(</span>
+<span class="nc" id="L155">								odoo,</span>
+<span class="nc" id="L156">								ProdottoDTO.fromXMLRPC(odoo, artpr),</span>
+<span class="nc" id="L157">								f</span>
 							);
-<span class="fc bfc" id="L154" title="All 2 branches covered.">			for(ProdottoFornitoreDTO p : prodf) {</span>
-<span class="fc" id="L155">				log.info(p.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">			for(ProdottoFornitoreDTO p : prodf) {</span>
+<span class="nc" id="L160">				log.info(p.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			}
 			
 			//costruzione struct ordine
-<span class="fc" id="L159">			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);</span>
-<span class="fc" id="L160">			log.info(ordstr.toString().replaceAll(&quot;[\r\n]&quot;,&quot;&quot;));</span>
+<span class="nc" id="L164">			ordstr=OrderMapper.map(f, prev, artpr, prodf, dest, comp);</span>
+<span class="nc" id="L165">			log.info(ordstr.toString().replaceAll(UNSAFE_CHARS_REGEX,&quot;&quot;));</span>
 			//costruzione ordine
-<span class="fc" id="L162">			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );</span>
+<span class="nc" id="L167">			ordine = new Order(ordstr, ordstr.getHeader().getOrderID() );</span>
 			
 			
-<span class="fc" id="L165">		} catch (InconsistentDTOException | ClassCastException e1) {</span>
-<span class="fc" id="L166">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e1);</span>
-<span class="fc" id="L167">		} catch(EmptyFetchException e) {</span>
-<span class="fc" id="L168">			log.info(&quot;Problema nel recupero degli ordini: {}&quot;,e.getMessage());</span>
+<span class="nc" id="L170">		} catch (InconsistentDTOException | ClassCastException e1) {</span>
+<span class="nc" id="L171">			log.error(&quot;Problema nel recupero degli ordini.&quot;,e1);</span>
+<span class="nc" id="L172">		} catch(EmptyFetchException e) {</span>
+<span class="nc" id="L173">			log.info(&quot;Problema nel recupero degli ordini.&quot;,e);</span>
 		}
 		
-<span class="fc" id="L171">		return hasNewOrder();</span>
+<span class="nc" id="L176">		return hasNewOrder();</span>
 		
 	}
 

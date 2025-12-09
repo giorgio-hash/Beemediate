@@ -9,37 +9,40 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName=&quot;SHIPMENT_PARTIES_REFERENCE&quot;)
 public class XmlShipmentPartiesReference{
 	
+	/**
+	 * campo che specifica un identificativo di riferimento per il luogo di consegna
+	 */
 	@JacksonXmlProperty(localName=&quot;DELIVERY_IDREF&quot;)
 	private XmlPartyID deliveryIdRef;
 
 	/**
 	 * Empty Constructor for Jackson deserializer
 	 */
-<span class="fc" id="L18">	public XmlShipmentPartiesReference() {/*Empty Constructor for Jackson deserializer*/}</span>
+<span class="nc" id="L21">	public XmlShipmentPartiesReference() {/*Empty Constructor for Jackson deserializer*/}</span>
 	
 	/**
 	 * Costruttore con identificativo del luogo di destinazione
 	 * @param deliveryIdRef
 	 */
-	public XmlShipmentPartiesReference(XmlPartyID deliveryIdRef) {
-<span class="fc" id="L25">		super();</span>
-<span class="fc" id="L26">		this.deliveryIdRef = deliveryIdRef;</span>
-<span class="fc" id="L27">	}</span>
+	public XmlShipmentPartiesReference(final XmlPartyID deliveryIdRef) {
+<span class="nc" id="L28">		super();</span>
+<span class="nc" id="L29">		this.deliveryIdRef = deliveryIdRef;</span>
+<span class="nc" id="L30">	}</span>
 
 	/**
 	 * 
 	 * @return XmlPartyID con identificativo di destinazione
 	 */
 	public XmlPartyID getDeliveryIdRef() {
-<span class="fc" id="L34">		return deliveryIdRef;</span>
+<span class="nc" id="L37">		return deliveryIdRef;</span>
 	}
 
 	/**
 	 * 
 	 * @param deliveryIdRef
 	 */
-	public void setDeliveryIdRef(XmlPartyID deliveryIdRef) {
-<span class="fc" id="L42">		this.deliveryIdRef = deliveryIdRef;</span>
-<span class="fc" id="L43">	}</span>
+	public void setDeliveryIdRef(final XmlPartyID deliveryIdRef) {
+<span class="nc" id="L45">		this.deliveryIdRef = deliveryIdRef;</span>
+<span class="nc" id="L46">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

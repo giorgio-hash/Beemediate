@@ -82,68 +82,68 @@ public class PreventivoDTO{
 	 */
 	public static PreventivoDTO fromXMLRPC(final OdooApiConfig odoo, final FornitoreDTO f) throws EmptyFetchException, InconsistentDTOException, XmlRpcException {
 		
-		Object[] ids;
-		Object[] res;
-<span class="fc" id="L87">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+		final Object[] ids;
+		final Object[] res;
+<span class="nc" id="L87">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
-<span class="fc bfc" id="L89" title="All 4 branches covered.">		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException(&quot;Oggetto FornitoreDTO non ha le informazioni necessarie&quot;);</span>
+<span class="nc bnc" id="L89" title="All 4 branches missed.">		if (f == null || f.getName().isEmpty()) throw new InconsistentDTOException(&quot;Oggetto FornitoreDTO non ha le informazioni necessarie&quot;);</span>
 		
 		//cerca un preventivo di GEALAN
-<span class="fc" id="L92">		requestInfo.clear();</span>
-<span class="fc" id="L93">		requestInfo.put(&quot;limit&quot;, 1);</span>
-<span class="fc" id="L94">		ids = odoo.searchFromModel(&quot;purchase.order&quot;, requestInfo, </span>
-<span class="fc" id="L95">									Arrays.asList(odoo.PARTNER_ID_FIELD,&quot;=&quot;,f.getName().get()),</span>
-<span class="fc" id="L96">									Arrays.asList(&quot;x_studio_oaf&quot;,&quot;=&quot;,OafStatus.NEW.toString() ));</span>
+<span class="nc" id="L92">		requestInfo.clear();</span>
+<span class="nc" id="L93">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="nc" id="L94">		ids = odoo.searchFromModel(&quot;purchase.order&quot;, requestInfo, </span>
+<span class="nc" id="L95">									Arrays.asList(OdooApiConfig.PARTNER_ID_FIELD,&quot;=&quot;,f.getName().get()),</span>
+<span class="nc" id="L96">									Arrays.asList(&quot;x_studio_oaf&quot;,&quot;=&quot;,OafStatus.NEW.toString() ));</span>
 		
-<span class="fc bfc" id="L98" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Nessun preventivo \&quot;new\&quot; per GEALAN&quot;);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Nessun preventivo \&quot;new\&quot; per GEALAN&quot;);</span>
 		
 		//estrai preventivo
-<span class="fc" id="L101">		requestInfo.clear();</span>
-<span class="fc" id="L102">		requestInfo.put(odoo.FIELDS, Arrays.asList(&quot;name&quot;,odoo.PARTNER_ID_FIELD,&quot;product_id&quot;,&quot;origin&quot;,&quot;order_line&quot;,&quot;currency_id&quot;,&quot;date_order&quot;,&quot;date_approve&quot;,&quot;date_planned&quot;,&quot;picking_type_id&quot;,&quot;company_id&quot;,&quot;x_studio_oaf&quot;));</span>
-<span class="fc" id="L103">		res = odoo.readFromModel(&quot;purchase.order&quot;, requestInfo, ids);</span>
+<span class="nc" id="L101">		requestInfo.clear();</span>
+<span class="nc" id="L102">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;name&quot;,OdooApiConfig.PARTNER_ID_FIELD,&quot;product_id&quot;,&quot;origin&quot;,&quot;order_line&quot;,&quot;currency_id&quot;,&quot;date_order&quot;,&quot;date_approve&quot;,&quot;date_planned&quot;,&quot;picking_type_id&quot;,&quot;company_id&quot;,&quot;x_studio_oaf&quot;));</span>
+<span class="nc" id="L103">		res = odoo.readFromModel(&quot;purchase.order&quot;, requestInfo, ids);</span>
 		
-<span class="fc bfc" id="L105" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato preventivi per GEALAN, ma nessuno estratto.&quot;);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato preventivi per GEALAN, ma nessuno estratto.&quot;);</span>
 		
-<span class="fc" id="L107">		return new PreventivoDTO( (HashMap&lt;String, Object&gt;) res[0] ); //n.b. è possibile estrarre più preventivi. Al momento si tratterà un singolo preventivo</span>
+<span class="nc" id="L107">		return new PreventivoDTO( (HashMap&lt;String, Object&gt;) res[0] ); //n.b. è possibile estrarre più preventivi. Al momento si tratterà un singolo preventivo</span>
 	}
 	
 	/**
 	 * Costruttore
 	 * @param map - Map contente una tupla del model &lt;i&gt;purchase.order&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="fc" id="L114">	public PreventivoDTO( final Map&lt;String, Object&gt; map) {</span>
+<span class="nc" id="L114">	public PreventivoDTO( final Map&lt;String, Object&gt; map) {</span>
 		
-<span class="fc" id="L116">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+<span class="nc" id="L116">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
 		
-<span class="fc" id="L118">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
+<span class="nc" id="L118">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
 		
-<span class="fc" id="L120">		partnerId = new IdentifierDTO( (Object[]) map.get(&quot;partner_id&quot;) );</span>
+<span class="nc" id="L120">		partnerId = new IdentifierDTO( (Object[]) map.get(&quot;partner_id&quot;) );</span>
 		
-<span class="fc" id="L122">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
+<span class="nc" id="L122">		productId = new IdentifierDTO( (Object[]) map.get(&quot;product_id&quot;) );</span>
 		
-<span class="fc" id="L124">		currencyId = new IdentifierDTO( (Object[]) map.get(&quot;currency_id&quot;) );</span>
+<span class="nc" id="L124">		currencyId = new IdentifierDTO( (Object[]) map.get(&quot;currency_id&quot;) );</span>
 		
-<span class="fc" id="L126">		pickingTypeId = new IdentifierDTO( (Object[]) map.get(&quot;picking_type_id&quot;) );</span>
+<span class="nc" id="L126">		pickingTypeId = new IdentifierDTO( (Object[]) map.get(&quot;picking_type_id&quot;) );</span>
 		
-<span class="fc" id="L128">		companyId = new IdentifierDTO( (Object[]) map.get(&quot;company_id&quot;) );</span>
+<span class="nc" id="L128">		companyId = new IdentifierDTO( (Object[]) map.get(&quot;company_id&quot;) );</span>
 		
-<span class="fc" id="L130">		origin = AttributeMapper.stringify( map.get(&quot;origin&quot;) );</span>
+<span class="nc" id="L130">		origin = AttributeMapper.stringify( map.get(&quot;origin&quot;) );</span>
 		
-<span class="fc" id="L132">		orderLine = AttributeMapper.toArray( map.get(&quot;order_line&quot;) );</span>
+<span class="nc" id="L132">		orderLine = AttributeMapper.toArray( map.get(&quot;order_line&quot;) );</span>
 		
-<span class="fc" id="L134">		dateOrder = AttributeMapper.toLocalDateTime( map.get(&quot;date_order&quot;) );</span>
+<span class="nc" id="L134">		dateOrder = AttributeMapper.toLocalDateTime( map.get(&quot;date_order&quot;) );</span>
 		
-<span class="fc" id="L136">		dateApprove = AttributeMapper.toLocalDateTime( map.get(&quot;date_approve&quot;) );</span>
+<span class="nc" id="L136">		dateApprove = AttributeMapper.toLocalDateTime( map.get(&quot;date_approve&quot;) );</span>
 		
-<span class="fc" id="L138">		datePlanned = AttributeMapper.toLocalDateTime( map.get(&quot;date_planned&quot;) );</span>
-<span class="fc" id="L139">	}</span>
+<span class="nc" id="L138">		datePlanned = AttributeMapper.toLocalDateTime( map.get(&quot;date_planned&quot;) );</span>
+<span class="nc" id="L139">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="fc" id="L146">		return id;</span>
+<span class="nc" id="L146">		return id;</span>
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getName() {
-<span class="fc" id="L154">		return name;</span>
+<span class="nc" id="L154">		return name;</span>
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class PreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo del fornitore.
 	 */
 	public IdentifierDTO getPartnerId() {
-<span class="fc" id="L162">		return partnerId;</span>
+<span class="nc" id="L162">		return partnerId;</span>
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class PreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo del prodotto che ha attivato il preventivo.
 	 */
 	public IdentifierDTO getProductId() {
-<span class="fc" id="L170">		return productId;</span>
+<span class="nc" id="L170">		return productId;</span>
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class PreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo della valuta specificata nel preventivo.
 	 */
 	public IdentifierDTO getCurrencyId() {
-<span class="fc" id="L178">		return currencyId;</span>
+<span class="nc" id="L178">		return currencyId;</span>
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class PreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo della &quot;procedura di consegna&quot; specificato nel preventivo.
 	 */
 	public IdentifierDTO getPickingTypeId() {
-<span class="fc" id="L186">		return pickingTypeId;</span>
+<span class="nc" id="L186">		return pickingTypeId;</span>
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class PreventivoDTO{
 	 * @return oggetto IdentifierDTO con identificativo della compagnia cliente del preventivo.
 	 */
 	public IdentifierDTO getCompanyId() {
-<span class="fc" id="L194">		return companyId;</span>
+<span class="nc" id="L194">		return companyId;</span>
 	}
 
 	/**
@@ -199,7 +199,7 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getOrigin() {
-<span class="fc" id="L202">		return origin;</span>
+<span class="nc" id="L202">		return origin;</span>
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
 	 */
 	public Optional&lt;Object[]&gt; getOrderLine() {
-<span class="fc" id="L210">		return orderLine;</span>
+<span class="nc" id="L210">		return orderLine;</span>
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
 	 */
 	public Optional&lt;LocalDateTime&gt; getDateOrder() {
-<span class="fc" id="L218">		return dateOrder;</span>
+<span class="nc" id="L218">		return dateOrder;</span>
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
 	 */
 	public Optional&lt;LocalDateTime&gt; getDateApprove() {
-<span class="fc" id="L226">		return dateApprove;</span>
+<span class="nc" id="L226">		return dateApprove;</span>
 	}
 
 	/**
@@ -231,15 +231,15 @@ public class PreventivoDTO{
 	 * @return oggetto Optional contenente LocalDateTime, altrimenti Optional.empty()
 	 */
 	public Optional&lt;LocalDateTime&gt; getDatePlanned() {
-<span class="fc" id="L234">		return datePlanned;</span>
+<span class="nc" id="L234">		return datePlanned;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L239">		return &quot;PreventivoDTO [id=&quot; + id + &quot;, name=&quot; + name + &quot;, partner_id=&quot; + partnerId + &quot;, product_id=&quot;</span>
-<span class="fc" id="L240">				+ productId + &quot;, currency_id=&quot; + currencyId + &quot;, picking_type_id=&quot; + pickingTypeId + &quot;, company_id=&quot;</span>
-<span class="fc" id="L241">				+ companyId + &quot;, origin=&quot; + origin + &quot;, order_line=&quot; + orderLine + &quot;, date_order=&quot; + dateOrder</span>
-<span class="fc" id="L242">				+ &quot;, date_approve=&quot; + dateApprove + &quot;, date_planned=&quot; + datePlanned </span>
+<span class="nc" id="L239">		return &quot;PreventivoDTO [id=&quot; + id + &quot;, name=&quot; + name + &quot;, partner_id=&quot; + partnerId + &quot;, product_id=&quot;</span>
+<span class="nc" id="L240">				+ productId + &quot;, currency_id=&quot; + currencyId + &quot;, picking_type_id=&quot; + pickingTypeId + &quot;, company_id=&quot;</span>
+<span class="nc" id="L241">				+ companyId + &quot;, origin=&quot; + origin + &quot;, order_line=&quot; + orderLine + &quot;, date_order=&quot; + dateOrder</span>
+<span class="nc" id="L242">				+ &quot;, date_approve=&quot; + dateApprove + &quot;, date_planned=&quot; + datePlanned </span>
 				+  &quot;]&quot;;
 	}
 	

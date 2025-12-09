@@ -10,14 +10,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 /**
  * Informazioni della transazione
  */
 @JacksonXmlRootElement(localName = &quot;ORDERRESPONSE_INFO&quot;)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-<span class="fc" id="L20">public class XmlOrderResponseInfo {</span>
+<span class="nc" id="L19">public class XmlOrderResponseInfo {</span>
 	
 	/**
 	 * Numero d'ordine del fornitore
@@ -86,160 +85,160 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 	 * @return String
 	 */
 	public String getSupplierOrderId() {
-<span class="fc" id="L89">		return supplierOrderId;</span>
+<span class="nc" id="L88">		return supplierOrderId;</span>
 	}
 
 	/**
 	 * 
 	 * @param supplierOrderId - String
 	 */
-	public void setSupplierOrderId(String supplierOrderId) {
-<span class="fc" id="L97">		this.supplierOrderId = supplierOrderId;</span>
-<span class="fc" id="L98">	}</span>
+	public void setSupplierOrderId(final String supplierOrderId) {
+<span class="nc" id="L96">		this.supplierOrderId = supplierOrderId;</span>
+<span class="nc" id="L97">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getOrderResponseDate() {
-<span class="fc" id="L105">		return orderResponseDate;</span>
+<span class="nc" id="L104">		return orderResponseDate;</span>
 	}
 
 	/**
 	 * 
 	 * @param orderResponseDate - String
 	 */
-	public void setOrderResponseDate(String orderResponseDate) {
-<span class="fc" id="L113">		this.orderResponseDate = orderResponseDate;</span>
-<span class="fc" id="L114">	}</span>
+	public void setOrderResponseDate(final String orderResponseDate) {
+<span class="nc" id="L112">		this.orderResponseDate = orderResponseDate;</span>
+<span class="nc" id="L113">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getOrderId() {
-<span class="fc" id="L121">		return orderId;</span>
+<span class="nc" id="L120">		return orderId;</span>
 	}
 
 	/**
 	 * 
 	 * @param orderId - String
 	 */
-	public void setOrderId(String orderId) {
-<span class="fc" id="L129">		this.orderId = orderId;</span>
-<span class="fc" id="L130">	}</span>
+	public void setOrderId(final String orderId) {
+<span class="nc" id="L128">		this.orderId = orderId;</span>
+<span class="nc" id="L129">	}</span>
 
 	/**
 	 * 
 	 * @return - String
 	 */
 	public String getOrderDate() {
-<span class="fc" id="L137">		return orderDate;</span>
+<span class="nc" id="L136">		return orderDate;</span>
 	}
 
 	/**
 	 * 
 	 * @param orderDate - String
 	 */
-	public void setOrderDate(String orderDate) {
-<span class="fc" id="L145">		this.orderDate = orderDate;</span>
-<span class="fc" id="L146">	}</span>
+	public void setOrderDate(final String orderDate) {
+<span class="nc" id="L144">		this.orderDate = orderDate;</span>
+<span class="nc" id="L145">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getAltCustomerOrderId() {
-<span class="fc" id="L153">		return altCustomerOrderId;</span>
+<span class="nc" id="L152">		return altCustomerOrderId;</span>
 	}
 
 	/**
 	 * 
 	 * @param altCustomerOrderId - String
 	 */
-	public void setAltCustomerOrderId(String altCustomerOrderId) {
-<span class="fc" id="L161">		this.altCustomerOrderId = altCustomerOrderId;</span>
-<span class="fc" id="L162">	}</span>
+	public void setAltCustomerOrderId(final String altCustomerOrderId) {
+<span class="nc" id="L160">		this.altCustomerOrderId = altCustomerOrderId;</span>
+<span class="nc" id="L161">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderPartiesReference 
 	 */
 	public XmlOrderPartiesReference getOrderPartiesReference() {
-<span class="fc" id="L169">		return orderPartiesReference;</span>
+<span class="nc" id="L168">		return orderPartiesReference;</span>
 	}
 
 	/**
 	 * 
 	 * @param orderPartiesReference - XmlOrderPartiesReference
 	 */
-	public void setOrderPartiesReference(XmlOrderPartiesReference orderPartiesReference) {
-<span class="fc" id="L177">		this.orderPartiesReference = orderPartiesReference;</span>
-<span class="fc" id="L178">	}</span>
+	public void setOrderPartiesReference(final XmlOrderPartiesReference orderPartiesReference) {
+<span class="nc" id="L176">		this.orderPartiesReference = orderPartiesReference;</span>
+<span class="nc" id="L177">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public String getCurrency() {
-<span class="fc" id="L185">		return currency;</span>
+<span class="nc" id="L184">		return currency;</span>
 	}
 
 	/**
 	 * 
 	 * @param currency - String
 	 */
-	public void setCurrency(String currency) {
-<span class="fc" id="L193">		this.currency = currency;</span>
-<span class="fc" id="L194">	}</span>
+	public void setCurrency(final String currency) {
+<span class="nc" id="L192">		this.currency = currency;</span>
+<span class="nc" id="L193">	}</span>
 
 	/**
 	 * 
 	 * @return XmlDeliveryDate
 	 */
 	public XmlDeliveryDate getDeliveryDate() {
-<span class="fc" id="L201">		return deliveryDate;</span>
+<span class="nc" id="L200">		return deliveryDate;</span>
 	}
 
 	/**
 	 * 
 	 * @param deliveryDate - XmlDeliveryDate
 	 */
-	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
-<span class="fc" id="L209">		this.deliveryDate = deliveryDate;</span>
-<span class="fc" id="L210">	}</span>
+	public void setDeliveryDate(final XmlDeliveryDate deliveryDate) {
+<span class="nc" id="L208">		this.deliveryDate = deliveryDate;</span>
+<span class="nc" id="L209">	}</span>
 
 	/**
 	 * 
 	 * @return List di XmlParty
 	 */
 	public List&lt;XmlParty&gt; getParties() {
-<span class="fc" id="L217">		return parties;</span>
+<span class="nc" id="L216">		return parties;</span>
 	}
 
 	/**
 	 * 
 	 * @param parties - List di XmlParty
 	 */
-	public void setParties(List&lt;XmlParty&gt; parties) {
-<span class="fc" id="L225">		this.parties = parties;</span>
-<span class="fc" id="L226">	}</span>
+	public void setParties(final List&lt;XmlParty&gt; parties) {
+<span class="nc" id="L224">		this.parties = parties;</span>
+<span class="nc" id="L225">	}</span>
 
 	/**
 	 * 
 	 * @return XmlRemarks
 	 */
 	public XmlRemarks getRemarks() {
-<span class="fc" id="L233">		return remarks;</span>
+<span class="nc" id="L232">		return remarks;</span>
 	}
 
 	/**
 	 * 
 	 * @param remarks - XmlRemarks
 	 */
-	public void setRemarks(XmlRemarks remarks) {
-<span class="fc" id="L241">		this.remarks = remarks;</span>
-<span class="fc" id="L242">	}</span>
+	public void setRemarks(final XmlRemarks remarks) {
+<span class="nc" id="L240">		this.remarks = remarks;</span>
+<span class="nc" id="L241">	}</span>
 	
 	
 	

@@ -20,10 +20,10 @@ public class Confirmation {
 	//@ requires d != null &amp; cID!=null;
 	//@ ensures data == d &amp; confirmationId == cID;
 	//@ pure
-<span class="fc" id="L23">	public Confirmation(final String cID, final ConfirmationStructure d) {</span>
-<span class="fc" id="L24">		data = d;</span>
-<span class="fc" id="L25">		confirmationId = cID;</span>
-<span class="fc" id="L26">	}</span>
+<span class="nc" id="L23">	public Confirmation(final String cID, final ConfirmationStructure d) {</span>
+<span class="nc" id="L24">		data = d;</span>
+<span class="nc" id="L25">		confirmationId = cID;</span>
+<span class="nc" id="L26">	}</span>
 
 	/**
 	 * Restituisce la copia della struttura dati della conferma d'ordine
@@ -44,7 +44,7 @@ public class Confirmation {
 	 */
 	//@ ensures \result == confirmationId;
 	public /*@ pure @*/ String getConfirmationId() {
-<span class="fc" id="L47">		return confirmationId;</span>
+<span class="nc" id="L47">		return confirmationId;</span>
 	}
 
 }
