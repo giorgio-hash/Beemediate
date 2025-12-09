@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 /**
  * Informazioni della transazione
  */
@@ -93,7 +92,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param supplierOrderId - String
 	 */
-	public void setSupplierOrderId(String supplierOrderId) {
+	public void setSupplierOrderId(final String supplierOrderId) {
 		this.supplierOrderId = supplierOrderId;
 	}
 
@@ -109,7 +108,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param orderResponseDate - String
 	 */
-	public void setOrderResponseDate(String orderResponseDate) {
+	public void setOrderResponseDate(final String orderResponseDate) {
 		this.orderResponseDate = orderResponseDate;
 	}
 
@@ -125,7 +124,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param orderId - String
 	 */
-	public void setOrderId(String orderId) {
+	public void setOrderId(final String orderId) {
 		this.orderId = orderId;
 	}
 
@@ -141,7 +140,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param orderDate - String
 	 */
-	public void setOrderDate(String orderDate) {
+	public void setOrderDate(final String orderDate) {
 		this.orderDate = orderDate;
 	}
 
@@ -157,7 +156,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param altCustomerOrderId - String
 	 */
-	public void setAltCustomerOrderId(String altCustomerOrderId) {
+	public void setAltCustomerOrderId(final String altCustomerOrderId) {
 		this.altCustomerOrderId = altCustomerOrderId;
 	}
 
@@ -173,7 +172,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param orderPartiesReference - XmlOrderPartiesReference
 	 */
-	public void setOrderPartiesReference(XmlOrderPartiesReference orderPartiesReference) {
+	public void setOrderPartiesReference(final XmlOrderPartiesReference orderPartiesReference) {
 		this.orderPartiesReference = orderPartiesReference;
 	}
 
@@ -189,7 +188,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param currency - String
 	 */
-	public void setCurrency(String currency) {
+	public void setCurrency(final String currency) {
 		this.currency = currency;
 	}
 
@@ -205,7 +204,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param deliveryDate - XmlDeliveryDate
 	 */
-	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+	public void setDeliveryDate(final XmlDeliveryDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
@@ -221,7 +220,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param parties - List di XmlParty
 	 */
-	public void setParties(List<XmlParty> parties) {
+	public void setParties(final List<XmlParty> parties) {
 		this.parties = parties;
 	}
 
@@ -237,7 +236,7 @@ public class XmlOrderResponseInfo {
 	 * 
 	 * @param remarks - XmlRemarks
 	 */
-	public void setRemarks(XmlRemarks remarks) {
+	public void setRemarks(final XmlRemarks remarks) {
 		this.remarks = remarks;
 	}
 	

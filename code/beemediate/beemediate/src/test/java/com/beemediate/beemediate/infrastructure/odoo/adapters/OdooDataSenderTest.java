@@ -67,7 +67,7 @@ public class OdooDataSenderTest {
         when(order.getOrderID()).thenReturn("ORD-1");
 
         when(odooMock.isOnline()).thenReturn(true);
-        // searchFromModel must return ids; updateOnModel must return true
+
         when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
                 .thenReturn(new Object[]{ 123 });
         when(odooMock.updateOnModel(eq("purchase.order"), anyMap(), eq(123)))
@@ -176,18 +176,15 @@ public class OdooDataSenderTest {
         when(odooMock.updateOnModel(eq("purchase.order"), anyMap(), eq(77)))
                 .thenReturn(true);
 
-        // createWorkflowAnnotation: searchFromModel for same order returns same id
-        // It's called again inside createWorkflowAnnotation - ensure it returns single id (unambiguous)
         when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
                 .thenReturn(new Object[]{ 77 }); // last stubbing wins for same signature
 
-        // insertOnModel returns a message id
+
         when(odooMock.insertOnModel(eq("mail.message"), anyMap())).thenReturn(9001);
 
         boolean res = sender.signalConfirmation(conf);
         assertTrue(res);
 
-        // verify that a message was attempted to be inserted
         verify(odooMock, atLeastOnce()).insertOnModel(eq("mail.message"), anyMap());
     }
     
@@ -219,7 +216,6 @@ public class OdooDataSenderTest {
 
         when(odooMock.isOnline()).thenReturn(true);
 
-        // updateTo succeeds
         when(odooMock.searchFromModel(eq("purchase.order"), anyMap(), anyList()))
                 .thenReturn(new Object[]{ 1 });
         when(odooMock.updateOnModel(eq("purchase.order"), anyMap(), eq(1))).thenReturn(true);
@@ -258,9 +254,7 @@ public class OdooDataSenderTest {
         assertNotNull(message);
         // Check it contains the header
         assertTrue(message.contains("ORDERRESPONSE"));
-        // encoded filename: '<' should be encoded as &lt; by OWASP Encode.forHtmlContent
         assertTrue(message.contains("&lt;myfile&gt;.xml") || message.contains("&lt;myfile&gt;.xml")); // defensive
-        // Order id should be encoded: < becomes &lt;, & becomes &amp;, > becomes &gt;, " becomes &quot;, ' becomes &#x27;
         assertTrue("Message should contain properly HTML-encoded order ID", 
                    message.contains("ORD&lt;&amp;&gt;") || 
                    message.contains("ORD&amp;&lt;&gt;") ||

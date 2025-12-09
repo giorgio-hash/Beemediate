@@ -24,7 +24,7 @@ public class OrderSummary {
 	  @ ensures this != copy;
 	  @ ensures \not_modified(copy);
 	  @*/
-	public OrderSummary(OrderSummary copy) {
+	public OrderSummary(final OrderSummary copy) {
 		this.totalItemNum = copy.totalItemNum;
 	}
 	

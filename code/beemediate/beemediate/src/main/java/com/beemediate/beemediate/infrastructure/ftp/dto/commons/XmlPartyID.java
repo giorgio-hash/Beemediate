@@ -2,7 +2,6 @@ package com.beemediate.beemediate.infrastructure.ftp.dto.commons;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 /**
@@ -32,7 +31,7 @@ public class XmlPartyID{
 	 * Costruttore
 	 * @param partyId - String
 	 */
-	public XmlPartyID(String partyId) {
+	public XmlPartyID(final String partyId) {
 		this.partyId = partyId;
 	}
 
@@ -41,7 +40,7 @@ public class XmlPartyID{
 	 * @param partyId - identiifcativo partner commerciale
 	 * @param partyType - String che specifica il sistema di riferimento nel quale è registrato l'identificativo
 	 */
-	public XmlPartyID(String partyId, String partyType) {
+	public XmlPartyID(final String partyId, final String partyType) {
 		this.partyId = partyId;
 		this.type = partyType;
 	}
@@ -51,7 +50,7 @@ public class XmlPartyID{
 	 * @param partyId - identiifcativo partner commerciale
 	 * @param partyType - enum PartyType, specifica il sistema di riferimento nel quale è registrato l'identificativo
 	 */
-	public XmlPartyID(String partyId, PartyType partyType) {
+	public XmlPartyID(final String partyId, final PartyType partyType) {
 		this.partyId = partyId;
 		this.type = partyType.toString();
 	}
@@ -60,7 +59,7 @@ public class XmlPartyID{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -68,7 +67,7 @@ public class XmlPartyID{
 		return partyId;
 	}
 
-	public void setPartyId(String partyId) {
+	public void setPartyId(final String partyId) {
 		this.partyId = partyId;
 	}
 	

@@ -26,7 +26,7 @@ public class XmlAgreement {
 	 * Costruttore
 	 * @param id
 	 */
-	public XmlAgreement(String id) {
+	public XmlAgreement(final String id) {
 		this.id=id;
 	}
 	/**
@@ -41,7 +41,7 @@ public class XmlAgreement {
 	 * 
 	 * @param id
 	 */
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}	
 }

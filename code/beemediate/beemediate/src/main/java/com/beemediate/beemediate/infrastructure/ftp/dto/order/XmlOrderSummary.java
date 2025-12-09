@@ -37,7 +37,7 @@ public class XmlOrderSummary {
 		return totalItemNum;
 	}
 
-	public void setTotalItemNum(int totalItemNum) {
+	public void setTotalItemNum(final int totalItemNum) {
 		this.totalItemNum = totalItemNum;
 	}
 	

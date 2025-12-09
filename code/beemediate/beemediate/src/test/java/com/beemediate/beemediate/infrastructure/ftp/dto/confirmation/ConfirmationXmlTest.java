@@ -1,5 +1,21 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto.confirmation;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import javax.xml.stream.XMLInputFactory;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+
 import com.beemediate.beemediate.domain.pojo.confirmation.ConfirmationStructure;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlAddress;
 import com.beemediate.beemediate.infrastructure.ftp.dto.commons.XmlDeliveryDate;
@@ -14,21 +30,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlFactory;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import javax.xml.stream.XMLInputFactory;
-
-import static org.junit.Assert.*;
 
 /**
  * Test mapping specifico per Confirmation.xml usando ResourceLoader.
@@ -166,8 +167,8 @@ public class ConfirmationXmlTest {
             
             JsonNode deliveryDateItemNode = itemNode.path("DELIVERY_DATE");
             XmlDeliveryDate xddItem = xorItem.getDeliveryDate();
-            assertEquals(deliveryDateNode.path("DELIVERY_START_DATE").toString().replaceAll("\"", ""), xddItem.getDeliveryStartDate());
-            assertEquals(deliveryDateNode.path("DELIVERY_END_DATE").toString().replaceAll("\"", ""), xddItem.getDeliveryEndDate());
+            assertEquals(deliveryDateItemNode.path("DELIVERY_START_DATE").toString().replaceAll("\"", ""), xddItem.getDeliveryStartDate());
+            assertEquals(deliveryDateItemNode.path("DELIVERY_END_DATE").toString().replaceAll("\"", ""), xddItem.getDeliveryEndDate());
             
             JsonNode remarksItemNode = itemNode.path("REMARKS");
             XmlRemarks xrItem = xorItem.getRemarks();

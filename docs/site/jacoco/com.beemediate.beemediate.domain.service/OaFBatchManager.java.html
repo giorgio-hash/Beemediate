@@ -33,10 +33,6 @@ public final class OaFBatchManager implements OaFManagerPort{
 	/***numero minimo di Order validi richiesti per l'invio al fornitore*/
 	private /*@ spec_public @*/ final int oafBatchThreshold;
 
-	/*@ public invariant oaf!=null; @*/
-	/*@ public invariant confirmations!=null; @*/
-	/*@ public invariant ftp!=null; @*/
-	/*@ public invariant crm!=null; @*/
 	/*@ public invariant 0 &lt; oafBatchThreshold &lt;= oaf.getBuffer().capacity() &lt;= Integer.MAX_VALUE; @*/
 	
 	/**
@@ -60,19 +56,19 @@ public final class OaFBatchManager implements OaFManagerPort{
 	  @*/
 //	@CodeBigintMath
 	@Autowired
-<span class="fc" id="L63">	public OaFBatchManager( @Value(&quot;${app.manager.threshold:1}&quot;) final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, final DataSenderPort u) throws UnreachableThresholdException{</span>
+<span class="fc" id="L59">	public OaFBatchManager( @Value(&quot;${app.manager.threshold:1}&quot;) final int threshold,final OaFBuffer oafb,final ConfirmationProviderPort c,final FTPHandlerPort f, final DataSenderPort u) throws UnreachableThresholdException{</span>
 		
-<span class="fc bfc" id="L65" title="All 2 branches covered.">		if(threshold&lt;1)</span>
-<span class="fc" id="L66">			throw new IllegalArgumentException(&quot;Soglia minima di ordini non deve essere inferiore a 1&quot;);</span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">		if(oafb.getBuffer().capacity()&lt;threshold)</span>
-<span class="fc" id="L68">			throw new UnreachableThresholdException(&quot;Capacit� del buffer di caricamento ordini inferiore alla soglia minima di invio.&quot;);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		if(threshold&lt;1)</span>
+<span class="fc" id="L62">			throw new IllegalArgumentException(&quot;Soglia minima di ordini non deve essere inferiore a 1&quot;);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		if(oafb.getBuffer().capacity()&lt;threshold)</span>
+<span class="fc" id="L64">			throw new UnreachableThresholdException(&quot;Capacit� del buffer di caricamento ordini inferiore alla soglia minima di invio.&quot;);</span>
 		
-<span class="fc" id="L70">		oafBatchThreshold = threshold;</span>
-<span class="fc" id="L71">		oaf = oafb;</span>
-<span class="fc" id="L72">		confirmations = c;</span>
-<span class="fc" id="L73">		ftp = f;</span>
-<span class="fc" id="L74">		crm = u;</span>
-<span class="fc" id="L75">	}</span>
+<span class="fc" id="L66">		oafBatchThreshold = threshold;</span>
+<span class="fc" id="L67">		oaf = oafb;</span>
+<span class="fc" id="L68">		confirmations = c;</span>
+<span class="fc" id="L69">		ftp = f;</span>
+<span class="fc" id="L70">		crm = u;</span>
+<span class="fc" id="L71">	}</span>
 	
 	/*@ public normal_behaviour
 	  @ assigns confirmations.newConfirmation, crm.positiveResponse;
@@ -87,24 +83,24 @@ public final class OaFBatchManager implements OaFManagerPort{
 	public int handleConfirmations() {
 		
 		Confirmation c;
-<span class="fc" id="L90">		int confCount=0;</span>
+<span class="fc" id="L86">		int confCount=0;</span>
 		
-<span class="fc bfc" id="L92" title="All 2 branches covered.">		if(confirmations.fetchConfirmations()) { //almeno una conferma c'?</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">		if(confirmations.fetchConfirmations()) { //almeno una conferma c'?</span>
 		
 		    //@ loop_writes c,confCount,confirmations.newConfirmation;
 			//@ maintaining confCount&gt;=0;
 			do {
-<span class="fc" id="L97">				c = confirmations.popConfirmation();</span>
+<span class="fc" id="L93">				c = confirmations.popConfirmation();</span>
 				
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">				if(ftp.archive(c))</span>
-<span class="fc" id="L100">					crm.signalConfirmation(c);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">				if(ftp.archive(c))</span>
+<span class="fc" id="L96">					crm.signalConfirmation(c);</span>
 				
-<span class="fc" id="L102">				confCount++;</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">			}while(confirmations.hasConfirmation());</span>
+<span class="fc" id="L98">				confCount++;</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">			}while(confirmations.hasConfirmation());</span>
 			
 		}
 		
-<span class="fc" id="L107">		return confCount;</span>
+<span class="fc" id="L103">		return confCount;</span>
 	}
 	
 	//@ public normal_behaviour
@@ -118,17 +114,16 @@ public final class OaFBatchManager implements OaFManagerPort{
 	/*@ requires oaf.buffer.size&lt;oaf.buffer.ordini.length ==&gt; (\forall int j; oaf.buffer.size&lt;=j&lt;oaf.buffer.ordini.length; oaf.buffer.ordini[j]==null);
 	  @*/
 	//@ ensures \result&gt;=0;
-	//@ ensures \not_modified(oaf,oaf.buffer,oaf.buffer.ordini,oaf.buffer.ordini.length);
 //	@CodeBigintMath
 	@Override
 	public int handleOrders() {
 		
 		/*@ nullable @*/Order o;		
-<span class="fc" id="L127">		int toSend=0; //valuto se la threshold ? superata</span>
+<span class="fc" id="L122">		int toSend=0; //valuto se la threshold ? superata</span>
 		
-<span class="fc bfc" id="L129" title="All 2 branches covered.">		if(oaf.loadNewBuffer()&gt;0) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">		if(oaf.loadNewBuffer()&gt;0) {</span>
 			
-<span class="fc" id="L131">			toSend = oaf.validateBuffer();</span>
+<span class="fc" id="L126">			toSend = oaf.validateBuffer();</span>
 			
 			
 			/*@ loop_invariant  o!=null ==&gt; o.data!=null 
@@ -143,26 +138,26 @@ public final class OaFBatchManager implements OaFManagerPort{
 			  @*/
 			/*@ maintaining oaf.buffer.size&lt;oaf.buffer.ordini.length ==&gt; (\forall int j; oaf.buffer.size&lt;=j&lt;oaf.buffer.ordini.length; oaf.buffer.ordini[j]==null);
 			  @*/
-<span class="fc bfc" id="L146" title="All 2 branches covered.">			while(!oaf.getBuffer().isEmpty()){</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">			while(!oaf.getBuffer().isEmpty()){</span>
 				
-<span class="fc" id="L148">				o = oaf.getBuffer().pop();</span>
+<span class="fc" id="L143">				o = oaf.getBuffer().pop();</span>
 				
 				//segnala al crm errori openTrans (critici) e non manda
-<span class="fc bfc" id="L151" title="All 2 branches covered.">				if(o.hasOpenTransError()) {</span>
-<span class="fc" id="L152">					crm.signalOpenTransError(o);</span>
-<span class="fc" id="L153">					continue;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">				if(o.hasOpenTransError()) {</span>
+<span class="fc" id="L147">					crm.signalOpenTransError(o);</span>
+<span class="fc" id="L148">					continue;</span>
 				} 
-<span class="fc bfc" id="L155" title="All 2 branches covered.">				else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)</span>
-<span class="fc" id="L156">					crm.signalContentError(o);</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">				else if(o.hasContentError()) { //segnala al crm errori di contenuto (non critici)</span>
+<span class="fc" id="L151">					crm.signalContentError(o);</span>
 				}
 				
-<span class="pc bpc" id="L159" title="2 of 4 branches missed.">				if(toSend&gt;=oafBatchThreshold &amp;&amp; ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm</span>
-<span class="fc bfc" id="L160" title="All 2 branches covered.">					if (!o.hasContentError())	</span>
-<span class="fc" id="L161">						crm.signalShipped(o);</span>
+<span class="pc bpc" id="L154" title="2 of 4 branches missed.">				if(toSend&gt;=oafBatchThreshold &amp;&amp; ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">					if (!o.hasContentError())	</span>
+<span class="fc" id="L156">						crm.signalShipped(o);</span>
 				}
 			}
 		}
-<span class="fc bfc" id="L165" title="All 2 branches covered.">		return toSend&gt;=oafBatchThreshold? toSend : 0;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">		return toSend&gt;=oafBatchThreshold? toSend : 0;</span>
 	}
 
 }

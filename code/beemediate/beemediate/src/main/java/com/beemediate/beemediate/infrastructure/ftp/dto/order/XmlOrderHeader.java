@@ -50,11 +50,11 @@ public class XmlOrderHeader {
 		return agreement;
 	}
 
-	public void setAgreement(XmlAgreement agreement) {
+	public void setAgreement(final XmlAgreement agreement) {
 		this.agreement = agreement;
 	}
 
-	public void setOrderInfo(XmlOrderInfo orderInfo) {
+	public void setOrderInfo(final XmlOrderInfo orderInfo) {
 		this.orderInfo = orderInfo;
 	}
 

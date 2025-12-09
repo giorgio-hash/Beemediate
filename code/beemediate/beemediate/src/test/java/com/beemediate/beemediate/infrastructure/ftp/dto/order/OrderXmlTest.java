@@ -1,9 +1,9 @@
 package com.beemediate.beemediate.infrastructure.ftp.dto.order;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -218,6 +218,8 @@ public class OrderXmlTest {
             		case "delivery":
 	            		oh.setDeliveryID(xp.getPartyId().getPartyId());
 	            		break;
+	            	default:
+	            		fail("Non è un PartyRole!");
             	}
             }
             oh.setBuyerIDRef(dto.getOh().getOrderInfo().getOrderPartiesReference().getBuyerIdRef().getPartyId());

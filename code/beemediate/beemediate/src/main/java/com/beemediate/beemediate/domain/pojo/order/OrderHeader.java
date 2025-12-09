@@ -72,7 +72,7 @@ public class OrderHeader {
 	  @ ensures this != copy;
 	  @ ensures \not_modified(copy);
 	  @*/
-	public OrderHeader(OrderHeader copy) {
+	public OrderHeader(final OrderHeader copy) {
 		this.buyerID = copy.buyerID;
 		this.buyerIDRef = copy.buyerIDRef ;
 		this.currency = copy.currency;

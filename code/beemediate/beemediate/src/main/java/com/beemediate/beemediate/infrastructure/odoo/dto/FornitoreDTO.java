@@ -1,9 +1,7 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,20 +37,20 @@ public class FornitoreDTO{
 	 * @throws XmlRpcException
 	 */
 	public static FornitoreDTO fromXMLRPC(final OdooApiConfig odoo) throws EmptyFetchException, XmlRpcException {
-		Object[] ids;
-		Object[] res;
+		final Object[] ids;
+		final Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		//cerca GEALAN
 		requestInfo.put("limit", 1);
-		ids = odoo.searchFromModel(odoo.RES_PARTNER, requestInfo, Arrays.asList("name","=","GEALAN"));
+		ids = odoo.searchFromModel(OdooApiConfig.RES_PARTNER, requestInfo, Arrays.asList("name","=","GEALAN"));
 		
 		if(ids.length == 0) throw new EmptyFetchException ("Non trovo GEALAN");
 		
 		//estrai GEALAN
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("name","ref"));
-		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, ids);
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("name","ref"));
+		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, ids);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Trovato GEALAN, ma non riesco ad estrarlo.");
 		

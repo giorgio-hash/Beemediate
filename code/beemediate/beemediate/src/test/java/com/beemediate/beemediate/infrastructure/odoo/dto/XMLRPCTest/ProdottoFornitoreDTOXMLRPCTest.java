@@ -2,25 +2,18 @@ package com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
-import org.assertj.core.util.Arrays;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -70,11 +63,11 @@ public class ProdottoFornitoreDTOXMLRPCTest {
         when(f.getName()).thenReturn(Optional.of("GEALAN"));
 
         // prepare ProdottoDTO with sellerIds
-        ProdottoDTO pr = org.mockito.Mockito.mock(ProdottoDTO.class);
+        ProdottoDTO prod = org.mockito.Mockito.mock(ProdottoDTO.class);
         Object[] sellerIds = new Object[] { 1, 2, 3 };
-        when(pr.getSellerIds()).thenReturn(Optional.of(sellerIds));
+        when(prod.getSellerIds()).thenReturn(Optional.of(sellerIds));
 
-        ProdottoDTO[] prodotti = new ProdottoDTO[] { pr };
+        ProdottoDTO[] prodotti = new ProdottoDTO[] { prod };
 
         // prepare supplierinfo records returned by readFromModel
         Map<String, Object> rec1 = new HashMap<>();
@@ -111,7 +104,8 @@ public class ProdottoFornitoreDTOXMLRPCTest {
     public void testInconsistentDTOException_whenFornitoreNull_withMock() {
     	f = null;
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
         } );
     }
     
@@ -120,7 +114,8 @@ public class ProdottoFornitoreDTOXMLRPCTest {
     public void testInconsistentDTOException_whenFornitoreHasNoName_withMock() {
     	when(f.getName()).thenReturn(Optional.empty());
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
         } );
     }
     
@@ -129,7 +124,8 @@ public class ProdottoFornitoreDTOXMLRPCTest {
     	when(f.getName()).thenReturn(Optional.of("GEALAN"));
     	
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, null, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, null, f);
         } );
     }
     
@@ -138,12 +134,14 @@ public class ProdottoFornitoreDTOXMLRPCTest {
     	when(f.getName()).thenReturn(Optional.of("GEALAN"));
     	when(pr.getSellerIds()).thenReturn(Optional.empty());
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
         } );
         
     	when(pr.getSellerIds()).thenReturn(Optional.of(new Object[0]));
         assertThrows(InconsistentDTOException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
         } );
     }
     
@@ -155,11 +153,9 @@ public class ProdottoFornitoreDTOXMLRPCTest {
         when(f.getName()).thenReturn(Optional.of("GEALAN"));
 
         // prepare ProdottoDTO with sellerIds
-        ProdottoDTO pr = org.mockito.Mockito.mock(ProdottoDTO.class);
+        ProdottoDTO prod = org.mockito.Mockito.mock(ProdottoDTO.class);
         Object[] sellerIds = new Object[] { 1, 2, 3 };
-        when(pr.getSellerIds()).thenReturn(Optional.of(sellerIds));
-
-        ProdottoDTO[] prodotti = new ProdottoDTO[] { pr };
+        when(prod.getSellerIds()).thenReturn(Optional.of(sellerIds));
 
         // prepare supplierinfo records returned by readFromModel
         Map<String, Object> rec1 = new HashMap<>();
@@ -168,14 +164,13 @@ public class ProdottoFornitoreDTOXMLRPCTest {
         rec1.put("partner_id", new Object[] { 2, "PRTNID" });
         rec1.put("product_uom_id", new Object[] { 3, "M" });
 
-        Object[] results = new Object[] { rec1, rec1, rec1 };
-
         // IMPORTANT: mock searchFromModel with permissive matchers (don't try to eq() complex lists)
         when(odoo.searchFromModel(eq("product.supplierinfo"), anyMap(), anyList(), anyList()))
             .thenReturn(new Object[0]);
         
         assertThrows(EmptyFetchException.class, () -> {
-            ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { pr }, f);
+            @SuppressWarnings("unused")
+			ProdottoFornitoreDTO[] prf = ProdottoFornitoreDTO.fromXMLRPC(odoo, new ProdottoDTO[] { prod }, f);
         } );
     }
     
@@ -191,16 +186,12 @@ public class ProdottoFornitoreDTOXMLRPCTest {
         Object[] sellerIds = new Object[] { 1, 2, 3 };
         when(pr.getSellerIds()).thenReturn(Optional.of(sellerIds));
 
-        ProdottoDTO[] prodotti = new ProdottoDTO[] { pr };
-
         // prepare supplierinfo records returned by readFromModel
         Map<String, Object> rec1 = new HashMap<>();
         rec1.put("id", 10);
         rec1.put("product_id", new Object[] { 1, "PROID" });
         rec1.put("partner_id", new Object[] { 2, "PRTNID" });
         rec1.put("product_uom_id", new Object[] { 3, "M" });
-
-        Object[] results = new Object[] { rec1, rec1, rec1 };
 
         // IMPORTANT: mock searchFromModel with permissive matchers (don't try to eq() complex lists)
         when(odoo.searchFromModel(eq("product.supplierinfo"), anyMap(), anyList(), anyList()))

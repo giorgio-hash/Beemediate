@@ -13,21 +13,33 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OdooBeans {
 
+	/**
+	 * @returns Bean di configurazione per informazioni di servizio dal server ed operazioni di autenticazione, via protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClientConfigImpl commonConfig() {
         return new XmlRpcClientConfigImpl();
     }
 
+	/**
+	 * @returns Bean di configurazione per interagire coi model di Odoo, via protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClientConfigImpl objectConfig() {
         return new XmlRpcClientConfigImpl();
     }
 
+	/**
+	 * @returns Bean di comunicazione a gestire il protocollo XML-RPC.
+	 */
     @Bean
     public XmlRpcClient xmlRpcClientCommon() {
         return new XmlRpcClient();
     }
-
+    
+	/**
+	 * @returns Bean di comunicazione coi model via protocollo XML-RPC. Usa la configurazione objectConfig.
+	 */
     @Bean
     public XmlRpcClient xmlRpcClientModels() {
         return new XmlRpcClient();

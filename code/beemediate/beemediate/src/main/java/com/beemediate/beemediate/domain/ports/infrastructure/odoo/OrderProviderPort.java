@@ -8,39 +8,48 @@ import com.beemediate.beemediate.domain.pojo.order.Order;
  */
 public interface OrderProviderPort {
 	
-	//@ public model instance boolean newOrder;
+	//@ public model instance int newOrders;
+	
+	/*@ public invariant 0<=newOrders<=Integer.MAX_VALUE; @*/
 	
 	/**
-	 * L'adattatore ha un buffer con oggetti Order. Con questo metodo, si può richiedere un oggetto Order all'adattatore.
-	 * @return oggetto Order se disponibile, altrimenti <i>null</i>
+	 * Restituisce un nuovo Order
+	 * @return Order
 	 */
 	/*@ public normal_behaviour
+	  @ assigns newOrders;
+	  @ requires newOrders>0;
 	  @ ensures \result!=null;
 	  @ ensures \result.data!=null;
 	  @ ensures \result.quantity!=null;
 	  @ ensures \result.orderID!=null;
 	  @ ensures \typeof(\result) == \type(Order);
+	  @ ensures newOrders == \old(newOrders)-1;
+	  @
+	  @ also public normal_behaviour
+	  @ assigns \nothing;
+	  @ requires newOrders==0;
+	  @ ensures \result==null;
 	  @*/
-	/*@ spec_public pure @*/ Order popNewOrder();
+	Order popNewOrder();
 	
 	/**
-	 * L'adattatore ha un buffer con oggetti Order.
-	 * @return <i>true</i> se il buffer dell'adattatore contiene almeno un Order
+	 * Determina se è ancora presente un Order
+	 * @return Order
 	 */
 	/*@ public normal_behaviour
-	  @ assigns newOrder;
-	  @ ensures \result <==> newOrder; 
+	  @ ensures \result == newOrders>0; 
 	  @*/
-	/*@ spec_public @*/ boolean hasNewOrder();
+	/*@ pure @*/ boolean hasNewOrder();
 	
 	/**
-	 * L'adattatore svuota il buffer, recupera gli oggetti Order e riempie il buffer.
-	 * @return <i>true</i> se il buffer è stato ripopolato con successo
+	 * Recupera nuovi Ordder
+	 * @return Order
 	 */
 	/*@ public normal_behaviour
-	  @ assigns newOrder;
-	  @ ensures \result <==> newOrder; 
+	  @ assigns newOrders;
+	  @ ensures \result <==> newOrders > 0;   
 	  @*/
-	/*@ spec_public @*/ boolean fetchOrders();
+	boolean fetchOrders();
 
 }

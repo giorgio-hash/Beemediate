@@ -42,11 +42,11 @@ public class ConsegnaDTO{
 		if (prv == null || prv.getPickingTypeId().getNum().isEmpty()) throw new InconsistentDTOException("Oggetto PreventivoDTO non ha le informazioni necessarie");
 		
 		final Object id = prv.getPickingTypeId().getNum().get();
-		Object[] res;
+		final Object[] res;
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("warehouse_id"));
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("warehouse_id"));
 		res = odoo.readFromModel("stock.picking.type", requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni sulla consegna.");

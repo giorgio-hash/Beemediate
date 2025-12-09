@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,14 +46,14 @@ public class FTPReader implements ConfirmationProviderPort{
 	/**
 	 * buffer con logica LIFO per le strutture dati sintetiche delle conferme d'ordine (Confirmation)
 	 */
-	private final Stack<Confirmation> buffer = new Stack<>();
+	private final Deque<Confirmation> buffer = new ArrayDeque<>();
 	
     /**
      * Costruttore
      * @param ftp - bean di configurazione FTPConfig
      */
     @Autowired 
-	public FTPReader(FTPConfig ftp) {
+	public FTPReader(final FTPConfig ftp) {
 		this.ftp = ftp;
 	}
 	
@@ -114,7 +115,7 @@ public class FTPReader implements ConfirmationProviderPort{
      * @throws IOException se si verifica un errore I/O
      * @throws WrongPathException se il percorso non è una directory valida
      */
-    private List<Path> collectXmlFiles(Path directoryPath) throws IOException, WrongPathException {
+    private List<Path> collectXmlFiles(final Path directoryPath) throws IOException, WrongPathException {
         // Verifica che il percorso esista ed sia una directory
         if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {
             throw new WrongPathException("Il percorso specificato non è una directory valida: " + directoryPath);
@@ -124,7 +125,7 @@ public class FTPReader implements ConfirmationProviderPort{
             return walk
                     .filter(Files::isRegularFile)          // solo file "normali"
                     .filter(path -> path.toString().toLowerCase().endsWith(".xml"))  // estensione .xml
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
     
@@ -137,7 +138,7 @@ public class FTPReader implements ConfirmationProviderPort{
      * @throws IOException se si verifica un errore di I/O o se il percorso non è una directory
      * @throws WrongPathException se il percorso non è una directory valida
      */
-    private boolean containsXmlFiles(Path directoryPath) throws IOException, WrongPathException {
+    private boolean containsXmlFiles(final Path directoryPath) throws IOException, WrongPathException {
         // Verifica che il percorso esista e sia una directory
         if (!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {
             throw new WrongPathException("Il percorso specificato non è una directory valida: " + directoryPath);

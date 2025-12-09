@@ -91,7 +91,7 @@ public class DestinazioneDTOXMLRPCTest {
 
     // 2: concons == null -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenConsegnaContactIsNull() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenConsegnaContactIsNull(){
         ContattoConsegnaDTO nullConcons = null;
         assertThrows(InconsistentDTOException.class, () -> {
             DestinazioneDTO.fromXMLRPC(odoo, nullConcons);
@@ -100,7 +100,7 @@ public class DestinazioneDTOXMLRPCTest {
 
     // 3: concons present but partnerId num empty -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenPartnerIdMissing() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenPartnerIdMissing(){
         // IdentifierDTO built from empty array to simulate missing num (getNum() -> Optional.empty())
         IdentifierDTO emptyIdDto = new IdentifierDTO(new Object[] {null, null}); 
         when(concons.getPartnerId()).thenReturn(emptyIdDto);

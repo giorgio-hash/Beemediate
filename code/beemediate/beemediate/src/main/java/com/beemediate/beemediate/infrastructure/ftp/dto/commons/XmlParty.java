@@ -76,7 +76,7 @@ public class XmlParty {
 	/**
 	 * @param XmlPartyID
 	 */
-	public void setPartyId(XmlPartyID partyId) {
+	public void setPartyId(final XmlPartyID partyId) {
 		this.partyId = partyId;
 	}
 
@@ -84,7 +84,7 @@ public class XmlParty {
 	 * 
 	 * @param partyRole
 	 */
-	public void setPartyRole(String partyRole) {
+	public void setPartyRole(final String partyRole) {
 		this.partyRole = partyRole;
 	}
 
@@ -92,7 +92,7 @@ public class XmlParty {
 	 * 
 	 * @param address
 	 */
-	public void setAddress(XmlAddress address) {
+	public void setAddress(final XmlAddress address) {
 		this.address = address;
 	}
 	

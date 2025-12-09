@@ -37,7 +37,7 @@ public class XmlControlInfo {
 	 * 
 	 * @param generatorInfo - String
 	 */
-	public void setGeneratorInfo(String generatorInfo) {
+	public void setGeneratorInfo(final String generatorInfo) {
 		this.generatorInfo = generatorInfo;
 	}
 
@@ -53,7 +53,7 @@ public class XmlControlInfo {
 	 * 
 	 * @param generationDate - String
 	 */
-	public void setGenerationDate(String generationDate) {
+	public void setGenerationDate(final String generationDate) {
 		this.generationDate = generationDate;
 	}
 

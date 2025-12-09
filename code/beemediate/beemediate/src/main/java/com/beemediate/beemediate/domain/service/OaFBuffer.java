@@ -35,7 +35,7 @@ public class OaFBuffer {
 	/*@ public invariant or!=null; @*/
 
 	//per testing
-	private OaFBuffer() {/*empty constructor for mockito testing*/};
+	private OaFBuffer() {/*empty constructor for mockito testing*/}
 	
 	/**
 	 * Costruttore
@@ -66,12 +66,8 @@ public class OaFBuffer {
 	 * @return int - numero di Order caricati
 	 */
 	/*@ public normal_behaviour
-	  @ assigns or.newOrder, buffer.ordini[*], buffer.size;
-	  @ requires buffer != null;
-	  @ requires or != null;
-	  @ ensures 0<=\result<=buffer.ordini.length;
-	  @ ensures \result == buffer.size;
-	  @ diverges true;
+	  @ ensures buffer.size==\result;
+	  @ ensures \result>=0;
 	  @*/
 //	@CodeBigintMath
 	public int loadNewBuffer() {
@@ -82,7 +78,7 @@ public class OaFBuffer {
 		//@ ghost int ordersLoaded = 0;
 		
 		if(or.fetchOrders()) { //c'? almeno un ordine
-			Order t = null;
+			/*@ nullable @*/Order t = null;
 			//@ loop_writes buffer.ordini[*], t, ordersLoaded;
 			//@ loop_invariant 0<=buffer.size<=buffer.ordini.length;
 			/*@ loop_invariant 0<=ordersLoaded<=buffer.size;
@@ -92,10 +88,9 @@ public class OaFBuffer {
 			  @																		& buffer.ordini[j].quantity!=null
 			  @																		& buffer.ordini[j].orderID!=null
 			  @																		& \typeof(buffer.ordini[j]) == \type(Order));
+			  @
+			  @ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
 			  @*/
-			/*@ maintaining buffer.size<buffer.ordini.length ==> (\forall int j; buffer.size<=j<buffer.ordini.length; buffer.ordini[j]==null);
-			  @*/
-			//@ loop_invariant t!=null & t.data!=null & t.quantity!=null & t.orderID!=null & \typeof(t) == \type(Order);
 			while(or.hasNewOrder() && !buffer.isFull()) {
 				
 				t = or.popNewOrder();

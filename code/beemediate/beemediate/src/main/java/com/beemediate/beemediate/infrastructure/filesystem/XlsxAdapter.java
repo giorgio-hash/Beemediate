@@ -39,7 +39,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
     /**
      * Percorso al file {@code .xlsx}
      */
-    private final String RESOURCE_PATH;
+    private final String resourcePath;
 
     /**
      * Costruttore
@@ -47,9 +47,9 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * @param path - String
      */
     public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,
-    					@Value("${datasource.path}") String path) {
+    					@Value("${datasource.path}") final String path) {
         this.resourceLoader = resourceLoader;
-        this.RESOURCE_PATH = path;
+        this.resourcePath = path;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
     private List<String> extractArticleNumbers() throws IOException {
         final List<String> numeriArticolo = new ArrayList<>();
 
-        final Resource resource = resourceLoader.getResource(RESOURCE_PATH);
+        final Resource resource = resourceLoader.getResource(resourcePath);
         try (InputStream is = resource.getInputStream();
              Workbook workbook = new XSSFWorkbook(is)) {
 
@@ -91,15 +91,15 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
             for (int i=sheet.getFirstRowNum()+1; i<=sheet.getLastRowNum(); i++) {
             	
             	// Controllo Null sulla Riga (POI ritorna null se la riga è visivamente vuota)
-                Row row = sheet.getRow(i);
+                final Row row = sheet.getRow(i);
                 if (row == null) {
                 	throw new IllegalArgumentException ("cella "+i+" vuota o nulla");
                 }
 
-                Cell cell = row.getCell(0);
+                final Cell cell = row.getCell(0);
                 
                 // Restituisce "" se la cella è vuota.
-                String val = formatter.formatCellValue(cell);
+                final String val = formatter.formatCellValue(cell);
 
                 // Validazione e Pulizia
                 if (val != null && !val.trim().isBlank()) {

@@ -4,12 +4,11 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.junit.After;
@@ -93,7 +92,7 @@ public class CompagniaDTOXMLRPCTest {
 
     // 2: prv == null -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenPreventivoIsNull() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenPreventivoIsNull() {
         PreventivoDTO nullPrv = null;
         assertThrows(InconsistentDTOException.class, () -> {
             CompagniaDTO.fromXMLRPC(odoo, nullPrv);
@@ -102,7 +101,7 @@ public class CompagniaDTOXMLRPCTest {
 
     // 3: prv present but companyId num empty -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenCompanyIdMissing() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenCompanyIdMissing() {
         // IdentifierDTO built from null/empty array to simulate missing num
         IdentifierDTO emptyIdDto = new IdentifierDTO(new Object[] { null, null}); // getNum() will be Optional.empty()
         when(prv.getCompanyId()).thenReturn(emptyIdDto);

@@ -26,7 +26,7 @@ public class XmlAOCValue{
 	 * 
 	 * @param amount - float
 	 */
-	public void setAmount(float amount) {
+	public void setAmount(final float amount) {
 		this.amount = amount;
 	}
 }

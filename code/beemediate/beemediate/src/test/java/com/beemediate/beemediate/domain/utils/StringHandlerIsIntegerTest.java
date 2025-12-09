@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class StringHandlerIsInteger {
+public class StringHandlerIsIntegerTest {
 	
 	//if(str == null || str.length()==0)
 	/**CASE		(str == null || str.length()==0)	|	esito dec.	| esito metodo	|	esito

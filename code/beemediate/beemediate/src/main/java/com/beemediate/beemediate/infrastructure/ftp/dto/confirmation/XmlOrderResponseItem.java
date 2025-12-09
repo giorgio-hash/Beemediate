@@ -87,7 +87,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param lineItemId - int
 	 */
-	public void setLineItemId(int lineItemId) {
+	public void setLineItemId(final int lineItemId) {
 		this.lineItemId = lineItemId;
 	}
 
@@ -103,7 +103,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param productId - XmlProductID
 	 */
-	public void setProductId(XmlProductID productId) {
+	public void setProductId(final XmlProductID productId) {
 		this.productId = productId;
 	}
 
@@ -119,7 +119,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param quantity - float
 	 */
-	public void setQuantity(float quantity) {
+	public void setQuantity(final float quantity) {
 		this.quantity = quantity;
 	}
 
@@ -135,7 +135,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param orderUnit - String
 	 */
-	public void setOrderUnit(String orderUnit) {
+	public void setOrderUnit(final String orderUnit) {
 		this.orderUnit = orderUnit;
 	}
 
@@ -151,7 +151,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param priceLineAmount - float
 	 */
-	public void setPriceLineAmount(float priceLineAmount) {
+	public void setPriceLineAmount(final float priceLineAmount) {
 		this.priceLineAmount = priceLineAmount;
 	}
 
@@ -167,7 +167,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param productPriceFix - XmlProductPriceFix
 	 */
-	public void setProductPriceFix(XmlProductPriceFix productPriceFix) {
+	public void setProductPriceFix(final XmlProductPriceFix productPriceFix) {
 		this.productPriceFix = productPriceFix;
 	}
 
@@ -183,7 +183,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param productFeatures - List di XmlProductFeature
 	 */
-	public void setProductFeatures(List<XmlProductFeature> productFeatures) {
+	public void setProductFeatures(final  List<XmlProductFeature> productFeatures) {
 		this.productFeatures = productFeatures;
 	}
 
@@ -199,7 +199,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param deliveryDate - XmlDeliveryDate
 	 */
-	public void setDeliveryDate(XmlDeliveryDate deliveryDate) {
+	public void setDeliveryDate(final XmlDeliveryDate deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 
@@ -215,7 +215,7 @@ public class XmlOrderResponseItem {
 	 * 
 	 * @param remarks - XmlRemarks
 	 */
-	public void setRemarks(XmlRemarks remarks) {
+	public void setRemarks(final XmlRemarks remarks) {
 		this.remarks = remarks;
 	}
 

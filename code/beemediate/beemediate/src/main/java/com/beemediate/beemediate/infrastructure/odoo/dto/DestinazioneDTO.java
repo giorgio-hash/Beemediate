@@ -45,8 +45,8 @@ public class DestinazioneDTO{
 		final Map<String, Object> requestInfo = new HashMap<>();
 		
 		requestInfo.clear();
-		requestInfo.put(odoo.FIELDS, Arrays.asList("ref"));
-		res = odoo.readFromModel(odoo.RES_PARTNER, requestInfo, id);
+		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList("ref"));
+		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, id);
 		
 		if(res.length == 0) throw new EmptyFetchException ("Non trovo informazioni della destinazione.");
 		

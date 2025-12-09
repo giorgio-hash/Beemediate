@@ -33,10 +33,6 @@ public final class OaFBatchManager implements OaFManagerPort{
 	/***numero minimo di Order validi richiesti per l'invio al fornitore*/
 	private /*@ spec_public @*/ final int oafBatchThreshold;
 
-	/*@ public invariant oaf!=null; @*/
-	/*@ public invariant confirmations!=null; @*/
-	/*@ public invariant ftp!=null; @*/
-	/*@ public invariant crm!=null; @*/
 	/*@ public invariant 0 < oafBatchThreshold <= oaf.getBuffer().capacity() <= Integer.MAX_VALUE; @*/
 	
 	/**
@@ -118,7 +114,6 @@ public final class OaFBatchManager implements OaFManagerPort{
 	/*@ requires oaf.buffer.size<oaf.buffer.ordini.length ==> (\forall int j; oaf.buffer.size<=j<oaf.buffer.ordini.length; oaf.buffer.ordini[j]==null);
 	  @*/
 	//@ ensures \result>=0;
-	//@ ensures \not_modified(oaf,oaf.buffer,oaf.buffer.ordini,oaf.buffer.ordini.length);
 //	@CodeBigintMath
 	@Override
 	public int handleOrders() {
@@ -156,8 +151,7 @@ public final class OaFBatchManager implements OaFManagerPort{
 					crm.signalContentError(o);
 				}
 				
-				if(toSend>=oafBatchThreshold && ftp.loadOrder(o)) {//manda e, se l'operazione non d? errori, segnala al crm
-					if (!o.hasContentError())	
+				if(toSend>=oafBatchThreshold && ftp.loadOrder(o) && !o.hasContentError()) {//manda e, se l'operazione non d? errori, segnala al crm
 						crm.signalShipped(o);
 				}
 			}

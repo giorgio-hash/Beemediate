@@ -1,7 +1,6 @@
 package com.beemediate.beemediate.infrastructure.odoo.dto.XMLRPCTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -15,7 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.xmlrpc.XmlRpcException;
-import org.assertj.core.util.Arrays;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mock;
@@ -116,7 +114,7 @@ public class PreventivoDTOXMLRPCTest {
 	
 	//2
 	@Test
-	public void testIdFetchediDSuccessfully_butNoResourceFound_withMock() throws XmlRpcException, EmptyFetchException, InconsistentDTOException {
+	public void testIdFetchediDSuccessfully_butNoResourceFound_withMock() throws XmlRpcException {
 		
 	      odoo = org.mockito.Mockito.mock(OdooApiConfig.class);
 	      f = org.mockito.Mockito.mock(FornitoreDTO.class);
@@ -137,7 +135,7 @@ public class PreventivoDTOXMLRPCTest {
 	
 	//3
 	@Test
-	public void testFornitoreNull() throws XmlRpcException, EmptyFetchException, InconsistentDTOException {
+	public void testFornitoreNull() {
 		
 	      odoo = org.mockito.Mockito.mock(OdooApiConfig.class);
 	      f = null;
@@ -149,7 +147,7 @@ public class PreventivoDTOXMLRPCTest {
 	
 	//4
 	@Test
-	public void testFornitoreHasNoName() throws XmlRpcException, EmptyFetchException, InconsistentDTOException {
+	public void testFornitoreHasNoName() {
 		
 	      odoo = org.mockito.Mockito.mock(OdooApiConfig.class);
 	      f = org.mockito.Mockito.mock(FornitoreDTO.class);

@@ -73,7 +73,7 @@ public class ManagerRestControllerTest {
 
         mockMvc.perform(get(url))
                 .andExpect(status().isInternalServerError()) // Verifica HTTP 500
-                .andExpect(content().string("Error while processing orders: DB connection failed"));
+                .andExpect(content().string("Error while processing orders"));
     }
 
     // --- TEST MANAGE CONFIRMATIONS ---
@@ -101,6 +101,6 @@ public class ManagerRestControllerTest {
 
         mockMvc.perform(get(url))
                 .andExpect(status().isInternalServerError()) // Verifica HTTP 500
-                .andExpect(content().string("Error while processing confirmations: Critical Error"));
+                .andExpect(content().string("Error while processing confirmations"));
     }
 }

@@ -1,16 +1,16 @@
 package com.beemediate.beemediate.infrastructure.ftp.config;
 
-import com.beemediate.beemediate.infrastructure.ftp.config.FTPConfig;
-import com.beemediate.beemediate.infrastructure.ftp.exceptions.WrongPathException;
-import org.junit.After;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import org.junit.After;
+import org.junit.Test;
+
+import com.beemediate.beemediate.infrastructure.ftp.exceptions.WrongPathException;
 
 /**
  * JUnit4 tests for FTPConfig.

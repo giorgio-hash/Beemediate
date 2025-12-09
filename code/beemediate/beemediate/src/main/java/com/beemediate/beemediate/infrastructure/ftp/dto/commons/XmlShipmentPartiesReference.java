@@ -9,6 +9,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 @JacksonXmlRootElement(localName="SHIPMENT_PARTIES_REFERENCE")
 public class XmlShipmentPartiesReference{
 	
+	/**
+	 * campo che specifica un identificativo di riferimento per il luogo di consegna
+	 */
 	@JacksonXmlProperty(localName="DELIVERY_IDREF")
 	private XmlPartyID deliveryIdRef;
 
@@ -21,7 +24,7 @@ public class XmlShipmentPartiesReference{
 	 * Costruttore con identificativo del luogo di destinazione
 	 * @param deliveryIdRef
 	 */
-	public XmlShipmentPartiesReference(XmlPartyID deliveryIdRef) {
+	public XmlShipmentPartiesReference(final XmlPartyID deliveryIdRef) {
 		super();
 		this.deliveryIdRef = deliveryIdRef;
 	}
@@ -38,7 +41,7 @@ public class XmlShipmentPartiesReference{
 	 * 
 	 * @param deliveryIdRef
 	 */
-	public void setDeliveryIdRef(XmlPartyID deliveryIdRef) {
+	public void setDeliveryIdRef(final XmlPartyID deliveryIdRef) {
 		this.deliveryIdRef = deliveryIdRef;
 	}
 }

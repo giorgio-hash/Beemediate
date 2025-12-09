@@ -279,13 +279,16 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
 	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
 	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i].quantity!=null &amp; ost.itemList[i].quantity.length()&gt;=0);
-	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT | \result==QuantityFieldValue.INTEGER | \result==QuantityFieldValue.FLOAT_WITH_COMMA | \result==QuantityFieldValue.NAN;
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_DOT &lt;==&gt; (\forall int i; 0&lt;=i&lt;ost.itemList.length; StringHandler.isDouble(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.INTEGER ==&gt; (\exists int i; 0&lt;=i&lt;ost.itemList.length; StringHandler.isInteger(ost.itemList[i].quantity) );
+	  @ ensures \result==QuantityFieldValue.NAN ==&gt; (\exists int i; 0&lt;=i&lt;ost.itemList.length; (!StringHandler.isDouble(ost.itemList[i].quantity) &amp; !StringHandler.isInteger(ost.itemList[i].quantity) &amp; !StringHandler.containsChar(ost.itemList[i].quantity,',') ));
+	  @ ensures \result==QuantityFieldValue.FLOAT_WITH_COMMA ==&gt; (\exists int i; 0&lt;=i&lt;ost.itemList.length; StringHandler.containsChar(ost.itemList[i].quantity,',') );
 	  @*/
 //	@CodeBigintMath
 	private /*@ spec_public pure @*/ QuantityFieldValue validateQuantity(/*@ non_null @*/final OrderStructure ost) {
 		
 		
-<span class="fc" id="L288">		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;</span>
+<span class="fc" id="L291">		QuantityFieldValue qfv = QuantityFieldValue.FLOAT_WITH_DOT;</span>
 		
 		/*@ loop_writes \nothing;
 		  @ loop_invariant 0&lt;=\count&lt;=ost.itemList.length;
@@ -293,27 +296,27 @@ public final class OaFValidator implements OaFValidatorIF{
 		  @ loop_invariant (qfv==QuantityFieldValue.FLOAT_WITH_DOT &amp; \count&gt;0) ==&gt; (\forall int i; 0&lt;=i&lt;\count; StringHandler.isDouble(ost.itemList[i].quantity) );
 		  @ loop_invariant (qfv==QuantityFieldValue.INTEGER &amp; \count&gt;0) ==&gt; (\exists int i; 0&lt;=i&lt;\count; StringHandler.isInteger(ost.itemList[i].quantity));
 		  @ loop_invariant qfv==QuantityFieldValue.FLOAT_WITH_COMMA ==&gt; (!StringHandler.isDouble(il.quantity) &amp; StringHandler.containsChar(il.quantity,',') );
-		  @ loop_invariant qfv==QuantityFieldValue.NAN ==&gt; (!StringHandler.isDouble(il.quantity) &amp; !StringHandler.containsChar(il.quantity,',') );
+		  @ loop_invariant qfv==QuantityFieldValue.NAN ==&gt; (!StringHandler.isDouble(il.quantity) &amp; !StringHandler.isInteger(il.quantity) &amp; !StringHandler.containsChar(il.quantity,',') );
 		  @ decreases ost.itemList.length - \count;
 		  @*/
-<span class="fc bfc" id="L299" title="All 2 branches covered.">		for(OrderItem il : ost.getItemList()) {</span>
+<span class="fc bfc" id="L302" title="All 2 branches covered.">		for(OrderItem il : ost.getItemList()) {</span>
 			
-<span class="fc bfc" id="L301" title="All 2 branches covered.">			if(StringHandler.isDouble(il.getQuantity()))</span>
-<span class="fc" id="L302">				continue;</span>
-<span class="fc bfc" id="L303" title="All 2 branches covered.">			else if(StringHandler.isInteger(il.getQuantity())) {</span>
-<span class="fc" id="L304">				qfv = QuantityFieldValue.INTEGER;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">			if(StringHandler.isDouble(il.getQuantity()))</span>
 <span class="fc" id="L305">				continue;</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">			else if(StringHandler.isInteger(il.getQuantity())) {</span>
+<span class="fc" id="L307">				qfv = QuantityFieldValue.INTEGER;</span>
+<span class="fc" id="L308">				continue;</span>
 			} else {
-<span class="fc bfc" id="L307" title="All 2 branches covered.">				if(StringHandler.containsChar(il.getQuantity(),','))</span>
-<span class="fc" id="L308">					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">				if(StringHandler.containsChar(il.getQuantity(),','))</span>
+<span class="fc" id="L311">					qfv = QuantityFieldValue.FLOAT_WITH_COMMA;</span>
 				else
-<span class="fc" id="L310">					qfv = QuantityFieldValue.NAN;</span>
+<span class="fc" id="L313">					qfv = QuantityFieldValue.NAN;</span>
 				
-<span class="fc" id="L312">				return qfv;</span>
+<span class="fc" id="L315">				return qfv;</span>
 			} 
 		}
 		
-<span class="fc" id="L316">		return qfv;</span>
+<span class="fc" id="L319">		return qfv;</span>
 	}
 	
 	/**
@@ -332,9 +335,9 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ ensures !\result &lt;==&gt; (!StringHandler.isDateTime(ost.header.orderDate) | !StringHandler.isDateTime(ost.header.startDate) | !StringHandler.isDateTime(ost.header.endDate));
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDateContent(/*@ non_null@*/final OrderStructure ost) {
-<span class="fc bfc" id="L335" title="All 4 branches covered.">		return ost.getHeader().getStartDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getStartDate())</span>
-<span class="fc bfc" id="L336" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getOrderDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getOrderDate())</span>
-<span class="fc bfc" id="L337" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getEndDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getEndDate());</span>
+<span class="fc bfc" id="L338" title="All 4 branches covered.">		return ost.getHeader().getStartDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getStartDate())</span>
+<span class="fc bfc" id="L339" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getOrderDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getOrderDate())</span>
+<span class="fc bfc" id="L340" title="All 4 branches covered.">				&amp;&amp; ost.getHeader().getEndDate()!=null &amp;&amp; StringHandler.isDateTime(ost.getHeader().getEndDate());</span>
 	}
 	
 	/**
@@ -355,14 +358,51 @@ public final class OaFValidator implements OaFValidatorIF{
 	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
 	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
 	  @ requires ost.header!=null;
-	  @ ensures \result ==&gt; (StringHandler.isDateTime(ost.header.orderDate) &amp; StringHandler.isDateTime(ost.header.startDate) &amp; StringHandler.isDateTime(ost.header.endDate));
-	  @ ensures \result ==&gt; (\forall int i; 1&lt;=i&lt;ost.header.orderDate.length() &amp; i!=4 &amp; i!=7 &amp; i!=10 &amp; i!=13 &amp; i!=16; ost.header.orderDate.charAt(i)&lt;=ost.header.endDate.charAt(i) );
-	  @ ensures \result ==&gt; (\forall int i; 1&lt;=i&lt;ost.header.orderDate.length() &amp; i!=4 &amp; i!=7 &amp; i!=10 &amp; i!=13 &amp; i!=16; ost.header.startDate.charAt(i)==ost.header.endDate.charAt(i) );
+	  @ requires !validateDeliveryDateContent(ost);
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires !StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ ensures !\result;
+	  @	  
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ requires !StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());
+	  @ ensures !\result;
+	  @
+	  @ also public normal_behaviour
+	  @ requires ost.itemList!=null;
+	  @ requires ost.itemList.length&gt;0;
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; ost.itemList[i] != null);
+	  @ requires (\forall int i; 0&lt;=i &amp; i&lt;ost.itemList.length; \typeof(ost.itemList[i]) == \type(OrderItem) );
+	  @ requires \elemtype(\typeof(ost.itemList)) == \type(OrderItem);
+	  @ requires (ost.orderSummary!=null) ==&gt; ost.orderSummary.totalItemNum == ost.itemList.length;
+	  @ requires ost.header!=null;
+	  @ requires validateDeliveryDateContent(ost);
+	  @ requires StringHandler.beforeOrEqualDateTime(ost.header.orderDate, ost.header.endDate);
+	  @ requires StringHandler.equals(ost.header.startDate, ost.header.endDate);
+	  @ ensures \result;
 	  @*/
 	private /*@ spec_public pure @*/ boolean validateDeliveryDate(/*@ non_null @*/final OrderStructure ost) {
-<span class="fc bfc" id="L363" title="All 2 branches covered.">		return validateDeliveryDateContent(ost) </span>
-<span class="fc bfc" id="L364" title="All 2 branches covered.">				&amp;&amp; StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())</span>
-<span class="fc bfc" id="L365" title="All 2 branches covered.">				&amp;&amp; StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">		return validateDeliveryDateContent(ost) </span>
+<span class="fc bfc" id="L404" title="All 2 branches covered.">				&amp;&amp; StringHandler.beforeOrEqualDateTime(ost.getHeader().getOrderDate(), ost.getHeader().getEndDate())</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">				&amp;&amp; StringHandler.equals(ost.getHeader().getStartDate(), ost.getHeader().getEndDate());</span>
 	}
 
 }

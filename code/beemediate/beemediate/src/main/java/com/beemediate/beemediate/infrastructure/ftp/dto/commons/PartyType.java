@@ -15,7 +15,7 @@ public enum PartyType{
 	 * Costruttore privato
 	 * @param type - String 
 	 */
-	PartyType(String type) {
+	PartyType(final String type) {
 		this.type = type;
 	}
 	

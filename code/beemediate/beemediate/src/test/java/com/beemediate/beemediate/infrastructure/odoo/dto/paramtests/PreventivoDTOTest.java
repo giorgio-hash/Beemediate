@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.assertj.core.util.Arrays;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -131,7 +130,6 @@ public class PreventivoDTOTest {
 		final String dateApprove = "date_approve";
 		final String datePlanned = "date_planned";
 		
-		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		
 		PreventivoDTO prev = null;
 		

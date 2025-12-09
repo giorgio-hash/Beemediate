@@ -91,7 +91,7 @@ public class ContattoConsegnaDTOXMLRPCTest {
 
     // 2: cns == null -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenConsegnaIsNull() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenConsegnaIsNull() {
         ConsegnaDTO nullCns = null;
         assertThrows(InconsistentDTOException.class, () -> {
             ContattoConsegnaDTO.fromXMLRPC(odoo, nullCns);
@@ -100,7 +100,7 @@ public class ContattoConsegnaDTOXMLRPCTest {
 
     // 3: cns present but warehouseId num empty -> InconsistentDTOException
     @Test
-    public void testFromXMLRPC_throwsInconsistent_whenWarehouseIdMissing() throws XmlRpcException {
+    public void testFromXMLRPC_throwsInconsistent_whenWarehouseIdMissing() {
         // IdentifierDTO built from empty array to simulate missing num (getNum() -> Optional.empty())
         IdentifierDTO emptyIdDto = new IdentifierDTO(new Object[] {null, null}); 
         when(cns.getWarehouseId()).thenReturn(emptyIdDto);

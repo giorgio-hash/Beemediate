@@ -51,7 +51,7 @@ public class XmlProductPriceFix {
 	 * 
 	 * @param priceAmount - float
 	 */
-	public void setPriceAmount(float priceAmount) {
+	public void setPriceAmount(final float priceAmount) {
 		this.priceAmount = priceAmount;
 	}
 
@@ -67,7 +67,7 @@ public class XmlProductPriceFix {
 	 * 
 	 * @param priceQuantity int
 	 */
-	public void setPriceQuantity(int priceQuantity) {
+	public void setPriceQuantity(final int priceQuantity) {
 		this.priceQuantity = priceQuantity;
 	}
 
@@ -83,7 +83,7 @@ public class XmlProductPriceFix {
 	 * 
 	 * @param taxDetailsFix - XmlTaxDetailsFix
 	 */
-	public void setTaxDetailsFix(XmlTaxDetailsFix taxDetailsFix) {
+	public void setTaxDetailsFix(final XmlTaxDetailsFix taxDetailsFix) {
 		this.taxDetailsFix = taxDetailsFix;
 	}
 
@@ -99,7 +99,7 @@ public class XmlProductPriceFix {
 	 * 
 	 * @param priceBaseFix - XmlPriceBaseFix
 	 */
-	public void setPriceBaseFix(XmlPriceBaseFix priceBaseFix) {
+	public void setPriceBaseFix(final XmlPriceBaseFix priceBaseFix) {
 		this.priceBaseFix = priceBaseFix;
 	}
 
