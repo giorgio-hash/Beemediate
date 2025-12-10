@@ -1,4 +1,6 @@
 # Beemediate
+![Badge Versione](https://img.shields.io/badge/version-1.0.0-green)
+
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
 Technical Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
