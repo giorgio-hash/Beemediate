@@ -1,9 +1,12 @@
+![Badge Versione](https://img.shields.io/badge/version-1.0.0-green) [![Snyk Vulnerabilities](https://snyk.io/test/github/giorgio-hash/Beemediate/badge.svg)](https://snyk.io/test/github/giorgio-hash/Beemediate.git) ![JaCoCo Coverage](https://img.shields.io/badge/JaCoCo_Coverage-97%25-brightgreen?style=for-the-badge)
+
 # Beemediate
-![Badge Versione](https://img.shields.io/badge/version-1.0.0-green)
 
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
-Technical Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
+Italian technical documentation is available [here](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
+
+Code and testing Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
 - See [Javadoc for code](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
 - See [Javadoc for testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
 - See [Project Reports](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) from PMD, CPD, SpotBugs and JaCoCo.
@@ -76,4 +79,11 @@ ENDLOCAL
 Esempio di disposizione dei vari file:
 <p align="center">
 <img src="./docs/imgs/esempio.jpg" alt="Descrizione immagine" width="600">
+</p>
+
+## CI Workflow
+I dettagli del Workflow realizzato sono disponibili sulla [documentazione tecnica](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
+
+<p align="center">
+<img src="./docs/imgs/workflow.png" alt="Descrizione immagine">
 </p>
