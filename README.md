@@ -87,3 +87,10 @@ I dettagli del Workflow realizzato sono disponibili sulla [documentazione tecnic
 <p align="center">
 <img src="./docs/imgs/workflow.png" alt="Descrizione immagine">
 </p>
+
+## Project Work
+Il progetto è stato svolto per seguire il caso studio di un sistema di integrazione tra sistema cliente e fornitore. 
+
+Clicca l'immagine per ottenere lo slideshow.
+
+[![slideshow](/docs/project-work.png)]([./docs/presentazione_Beemediate.pdf](https://github.com/giorgio-hash/Beemediate/blob/main/docs/presentazione_Beemediate.pdf))
