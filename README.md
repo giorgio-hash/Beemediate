@@ -89,7 +89,7 @@ I dettagli del Workflow realizzato sono disponibili sulla [documentazione tecnic
 </p>
 
 ## Project Work
-Il progetto è stato svolto per seguire il caso studio di un sistema di integrazione tra sistema cliente e fornitore. 
+Il progetto è stato svolto per seguire il caso studio di un integrazione dati tra sistemi cliente e fornitore eterogenei. 
 
 Clicca l'immagine per ottenere lo slideshow.
 
