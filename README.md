@@ -93,4 +93,4 @@ Il progetto è stato svolto per seguire il caso studio di un sistema di integraz
 
 Clicca l'immagine per ottenere lo slideshow.
 
-[![slideshow](/docs/project-work.png)]([./docs/presentazione_Beemediate.pdf](https://github.com/giorgio-hash/Beemediate/blob/main/docs/presentazione_Beemediate.pdf)
+![![slideshow](/docs/project-work.png)](https://github.com/giorgio-hash/Beemediate/blob/main/docs/presentazione_Beemediate.pdf)
