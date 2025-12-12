@@ -1,9 +1,102 @@
+![Badge Versione](https://img.shields.io/badge/version-1.0.0-green) [![Snyk Vulnerabilities](https://snyk.io/test/github/giorgio-hash/Beemediate/badge.svg)](https://snyk.io/test/github/giorgio-hash/Beemediate.git) ![JaCoCo Coverage](https://img.shields.io/badge/JaCoCo_Coverage-97%25-brightgreen?style=for-the-badge)
+
 # Beemediate
-![Badge Versione](https://img.shields.io/badge/version-1.0.0-green)
 
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
-Technical Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
-- See [Javadoc for code](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
-- See [Javadoc for testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
-- See [Project Reports](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) from PMD, CPD, SpotBugs and JaCoCo.
+Manuale utente disponibile [qui](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Beemediate%20Manuale%20Utente.pdf).
+
+Documentazione tecnica disponibile [qui](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
+
+Documentazione relativa a codice, test e reports di analisi statica sono disponibili su Github Pages. [Leggi di più](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
+- Vedi [Javadoc per il codice](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
+- Vedi [Javadoc per il testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
+- Vedi [Report di analisi statica e copertura](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) da PMD, CPD, SpotBugs e JaCoCo.
+
+## Overview
+Beemediate è un software che permette di convertire gli Ordini di Acquisto di Odoo in strutture dati di formato XML-OpenTrans. Esso funziona tramite le Odoo External Api. Appena trova un ordine pendente per il fornitore designato, Beemediate estrae dai model di Odoo i dati necessari per generare la struttura XML-OpenTrans.
+Beemediate è dotato di una Web UI intuitiva per l'operatore.
+<p align="center">
+<img src="./docs/imgs/Carica_ordini_Risposta.png" alt="Descrizione immagine" width="300">
+</p>
+Beemediate gestisce le comunicazioni FTP tra fornitore XML-OpenTrans e cliente di un gestionale Odoo. Appena trova una conferma d'ordine, manda una notifica al CRM attraverso messaggi sul workflow dell'Ordine di Acquisto.
+<p align="center">
+<img src="./docs/imgs/aggiornamento_odoo_confirmations.png" alt="Descrizione immagine" width="300">
+</p>
+<p align="center">
+<img src="./docs/imgs/messaggio_sul_workflow.png" alt="Descrizione immagine" width="600">
+</p>
+
+## Project Work
+Il progetto è stato svolto per seguire il caso studio di un integrazione dati tra sistemi cliente e fornitore eterogenei. Beemediate ha svolto un ruolo chiave nel sistema di e-procurement con protocollo basato su trasferimento file tra cliente Odoo e fornitore XML-OpenTrans.
+<p align="center">
+<img src="./docs/imgs/odoo.drawio.png" alt="Descrizione immagine">
+</p>
+
+## Setup
+E' possibile modificare le impostazioni del programma interagendo via riga di comando, con un'impostazione tipo la seguente in cmd (modificare a favore del proprio caso specifico):
+```cmd
+@echo off
+SETLOCAL
+
+rem Inizio spazio variabili
+set "jarfile=beemediate-0.0.1-SNAPSHOT.jar"
+set "host=https://edu-sito.odoo.com"
+set "db=sito-db"
+set "key=Un4Chiave4C4s0"
+set "username=miamail@esempio.it"
+set "inbound=.\inbound"
+set "outbound=.\outbound"
+set "archiv=.\outbound\archiv"
+set "datasource=.\data\MasterData_IT.XLSX"
+rem Fine spazio variabili
+
+set "ARGS="
+
+rem Check each variable: defined and not empty string
+if defined host (
+    if not "%host%"=="" set "ARGS=%ARGS% -Dapi.host=%host%"
+)
+if defined db (
+    if not "%db%"=="" set "ARGS=%ARGS% -Dapi.db=%db%"
+)
+if defined key (
+    if not "%key%"=="" set "ARGS=%ARGS% -Dapi.key=%key%"
+)
+if defined username (
+    if not "%username%"=="" set "ARGS=%ARGS% -Dapi.username=%username%"
+)
+if defined inbound (
+    if not "%inbound%"=="" set "ARGS=%ARGS% -Dftp.inbound=%inbound%"
+)
+if defined outbound (
+    if not "%outbound%"=="" set "ARGS=%ARGS% -Dftp.outbound=%outbound%"
+)
+if defined archiv (
+    if not "%archiv%"=="" set "ARGS=%ARGS% -Dftp.archived=%archiv%"
+)
+
+if defined datasource (
+    if not "%datasource%"=="" set "ARGS=%ARGS% -Ddatasource.path=file:%datasource%"
+)
+
+rem Esegui java (usa %jarfile% su Windows)
+java -jar %ARGS% "%jarfile%"
+
+ENDLOCAL
+```
+Esempio di disposizione dei vari file:
+<p align="center">
+<img src="./docs/imgs/esempio.jpg" alt="Descrizione immagine" width="600">
+</p>
+
+## CI Workflow
+I dettagli del Workflow realizzato sono disponibili sulla [documentazione tecnica](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
+<p align="center">
+<img src="./docs/imgs/workflow.png" alt="Descrizione immagine">
+</p>
+
+## Slides del Project Work
+Clicca l'immagine per ottenere lo slideshow.
+
+[![slideshow](/docs/project-work.png)](https://github.com/giorgio-hash/Beemediate/blob/main/docs/presentazione_Beemediate.pdf)
