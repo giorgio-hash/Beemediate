@@ -4,6 +4,8 @@
 
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
+Italian Manual documentation is available [here](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Beemediate%20Manuale%20Utente.pdf).
+
 Italian technical documentation is available [here](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
 
 Code and testing Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
@@ -13,6 +15,7 @@ Code and testing Documentation, with reports included, is hosted on Github Pages
 
 ## Overview
 Beemediate è un software che permette di convertire gli Ordini di Acquisto di Odoo in strutture dati di formato XML-OpenTrans. Esso funziona tramite le Odoo External Api. Appena trova un ordine pendente per il fornitore designato, Beemediate estrae dai model di Odoo i dati necessari per generare la struttura XML-OpenTrans.
+Beemediate è dotato di una Web UI intuitiva per l'operatore.
 <p align="center">
 <img src="./docs/imgs/Carica_ordini_Risposta.png" alt="Descrizione immagine" width="300">
 </p>
@@ -22,6 +25,12 @@ Beemediate gestisce le comunicazioni FTP tra fornitore XML-OpenTrans e cliente d
 </p>
 <p align="center">
 <img src="./docs/imgs/messaggio_sul_workflow.png" alt="Descrizione immagine" width="600">
+</p>
+
+## Project Work
+Il progetto è stato svolto per seguire il caso studio di un integrazione dati tra sistemi cliente e fornitore eterogenei. Beemediate ha svolto un ruolo chiave nel sistema di e-procurement con protocollo basato su trasferimento file tra cliente Odoo e fornitore XML-OpenTrans.
+<p align="center">
+<img src="./docs/imgs/odoo.drawio.png" alt="Descrizione immagine">
 </p>
 
 ## Setup
@@ -83,14 +92,11 @@ Esempio di disposizione dei vari file:
 
 ## CI Workflow
 I dettagli del Workflow realizzato sono disponibili sulla [documentazione tecnica](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
-
 <p align="center">
 <img src="./docs/imgs/workflow.png" alt="Descrizione immagine">
 </p>
 
-## Project Work
-Il progetto è stato svolto per seguire il caso studio di un integrazione dati tra sistemi cliente e fornitore eterogenei. 
-
+## Slides del Project Work
 Clicca l'immagine per ottenere lo slideshow.
 
 [![slideshow](/docs/project-work.png)](https://github.com/giorgio-hash/Beemediate/blob/main/docs/presentazione_Beemediate.pdf)
