@@ -39,41 +39,41 @@ public class FornitoreDTO{
 	public static FornitoreDTO fromXMLRPC(final OdooApiConfig odoo) throws EmptyFetchException, XmlRpcException {
 		final Object[] ids;
 		final Object[] res;
-<span class="nc" id="L42">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L42">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
 		//cerca GEALAN
-<span class="nc" id="L45">		requestInfo.put(&quot;limit&quot;, 1);</span>
-<span class="nc" id="L46">		ids = odoo.searchFromModel(OdooApiConfig.RES_PARTNER, requestInfo, Arrays.asList(&quot;name&quot;,&quot;=&quot;,&quot;GEALAN&quot;));</span>
+<span class="fc" id="L45">		requestInfo.put(&quot;limit&quot;, 1);</span>
+<span class="fc" id="L46">		ids = odoo.searchFromModel(OdooApiConfig.RES_PARTNER, requestInfo, Arrays.asList(&quot;name&quot;,&quot;=&quot;,&quot;GEALAN&quot;));</span>
 		
-<span class="nc bnc" id="L48" title="All 2 branches missed.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Non trovo GEALAN&quot;);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		if(ids.length == 0) throw new EmptyFetchException (&quot;Non trovo GEALAN&quot;);</span>
 		
 		//estrai GEALAN
-<span class="nc" id="L51">		requestInfo.clear();</span>
-<span class="nc" id="L52">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;name&quot;,&quot;ref&quot;));</span>
-<span class="nc" id="L53">		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, ids);</span>
+<span class="fc" id="L51">		requestInfo.clear();</span>
+<span class="fc" id="L52">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;name&quot;,&quot;ref&quot;));</span>
+<span class="fc" id="L53">		res = odoo.readFromModel(OdooApiConfig.RES_PARTNER, requestInfo, ids);</span>
 		
-<span class="nc bnc" id="L55" title="All 2 branches missed.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato GEALAN, ma non riesco ad estrarlo.&quot;);</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		if(res.length == 0) throw new EmptyFetchException (&quot;Trovato GEALAN, ma non riesco ad estrarlo.&quot;);</span>
 		
 		
-<span class="nc" id="L58">		return new FornitoreDTO( (HashMap&lt;String, Object&gt;) res[0] );</span>
+<span class="fc" id="L58">		return new FornitoreDTO( (HashMap&lt;String, Object&gt;) res[0] );</span>
 	}
 	
 	/**
 	 * Costruttore
 	 * @param map - Map contente una tupla del model &lt;i&gt;res.partner&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="nc" id="L65">	public FornitoreDTO(final Map&lt;String, Object&gt; map) {</span>
-<span class="nc" id="L66">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
-<span class="nc" id="L67">		codiceAzienda = AttributeMapper.stringify(map.get(&quot;ref&quot;));</span>
-<span class="nc" id="L68">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
-<span class="nc" id="L69">	}</span>
+<span class="fc" id="L65">	public FornitoreDTO(final Map&lt;String, Object&gt; map) {</span>
+<span class="fc" id="L66">		name = AttributeMapper.stringify(map.get(&quot;name&quot;));</span>
+<span class="fc" id="L67">		codiceAzienda = AttributeMapper.stringify(map.get(&quot;ref&quot;));</span>
+<span class="fc" id="L68">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+<span class="fc" id="L69">	}</span>
 	
 	/**
 	 * 
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getName() {
-<span class="nc" id="L76">		return name;</span>
+<span class="fc" id="L76">		return name;</span>
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class FornitoreDTO{
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="nc" id="L84">		return id;</span>
+<span class="fc" id="L84">		return id;</span>
 	}
 	
 	/**
@@ -89,12 +89,12 @@ public class FornitoreDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt;  getCodiceAzienda() {
-<span class="nc" id="L92">		return codiceAzienda;</span>
+<span class="fc" id="L92">		return codiceAzienda;</span>
 	}
 	
 	@Override
 	public String toString() {
-<span class="nc" id="L97">		return &quot;FornitoreDTO [name=&quot; + name + &quot;, codiceAzienda=&quot; + codiceAzienda + &quot;, id=&quot; + id</span>
+<span class="fc" id="L97">		return &quot;FornitoreDTO [name=&quot; + name + &quot;, codiceAzienda=&quot; + codiceAzienda + &quot;, id=&quot; + id</span>
 				+ &quot;]&quot;;
 	}
 	

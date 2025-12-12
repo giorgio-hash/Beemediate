@@ -38,14 +38,14 @@ public class BoundedBuffer {
 	//@ ensures (\forall int i; size&lt;=i&lt;ordini.length; ordini[i]==null);
 	//@ pure
 //	@CodeBigintMath
-<span class="nc" id="L41">	public BoundedBuffer (final int n) {</span>
+<span class="fc" id="L41">	public BoundedBuffer (final int n) {</span>
 		
-<span class="nc bnc" id="L43" title="All 2 branches missed.">		if(n&lt;=0)</span>
-<span class="nc" id="L44">			throw new IllegalArgumentException(&quot;capacity should be &gt;=1&quot;);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">		if(n&lt;=0)</span>
+<span class="fc" id="L44">			throw new IllegalArgumentException(&quot;capacity should be &gt;=1&quot;);</span>
 		
-<span class="nc" id="L46">		ordini = new Order[n];</span>
-<span class="nc" id="L47">		size = 0;</span>
-<span class="nc" id="L48">	}</span>
+<span class="fc" id="L46">		ordini = new Order[n];</span>
+<span class="fc" id="L47">		size = 0;</span>
+<span class="fc" id="L48">	}</span>
 	
 	/**
 	 * Restituisce elemento alla posizione &lt;tt&gt;i&lt;/tt&gt;.
@@ -61,9 +61,9 @@ public class BoundedBuffer {
 	  @*/
 //	@CodeBigintMath
 	public /*@ pure nullable */ Order get(final int i) {
-<span class="nc bnc" id="L64" title="All 4 branches missed.">		if(0&lt;=i &amp;&amp; i&lt;size)</span>
-<span class="nc" id="L65">			return ordini[i];</span>
-<span class="nc" id="L66">		return null;</span>
+<span class="fc bfc" id="L64" title="All 4 branches covered.">		if(0&lt;=i &amp;&amp; i&lt;size)</span>
+<span class="fc" id="L65">			return ordini[i];</span>
+<span class="fc" id="L66">		return null;</span>
 	}
 
 	/**
@@ -83,11 +83,11 @@ public class BoundedBuffer {
 	  @ ensures size == \old(size)+1 ==&gt; \typeof(ordini[\old(size)]) == \type(Order);
 	  @*/
 	public void push(final Order x) {
-<span class="nc bnc" id="L86" title="All 2 branches missed.">		if(size&lt;ordini.length) {</span>
-<span class="nc" id="L87">			ordini[size] = x;</span>
-<span class="nc" id="L88">			size++;</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		if(size&lt;ordini.length) {</span>
+<span class="fc" id="L87">			ordini[size] = x;</span>
+<span class="fc" id="L88">			size++;</span>
 		}
-<span class="nc" id="L90">	}</span>
+<span class="fc" id="L90">	}</span>
 	
 	/**
 	 * Se il buffer non è vuoto, restituisce un elemento Order.
@@ -109,14 +109,14 @@ public class BoundedBuffer {
 
 //	@CodeBigintMath
 	public /*@ nullable */ Order pop() {
-<span class="nc" id="L112">		/*@ nullable */ Order res=null;</span>
+<span class="fc" id="L112">		/*@ nullable */ Order res=null;</span>
 		
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		if(size&gt;0) {</span>
-<span class="nc" id="L115">			size--;</span>
-<span class="nc" id="L116">			res = ordini[size]; </span>
-<span class="nc" id="L117">			ordini[size] = null;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">		if(size&gt;0) {</span>
+<span class="fc" id="L115">			size--;</span>
+<span class="fc" id="L116">			res = ordini[size]; </span>
+<span class="fc" id="L117">			ordini[size] = null;</span>
 		} 
-<span class="nc" id="L119">		return res;</span>
+<span class="fc" id="L119">		return res;</span>
 	}
 	
 	/**
@@ -132,12 +132,12 @@ public class BoundedBuffer {
 
 		//@ loop_invariant 0&lt;=size&lt;=ordini.length;
 		//@ loop_invariant (\forall int i; size&lt;=i&lt;ordini.length; ordini[i]==null);
-<span class="nc bnc" id="L135" title="All 2 branches missed.">		while(size&gt;0)</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">		while(size&gt;0)</span>
 		{
-<span class="nc" id="L137">			size--;</span>
-<span class="nc" id="L138">			ordini[size] = null;</span>
+<span class="fc" id="L137">			size--;</span>
+<span class="fc" id="L138">			ordini[size] = null;</span>
 		}
-<span class="nc" id="L140">	}</span>
+<span class="fc" id="L140">	}</span>
 	
 	/**
 	 * 
@@ -148,7 +148,7 @@ public class BoundedBuffer {
 	  @ ensures \not_modified(size);
 	  @*/
 	public /*@ pure @*/ int getSize() {
-<span class="nc" id="L151">		return size;</span>
+<span class="fc" id="L151">		return size;</span>
 	}
 	
 	/**
@@ -159,7 +159,7 @@ public class BoundedBuffer {
 	  @ ensures \result == ordini.length;
 	  @*/
 	public /*@ pure @*/ int capacity() {
-<span class="nc" id="L162">		return ordini.length;</span>
+<span class="fc" id="L162">		return ordini.length;</span>
 	}
 	
 	/**
@@ -170,7 +170,7 @@ public class BoundedBuffer {
 	  @ ensures \result | size&lt;ordini.length;
 	  @*/
 	public /*@ pure @*/ boolean isFull() {
-<span class="nc bnc" id="L173" title="All 2 branches missed.">		return ordini.length == size;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">		return ordini.length == size;</span>
 	}
 	
 	/**
@@ -181,7 +181,7 @@ public class BoundedBuffer {
 	  @ ensures \result | size&gt;0;
 	  @*/
 	public /*@ pure @*/ boolean isEmpty() {
-<span class="nc bnc" id="L184" title="All 2 branches missed.">		return size==0;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">		return size==0;</span>
 	}
 
 }

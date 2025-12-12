@@ -3,22 +3,22 @@
 //import org.jmlspecs.annotation.SkipEsc;
 
 /***Parte di OrderStructure. Contiene le informazioni relative ad un singolo articolo nell'ordine a fornitore. Ogni informazione è in formato String.*/
-<span class="nc" id="L6">public class OrderItem {</span>
+<span class="fc" id="L6">public class OrderItem {</span>
 	
 	/***Numero di linea dell'articolo*/
-<span class="nc" id="L9">	private /*@ spec_public @*/ String lineItemID = &quot;&quot;;</span>
+<span class="fc" id="L9">	private /*@ spec_public @*/ String lineItemID = &quot;&quot;;</span>
 	/***Numero con la quantità*/
-<span class="nc" id="L11">	private /*@ spec_public @*/ String quantity = &quot;&quot;;</span>
+<span class="fc" id="L11">	private /*@ spec_public @*/ String quantity = &quot;&quot;;</span>
 	/***Unità di misura per la quantità*/
-<span class="nc" id="L13">	private /*@ spec_public @*/ String orderUnit = &quot;&quot;;</span>
+<span class="fc" id="L13">	private /*@ spec_public @*/ String orderUnit = &quot;&quot;;</span>
 	
 	//order_item.product_id
 	/***identificativo del prodotto lato fornitore*/
-<span class="nc" id="L17">	private /*@ spec_public @*/ String supplierID = &quot;&quot;;</span>
+<span class="fc" id="L17">	private /*@ spec_public @*/ String supplierID = &quot;&quot;;</span>
 	/***identificativo del prodotto lato  cliente*/
-<span class="nc" id="L19">	private /*@ spec_public @*/ String buyerID = &quot;&quot;;</span>
+<span class="fc" id="L19">	private /*@ spec_public @*/ String buyerID = &quot;&quot;;</span>
 	/***descrizione aggiuntiva*/
-<span class="nc" id="L21">	private /*@ spec_public @*/ String descriptionShort = &quot;&quot;;</span>
+<span class="fc" id="L21">	private /*@ spec_public @*/ String descriptionShort = &quot;&quot;;</span>
 	
 	
 	/**
@@ -28,7 +28,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==lineItemID;
 	public /*@ pure @*/ String getLineItemID() {
-<span class="nc" id="L31">		return lineItemID;</span>
+<span class="fc" id="L31">		return lineItemID;</span>
 	}
 	
 	/**
@@ -38,8 +38,8 @@
 	//@ public normal_behaviour
 	//@ ensures this.lineItemID!=null;
 	public void setLineItemID(/*@ non_null @*/ final String lineItemID) {
-<span class="nc" id="L41">		this.lineItemID = lineItemID;</span>
-<span class="nc" id="L42">	}</span>
+<span class="fc" id="L41">		this.lineItemID = lineItemID;</span>
+<span class="fc" id="L42">	}</span>
 	
 	/**
 	 * 
@@ -48,7 +48,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==quantity;
 	public /*@ pure @*/ String getQuantity() {
-<span class="nc" id="L51">		return quantity;</span>
+<span class="fc" id="L51">		return quantity;</span>
 	}
 	
 	/**
@@ -58,8 +58,8 @@
 	//@ public normal_behaviour
 	//@ ensures this.quantity!=null;
 	public void setQuantity(/*@ non_null @*/final String quantity) {
-<span class="nc" id="L61">		this.quantity = quantity;</span>
-<span class="nc" id="L62">	}</span>
+<span class="fc" id="L61">		this.quantity = quantity;</span>
+<span class="fc" id="L62">	}</span>
 	
 	/**
 	 * 
@@ -68,7 +68,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==orderUnit;
 	public /*@ pure @*/ String getOrderUnit() {
-<span class="nc" id="L71">		return orderUnit;</span>
+<span class="fc" id="L71">		return orderUnit;</span>
 	}
 	
 	/**
@@ -78,8 +78,8 @@
 	//@ public normal_behaviour
 	//@ ensures this.orderUnit!=null;
 	public void setOrderUnit(/*@ non_null @*/final String orderUnit) {
-<span class="nc" id="L81">		this.orderUnit = orderUnit;</span>
-<span class="nc" id="L82">	}</span>
+<span class="fc" id="L81">		this.orderUnit = orderUnit;</span>
+<span class="fc" id="L82">	}</span>
 	
 	/**
 	 * 
@@ -88,7 +88,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==supplierID;
 	public /*@ pure @*/ String getSupplierID() {
-<span class="nc" id="L91">		return supplierID;</span>
+<span class="fc" id="L91">		return supplierID;</span>
 	}
 	
 	/**
@@ -98,7 +98,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==buyerID;
 	public String getBuyerID() {
-<span class="nc" id="L101">		return buyerID;</span>
+<span class="fc" id="L101">		return buyerID;</span>
 	}
 	
 	/**
@@ -108,7 +108,7 @@
 	//@ public normal_behaviour
 	//@ ensures \result==descriptionShort;
 	public /*@ pure @*/ String getDescriptionShort() {
-<span class="nc" id="L111">		return descriptionShort;</span>
+<span class="fc" id="L111">		return descriptionShort;</span>
 	}
 	
 	/**
@@ -118,8 +118,8 @@
 	//@ public normal_behaviour
 	//@ ensures this.supplierID!=null;
 	public void setSupplierID(/*@ non_null @*/final String supplierID) {
-<span class="nc" id="L121">		this.supplierID = supplierID;</span>
-<span class="nc" id="L122">	}</span>
+<span class="fc" id="L121">		this.supplierID = supplierID;</span>
+<span class="fc" id="L122">	}</span>
 	
 	/**
 	 * 
@@ -128,8 +128,8 @@
 	//@ public normal_behaviour
 	//@ ensures this.buyerID!=null;
 	public void setBuyerID(/*@ non_null @*/final String buyerID) {
-<span class="nc" id="L131">		this.buyerID = buyerID;</span>
-<span class="nc" id="L132">	}</span>
+<span class="fc" id="L131">		this.buyerID = buyerID;</span>
+<span class="fc" id="L132">	}</span>
 	
 	/**
 	 * 
@@ -138,14 +138,14 @@
 	//@ public normal_behaviour
 	//@ ensures this.descriptionShort!=null;
 	public void setDescriptionShort(/*@ non_null @*/final String descriptionShort) {
-<span class="nc" id="L141">		this.descriptionShort = descriptionShort;</span>
-<span class="nc" id="L142">	}</span>
+<span class="fc" id="L141">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L142">	}</span>
 	
 //	@SkipEsc
 	@Override
 	public String toString() {
-<span class="nc" id="L147">		return &quot;OrderItem [lineItemID=&quot; + lineItemID + &quot;, quantity=&quot; + quantity + &quot;, orderUnit=&quot; + orderUnit</span>
-<span class="nc" id="L148">				+ &quot;, supplierID=&quot; + supplierID + &quot;, buyerID=&quot; + buyerID + &quot;, descriptionShort=&quot; + descriptionShort</span>
+<span class="fc" id="L147">		return &quot;OrderItem [lineItemID=&quot; + lineItemID + &quot;, quantity=&quot; + quantity + &quot;, orderUnit=&quot; + orderUnit</span>
+				+ &quot;, supplierID=&quot; + supplierID + &quot;, buyerID=&quot; + buyerID + &quot;, descriptionShort=&quot; + descriptionShort
 				+ &quot;]&quot;;
 	}
 	

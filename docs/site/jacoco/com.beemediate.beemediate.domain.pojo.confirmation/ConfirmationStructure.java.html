@@ -90,7 +90,7 @@ public class ConfirmationStructure {
 	 * Costruttore vuoto.
 	 */
 	//@SkipEsc
-<span class="nc" id="L93">	public ConfirmationStructure() {/*empty constructor*/}</span>
+<span class="fc" id="L93">	public ConfirmationStructure() {/*empty constructor*/}</span>
 
 	/**
 	 * Costruttore di copia.
@@ -115,21 +115,21 @@ public class ConfirmationStructure {
 	  @ ensures this.currency == copy.currency;
 	@*/
 	public ConfirmationStructure(final ConfirmationStructure copy) {
-<span class="nc" id="L118">		super();</span>
-<span class="nc" id="L119">		this.orderResponseDate =  copy.orderResponseDate;</span>
-<span class="nc" id="L120">		this.deliveryDate = copy.deliveryDate;</span>
-<span class="nc" id="L121">		this.orderId = copy.orderId;</span>
-<span class="nc" id="L122">		this.orderIdGealan = copy.orderIdGealan;</span>
-<span class="nc" id="L123">		this.addressName = copy.addressName;</span>
-<span class="nc" id="L124">		this.addressStreet = copy.addressStreet;</span>
-<span class="nc" id="L125">		this.addressZip = copy.addressZip;</span>
-<span class="nc" id="L126">		this.addressCity = copy.addressCity;</span>
-<span class="nc" id="L127">		this.addressCountry = copy.addressCountry;</span>
-<span class="nc" id="L128">		this.addressCountryCoded = copy.addressCountryCoded;</span>
-<span class="nc" id="L129">		this.totalItemNum = copy.totalItemNum;</span>
-<span class="nc" id="L130">		this.totalAmount = copy.totalAmount;</span>
-<span class="nc" id="L131">		this.currency = copy.currency;</span>
-<span class="nc" id="L132">	}</span>
+<span class="fc" id="L118">		super();</span>
+<span class="fc" id="L119">		this.orderResponseDate =  copy.orderResponseDate;</span>
+<span class="fc" id="L120">		this.deliveryDate = copy.deliveryDate;</span>
+<span class="fc" id="L121">		this.orderId = copy.orderId;</span>
+<span class="fc" id="L122">		this.orderIdGealan = copy.orderIdGealan;</span>
+<span class="fc" id="L123">		this.addressName = copy.addressName;</span>
+<span class="fc" id="L124">		this.addressStreet = copy.addressStreet;</span>
+<span class="fc" id="L125">		this.addressZip = copy.addressZip;</span>
+<span class="fc" id="L126">		this.addressCity = copy.addressCity;</span>
+<span class="fc" id="L127">		this.addressCountry = copy.addressCountry;</span>
+<span class="fc" id="L128">		this.addressCountryCoded = copy.addressCountryCoded;</span>
+<span class="fc" id="L129">		this.totalItemNum = copy.totalItemNum;</span>
+<span class="fc" id="L130">		this.totalAmount = copy.totalAmount;</span>
+<span class="fc" id="L131">		this.currency = copy.currency;</span>
+<span class="fc" id="L132">	}</span>
 	
 	/**
 	 * Imposta la data/ora di risposta dell'ordine.
@@ -138,8 +138,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.orderResponseDate == orderResponseDate; @*/
 	public void setOrderResponseDate(String orderResponseDate) {
-<span class="nc" id="L141">		this.orderResponseDate =  orderResponseDate;</span>
-<span class="nc" id="L142">	}</span>
+<span class="fc" id="L141">		this.orderResponseDate =  orderResponseDate;</span>
+<span class="fc" id="L142">	}</span>
 
 	/**
 	 * Imposta la data di consegna prevista.
@@ -148,8 +148,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.deliveryDate == deliveryDate; @*/
 	public void setDeliveryDate(final String deliveryDate) {
-<span class="nc" id="L151">		this.deliveryDate = deliveryDate;</span>
-<span class="nc" id="L152">	}</span>
+<span class="fc" id="L151">		this.deliveryDate = deliveryDate;</span>
+<span class="fc" id="L152">	}</span>
 
 	/**
 	 * Imposta l'identificativo dell'ordine.
@@ -158,8 +158,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.orderId == orderId; @*/
 	public void setOrderId(final String orderId) {
-<span class="nc" id="L161">		this.orderId = orderId;</span>
-<span class="nc" id="L162">	}</span>
+<span class="fc" id="L161">		this.orderId = orderId;</span>
+<span class="fc" id="L162">	}</span>
 
 	/**
 	 * Imposta l'identificativo dell'ordine nel sistema Gealan.
@@ -168,8 +168,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.orderIdGealan == orderIdGealan; @*/
 	public void setOrderIdGealan(final String orderIdGealan) {
-<span class="nc" id="L171">		this.orderIdGealan = orderIdGealan;</span>
-<span class="nc" id="L172">	}</span>
+<span class="fc" id="L171">		this.orderIdGealan = orderIdGealan;</span>
+<span class="fc" id="L172">	}</span>
 
 	/**
 	 * Imposta il nome associato all'indirizzo di consegna.
@@ -178,8 +178,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressName == addressName; @*/
 	public void setAddressName(final String addressName) {
-<span class="nc" id="L181">		this.addressName = addressName;</span>
-<span class="nc" id="L182">	}</span>
+<span class="fc" id="L181">		this.addressName = addressName;</span>
+<span class="fc" id="L182">	}</span>
 
 	/**
 	 * Imposta la via/strada dell'indirizzo di consegna.
@@ -188,8 +188,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressStreet == addressStreet; @*/
 	public void setAddressStreet(final String addressStreet) {
-<span class="nc" id="L191">		this.addressStreet = addressStreet;</span>
-<span class="nc" id="L192">	}</span>
+<span class="fc" id="L191">		this.addressStreet = addressStreet;</span>
+<span class="fc" id="L192">	}</span>
 
 	/**
 	 * Imposta il CAP / codice postale.
@@ -198,8 +198,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressZip == addressZip; @*/
 	public void setAddressZip(final String addressZip) {
-<span class="nc" id="L201">		this.addressZip = addressZip;</span>
-<span class="nc" id="L202">	}</span>
+<span class="fc" id="L201">		this.addressZip = addressZip;</span>
+<span class="fc" id="L202">	}</span>
 
 	/**
 	 * Imposta la città dell'indirizzo di consegna.
@@ -208,8 +208,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressCity == addressCity; @*/
 	public void setAddressCity(final String addressCity) {
-<span class="nc" id="L211">		this.addressCity = addressCity;</span>
-<span class="nc" id="L212">	}</span>
+<span class="fc" id="L211">		this.addressCity = addressCity;</span>
+<span class="fc" id="L212">	}</span>
 
 	/**
 	 * Imposta il paese dell'indirizzo di consegna (nome completo).
@@ -218,8 +218,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressCountry == addressCountry; @*/
 	public void setAddressCountry(final String addressCountry) {
-<span class="nc" id="L221">		this.addressCountry = addressCountry;</span>
-<span class="nc" id="L222">	}</span>
+<span class="fc" id="L221">		this.addressCountry = addressCountry;</span>
+<span class="fc" id="L222">	}</span>
 
 	/**
 	 * Imposta il codice del paese dell'indirizzo di consegna (es. ISO).
@@ -228,8 +228,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.addressCountryCoded == addressCountryCoded; @*/
 	public void setAddressCountryCoded(final String addressCountryCoded) {
-<span class="nc" id="L231">		this.addressCountryCoded = addressCountryCoded;</span>
-<span class="nc" id="L232">	}</span>
+<span class="fc" id="L231">		this.addressCountryCoded = addressCountryCoded;</span>
+<span class="fc" id="L232">	}</span>
 
 	/**
 	 * Imposta il numero totale di articoli nell'ordine.
@@ -238,8 +238,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.totalItemNum == totalItemNum; @*/
 	public void setTotalItemNum(final int totalItemNum) {
-<span class="nc" id="L241">		this.totalItemNum = totalItemNum;</span>
-<span class="nc" id="L242">	}</span>
+<span class="fc" id="L241">		this.totalItemNum = totalItemNum;</span>
+<span class="fc" id="L242">	}</span>
 
 	/**
 	 * Imposta l'importo totale dell'ordine.
@@ -248,8 +248,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.totalAmount == totalAmount; @*/
 	public void setTotalAmount(final float totalAmount) {
-<span class="nc" id="L251">		this.totalAmount = totalAmount;</span>
-<span class="nc" id="L252">	}</span>
+<span class="fc" id="L251">		this.totalAmount = totalAmount;</span>
+<span class="fc" id="L252">	}</span>
 
 	/**
 	 * Imposta la valuta dell'importo totale.
@@ -258,8 +258,8 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures this.currency == currency; @*/
 	public void setCurrency(final String currency) {
-<span class="nc" id="L261">		this.currency = currency;</span>
-<span class="nc" id="L262">	}</span>
+<span class="fc" id="L261">		this.currency = currency;</span>
+<span class="fc" id="L262">	}</span>
 
 	/**
 	 * Restituisce la data/ora di risposta dell'ordine.
@@ -268,7 +268,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.orderResponseDate; @*/
 	public String getOrderResponseDate() {
-<span class="nc" id="L271">		return orderResponseDate;</span>
+<span class="fc" id="L271">		return orderResponseDate;</span>
 	}
 	
 	/**
@@ -278,7 +278,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.deliveryDate; @*/
 	public String getDeliveryDate() {
-<span class="nc" id="L281">		return deliveryDate;</span>
+<span class="fc" id="L281">		return deliveryDate;</span>
 	}
 
 	/**
@@ -288,7 +288,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.orderId; @*/
 	public String getOrderId() {
-<span class="nc" id="L291">		return orderId;</span>
+<span class="fc" id="L291">		return orderId;</span>
 	}
 
 	/**
@@ -298,7 +298,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.orderIdGealan; @*/
 	public String getOrderIdGealan() {
-<span class="nc" id="L301">		return orderIdGealan;</span>
+<span class="fc" id="L301">		return orderIdGealan;</span>
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressName; @*/
 	public String getAddressName() {
-<span class="nc" id="L311">		return addressName;</span>
+<span class="fc" id="L311">		return addressName;</span>
 	}
 
 	/**
@@ -318,7 +318,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressStreet; @*/
 	public String getAddressStreet() {
-<span class="nc" id="L321">		return addressStreet;</span>
+<span class="fc" id="L321">		return addressStreet;</span>
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressZip; @*/
 	public String getAddressZip() {
-<span class="nc" id="L331">		return addressZip;</span>
+<span class="fc" id="L331">		return addressZip;</span>
 	}
 
 	/**
@@ -338,7 +338,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressCity; @*/
 	public String getAddressCity() {
-<span class="nc" id="L341">		return addressCity;</span>
+<span class="fc" id="L341">		return addressCity;</span>
 	}
 
 	/**
@@ -348,7 +348,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressCountry; @*/
 	public String getAddressCountry() {
-<span class="nc" id="L351">		return addressCountry;</span>
+<span class="fc" id="L351">		return addressCountry;</span>
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.addressCountryCoded; @*/
 	public String getAddressCountryCoded() {
-<span class="nc" id="L361">		return addressCountryCoded;</span>
+<span class="fc" id="L361">		return addressCountryCoded;</span>
 	}
 	
 	/**
@@ -368,7 +368,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.totalItemNum; @*/
 	public int getTotalItemNum() {
-<span class="nc" id="L371">		return totalItemNum;</span>
+<span class="fc" id="L371">		return totalItemNum;</span>
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.totalAmount; @*/
 	public float getTotalAmount() {
-<span class="nc" id="L381">		return totalAmount;</span>
+<span class="fc" id="L381">		return totalAmount;</span>
 	}
 	
 	/**
@@ -388,17 +388,17 @@ public class ConfirmationStructure {
 	 */
 	/*@ ensures \result == this.currency; @*/
 	public String getCurrency() {
-<span class="nc" id="L391">		return currency;</span>
+<span class="fc" id="L391">		return currency;</span>
 	}
 
 
 	@Override
 	public String toString() {
-<span class="nc" id="L397">		return &quot;ConfirmationStructure [orderResponseDate=&quot;+orderResponseDate+&quot;deliveryDate=&quot; + deliveryDate + &quot;, orderId=&quot; + orderId + &quot;, orderIdGealan=&quot;</span>
-<span class="nc" id="L398">				+ orderIdGealan + &quot;, addressName=&quot; + addressName + &quot;, addressStreet=&quot; + addressStreet + &quot;, addressZip=&quot;</span>
-<span class="nc" id="L399">				+ addressZip + &quot;, addressCity=&quot; + addressCity + &quot;, addressCountry=&quot; + addressCountry</span>
-<span class="nc" id="L400">				+ &quot;, addressCountryCoded=&quot; + addressCountryCoded + &quot;, totalItemNum=&quot; + totalItemNum + &quot;, totalAmount=&quot;</span>
-<span class="nc" id="L401">				+ totalAmount + &quot;, currency=&quot; + currency + &quot;]&quot;;</span>
+<span class="fc" id="L397">		return &quot;ConfirmationStructure [orderResponseDate=&quot;+orderResponseDate+&quot;deliveryDate=&quot; + deliveryDate + &quot;, orderId=&quot; + orderId + &quot;, orderIdGealan=&quot;</span>
+				+ orderIdGealan + &quot;, addressName=&quot; + addressName + &quot;, addressStreet=&quot; + addressStreet + &quot;, addressZip=&quot;
+				+ addressZip + &quot;, addressCity=&quot; + addressCity + &quot;, addressCountry=&quot; + addressCountry
+				+ &quot;, addressCountryCoded=&quot; + addressCountryCoded + &quot;, totalItemNum=&quot; + totalItemNum + &quot;, totalAmount=&quot;
+				+ totalAmount + &quot;, currency=&quot; + currency + &quot;]&quot;;
 	}
 	
 	

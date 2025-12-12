@@ -39,23 +39,23 @@ public final class XmlItem {
 	/**
 	 * empty constructor for deserializer
 	 */
-<span class="nc" id="L42">	public XmlItem() {/*empty constructor*/}</span>
+<span class="fc" id="L42">	public XmlItem() {/*empty constructor*/}</span>
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans articolo ordine partendo dal POJO {@code OrderItem}
 	 * @param item - OrderItem
 	 */
 	public XmlItem(final OrderItem item) {
-<span class="nc" id="L49">		super();</span>
-<span class="nc" id="L50">		this.lineItemId = Integer.parseInt(item.getLineItemID());</span>
-<span class="nc" id="L51">		this.prodId = new XmlProductID(</span>
-<span class="nc" id="L52">								item.getSupplierID(),</span>
-<span class="nc" id="L53">								item.getBuyerID(),</span>
-<span class="nc" id="L54">								item.getDescriptionShort()</span>
+<span class="fc" id="L49">		super();</span>
+<span class="fc" id="L50">		this.lineItemId = Integer.parseInt(item.getLineItemID());</span>
+<span class="fc" id="L51">		this.prodId = new XmlProductID(</span>
+<span class="fc" id="L52">								item.getSupplierID(),</span>
+<span class="fc" id="L53">								item.getBuyerID(),</span>
+<span class="fc" id="L54">								item.getDescriptionShort()</span>
 							);
-<span class="nc" id="L56">		this.quantity = Float.parseFloat(item.getQuantity());</span>
-<span class="nc" id="L57">		this.orderUnit = item.getOrderUnit();</span>
-<span class="nc" id="L58">	}</span>
+<span class="fc" id="L56">		this.quantity = Float.parseFloat(item.getQuantity());</span>
+<span class="fc" id="L57">		this.orderUnit = item.getOrderUnit();</span>
+<span class="fc" id="L58">	}</span>
 
 
 
@@ -64,7 +64,7 @@ public final class XmlItem {
 	 * @return int 
 	 */
 	public int getLineItemId() {
-<span class="nc" id="L67">		return lineItemId;</span>
+<span class="fc" id="L67">		return lineItemId;</span>
 	}
 
 
@@ -74,7 +74,7 @@ public final class XmlItem {
 	 * @return XmlProductId - DTO con numero articolo del sistema cliente e del sistema fornitore.
 	 */
 	public XmlProductID getProdId() {
-<span class="nc" id="L77">		return prodId;</span>
+<span class="fc" id="L77">		return prodId;</span>
 	}
 
 
@@ -84,7 +84,7 @@ public final class XmlItem {
 	 * @return float - quantità
 	 */
 	public float getQuantity() {
-<span class="nc" id="L87">		return quantity;</span>
+<span class="fc" id="L87">		return quantity;</span>
 	}
 
 
@@ -94,32 +94,32 @@ public final class XmlItem {
 	 * @return String - unità di misura (ISO) della quantità
 	 */
 	public String getOrderUnit() {
-<span class="nc" id="L97">		return orderUnit;</span>
+<span class="fc" id="L97">		return orderUnit;</span>
 	}
 
 
 
 	public void setLineItemId(final int lineItemId) {
-<span class="nc" id="L103">		this.lineItemId = lineItemId;</span>
-<span class="nc" id="L104">	}</span>
+<span class="fc" id="L103">		this.lineItemId = lineItemId;</span>
+<span class="fc" id="L104">	}</span>
 
 
 
 	public void setProdId(final XmlProductID prodId) {
-<span class="nc" id="L109">		this.prodId = prodId;</span>
-<span class="nc" id="L110">	}</span>
+<span class="fc" id="L109">		this.prodId = prodId;</span>
+<span class="fc" id="L110">	}</span>
 
 
 
 	public void setQuantity(final float quantity) {
-<span class="nc" id="L115">		this.quantity = quantity;</span>
-<span class="nc" id="L116">	}</span>
+<span class="fc" id="L115">		this.quantity = quantity;</span>
+<span class="fc" id="L116">	}</span>
 
 
 
 	public void setOrderUnit(final String orderUnit) {
-<span class="nc" id="L121">		this.orderUnit = orderUnit;</span>
-<span class="nc" id="L122">	}</span>
+<span class="fc" id="L121">		this.orderUnit = orderUnit;</span>
+<span class="fc" id="L122">	}</span>
 
 	
 

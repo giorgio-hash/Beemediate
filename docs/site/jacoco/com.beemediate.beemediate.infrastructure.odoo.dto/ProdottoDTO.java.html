@@ -39,44 +39,44 @@ public class ProdottoDTO{
 	 */
 	public static ProdottoDTO[] fromXMLRPC(final OdooApiConfig odoo, final ArticoloPreventivoDTO[] ap) throws InconsistentDTOException, EmptyFetchException, XmlRpcException  {
 		
-<span class="nc bnc" id="L42" title="All 2 branches missed.">		if ( ap == null ) throw new InconsistentDTOException(&quot;Lista ArticoloPreventivoDTO null&quot;);</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">		if ( ap == null ) throw new InconsistentDTOException(&quot;Lista ArticoloPreventivoDTO null&quot;);</span>
 		
-<span class="nc" id="L44">		final Object[] ids = new Object[ap.length];</span>
+<span class="fc" id="L44">		final Object[] ids = new Object[ap.length];</span>
 		Object[] res;
-<span class="nc" id="L46">		final ProdottoDTO[] prd = new ProdottoDTO[ap.length];</span>
-<span class="nc" id="L47">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L46">		final ProdottoDTO[] prd = new ProdottoDTO[ap.length];</span>
+<span class="fc" id="L47">		final Map&lt;String, Object&gt; requestInfo = new HashMap&lt;&gt;();</span>
 		
 		//estrai prodotti (per arricchire le info sulle parti del preventivo)
 		
 		//prima bisogna cercare gli id del prodotto
-<span class="nc bnc" id="L52" title="All 2 branches missed.">		for(int i=0; i&lt;ap.length; i++) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		for(int i=0; i&lt;ap.length; i++) {</span>
 			
-<span class="nc bnc" id="L54" title="All 2 branches missed.">			if(ap[i].getProductId().getNum().isEmpty()) </span>
-<span class="nc" id="L55">				throw new InconsistentDTOException(&quot;id prodotto non presente. articolo: &quot; + ap[i]);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">			if(ap[i].getProductId().getNum().isEmpty()) </span>
+<span class="fc" id="L55">				throw new InconsistentDTOException(&quot;id prodotto non presente. articolo: &quot; + ap[i]);</span>
 			else
-<span class="nc" id="L57">				ids[i] = ap[i].getProductId().getNum().get();</span>
+<span class="fc" id="L57">				ids[i] = ap[i].getProductId().getNum().get();</span>
 		}
 		
 		//estrazione
-<span class="nc" id="L61">		requestInfo.clear();</span>
-<span class="nc" id="L62">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;seller_ids&quot;));</span>
-<span class="nc" id="L63">		res = odoo.readFromModel(&quot;product.product&quot;, requestInfo, ids);</span>
+<span class="fc" id="L61">		requestInfo.clear();</span>
+<span class="fc" id="L62">		requestInfo.put(OdooApiConfig.FIELDS, Arrays.asList(&quot;seller_ids&quot;));</span>
+<span class="fc" id="L63">		res = odoo.readFromModel(&quot;product.product&quot;, requestInfo, ids);</span>
 		
-<span class="nc bnc" id="L65" title="All 2 branches missed.">		if(res.length==0) {</span>
-<span class="nc" id="L66">			StringBuilder sb = new StringBuilder();</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">		if(res.length==0) {</span>
+<span class="fc" id="L66">			StringBuilder sb = new StringBuilder();</span>
 			
-<span class="nc bnc" id="L68" title="All 2 branches missed.">			for( ArticoloPreventivoDTO p : ap)</span>
-<span class="nc" id="L69">				sb.append(p.toString()).append('\n');</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">			for( ArticoloPreventivoDTO p : ap)</span>
+<span class="fc" id="L69">				sb.append(p.toString()).append('\n');</span>
 			
-<span class="nc" id="L71">			throw new EmptyFetchException(&quot;Non è stato possibile trovare alcun prodotto associato agli articoli: &quot; + sb.toString());</span>
+<span class="fc" id="L71">			throw new EmptyFetchException(&quot;Non è stato possibile trovare alcun prodotto associato agli articoli: &quot; + sb.toString());</span>
 		}
 		
 		//collezione di POJO
-<span class="nc bnc" id="L75" title="All 2 branches missed.">		for(int i=0; i&lt;res.length; i++) {</span>
-<span class="nc" id="L76">			prd[i] = new ProdottoDTO( (HashMap&lt;String,Object&gt;) res[i]);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">		for(int i=0; i&lt;res.length; i++) {</span>
+<span class="fc" id="L76">			prd[i] = new ProdottoDTO( (HashMap&lt;String,Object&gt;) res[i]);</span>
 		}
 		
-<span class="nc" id="L79">		return prd;</span>
+<span class="fc" id="L79">		return prd;</span>
 	}
 	
 	
@@ -84,19 +84,19 @@ public class ProdottoDTO{
 	 * Costruttore
 	 * @param map - Map contente una tupla del model &lt;i&gt;product.product&lt;/i&gt; di Odoo. Ogni coppia chiave-valore fa riferimento ad un attributo del model.
 	 */
-<span class="nc" id="L87">	public ProdottoDTO( final Map&lt;String, Object&gt; map) {</span>
+<span class="fc" id="L87">	public ProdottoDTO( final Map&lt;String, Object&gt; map) {</span>
 		
-<span class="nc" id="L89">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
+<span class="fc" id="L89">		id = AttributeMapper.intify(map.get(&quot;id&quot;));</span>
 		
-<span class="nc" id="L91">		sellerIds = AttributeMapper.toArray(map.get(&quot;seller_ids&quot;));</span>
-<span class="nc" id="L92">	}</span>
+<span class="fc" id="L91">		sellerIds = AttributeMapper.toArray(map.get(&quot;seller_ids&quot;));</span>
+<span class="fc" id="L92">	}</span>
 
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getId() {
-<span class="nc" id="L99">		return id;</span>
+<span class="fc" id="L99">		return id;</span>
 	}
 
 	/**
@@ -104,12 +104,12 @@ public class ProdottoDTO{
 	 * @return oggetto Optional contenente Object[], altrimenti Optional.empty()
 	 */
 	public Optional&lt;Object[]&gt; getSellerIds() {
-<span class="nc" id="L107">		return sellerIds;</span>
+<span class="fc" id="L107">		return sellerIds;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L112">		return &quot;ProdottoDTO [id=&quot; + id + &quot;, seller_ids=&quot; + sellerIds + &quot;]&quot;;</span>
+<span class="fc" id="L112">		return &quot;ProdottoDTO [id=&quot; + id + &quot;, seller_ids=&quot; + sellerIds + &quot;]&quot;;</span>
 	}
 	
 	

@@ -33,7 +33,7 @@ public class XmlProductID{
 	/**
 	 * empty costructor for Jackson deserializer
 	 */
-<span class="nc" id="L36">	public XmlProductID() {/*empty costructor for Jackson deserializer*/}</span>
+<span class="fc" id="L36">	public XmlProductID() {/*empty costructor for Jackson deserializer*/}</span>
 	
 	
 	/**
@@ -43,28 +43,28 @@ public class XmlProductID{
 	 * @param descriptionShort - descrizione dell'articolo
 	 */
 	public XmlProductID(final String supplierId, final String buyerId, final String descriptionShort) {
-<span class="nc" id="L46">		super();</span>
-<span class="nc bnc" id="L47" title="All 6 branches missed.">		if(supplierId==null || supplierId.isEmpty() || supplierId.isBlank())</span>
+<span class="fc" id="L46">		super();</span>
+<span class="pc bpc" id="L47" title="3 of 6 branches missed.">		if(supplierId==null || supplierId.isEmpty() || supplierId.isBlank())</span>
 <span class="nc" id="L48">			this.supplierId = null;</span>
 		else
-<span class="nc" id="L50">			this.supplierId = new XmlPartyID(supplierId);</span>
+<span class="fc" id="L50">			this.supplierId = new XmlPartyID(supplierId);</span>
 			
-<span class="nc bnc" id="L52" title="All 6 branches missed.">		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())</span>
+<span class="pc bpc" id="L52" title="3 of 6 branches missed.">		if(buyerId==null || buyerId.isEmpty() || buyerId.isBlank())</span>
 <span class="nc" id="L53">			this.buyerId = null;</span>
 		else {
-<span class="nc" id="L55">			this.buyerId = new XmlPartyID(buyerId);</span>
-<span class="nc" id="L56">			this.buyerId.setType(&quot;CODE&quot;);</span>
+<span class="fc" id="L55">			this.buyerId = new XmlPartyID(buyerId);</span>
+<span class="fc" id="L56">			this.buyerId.setType(&quot;CODE&quot;);</span>
 		}
 		
-<span class="nc" id="L59">		this.descriptionShort = descriptionShort;</span>
-<span class="nc" id="L60">	}</span>
+<span class="fc" id="L59">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L60">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public XmlPartyID getSupplierId() {
-<span class="nc" id="L67">		return supplierId;</span>
+<span class="fc" id="L67">		return supplierId;</span>
 	}
 
 	/**
@@ -72,28 +72,28 @@ public class XmlProductID{
 	 * @return BuyerID con identificativo ordine
 	 */
 	public void setSupplierId(final XmlPartyID supplierId) {
-<span class="nc" id="L75">		this.supplierId = supplierId;</span>
-<span class="nc" id="L76">	}</span>
+<span class="fc" id="L75">		this.supplierId = supplierId;</span>
+<span class="fc" id="L76">	}</span>
 
 	/**
 	 * 
 	 * @return String
 	 */
 	public XmlPartyID getBuyerId() {
-<span class="nc" id="L83">		return buyerId;</span>
+<span class="fc" id="L83">		return buyerId;</span>
 	}
 
 	public void setBuyerId(final XmlPartyID buyerId) {
-<span class="nc" id="L87">		this.buyerId = buyerId;</span>
-<span class="nc" id="L88">	}</span>
+<span class="fc" id="L87">		this.buyerId = buyerId;</span>
+<span class="fc" id="L88">	}</span>
 
 	public String getDescriptionShort() {
-<span class="nc" id="L91">		return descriptionShort;</span>
+<span class="fc" id="L91">		return descriptionShort;</span>
 	}
 
 	public void setDescriptionShort(final String descriptionShort) {
-<span class="nc" id="L95">		this.descriptionShort = descriptionShort;</span>
-<span class="nc" id="L96">	}</span>
+<span class="fc" id="L95">		this.descriptionShort = descriptionShort;</span>
+<span class="fc" id="L96">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

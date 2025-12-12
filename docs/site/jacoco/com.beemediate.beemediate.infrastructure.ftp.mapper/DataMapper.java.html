@@ -32,12 +32,12 @@ public final class DataMapper {
 	/**
      * Logger SLF4J per il tracciamento delle operazioni e degli errori.
      */
-<span class="nc" id="L35">	private static final Logger LOG = LoggerFactory.getLogger(DataMapper.class);</span>
+<span class="fc" id="L35">	private static final Logger LOG = LoggerFactory.getLogger(DataMapper.class);</span>
 	
 	/**
 	 * Oggetto Jackson per gestire serializzazione/deserializzazione tra strutture dati XML e DTO.
 	 */
-<span class="nc" id="L40">	private static final XmlMapper XML_MAPPER = initMapper();</span>
+<span class="fc" id="L40">	private static final XmlMapper XML_MAPPER = initMapper();</span>
 	
 	/**
 	 * Costruttore private
@@ -52,9 +52,9 @@ public final class DataMapper {
 	private static XmlMapper initMapper() {
 		// disattiva la risoluzione del namespace: 
 		// https://github.com/FasterXML/jackson-dataformat-xml/issues/63
-<span class="nc" id="L55">		final XMLInputFactory f = new WstxInputFactory();</span>
-<span class="nc" id="L56">		f.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);</span>
-<span class="nc" id="L57">		return new XmlMapper(new XmlFactory(f, new WstxOutputFactory()));</span>
+<span class="fc" id="L55">		final XMLInputFactory f = new WstxInputFactory();</span>
+<span class="fc" id="L56">		f.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.FALSE);</span>
+<span class="fc" id="L57">		return new XmlMapper(new XmlFactory(f, new WstxOutputFactory()));</span>
 	}
 	
 	/**
@@ -64,12 +64,12 @@ public final class DataMapper {
 	 */
 	public static XmlOrder mapOrderToXml(final OrderStructure os) {
 
-<span class="nc" id="L67">		return new XmlOrder(</span>
-<span class="nc" id="L68">							new XmlOrderHeader(os.getHeader()),</span>
-<span class="nc" id="L69">							Arrays.stream(os.getItemList())</span>
-<span class="nc" id="L70">							          .map(XmlItem::new)</span>
-<span class="nc" id="L71">							          .toList(),</span>
-<span class="nc" id="L72">							new XmlOrderSummary(os.getOrderSummary())</span>
+<span class="fc" id="L67">		return new XmlOrder(</span>
+<span class="fc" id="L68">							new XmlOrderHeader(os.getHeader()),</span>
+<span class="fc" id="L69">							Arrays.stream(os.getItemList())</span>
+<span class="fc" id="L70">							          .map(XmlItem::new)</span>
+<span class="fc" id="L71">							          .toList(),</span>
+<span class="fc" id="L72">							new XmlOrderSummary(os.getOrderSummary())</span>
 							);
 	}
 	
@@ -80,7 +80,7 @@ public final class DataMapper {
 	 */
 	public static String serializeXmlOrder(final XmlOrder xo) {
 		try {
-<span class="nc" id="L83">			return XML_MAPPER.writeValueAsString(xo);</span>
+<span class="fc" id="L83">			return XML_MAPPER.writeValueAsString(xo);</span>
 <span class="nc" id="L84">		} catch (JsonProcessingException e) {</span>
 <span class="nc" id="L85">			LOG.error(&quot;Errore durante la serializzazione XML.&quot;,e);</span>
 		}
@@ -96,7 +96,7 @@ public final class DataMapper {
 	public static XmlOrderResponse deserializeXmlOrderResponse(final String data) {
 		
 		try {
-<span class="nc" id="L99">			return XML_MAPPER.readValue(data, XmlOrderResponse.class);</span>
+<span class="fc" id="L99">			return XML_MAPPER.readValue(data, XmlOrderResponse.class);</span>
 <span class="nc" id="L100">		}catch(JsonProcessingException e) {</span>
 <span class="nc" id="L101">			LOG.error(&quot;Errore durante la deserializzazione XML.&quot;,e);</span>
 		}
@@ -111,35 +111,35 @@ public final class DataMapper {
 	 */
 	public static ConfirmationStructure mapConfirmationFromXml(final XmlOrderResponse xor) {
 		
-<span class="nc" id="L114">		final ConfirmationStructure cs = new ConfirmationStructure();</span>
+<span class="fc" id="L114">		final ConfirmationStructure cs = new ConfirmationStructure();</span>
 		
 		
-<span class="nc" id="L117">		final XmlOrderResponseInfo info = xor.getOrderResponseHeader()</span>
-<span class="nc" id="L118">										.getOrderResponseInfo();</span>
-<span class="nc" id="L119">		cs.setOrderResponseDate(info.getOrderResponseDate());</span>
-<span class="nc" id="L120">		cs.setDeliveryDate(info.getDeliveryDate()</span>
-<span class="nc" id="L121">								.getDeliveryEndDate());</span>
-<span class="nc" id="L122">		cs.setOrderId(info.getOrderId());</span>
-<span class="nc" id="L123">		cs.setOrderIdGealan(info.getSupplierOrderId());</span>
-<span class="nc" id="L124">		cs.setCurrency(info.getCurrency());</span>
+<span class="fc" id="L117">		final XmlOrderResponseInfo info = xor.getOrderResponseHeader()</span>
+<span class="fc" id="L118">										.getOrderResponseInfo();</span>
+<span class="fc" id="L119">		cs.setOrderResponseDate(info.getOrderResponseDate());</span>
+<span class="fc" id="L120">		cs.setDeliveryDate(info.getDeliveryDate()</span>
+<span class="fc" id="L121">								.getDeliveryEndDate());</span>
+<span class="fc" id="L122">		cs.setOrderId(info.getOrderId());</span>
+<span class="fc" id="L123">		cs.setOrderIdGealan(info.getSupplierOrderId());</span>
+<span class="fc" id="L124">		cs.setCurrency(info.getCurrency());</span>
 		
 		
-<span class="nc" id="L127">		final XmlAddress addr = info.getParties()</span>
-<span class="nc" id="L128">								.get(0)</span>
-<span class="nc" id="L129">								.getAddress();</span>
-<span class="nc" id="L130">		cs.setAddressCity(addr.getCity());</span>
-<span class="nc" id="L131">		cs.setAddressCountry(addr.getCountry());</span>
-<span class="nc" id="L132">		cs.setAddressCountryCoded(addr.getCountryCoded());</span>
-<span class="nc" id="L133">		cs.setAddressName(addr.getName());</span>
-<span class="nc" id="L134">		cs.setAddressStreet(addr.getStreet());</span>
-<span class="nc" id="L135">		cs.setAddressZip(addr.getZip());</span>
+<span class="fc" id="L127">		final XmlAddress addr = info.getParties()</span>
+<span class="fc" id="L128">								.get(0)</span>
+<span class="fc" id="L129">								.getAddress();</span>
+<span class="fc" id="L130">		cs.setAddressCity(addr.getCity());</span>
+<span class="fc" id="L131">		cs.setAddressCountry(addr.getCountry());</span>
+<span class="fc" id="L132">		cs.setAddressCountryCoded(addr.getCountryCoded());</span>
+<span class="fc" id="L133">		cs.setAddressName(addr.getName());</span>
+<span class="fc" id="L134">		cs.setAddressStreet(addr.getStreet());</span>
+<span class="fc" id="L135">		cs.setAddressZip(addr.getZip());</span>
 		
 		
-<span class="nc" id="L138">		final XmlOrderResponseSummary summary = xor.getOrderSummary();</span>
-<span class="nc" id="L139">		cs.setTotalAmount(summary.getTotalAmount());</span>
-<span class="nc" id="L140">		cs.setTotalItemNum(summary.getTotalItemNum());</span>
+<span class="fc" id="L138">		final XmlOrderResponseSummary summary = xor.getOrderSummary();</span>
+<span class="fc" id="L139">		cs.setTotalAmount(summary.getTotalAmount());</span>
+<span class="fc" id="L140">		cs.setTotalItemNum(summary.getTotalItemNum());</span>
 		
-<span class="nc" id="L142">		return cs;</span>
+<span class="fc" id="L142">		return cs;</span>
 		
 	}
 	
