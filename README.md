@@ -4,14 +4,14 @@
 
 A framework for immediate translation of ODOO Request For Purchase to XML-Opentrans.
 
-Italian Manual documentation is available [here](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Beemediate%20Manuale%20Utente.pdf).
+Manuale utente disponibile [qui](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Beemediate%20Manuale%20Utente.pdf).
 
-Italian technical documentation is available [here](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
+Documentazione tecnica disponibile [qui](https://github.com/giorgio-hash/Beemediate/blob/main/docs/documentazione_Beemediate.pdf).
 
-Code and testing Documentation, with reports included, is hosted on Github Pages. See [project information](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
-- See [Javadoc for code](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
-- See [Javadoc for testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
-- See [Project Reports](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) from PMD, CPD, SpotBugs and JaCoCo.
+Documentazione relativa a codice, test e reports di analisi statica sono disponibili su Github Pages. [Leggi di più](https://giorgio-hash.github.io/Beemediate/site/project-info.html).
+- Vedi [Javadoc per il codice](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
+- Vedi [Javadoc per il testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
+- Vedi [Report di analisi statica e copertura](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) da PMD, CPD, SpotBugs e JaCoCo.
 
 ## Overview
 Beemediate è un software che permette di convertire gli Ordini di Acquisto di Odoo in strutture dati di formato XML-OpenTrans. Esso funziona tramite le Odoo External Api. Appena trova un ordine pendente per il fornitore designato, Beemediate estrae dai model di Odoo i dati necessari per generare la struttura XML-OpenTrans.
