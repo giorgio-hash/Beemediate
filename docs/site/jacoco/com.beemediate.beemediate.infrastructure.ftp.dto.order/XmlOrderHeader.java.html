@@ -27,27 +27,27 @@ public class XmlOrderHeader {
 	/**
 	 * empty constructor for deserializer
 	 */
-<span class="nc" id="L30">	public XmlOrderHeader() {/*empty constructor*/}</span>
+<span class="fc" id="L30">	public XmlOrderHeader() {/*empty constructor*/}</span>
 	
 	/**
 	 * Costruttore per creare struttura XML-OpenTrans header ordine partendo dal POJO {@code OrderHeader}
 	 * @param head - OrderHeader
 	 */
 	public XmlOrderHeader(final OrderHeader head) {
-<span class="nc" id="L37">		super();</span>
-<span class="nc" id="L38">		this.orderInfo = new XmlOrderInfo( head );</span>
-<span class="nc" id="L39">	}</span>
+<span class="fc" id="L37">		super();</span>
+<span class="fc" id="L38">		this.orderInfo = new XmlOrderInfo( head );</span>
+<span class="fc" id="L39">	}</span>
 
 	/**
 	 * 
 	 * @return XmlOrderInfo
 	 */
 	public XmlOrderInfo getOrderInfo() {
-<span class="nc" id="L46">		return orderInfo;</span>
+<span class="fc" id="L46">		return orderInfo;</span>
 	}
 
 	public XmlAgreement getAgreement() {
-<span class="nc" id="L50">		return agreement;</span>
+<span class="fc" id="L50">		return agreement;</span>
 	}
 
 	public void setAgreement(final XmlAgreement agreement) {
@@ -55,8 +55,8 @@ public class XmlOrderHeader {
 <span class="nc" id="L55">	}</span>
 
 	public void setOrderInfo(final XmlOrderInfo orderInfo) {
-<span class="nc" id="L58">		this.orderInfo = orderInfo;</span>
-<span class="nc" id="L59">	}</span>
+<span class="fc" id="L58">		this.orderInfo = orderInfo;</span>
+<span class="fc" id="L59">	}</span>
 
 	
 }

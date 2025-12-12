@@ -29,7 +29,7 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
 	/**
 	 * Logger
 	 */
-<span class="nc" id="L32">	private final Logger log = LoggerFactory.getLogger(XlsxAdapter.class);</span>
+<span class="fc" id="L32">	private final Logger log = LoggerFactory.getLogger(XlsxAdapter.class);</span>
 	
 	/**
 	 * ResourceLoader
@@ -46,21 +46,21 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * @param resourceLoader - oggetto ResourceLoader
      * @param path - String
      */
-<span class="nc" id="L49">    public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,</span>
-    					@Value(&quot;${datasource.path}&quot;) final String path) {
-<span class="nc" id="L51">        this.resourceLoader = resourceLoader;</span>
-<span class="nc" id="L52">        this.resourcePath = path;</span>
-<span class="nc" id="L53">    }</span>
+    public XlsxAdapter(@Autowired final ResourceLoader resourceLoader,
+<span class="fc" id="L50">    					@Value(&quot;${datasource.path}&quot;) final String path) {</span>
+<span class="fc" id="L51">        this.resourceLoader = resourceLoader;</span>
+<span class="fc" id="L52">        this.resourcePath = path;</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public String[] readArticleNumbers() {
         try {
-<span class="nc" id="L58">            final List&lt;String&gt; numbers = extractArticleNumbers();</span>
-<span class="nc" id="L59">            log.info(&quot;Catalogo caricato con successo ({} elementi)&quot;,numbers.size());</span>
-<span class="nc" id="L60">            return numbers.toArray(new String[0]);</span>
-<span class="nc" id="L61">        } catch (IOException | IllegalArgumentException e) {</span>
-<span class="nc" id="L62">            log.error(&quot;Errore durante la lettura del file XLSX&quot;, e);</span>
-<span class="nc" id="L63">            return new String[0];</span>
+<span class="fc" id="L58">            final List&lt;String&gt; numbers = extractArticleNumbers();</span>
+<span class="fc" id="L59">            log.info(&quot;Catalogo caricato con successo ({} elementi)&quot;,numbers.size());</span>
+<span class="fc" id="L60">            return numbers.toArray(new String[0]);</span>
+<span class="fc" id="L61">        } catch (IOException | IllegalArgumentException e) {</span>
+<span class="fc" id="L62">            log.error(&quot;Errore durante la lettura del file XLSX&quot;, e);</span>
+<span class="fc" id="L63">            return new String[0];</span>
         }
     }
 
@@ -71,45 +71,45 @@ public class XlsxAdapter implements SupplierCatalogReaderPort{
      * @throws IllegalArgumentException se il file è vuoto o presenta celle vuote
      */
     private List&lt;String&gt; extractArticleNumbers() throws IOException {
-<span class="nc" id="L74">        final List&lt;String&gt; numeriArticolo = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L74">        final List&lt;String&gt; numeriArticolo = new ArrayList&lt;&gt;();</span>
 
-<span class="nc" id="L76">        final Resource resource = resourceLoader.getResource(resourcePath);</span>
-<span class="nc" id="L77">        try (InputStream is = resource.getInputStream();</span>
-<span class="nc" id="L78">             Workbook workbook = new XSSFWorkbook(is)) {</span>
+<span class="fc" id="L76">        final Resource resource = resourceLoader.getResource(resourcePath);</span>
+<span class="fc" id="L77">        try (InputStream is = resource.getInputStream();</span>
+<span class="fc" id="L78">             Workbook workbook = new XSSFWorkbook(is)) {</span>
 
-<span class="nc" id="L80">            final Sheet sheet = workbook.getSheetAt(0);</span>
-<span class="nc" id="L81">            final int headerRowNum = sheet.getFirstRowNum();</span>
+<span class="fc" id="L80">            final Sheet sheet = workbook.getSheetAt(0);</span>
+<span class="fc" id="L81">            final int headerRowNum = sheet.getFirstRowNum();</span>
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (headerRowNum == -1) {</span>
-<span class="nc" id="L84">                throw new IllegalArgumentException (&quot;File non deve essere null o vuoto&quot;);</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (headerRowNum == -1) {</span>
+<span class="fc" id="L84">                throw new IllegalArgumentException (&quot;File non deve essere null o vuoto&quot;);</span>
             }
             
             
             //Per le conversioni del formato cella
-<span class="nc" id="L89">            final DataFormatter formatter = new DataFormatter();</span>
+<span class="fc" id="L89">            final DataFormatter formatter = new DataFormatter();</span>
 
-<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (int i=sheet.getFirstRowNum()+1; i&lt;=sheet.getLastRowNum(); i++) {</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">            for (int i=sheet.getFirstRowNum()+1; i&lt;=sheet.getLastRowNum(); i++) {</span>
             	
             	// Controllo Null sulla Riga (POI ritorna null se la riga è visivamente vuota)
-<span class="nc" id="L94">                final Row row = sheet.getRow(i);</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                if (row == null) {</span>
+<span class="fc" id="L94">                final Row row = sheet.getRow(i);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                if (row == null) {</span>
 <span class="nc" id="L96">                	throw new IllegalArgumentException (&quot;cella &quot;+i+&quot; vuota o nulla&quot;);</span>
                 }
 
-<span class="nc" id="L99">                final Cell cell = row.getCell(0);</span>
+<span class="fc" id="L99">                final Cell cell = row.getCell(0);</span>
                 
                 // Restituisce &quot;&quot; se la cella è vuota.
-<span class="nc" id="L102">                final String val = formatter.formatCellValue(cell);</span>
+<span class="fc" id="L102">                final String val = formatter.formatCellValue(cell);</span>
 
                 // Validazione e Pulizia
-<span class="nc bnc" id="L105" title="All 4 branches missed.">                if (val != null &amp;&amp; !val.trim().isBlank()) {</span>
-<span class="nc" id="L106">                    numeriArticolo.add(val.trim());</span>
-<span class="nc" id="L107">                }else</span>
-<span class="nc" id="L108">                	throw new IllegalArgumentException (&quot;cella &quot;+i+&quot; vuota o nulla&quot;);</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">                if (val != null &amp;&amp; !val.trim().isBlank()) {</span>
+<span class="fc" id="L106">                    numeriArticolo.add(val.trim());</span>
+                }else
+<span class="fc" id="L108">                	throw new IllegalArgumentException (&quot;cella &quot;+i+&quot; vuota o nulla&quot;);</span>
             }
         }
 
-<span class="nc" id="L112">        return numeriArticolo;</span>
+<span class="fc" id="L112">        return numeriArticolo;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

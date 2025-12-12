@@ -21,17 +21,17 @@ public class IdentifierDTO{
 	 * Costruttore.
 	 * @param array - un Array contenente due Object
 	 */
-<span class="nc" id="L24">	public IdentifierDTO(final Object[] array) {</span>
-<span class="nc" id="L25">		num = AttributeMapper.intify(array[0]);</span>
-<span class="nc" id="L26">		name = AttributeMapper.stringify(array[1]);</span>
-<span class="nc" id="L27">	}</span>
+<span class="fc" id="L24">	public IdentifierDTO(final Object[] array) {</span>
+<span class="fc" id="L25">		num = AttributeMapper.intify(array[0]);</span>
+<span class="fc" id="L26">		name = AttributeMapper.stringify(array[1]);</span>
+<span class="fc" id="L27">	}</span>
 	
 	/**
 	 * 
 	 * @return oggetto Optional contenente Integer, altrimenti Optional.empty()
 	 */
 	public Optional&lt;Integer&gt; getNum() {
-<span class="nc" id="L34">		return num;</span>
+<span class="fc" id="L34">		return num;</span>
 	}
 	
 	/**
@@ -39,12 +39,12 @@ public class IdentifierDTO{
 	 * @return oggetto Optional contenente String, altrimenti Optional.empty()
 	 */
 	public Optional&lt;String&gt; getName() {
-<span class="nc" id="L42">		return name;</span>
+<span class="fc" id="L42">		return name;</span>
 	}
 	
 	@Override
 	public String toString() {
-<span class="nc" id="L47">		return &quot;FieldIdentifierDTO [num=&quot; + num + &quot;, name=&quot; + name + &quot;]&quot;;</span>
+<span class="fc" id="L47">		return &quot;FieldIdentifierDTO [num=&quot; + num + &quot;, name=&quot; + name + &quot;]&quot;;</span>
 	}
 	
 }
