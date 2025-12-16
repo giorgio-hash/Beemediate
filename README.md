@@ -12,7 +12,7 @@ Documentazione relativa a codice, test e reports di analisi statica sono disponi
 - Vedi [Javadoc per il codice](https://giorgio-hash.github.io/Beemediate/site/apidocs/index.html).
 - Vedi [Javadoc per il testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
 - Vedi [Report di analisi statica e copertura](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) da PMD, CPD, SpotBugs e JaCoCo.
-- Vedi [Report di SonarCloud su issues, code quality e security hotspots](https://sonarcloud.io/project/overview?id=giorgio-hash_Beemediate).
+- Vedi [Report di SonarCloud](https://sonarcloud.io/project/overview?id=giorgio-hash_Beemediate) su issues, code quality e security hotspots.
 - Vedi [estratto del report di Snyk](https://github.com/giorgio-hash/Beemediate) riguardo la vulnerabiltà delle dipendenze di progetto.
 
 ## Overview
