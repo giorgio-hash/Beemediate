@@ -13,7 +13,7 @@ Documentazione relativa a codice, test e reports di analisi statica sono disponi
 - Vedi [Javadoc per il testing](https://giorgio-hash.github.io/Beemediate/site/testapidocs/index.html).
 - Vedi [Report di analisi statica e copertura](https://giorgio-hash.github.io/Beemediate/site/project-reports.html) da PMD, CPD, SpotBugs e JaCoCo.
 - Vedi [Report di SonarCloud](https://sonarcloud.io/project/overview?id=giorgio-hash_Beemediate) su issues, code quality e security hotspots.
-- Vedi [estratto del report di Snyk](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Snyk-report.pdf) riguardo la vulnerabiltà delle dipendenze di progetto.
+- Vedi [estratto del report di Snyk](https://github.com/giorgio-hash/Beemediate/blob/main/docs/Snyk-report.pdf) riguardo le vulnerabilità delle dipendenze di progetto.
 
 ## Overview
 Beemediate è un software che permette di convertire gli Ordini di Acquisto di Odoo in strutture dati di formato XML-OpenTrans. Esso funziona tramite le Odoo External Api. Appena trova un ordine pendente per il fornitore designato, Beemediate estrae dai model di Odoo i dati necessari per generare la struttura XML-OpenTrans.
