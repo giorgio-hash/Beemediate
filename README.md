@@ -21,7 +21,7 @@ Beemediate è dotato di una Web UI intuitiva per l'operatore.
 <p align="center">
 <img src="./docs/imgs/Carica_ordini_Risposta.png" alt="Descrizione immagine" width="300">
 </p>
-Beemediate gestisce le comunicazioni FTP tra fornitore XML-OpenTrans e cliente con gestionale Odoo. Appena trova una conferma d'ordine, manda una notifica al CRM attraverso messaggi sul workflow dell'Ordine di Acquisto.
+Beemediate gestisce le comunicazioni tra fornitore XML-OpenTrans e cliente con gestionale Odoo. Appena trova una conferma d'ordine, manda una notifica al CRM attraverso messaggi sul workflow dell'Ordine di Acquisto.
 <p align="center">
 <img src="./docs/imgs/aggiornamento_odoo_confirmations.png" alt="Descrizione immagine" width="300">
 </p>
